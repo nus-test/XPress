@@ -20,14 +20,6 @@ public class MultiTester {
     static String xmlFile = "test1.xml";
     static String[] xqueryFiles = {"xquery.txt"};
 
-    public static String readInputStream(InputStream inputStream) {
-        String text = new BufferedReader(
-                new InputStreamReader(inputStream, StandardCharsets.UTF_8))
-                .lines()
-                .collect(Collectors.joining("\n"));
-        return text;
-    }
-
 
     public static void main(final String... args) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, XMLDBException {
         BaseXClient BaseXSession = new BaseXClient("localhost", 1984, username, password);
@@ -62,7 +54,7 @@ public class MultiTester {
 
         for(String xqueryFile: xqueryFiles) {
             InputStream inputStream = MultiTester.class.getResourceAsStream(xqueryFile);
-            String xquery = readInputStream(inputStream);
+            String xquery = CommonUtils.readInputStream(inputStream);
             System.out.println("==================Xquery==================");
             System.out.println(xquery);
             System.out.println("==================Execute Xquery BaseX==================");

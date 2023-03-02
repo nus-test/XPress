@@ -9,14 +9,6 @@ public class BaseXSimple {
     static String xmlFile = "test1.xml";
     static String[] xqueryFiles = {"xquery.txt"};
 
-    public static String readInputStream(InputStream inputStream) {
-        String text = new BufferedReader(
-                new InputStreamReader(inputStream, StandardCharsets.UTF_8))
-                .lines()
-                .collect(Collectors.joining("\n"));
-        return text;
-    }
-
 
     public static void main(final String... args) throws IOException {
         try(BaseXClient session = new BaseXClient("localhost", 1984, username, password)) {
@@ -30,7 +22,7 @@ public class BaseXSimple {
             System.out.println(session.info());
             for(String xqueryFile: xqueryFiles) {
                 InputStream inputStream = BaseXSimple.class.getResourceAsStream(xqueryFile);
-                String xquery = readInputStream(inputStream);
+                String xquery =  CommonUtils.readInputStream(inputStream);
                 System.out.println("==================Xquery==================");
                 System.out.println(xquery);
                 System.out.println("==================Execute Xquery==================");
