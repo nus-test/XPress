@@ -1,0 +1,4 @@
+<parent>
+    <child id="hello" id2="world">Example 1</child>
+    <child id3="helloworld">Example 2</child>
+</parent>
