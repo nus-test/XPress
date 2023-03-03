@@ -33,7 +33,6 @@ public class OracleSimple {
                 System.out.println("Connected with connection #2");
             }
 
-            String xmlPath = String.valueOf(Paths.get(OracleSimple.class.getResource("xmldocs").toURI()));
             String xmlData =
                     CommonUtils.readInputStream(
                             new ByteArrayInputStream(MySQLSimple.class.getResourceAsStream("xmldocs/" + xmlFile).readAllBytes()));
@@ -73,7 +72,7 @@ public class OracleSimple {
             statement.execute(dropSQL);
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
-        } catch (SQLException | URISyntaxException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
         } catch (IOException e) {
             throw new RuntimeException(e);

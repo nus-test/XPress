@@ -34,6 +34,10 @@ public class MultiTester {
 
         InputStream xmlData =
                 new ByteArrayInputStream(BaseXSimple.class.getResourceAsStream("xmldocs/" + xmlFile).readAllBytes());
+        String xmlDataString =
+                CommonUtils.readInputStream(
+                        new ByteArrayInputStream(MySQLSimple.class.getResourceAsStream("xmldocs/" + xmlFile).readAllBytes()));
+        System.out.println(xmlDataString);
 
         // create new database
         BaseXSession.execute("create db test");
