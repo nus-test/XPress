@@ -5,14 +5,14 @@ import java.util.*;
 import static XMLGeneration.DataGenerator.mutateProb;
 import static XMLGeneration.DataGenerator.newProb;
 
-public class XMLStringGenerator {
+public class XMLStringGenerator implements ValueGenerator {
     Set<Character> escapeSet = new HashSet<>(Arrays.asList('\'', '\"'));
     int valuePoolIdCnt = 0;
     Set<String> valuePool = new HashSet<>();
     Map<Integer, String> valuePoolLookUpMap = new HashMap<>();
     static int minLength = 0, maxLength = 60;
 
-    String getValue() {
+    public String getValue() {
         boolean choice = Math.random() < newProb;
         String generatedString;
         if(choice) {
