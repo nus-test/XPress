@@ -1,6 +1,7 @@
+package TempTests;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.nio.file.Paths;
 import java.sql.*;
 
 public class MySQLSimple {

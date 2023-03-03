@@ -1,3 +1,5 @@
+package TempTests;
+
 import org.exist.xmldb.EXistResource;
 import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.*;
@@ -7,8 +9,6 @@ import org.xmldb.api.modules.XQueryService;
 import javax.xml.transform.OutputKeys;
 import java.io.*;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.stream.Collectors;
 
 public class MultiTester {
 

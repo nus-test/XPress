@@ -3,8 +3,8 @@ package PrimitiveDatatypes;
 import java.nio.charset.Charset;
 import java.util.*;
 
-import static PrimitiveDatatypes.RandomDataGenerator.mutateProb;
-import static PrimitiveDatatypes.RandomDataGenerator.newProb;
+import static MainGenerators.DataGenerator.mutateProb;
+import static MainGenerators.DataGenerator.newProb;
 
 public class XMLStringGenerator {
     Set<Character> escapeSet = new HashSet<>(Arrays.asList('\'', '\"'));
@@ -48,30 +48,26 @@ public class XMLStringGenerator {
     }
 
     String getRandomValue() {
-        byte[] array = new byte[maxLength]; // length is bounded by 7
         Random random = new Random();
-        new Random().nextBytes(array);
         int valueLength = random.nextInt(maxLength);
-        String generatedString = new String(array, Charset.forName("UTF-8"));
-        System.out.println("Maxlength: " + maxLength + " valueLength: " + valueLength + " " + array.length);
-        StringBuilder stringBuilder = new StringBuilder(generatedString.substring(0, valueLength));
-        for(int i = 0; i < stringBuilder.length(); i ++) {
-            if(escapeSet.contains(stringBuilder.charAt(i))) {
-                stringBuilder.setCharAt(i, getRandomCharacter());
-            }
+        StringBuilder stringBuilder = new StringBuilder();
+        for(int i = 0; i < valueLength; i ++) {
+            stringBuilder.append(getRandomCharacter());
         }
-        generatedString = stringBuilder.toString();
-        System.out.println(generatedString);
+        String generatedString = stringBuilder.toString();
         return generatedString;
     }
 
     Character getRandomCharacter() {
-        byte[] array = new byte[1];
-        Character c = 'a';
         boolean flag = false;
+        Random random = new Random();
+        int maxCharValue = 126;
+        int minCharValue = 32;
+        int interval = maxCharValue - minCharValue;
+        char c = 'a';
         while(!flag) {
-            c = (new String(array, Charset.forName("UTF-8"))).charAt(0);
-            if(!escapeSet.contains(c))
+            c = (char) (random.nextInt(interval + 1) + minCharValue);
+            if(escapeSet.contains(c) == false)
                 flag = true;
         }
         return c;

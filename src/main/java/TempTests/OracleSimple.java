@@ -1,10 +1,9 @@
+package TempTests;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.nio.file.Paths;
 import java.sql.*;
-import java.util.Properties;
 
 /**
  * This program demonstrates how to make database connection with Oracle
