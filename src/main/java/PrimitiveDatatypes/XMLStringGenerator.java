@@ -1,10 +1,9 @@
 package PrimitiveDatatypes;
 
-import java.nio.charset.Charset;
 import java.util.*;
 
-import static MainGenerators.DataGenerator.mutateProb;
-import static MainGenerators.DataGenerator.newProb;
+import static XMLGeneration.DataGenerator.mutateProb;
+import static XMLGeneration.DataGenerator.newProb;
 
 public class XMLStringGenerator {
     Set<Character> escapeSet = new HashSet<>(Arrays.asList('\'', '\"'));

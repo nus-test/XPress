@@ -31,4 +31,11 @@ public class XMLStringTest {
             }
         }
     }
+
+    @Test
+    void ScratchTest() {
+        String a = "a";
+        a += "v";
+        System.out.println(a);
+    }
 }

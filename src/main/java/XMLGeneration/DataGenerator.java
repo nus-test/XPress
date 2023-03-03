@@ -1,4 +1,4 @@
-package MainGenerators;
+package XMLGeneration;
 
 public class DataGenerator {
     public static double newProb = 0.3;
