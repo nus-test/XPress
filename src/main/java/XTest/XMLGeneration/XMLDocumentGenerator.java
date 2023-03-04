@@ -22,7 +22,13 @@ public class XMLDocumentGenerator {
         this.contextTreeGenerator = contextTreeGenerator;
     }
 
-    ContextNode GenerateXMLDocument(int contextNodeSize) {
+    String getXMLDocument(int contextNodeSize) {
+        ContextNode root = generateXMLDocument(contextNodeSize);
+        XMLWriter xmlWriter = new XMLWriter();
+        return xmlWriter.writeContext(new String(), root);
+    }
+
+    ContextNode generateXMLDocument(int contextNodeSize) {
         ContextNode root = contextTreeGenerator.GenerateRandomTree(contextNodeSize);
         int templateSize = contextNodeSize / 2;
         contextNodeTemplateList = contextTemplateGenerator.GenerateContextTemplate(templateSize);

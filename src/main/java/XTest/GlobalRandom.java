@@ -1,12 +1,14 @@
 package XTest;
 
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class GlobalRandom {
     private static GlobalRandom globalRandom;
     Random random;
     private GlobalRandom() {
         random = new Random();
+        random.setSeed(998244353);
     }
 
     public static GlobalRandom getInstance() {
@@ -26,5 +28,13 @@ public class GlobalRandom {
 
     public double nextDouble() {
         return random.nextDouble();
+    }
+
+    public List<Integer> nextIntListNoRep(int length, int maxBound) {
+        List<Integer> intList = new ArrayList<>();
+        for(int i = 0; i < maxBound; i ++)
+            intList.add(i);
+        Collections.shuffle(intList, random);
+        return intList.stream().limit(length).collect(Collectors.toList());
     }
 }

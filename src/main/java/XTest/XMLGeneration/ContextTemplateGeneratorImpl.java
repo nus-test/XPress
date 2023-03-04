@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static org.apache.commons.lang3.math.NumberUtils.min;
+
 public class ContextTemplateGeneratorImpl implements ContextTemplateGenerator {
     NameGenerator contextNodeNameGenerator;
     AttributeTemplateGenerator attributeTemplateGenerator;
@@ -24,12 +26,15 @@ public class ContextTemplateGeneratorImpl implements ContextTemplateGenerator {
 
         for(int i = 0; i < templateSize; i ++) {
             ContextNode contextNode = new ContextNode();
-            int attributeTotalNum = GlobalRandom.getInstance().nextInt(5);
+            int attributeTotalNum = min(attributeSize, GlobalRandom.getInstance().nextInt(5));
             contextNode.addAttribute(attributeTemplateList.get(0));
-            for(int j = 0; j < attributeTotalNum; j ++) {
-                int attributeId = GlobalRandom.getInstance().nextInt(attributeSize - 1) + 1;
+            List<Integer> attributeIdList = GlobalRandom.getInstance().nextIntListNoRep(attributeTotalNum - 1, attributeSize - 1);
+            for(int j = 0; j < attributeTotalNum - 1; j ++)
+                attributeIdList.set(j, attributeIdList.get(j) + 1);
+
+            for(int j = 0; j < attributeTotalNum - 1; j ++) {
                 AttributeNode attributeNode = new AttributeNode(
-                        attributeTemplateList.get(attributeId)
+                        attributeTemplateList.get(attributeIdList.get(j))
                 );
                 contextNode.addAttribute(attributeNode);
             }
