@@ -11,7 +11,7 @@ import javax.xml.transform.OutputKeys;
 import java.io.File;
 import java.net.URL;
 
-public class ExistExecutor implements DatabaseExecutor {
+public class ExistExecutor extends DatabaseExecutor {
     static ExistExecutor existExecutor;
     final String driver = "org.exist.xmldb.DatabaseImpl";
     private static String URI = "xmldb:exist://localhost:8080/exist/xmlrpc";
@@ -28,7 +28,7 @@ public class ExistExecutor implements DatabaseExecutor {
         DatabaseManager.registerDatabase(database);
     }
 
-    ExistExecutor getInstance() throws XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+    static public ExistExecutor getInstance() throws XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         if(existExecutor == null)
             existExecutor = new ExistExecutor();
         return existExecutor;
@@ -45,11 +45,6 @@ public class ExistExecutor implements DatabaseExecutor {
         collection.storeResource(resource);
         xqs = (XQueryService) collection.getService("XQueryService", "1.0");
         xqs.setProperty("indent", "yes");
-    }
-
-    @Override
-    public void setContextByContent(String context) {
-        throw new UnsupportedOperationException();
     }
 
     @Override

@@ -8,7 +8,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class BaseXExecutor implements DatabaseExecutor {
+public class BaseXExecutor extends DatabaseExecutor {
 
     static BaseXExecutor baseXExecutor;
     BaseXClient BaseXSession;
@@ -19,7 +19,7 @@ public class BaseXExecutor implements DatabaseExecutor {
         BaseXSession = new BaseXClient("localhost", 1984, username, password);
     }
 
-    BaseXExecutor getInstance() throws IOException {
+    static public BaseXExecutor getInstance() throws IOException {
         if(baseXExecutor == null) {
             baseXExecutor = new BaseXExecutor();
         }
@@ -32,11 +32,6 @@ public class BaseXExecutor implements DatabaseExecutor {
                 new ByteArrayInputStream(BaseXSimple.class.getResourceAsStream("/xmldocs/" + pathName).readAllBytes());
         BaseXSession.execute("create db test");
         BaseXSession.add(pathName, xmlData);
-    }
-
-    @Override
-    public void setContextByContent(String context) {
-        throw new UnsupportedOperationException();
     }
 
     @Override

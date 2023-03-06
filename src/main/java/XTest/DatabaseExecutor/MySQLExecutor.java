@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
 
-public class MySQLExecutor implements DatabaseExecutor {
+public class MySQLExecutor extends DatabaseExecutor {
     static MySQLExecutor mySQLExecutor;
     Connection connection;
     String xmlDataContent;
@@ -22,7 +22,7 @@ public class MySQLExecutor implements DatabaseExecutor {
                 "root", "shuxin");
     }
 
-    MySQLExecutor getInstance() throws SQLException, ClassNotFoundException {
+    static public MySQLExecutor getInstance() throws SQLException, ClassNotFoundException {
         if(mySQLExecutor == null)
             mySQLExecutor = new MySQLExecutor();
         return mySQLExecutor;
@@ -37,10 +37,6 @@ public class MySQLExecutor implements DatabaseExecutor {
     @Override
     public void setContextByContent(String context) {
         xmlDataContent = context;
-    }
-
-    @Override
-    public void clearCurrentContext() throws XMLDBException, IOException {
     }
 
     @Override

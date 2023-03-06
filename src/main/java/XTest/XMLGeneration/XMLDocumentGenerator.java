@@ -18,9 +18,9 @@ public class XMLDocumentGenerator {
     List<ContextNode> contextNodeTemplateList;
 
 
-    XMLDocumentGenerator() {}
+    public XMLDocumentGenerator() {}
 
-    XMLDocumentGenerator(ContextTreeGenerator contextTreeGenerator) {
+    public XMLDocumentGenerator(ContextTreeGenerator contextTreeGenerator) {
         this.contextTreeGenerator = contextTreeGenerator;
     }
 
@@ -36,15 +36,19 @@ public class XMLDocumentGenerator {
     }
 
     ContextNode generateXMLDocumentSave2Resource(int contextNodeSize, String fileName) throws IOException {
-        ContextNode root = generateXMLDocument(contextNodeSize);
-        String xmlData = getXMLDocument(root);
+        XMLContext xmlContext = generateXMLContext(contextNodeSize);
         FileWriter writer =
                 new FileWriter((this.getClass().getResource(fileName).getPath()));
-        writer.write(xmlData);
-        System.out.println(xmlData);
+        writer.write(xmlContext.xmlContent);
         writer.flush();
         writer.close();
-        return root;
+        return xmlContext.root;
+    }
+
+    public XMLContext generateXMLContext(int contextNodeSize) {
+        ContextNode root = generateXMLDocument(contextNodeSize);
+        String xmlData = getXMLDocument(root);
+        return new XMLContext(root, xmlData);
     }
 
     ContextNode generateXMLDocument(int contextNodeSize) {

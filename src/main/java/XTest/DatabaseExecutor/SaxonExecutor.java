@@ -10,7 +10,7 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.net.URL;
 
-public class SaxonExecutor implements DatabaseExecutor {
+public class SaxonExecutor extends DatabaseExecutor {
     static SaxonExecutor saxonExecutor;
     Processor saxon;
     DocumentBuilder builder;
@@ -22,28 +22,16 @@ public class SaxonExecutor implements DatabaseExecutor {
         builder = saxon.newDocumentBuilder();
     }
 
-    SaxonExecutor getInstance() {
+    static public SaxonExecutor getInstance() {
         if(saxonExecutor == null)
             saxonExecutor = new SaxonExecutor();
         return saxonExecutor;
     }
 
     @Override
-    public void setContextByFile(String pathName) throws FileNotFoundException, SaxonApiException {
-        URL url = SaxonSimple.class.getResource("xmldocs/" + pathName);
-        File xmldocFile = new File(url.getFile());
-        String xmlFileContent = CommonUtils.readInputStream(new FileInputStream(xmldocFile));
-        setContextByContent(xmlFileContent);
-    }
-
-    @Override
     public void setContextByContent(String context) throws SaxonApiException {
         Source src = new StreamSource(new StringReader(context));
         document = builder.build(src);
-    }
-
-    @Override
-    public void clearCurrentContext() throws XMLDBException, IOException {
     }
 
     @Override

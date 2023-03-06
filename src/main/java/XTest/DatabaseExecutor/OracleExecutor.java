@@ -8,7 +8,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.sql.*;
 
-public class OracleExecutor implements DatabaseExecutor {
+public class OracleExecutor extends DatabaseExecutor {
     static OracleExecutor oracleExecutor;
     String url = "jdbc:oracle:thin:@localhost:1521/XE";
     String username = "test";
@@ -24,18 +24,10 @@ public class OracleExecutor implements DatabaseExecutor {
         statement = connection.createStatement();
     }
 
-    OracleExecutor getInstance() throws SQLException, ClassNotFoundException {
+    static public OracleExecutor getInstance() throws SQLException, ClassNotFoundException {
         if(oracleExecutor == null)
             oracleExecutor = new OracleExecutor();
         return oracleExecutor;
-    }
-
-    @Override
-    public void setContextByFile(String pathName) throws SQLException, IOException {
-        String xmlData =
-                CommonUtils.readInputStream(
-                        new ByteArrayInputStream(MySQLSimple.class.getResourceAsStream("xmldocs/" + pathName).readAllBytes()));
-        setContextByContent(xmlData);
     }
 
     @Override
