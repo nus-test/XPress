@@ -1,11 +1,10 @@
 package XTest.XMLGeneration;
 
 import XTest.GlobalRandom;
-import XTest.PrimitiveDatatypes.XMLDataType;
+import XTest.PrimitiveDatatype.XMLDatatype;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static org.apache.commons.lang3.math.NumberUtils.min;
 
@@ -26,7 +25,7 @@ public class ContextTemplateGeneratorImpl implements ContextTemplateGenerator {
 
         for(int i = 0; i < templateSize; i ++) {
             ContextNode contextNode = new ContextNode();
-            int attributeTotalNum = min(attributeSize, GlobalRandom.getInstance().nextInt(5));
+            int attributeTotalNum = min(attributeSize, GlobalRandom.getInstance().nextInt(5) + 1);
             contextNode.addAttribute(attributeTemplateList.get(0));
             List<Integer> attributeIdList = GlobalRandom.getInstance().nextIntListNoRep(attributeTotalNum - 1, attributeSize - 1);
             for(int j = 0; j < attributeTotalNum - 1; j ++)
@@ -39,7 +38,7 @@ public class ContextTemplateGeneratorImpl implements ContextTemplateGenerator {
                 contextNode.addAttribute(attributeNode);
             }
             contextNode.tagName = contextNodeNameGenerator.GenerateName();
-            contextNode.dataType = XMLDataType.getRandomDataType();
+            contextNode.dataType = XMLDatatype.getRandomDataType();
             contextTemplateList.add(contextNode);
         }
         return contextTemplateList;

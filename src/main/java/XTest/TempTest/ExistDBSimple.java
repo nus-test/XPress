@@ -1,4 +1,4 @@
-package XTest.TempTests;
+package XTest.TempTest;
 
 import org.xmldb.api.base.*;
 import org.xmldb.api.modules.*;

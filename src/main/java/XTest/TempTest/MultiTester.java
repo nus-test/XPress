@@ -1,4 +1,4 @@
-package XTest.TempTests;
+package XTest.TempTest;
 
 import org.exist.xmldb.EXistResource;
 import org.xmldb.api.DatabaseManager;
@@ -17,7 +17,7 @@ public class MultiTester {
     private static String URI = "xmldb:exist://localhost:8080/exist/xmlrpc";
     static String rootDir = "/db";
     private static String collName = "test";
-    static String xmlFile = "test1.xml";
+    static String xmlFile = "test2.xml";
     static String[] xqueryFiles = {"xquery.txt"};
 
 

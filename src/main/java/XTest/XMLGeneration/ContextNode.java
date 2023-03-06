@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ContextNode extends ElementNode {
-    List<AttributeNode> attributeList = new ArrayList<>();
-    List<ContextNode> childList = new ArrayList<>();
+    public List<AttributeNode> attributeList = new ArrayList<>();
+    public List<ContextNode> childList = new ArrayList<>();
+    public int id;
 
     void addAttribute(AttributeNode attributeNode) {
         attributeNode.parentNode = this;
@@ -23,5 +24,9 @@ public class ContextNode extends ElementNode {
         for(AttributeNode attributeNode: contextNode.attributeList) {
             this.attributeList.add(new AttributeNode(attributeNode));
         }
+    }
+
+    void setId(int id) {
+        this.id = id;
     }
 }

@@ -1,6 +1,5 @@
-package XTest.PrimitiveDatatypes;
+package XTest.PrimitiveDatatype;
 
-import XTest.PrimitiveDatatypes.XMLStringGenerator;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -11,9 +10,6 @@ public class XMLStringTest {
         XMLStringGenerator xmlStringGenerator = new XMLStringGenerator();
         String randomString = xmlStringGenerator.getRandomValue();
         System.out.println(randomString);
-        for(int i = 0; i < randomString.length(); i ++) {
-            System.out.println(i + " " + (int) randomString.charAt(i));
-        }
     }
 
     @Test

@@ -1,1 +1,1 @@
-//child[@prop=false()]
+(1 to 5) ! (. + 1)

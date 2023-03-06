@@ -1,18 +1,15 @@
-package XTest.PrimitiveDatatypes;
+package XTest.PrimitiveDatatype;
 
 import XTest.GlobalRandom;
 
 import java.util.*;
 
-import static XTest.XMLGeneration.DataGenerator.mutateProb;
-import static XTest.XMLGeneration.DataGenerator.newProb;
-
 public class XMLStringGenerator extends PooledValueGenerator {
-    Set<Character> escapeSet = new HashSet<>(Arrays.asList('\'', '\"'));
+    Set<Character> escapeSet = new HashSet<>(Arrays.asList('\'', '\"', '<', '>', '/'));
     int valuePoolIdCnt = 0;
     Set<String> valuePool = new HashSet<>();
     Map<Integer, String> valuePoolLookUpMap = new HashMap<>();
-    static int minLength = 0, maxLength = 60;
+    static int minLength = 0, maxLength = 10;
 
     XMLStringGenerator() {
     }

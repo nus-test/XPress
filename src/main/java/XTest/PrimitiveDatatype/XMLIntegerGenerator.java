@@ -1,4 +1,4 @@
-package XTest.PrimitiveDatatypes;
+package XTest.PrimitiveDatatype;
 
 import XTest.GlobalRandom;
 

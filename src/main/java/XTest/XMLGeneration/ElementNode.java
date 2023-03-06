@@ -1,11 +1,11 @@
 package XTest.XMLGeneration;
 
-import XTest.PrimitiveDatatypes.XMLDataType;
+import XTest.PrimitiveDatatype.XMLDatatype;
 
 public class ElementNode {
     String tagName;
     ContextNode parentNode;
-    XMLDataType dataType;
+    XMLDatatype dataType;
     String dataContext;
 
     ElementNode() {}

@@ -1,5 +1,8 @@
 package XTest.XMLGeneration;
 
+import XTest.GlobalRandom;
+
+import java.io.*;
 import java.util.List;
 import java.util.Random;
 
@@ -13,7 +16,6 @@ public class XMLDocumentGenerator {
             new ContextTemplateGeneratorImpl(contextNodeNameGenerator,
                     attributeTemplateGenerator);
     List<ContextNode> contextNodeTemplateList;
-    Random random = new Random();
 
 
     XMLDocumentGenerator() {}
@@ -28,6 +30,23 @@ public class XMLDocumentGenerator {
         return xmlWriter.writeContext(new String(), root);
     }
 
+    String getXMLDocument(ContextNode root) {
+        XMLWriter xmlWriter = new XMLWriter();
+        return xmlWriter.writeContext(new String(), root);
+    }
+
+    ContextNode generateXMLDocumentSave2Resource(int contextNodeSize, String fileName) throws IOException {
+        ContextNode root = generateXMLDocument(contextNodeSize);
+        String xmlData = getXMLDocument(root);
+        FileWriter writer =
+                new FileWriter((this.getClass().getResource(fileName).getPath()));
+        writer.write(xmlData);
+        System.out.println(xmlData);
+        writer.flush();
+        writer.close();
+        return root;
+    }
+
     ContextNode generateXMLDocument(int contextNodeSize) {
         ContextNode root = contextTreeGenerator.GenerateRandomTree(contextNodeSize);
         int templateSize = contextNodeSize / 2;
@@ -37,11 +56,18 @@ public class XMLDocumentGenerator {
     }
 
     void assignTemplateToNode(ContextNode currentNode) {
-        int templateId = random.nextInt(contextNodeTemplateList.size());
+        int templateId = GlobalRandom.getInstance().nextInt(contextNodeTemplateList.size());
         currentNode.assignTemplate(contextNodeTemplateList.get(templateId));
         currentNode.assignRandomValue();
-        for(AttributeNode attributeNode: currentNode.attributeList)
-            attributeNode.assignRandomValue();
+        if(currentNode.dataContext == null) {
+            System.out.println(currentNode.dataType);
+        }
+        for(AttributeNode attributeNode: currentNode.attributeList) {
+            if(attributeNode.tagName == "id")
+                attributeNode.dataContext = Integer.toString(currentNode.id);
+            else
+                attributeNode.assignRandomValue();
+        }
         for(ContextNode childNode: currentNode.childList) {
             assignTemplateToNode(childNode);
         }

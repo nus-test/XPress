@@ -1,4 +1,4 @@
-package XTest.TempTests;
+package XTest.TempTest;
 
 import java.io.*;
 import java.net.*;

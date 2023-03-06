@@ -1,10 +1,9 @@
 package XTest.XMLGeneration;
 
-import XTest.PrimitiveDatatypes.XMLDataType;
+import XTest.PrimitiveDatatype.XMLDatatype;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class AttributeTemplateGeneratorImpl implements AttributeTemplateGenerator {
     NameGenerator nameGenerator;
@@ -18,13 +17,13 @@ public class AttributeTemplateGeneratorImpl implements AttributeTemplateGenerato
         List<AttributeNode> attributeNodeList = new ArrayList<>();
         AttributeNode attributeID = new AttributeNode();
         attributeID.tagName = "id";
-        attributeID.dataType = XMLDataType.INTEGER;
+        attributeID.dataType = XMLDatatype.INTEGER;
         attributeNodeList.add(attributeID);
 
         for(int i = 1; i < templateSize; i ++) {
             AttributeNode attributeNode = new AttributeNode();
             attributeNode.tagName = nameGenerator.GenerateName();
-            attributeNode.dataType = XMLDataType.getRandomDataType();
+            attributeNode.dataType = XMLDatatype.getRandomDataType();
         }
         return attributeNodeList;
     }

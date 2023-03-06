@@ -1,4 +1,4 @@
-package XTest.TempTests;
+package XTest.TempTest;
 
 import java.io.BufferedReader;
 import java.io.InputStream;

@@ -1,4 +1,4 @@
-package XTest.PrimitiveDatatypes;
+package XTest.PrimitiveDatatype;
 
 public interface ValueGenerator {
     String getValue();

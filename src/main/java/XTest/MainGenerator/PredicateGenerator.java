@@ -1,4 +1,4 @@
-package XTest.MainGenerators;
+package XTest.MainGenerator;
 
 public class PredicateGenerator {
 }
