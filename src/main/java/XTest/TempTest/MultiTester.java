@@ -1,5 +1,6 @@
 package XTest.TempTest;
 
+import XTest.CommonUtils;
 import org.exist.xmldb.EXistResource;
 import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.*;

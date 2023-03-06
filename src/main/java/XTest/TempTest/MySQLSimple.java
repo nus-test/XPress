@@ -1,5 +1,7 @@
 package XTest.TempTest;
 
+import XTest.CommonUtils;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.sql.*;

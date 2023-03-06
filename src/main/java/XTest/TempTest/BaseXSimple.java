@@ -1,5 +1,7 @@
 package XTest.TempTest;
 
+import XTest.CommonUtils;
+
 import java.io.*;
 
 public class BaseXSimple {
