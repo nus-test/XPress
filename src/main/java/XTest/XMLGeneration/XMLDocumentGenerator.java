@@ -26,13 +26,22 @@ public class XMLDocumentGenerator {
 
     String getXMLDocument(int contextNodeSize) {
         ContextNode root = generateXMLDocument(contextNodeSize);
-        XMLWriter xmlWriter = new XMLWriter();
-        return xmlWriter.writeContext(new String(), root);
+        return getXMLDocument(root);
     }
 
     String getXMLDocument(ContextNode root) {
         XMLWriter xmlWriter = new XMLWriter();
         return xmlWriter.writeContext(new String(), root);
+    }
+
+    String getXMLDocumentWithStructure(int contextNodeSize) {
+        ContextNode root = generateXMLDocument(contextNodeSize);
+        return getXMLDocumentWithStructure(root);
+    }
+
+    String getXMLDocumentWithStructure(ContextNode root) {
+        XMLWriter xmlWriter = new XMLWriter();
+        return xmlWriter.writeContext(new String(), root, true);
     }
 
     ContextNode generateXMLDocumentSave2Resource(int contextNodeSize, String fileName) throws IOException {

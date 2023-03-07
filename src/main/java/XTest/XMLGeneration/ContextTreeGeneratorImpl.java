@@ -17,10 +17,25 @@ public class ContextTreeGeneratorImpl implements ContextTreeGenerator {
             currentNode.id = i + 1;
             if(i != 0) {
                 int parent = GlobalRandom.getInstance().nextInt(i);
-                currentNode.parentNode = nodeList.get(parent);
-                nodeList.get(parent).childList.add(currentNode);
+                nodeList.get(parent).addChild(currentNode);
             }
         }
-        return nodeList.get(0);
+        ContextNode root = nodeList.get(0);
+        markPrecedingFollowing(root, MarkChoice.PRECEDING);
+        markPrecedingFollowing(root, MarkChoice.FOLLOWING);
+        return root;
     }
+
+    public void markPrecedingFollowing(ContextNode currentNode, MarkChoice currentMarking) {
+        if(currentMarking == MarkChoice.PRECEDING)
+            currentNode.havePreceding = false;
+        else
+            currentNode.haveFollowing = false;
+        if(currentNode.childList.size() != 0) {
+            int id = (currentMarking == MarkChoice.PRECEDING) ? 0 : (currentNode.childList.size() - 1);
+            markPrecedingFollowing(currentNode.childList.get(id), currentMarking);
+        }
+    }
+
+    public enum MarkChoice {PRECEDING, FOLLOWING}
 }

@@ -7,6 +7,10 @@ public class ContextNode extends ElementNode {
     public List<AttributeNode> attributeList = new ArrayList<>();
     public List<ContextNode> childList = new ArrayList<>();
     public int id;
+    public int depth = 0;
+    public int childId;
+    public boolean havePreceding = true;
+    public boolean haveFollowing = true;
 
     void addAttribute(AttributeNode attributeNode) {
         attributeNode.parentNode = this;
@@ -15,7 +19,9 @@ public class ContextNode extends ElementNode {
 
     void addChild(ContextNode contextNode) {
         contextNode.parentNode = this;
+        contextNode.depth = this.depth + 1;
         childList.add(contextNode);
+        contextNode.childId = childList.size();
     }
 
     void assignTemplate(ContextNode contextNode) {

@@ -37,4 +37,9 @@ public class GlobalRandom {
         Collections.shuffle(intList, random);
         return intList.stream().limit(length).collect(Collectors.toList());
     }
+
+    public <T> T getRandomFromList(List<T> list) {
+        int id = nextInt(0, list.size());
+        return list.get(id);
+    }
 }

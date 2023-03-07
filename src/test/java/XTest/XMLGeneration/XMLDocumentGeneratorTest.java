@@ -25,4 +25,11 @@ public class XMLDocumentGeneratorTest {
         XMLDocumentGenerator xmlDocumentGenerator = new XMLDocumentGenerator();
         xmlDocumentGenerator.generateXMLDocumentSave2Resource(5, "/xmldocs/test2.xml");
     }
+
+    @Test
+    void XMLDocumentGenerationWithStructureTest() {
+        XMLDocumentGenerator xmlDocumentGenerator = new XMLDocumentGenerator();
+        String xml = xmlDocumentGenerator.getXMLDocumentWithStructure(5);
+        System.out.println(xml);
+    }
 }

@@ -3,10 +3,10 @@ package XTest.XMLGeneration;
 import XTest.PrimitiveDatatype.XMLDatatype;
 
 public class ElementNode {
-    String tagName;
-    ContextNode parentNode;
-    XMLDatatype dataType;
-    String dataContext;
+    public String tagName;
+    public ContextNode parentNode;
+    public XMLDatatype dataType;
+    public String dataContext;
 
     ElementNode() {}
     ElementNode(ElementNode elementNode) {
