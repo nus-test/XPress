@@ -9,5 +9,9 @@ public abstract class PredicateTreeLogicalConnectionNode extends PredicateTreeNo
     }
 
     public void join(PredicateTreeNode leftChild, PredicateTreeNode rightChild) {
+        childList.add(leftChild);
+        childList.add(rightChild);
     }
+
+    abstract public PredicateTreeLogicalConnectionNode newInstance();
 }

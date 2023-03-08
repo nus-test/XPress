@@ -9,12 +9,9 @@ import XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalConnectionN
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
 
-import javax.naming.Context;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 public class PredicateGenerator {
     MainExecutor mainExecutor;
@@ -67,6 +64,8 @@ public class PredicateGenerator {
     }
 
     public PredicateTreeFunctionNode generateFunctionExpression(PredicateTreeNode inputNode) {
+        PredicateTreeFunctionNode functionNode = PredicateTreeFunctionNode.getRandomPredicateTreeFunctionNode(inputNode.datatype);
+
         return null;
     }
 

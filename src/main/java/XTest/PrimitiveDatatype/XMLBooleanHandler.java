@@ -2,7 +2,7 @@ package XTest.PrimitiveDatatype;
 
 import XTest.GlobalRandom;
 
-public class XMLBooleanGenerator implements ValueGenerator {
+public class XMLBooleanHandler extends ValueHandler {
 
     @Override
     public String getValue() {

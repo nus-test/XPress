@@ -7,7 +7,7 @@ import java.util.*;
 import static XTest.XMLGeneration.DataGenerator.mutateProb;
 import static XTest.XMLGeneration.DataGenerator.newProb;
 
-public abstract class PooledValueGenerator implements ValueGenerator {
+public abstract class PooledValueHandler extends ValueHandler {
     int valuePoolIdCnt = 0;
     Set<String> valuePool = new HashSet<>();
     Map<Integer, String> valuePoolLookUpMap = new HashMap<>();
@@ -16,12 +16,16 @@ public abstract class PooledValueGenerator implements ValueGenerator {
     abstract String mutateValue(String baseString);
 
     public String getValue() {
+        return getValue(true);
+    }
+
+    public String getValue(boolean pooling) {
         boolean choice = GlobalRandom.getInstance().nextDouble() < newProb;
         String generatedString;
         if(choice) {
             // Generate new random value and add to pool;
             generatedString = getRandomValue();
-            addValueToPool(getRandomValue());
+            if(pooling) addValueToPool(getRandomValue());
         }
         else {
             // Get random value from original pool or from mutation
@@ -29,7 +33,7 @@ public abstract class PooledValueGenerator implements ValueGenerator {
             String baseString = getRandomValueFromPool();
             if(mutateChoice) {
                 generatedString = mutateValue(baseString);
-                addValueToPool(generatedString);
+                if(pooling) addValueToPool(generatedString);
             }
             else generatedString = baseString;
         }

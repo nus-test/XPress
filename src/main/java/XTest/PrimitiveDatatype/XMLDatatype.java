@@ -5,19 +5,19 @@ import java.util.Map;
 import java.util.Random;
 
 public enum XMLDatatype {
-    INTEGER(1, new XMLIntegerGenerator()),
-    STRING(2, new XMLStringGenerator()),
-    BOOLEAN(3, new XMLBooleanGenerator());
+    INTEGER(1, new XMLIntegerHandler()),
+    STRING(2, new XMLStringHandler()),
+    BOOLEAN(3, new XMLBooleanHandler());
 
     int id;
-    ValueGenerator valueGenerator;
+    ValueHandler valueHandler;
     public static int typeCnt = 2;
     public static Map<Integer, XMLDatatype> datatypeIdMap = new HashMap<>();
     public static Random random = new Random();
 
-    private XMLDatatype(int id, ValueGenerator valueGenerator) {
+    private XMLDatatype(int id, ValueHandler valueHandler) {
         this.id = id;
-        this.valueGenerator = valueGenerator;
+        this.valueHandler = valueHandler;
     }
 
     static {
@@ -31,7 +31,7 @@ public enum XMLDatatype {
         return XMLDatatype.datatypeIdMap.get(dataTypeId);
     }
 
-    public ValueGenerator getValueGenerator() {
-        return valueGenerator;
+    public ValueHandler getValueHandler() {
+        return valueHandler;
     }
 }

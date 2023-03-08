@@ -28,7 +28,7 @@ public class XPathGenerator {
         this.predicateGenerator = new PredicateGenerator(mainExecutor);
     }
 
-    String generateXPath(String currentBuilder, List<ContextNode> currentNodeList, int depth) throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException {
+    String generateXPath(String currentBuilder, List<ContextNode> currentNodeList, int depth) throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException{
         if(depth == 0) {
             return currentBuilder;
         }
@@ -61,7 +61,7 @@ public class XPathGenerator {
         return generateXPath(builder, selectedNodeList, depth - 1);
     }
 
-    String getXPath(int depth) throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException {
+    String getXPath(int depth) throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, InstantiationException, IllegalAccessException {
         return generateXPath("", null, depth);
     }
 }

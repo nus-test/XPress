@@ -7,24 +7,24 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 public class XMLStringTest {
     @Test
     void GenerateRandomXMLStringTest() {
-        XMLStringGenerator xmlStringGenerator = new XMLStringGenerator();
-        String randomString = xmlStringGenerator.getRandomValue();
+        XMLStringHandler xmlStringHandler = new XMLStringHandler();
+        String randomString = xmlStringHandler.getRandomValue();
         System.out.println(randomString);
     }
 
     @Test
     void EscapeSetContainsSingleDash() {
-        XMLStringGenerator xmlStringGenerator = new XMLStringGenerator();
-        assertTrue(xmlStringGenerator.escapeSet.contains('\''));
+        XMLStringHandler xmlStringHandler = new XMLStringHandler();
+        assertTrue(xmlStringHandler.escapeSet.contains('\''));
     }
 
     @Test
     void GeneratedStringDoesNotContainEscapedCharacters() {
-        XMLStringGenerator xmlStringGenerator = new XMLStringGenerator();
+        XMLStringHandler xmlStringHandler = new XMLStringHandler();
         for(int i = 1; i <= 10; i ++) {
-            String randomString = xmlStringGenerator.getRandomValue();
+            String randomString = xmlStringHandler.getRandomValue();
             for (int j = 0; j < randomString.length(); j ++) {
-                assertFalse(xmlStringGenerator.escapeSet.contains(randomString.charAt(j)));
+                assertFalse(xmlStringHandler.escapeSet.contains(randomString.charAt(j)));
             }
         }
     }

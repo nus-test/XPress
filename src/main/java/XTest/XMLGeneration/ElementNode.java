@@ -16,6 +16,6 @@ public class ElementNode {
     }
 
     void assignRandomValue() {
-        dataContext = dataType.getValueGenerator().getValue();
+        dataContext = dataType.getValueHandler().getValue();
     }
 }

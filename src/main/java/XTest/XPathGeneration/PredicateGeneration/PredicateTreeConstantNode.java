@@ -1,11 +1,19 @@
 package XTest.XPathGeneration.PredicateGeneration;
 
+import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.XMLGeneration.AttributeNode;
 import XTest.XMLGeneration.ContextNode;
 import XTest.XMLGeneration.ElementNode;
 
 public class PredicateTreeConstantNode extends PredicateTreeNode {
     PredicateTreeConstantNode() {}
+
+    public PredicateTreeConstantNode(XMLDatatype xmlDatatype, String context) {
+        datatype = xmlDatatype;
+        dataContent = context;
+        XPathExpr = context;
+    }
+
     PredicateTreeConstantNode(ElementNode elementNode) {
         dataContent = elementNode.dataContext;
         datatype = elementNode.dataType;

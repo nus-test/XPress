@@ -4,14 +4,14 @@ import XTest.GlobalRandom;
 
 import java.util.*;
 
-public class XMLStringGenerator extends PooledValueGenerator {
+public class XMLStringHandler extends PooledValueHandler implements XMLComparable {
     Set<Character> escapeSet = new HashSet<>(Arrays.asList('\'', '\"', '<', '>', '/'));
     int valuePoolIdCnt = 0;
     Set<String> valuePool = new HashSet<>();
     Map<Integer, String> valuePoolLookUpMap = new HashMap<>();
     static int minLength = 0, maxLength = 10;
 
-    XMLStringGenerator() {
+    XMLStringHandler() {
     }
 
     String mutateValue(String value) {
