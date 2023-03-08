@@ -1,0 +1,6 @@
+package XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalOperationNode;
+
+import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
+
+public abstract class PredicateTreeLogicalOperationNode extends PredicateTreeNode {
+}

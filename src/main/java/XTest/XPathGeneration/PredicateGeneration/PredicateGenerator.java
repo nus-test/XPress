@@ -4,12 +4,17 @@ import XTest.DatabaseExecutor.MainExecutor;
 import XTest.GlobalRandom;
 import XTest.TestException.MismatchingResultException;
 import XTest.XMLGeneration.ContextNode;
+import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.PredicateTreeFunctionNode;
+import XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalConnectionNode.PredicateTreeLogicalConnectionNode;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
 
+import javax.naming.Context;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class PredicateGenerator {
     MainExecutor mainExecutor;
@@ -20,31 +25,55 @@ public class PredicateGenerator {
 
     public PredicateContext generatePredicate(String XPathPrefix, List<ContextNode> candidateNodeList, int maxPhraseLength) throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException {
         ContextNode randomNode = GlobalRandom.getInstance().getRandomFromList(candidateNodeList);
-        PredicateContextTree predicate = generatePredicate(randomNode, maxPhraseLength);
-        boolean found = false;
-        List<ContextNode> resultList = null;
-        while(found == false) {
-            resultList = mainExecutor.executeGetNodeList(XPathPrefix + predicate.toString());
-            if(!resultList.isEmpty())
-                found = true;
-            else predicate = mutatePredicate(randomNode, predicate);
-        }
-        return new PredicateContext(predicate.toString(), XPathPrefix, resultList);
-    }
-
-    public PredicateContextTree generatePredicate(ContextNode currentNode, int maxPhraseLength) {
+        PredicateTreeNode currentRoot = null;
         for(int i = 0; i < maxPhraseLength; i ++) {
-            PredicateContextTree phrase = generatePredicate(currentNode);
-
+            PredicateTreeNode singlePhraseNode = generateSinglePhrase(randomNode);
+            if(currentRoot == null)
+                currentRoot = singlePhraseNode;
+            else {
+                currentRoot = joinSinglePhrases(currentRoot, singlePhraseNode);
+            }
         }
+        String predicate = "[" + currentRoot.toString() + "]";
+        List<ContextNode> executionResult = mainExecutor.executeGetNodeList(XPathPrefix + predicate);
+        PredicateContext predicateContext = new PredicateContext(predicate, XPathPrefix, executionResult);
+        return predicateContext;
+    }
+
+    public PredicateTreeNode generateSinglePhrase(ContextNode currentNode) {
+        PredicateTreeConstantNode inputNode = getSubcontextFromContextNode(currentNode);
+        PredicateTreeFunctionNode functionNode = generateFunctionExpression(inputNode, 2);
+        PredicateTreeNode phraseNode = generateSinglePhraseFromFunction(functionNode);
+        return phraseNode;
+    }
+
+    public PredicateTreeNode generateSinglePhraseFromFunction(PredicateTreeFunctionNode functionNode) {
         return null;
     }
 
-    public PredicateContextTree generatePredicate(ContextNode currentNode) {
+    public PredicateTreeNode joinSinglePhrases(PredicateTreeNode leftChild, PredicateTreeNode rightChild) {
+        PredicateTreeLogicalConnectionNode connectionNode = PredicateTreeLogicalConnectionNode.getRandomLogicalConnectionNode();
+        connectionNode.join(leftChild, rightChild);
+        return connectionNode;
+    }
+
+    public PredicateTreeFunctionNode generateFunctionExpression(PredicateTreeNode inputNode, int depth) {
+        PredicateTreeFunctionNode functionNode = null;
+        for(int d = 0; d < depth; d ++) {
+            functionNode = generateFunctionExpression(inputNode);
+            inputNode = functionNode;
+        }
+        return functionNode;
+    }
+
+    public PredicateTreeFunctionNode generateFunctionExpression(PredicateTreeNode inputNode) {
         return null;
     }
 
-    public PredicateContextTree mutatePredicate(ContextNode currentNode, PredicateContextTree basePredicate) {
-        return null;
+    public PredicateTreeConstantNode getSubcontextFromContextNode(ContextNode currentNode) {
+        double prob = GlobalRandom.getInstance().nextDouble();
+        if(prob < 0.3)
+            return new PredicateTreeConstantNode(currentNode);
+        return new PredicateTreeConstantNode(GlobalRandom.getInstance().getRandomFromList(currentNode.attributeList));
     }
 }
