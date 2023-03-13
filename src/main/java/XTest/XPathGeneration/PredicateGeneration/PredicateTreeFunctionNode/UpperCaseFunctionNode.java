@@ -4,9 +4,9 @@ import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 
 public class UpperCaseFunctionNode extends PredicateTreeFunctionNode {
-    static {
-        UpperCaseFunctionNode upperCaseFunctionNode = new UpperCaseFunctionNode();
-        PredicateTreeFunctionNode.insertFunctionToMap(upperCaseFunctionNode, XMLDatatype.STRING);
+
+    UpperCaseFunctionNode() {
+        this.datatype = XMLDatatype.STRING;
     }
     @Override
     public void fillContents(PredicateTreeNode inputNode) {

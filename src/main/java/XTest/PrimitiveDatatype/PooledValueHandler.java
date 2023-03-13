@@ -13,7 +13,6 @@ public abstract class PooledValueHandler extends ValueHandler {
     Map<Integer, String> valuePoolLookUpMap = new HashMap<>();
 
     abstract String getRandomValue();
-    abstract String mutateValue(String baseString);
 
     public String getValue() {
         return getValue(true);

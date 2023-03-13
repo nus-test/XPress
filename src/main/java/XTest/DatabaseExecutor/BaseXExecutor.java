@@ -7,6 +7,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLOutput;
 
 public class BaseXExecutor extends DatabaseExecutor {
 
@@ -36,6 +37,7 @@ public class BaseXExecutor extends DatabaseExecutor {
 
     @Override
     public void clearCurrentContext() throws IOException {
+        System.out.println("Cleared baseX context!");
         BaseXSession.execute("drop db test");
     }
 
@@ -46,6 +48,5 @@ public class BaseXExecutor extends DatabaseExecutor {
 
     @Override
     public void close() throws IOException {
-        BaseXSession.execute("drop db test");
     }
 }

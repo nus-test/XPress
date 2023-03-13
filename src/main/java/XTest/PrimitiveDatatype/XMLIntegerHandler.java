@@ -17,7 +17,7 @@ public class XMLIntegerHandler extends PooledValueHandler implements XMLComparab
     }
 
     @Override
-    String mutateValue(String baseString) {
+    public String mutateValue(String baseString) {
         return null;
     }
 }

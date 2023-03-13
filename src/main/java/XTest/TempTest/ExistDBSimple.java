@@ -45,7 +45,7 @@ public class ExistDBSimple {
         col = DatabaseManager.getCollection(URI + rootDir + "/" + collName);
         col.setProperty(OutputKeys.INDENT, "no");
         res = (XMLResource)col.createResource(xmlFile, XMLResource.RESOURCE_TYPE);
-        URL url = ExistDBSimple.class.getResource("xmldocs/" + xmlFile);
+        URL url = ExistDBSimple.class.getResource("/xmldocs/" + xmlFile);
         File f = new File(url.getFile());
         res.setContent(f);
         col.storeResource(res);
@@ -55,7 +55,7 @@ public class ExistDBSimple {
         xqs.setProperty("indent", "yes");
 
         for(String xqueryFile: xqueryFiles) {
-            InputStream inputStream = ExistDBSimple.class.getResourceAsStream(xqueryFile);
+            InputStream inputStream = ExistDBSimple.class.getResourceAsStream("/" + xqueryFile);
             String xquery = readInputStream(inputStream);
             System.out.println("==================Xquery==================");
             System.out.println(xquery);

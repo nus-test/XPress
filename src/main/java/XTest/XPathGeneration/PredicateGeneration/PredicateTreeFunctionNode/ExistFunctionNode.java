@@ -1,11 +1,16 @@
 package XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode;
 
+import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 
 public class ExistFunctionNode extends PredicateTreeFunctionNode {
+    ExistFunctionNode() {
+        this.datatype = XMLDatatype.BOOLEAN;
+    }
+
     @Override
     public String toString() {
-        return "exists(" + childList.toString() + ")";
+        return "exists(" + childList.get(0).toString() + ")";
     }
 
     @Override
@@ -17,4 +22,5 @@ public class ExistFunctionNode extends PredicateTreeFunctionNode {
     public ExistFunctionNode newInstance() {
         return new ExistFunctionNode();
     }
+
 }

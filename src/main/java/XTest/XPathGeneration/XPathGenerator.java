@@ -48,13 +48,23 @@ public class XPathGenerator {
                 prefix = availablePrefixes.get(id);
             }
         }
+        if(currentBuilder.length() == 0) {
+            prefix = "//";
+        }
         builder += prefix;
         String tempBuilder = builder + "*";
+        System.out.println("tempBuilder: " + tempBuilder + " " + prefix);
         List<Integer> nodeIdList = mainExecutor.execute(tempBuilder);
         List<ContextNode> selectedNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
         prob = GlobalRandom.getInstance().nextDouble();
+        ContextNode randomNode = GlobalRandom.getInstance().getRandomFromList(selectedNodeList);
+        double prob2 = GlobalRandom.getInstance().nextDouble();
+        if(prob2 < 0.6)
+            builder += "*";
+        else
+            builder += randomNode.tagName;
         if(prob > 0.3) {
-            PredicateContext predicateContext = predicateGenerator.generatePredicate(builder, selectedNodeList, 3);
+            PredicateContext predicateContext = predicateGenerator.generatePredicate(builder, selectedNodeList, 3, randomNode);
             builder += predicateContext.predicate;
             selectedNodeList = predicateContext.executionResult;
         }

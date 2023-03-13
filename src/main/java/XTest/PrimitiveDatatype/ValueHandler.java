@@ -6,4 +6,6 @@ public abstract class ValueHandler {
     public String getValue(boolean pooling) {
         return getValue();
     }
+
+    public abstract String mutateValue(String baseString);
 }

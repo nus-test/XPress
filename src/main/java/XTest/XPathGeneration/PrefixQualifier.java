@@ -31,10 +31,12 @@ public class PrefixQualifier {
                 haveChildNode = true;
             if(node.parentNode != null)
                 haveParentNode = true;
-            if(node.childId != node.parentNode.childList.size())
-                haveFollowingSibling = true;
-            if(node.childId != 0)
-                havePrecedingSibling = true;
+            if(node.parentNode != null) {
+                if (node.childId != node.parentNode.childList.size())
+                    haveFollowingSibling = true;
+                if (node.childId != 0)
+                    havePrecedingSibling = true;
+            }
             if(node.haveFollowing)
                 haveFollowing = true;
             if(node.havePreceding)
@@ -43,20 +45,20 @@ public class PrefixQualifier {
         if(haveChildNode) {
             availablePrefix.addAll(Arrays.asList("/", "//"));
             if(!noAxes)
-                availablePrefix.addAll(getAxesList(Arrays.asList("/child","/descendant")));
+                availablePrefix.addAll(getAxesList(Arrays.asList("child","descendant")));
         }
         if(!noAxes) {
             if(haveParentNode)
-                availablePrefix.addAll(getAxesList(Arrays.asList("/parent", "/ancestor")));
+                availablePrefix.addAll(getAxesList(Arrays.asList("parent", "ancestor")));
             if(haveFollowingSibling)
-                availablePrefix.add(getAxis("/following-sibling"));
+                availablePrefix.add(getAxis("following-sibling"));
             if(havePrecedingSibling)
-                availablePrefix.add(getAxis("/preceding-sibling"));
+                availablePrefix.add(getAxis("preceding-sibling"));
             if(haveFollowing)
-                availablePrefix.add(getAxis("/following"));
+                availablePrefix.add(getAxis("following"));
             if(havePreceding)
-                availablePrefix.add(getAxis("/preceding"));
-            availablePrefix.addAll(Arrays.asList("/self", "/descendant-or-self", "/ancestor-or-self"));
+                availablePrefix.add(getAxis("preceding"));
+            availablePrefix.addAll(getAxesList(Arrays.asList("self", "descendant-or-self", "ancestor-or-self")));
         }
         return availablePrefix;
     }

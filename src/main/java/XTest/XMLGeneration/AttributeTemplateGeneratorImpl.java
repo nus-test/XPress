@@ -24,6 +24,7 @@ public class AttributeTemplateGeneratorImpl implements AttributeTemplateGenerato
             AttributeNode attributeNode = new AttributeNode();
             attributeNode.tagName = nameGenerator.GenerateName();
             attributeNode.dataType = XMLDatatype.getRandomDataType();
+            attributeNodeList.add(attributeNode);
         }
         return attributeNodeList;
     }

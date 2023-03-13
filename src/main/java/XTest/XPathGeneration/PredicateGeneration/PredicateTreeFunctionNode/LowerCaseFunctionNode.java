@@ -4,9 +4,8 @@ import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 
 public class LowerCaseFunctionNode extends PredicateTreeFunctionNode {
-    static {
-        LowerCaseFunctionNode lowerCaseFunctionNode = new LowerCaseFunctionNode();
-        PredicateTreeFunctionNode.insertFunctionToMap(lowerCaseFunctionNode, XMLDatatype.STRING);
+    LowerCaseFunctionNode() {
+        this.datatype = XMLDatatype.STRING;
     }
 
     @Override

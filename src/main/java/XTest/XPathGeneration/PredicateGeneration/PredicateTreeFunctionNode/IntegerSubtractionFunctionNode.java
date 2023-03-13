@@ -7,11 +7,9 @@ import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 
 public class IntegerSubtractionFunctionNode extends PredicateTreeFunctionNode {
 
-    static {
-        IntegerSubtractionFunctionNode subtractionFunctionNode = new IntegerSubtractionFunctionNode();
-        PredicateTreeFunctionNode.insertFunctionToMap(subtractionFunctionNode, XMLDatatype.INTEGER);
+    IntegerSubtractionFunctionNode() {
+        this.datatype = XMLDatatype.INTEGER;
     }
-
     @Override
     public void fillContents(PredicateTreeNode inputNode) {
         String value = null;

@@ -6,9 +6,9 @@ import XTest.XPathGeneration.PredicateGeneration.PredicateTreeConstantNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 
 public class IntegerAddFunctionNode extends PredicateTreeFunctionNode{
-    static {
-        IntegerAddFunctionNode addFunctionNode = new IntegerAddFunctionNode();
-        PredicateTreeFunctionNode.insertFunctionToMap(addFunctionNode, XMLDatatype.INTEGER);
+
+    IntegerAddFunctionNode() {
+        this.datatype = XMLDatatype.INTEGER;
     }
 
     @Override
@@ -37,4 +37,5 @@ public class IntegerAddFunctionNode extends PredicateTreeFunctionNode{
     public IntegerAddFunctionNode newInstance() {
         return new IntegerAddFunctionNode();
     }
+
 }

@@ -6,9 +6,8 @@ import XTest.XPathGeneration.PredicateGeneration.PredicateTreeConstantNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 
 public class IntegerMultiplicationFunctionNode extends PredicateTreeFunctionNode {
-    static {
-        IntegerMultiplicationFunctionNode multiplicationFunctionNode = new IntegerMultiplicationFunctionNode();
-        PredicateTreeFunctionNode.insertFunctionToMap(multiplicationFunctionNode, XMLDatatype.INTEGER);
+    IntegerMultiplicationFunctionNode() {
+        this.datatype = XMLDatatype.INTEGER;
     }
 
     @Override

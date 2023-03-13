@@ -21,10 +21,16 @@ public class XPathGenerationTest {
 
         BaseXExecutor baseXExecutor = BaseXExecutor.getInstance();
         MainExecutor mainExecutor = new MainExecutor();
-        XPathGenerator xPathGenerator = new XPathGenerator(mainExecutor);
-        mainExecutor.registerDatabase(baseXExecutor);
-        mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
-
-        xPathGenerator.getXPath(5);
+        XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
+        mainExecutor.registerDatabase(baseXExecutor,"BaseX");
+        String XPath;
+        try {
+            mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
+            XPath = XPathGenerator.getXPath(5);
+        }finally {
+            mainExecutor.close();
+        }
+        System.out.println("XPath generation result -------------->");
+        System.out.println(XPath);
     }
 }

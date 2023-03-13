@@ -12,6 +12,8 @@ public class PredicateTreeConstantNode extends PredicateTreeNode {
         datatype = xmlDatatype;
         dataContent = context;
         XPathExpr = context;
+        if(this.datatype == XMLDatatype.STRING)
+            XPathExpr = "\"" + context + "\"";
     }
 
     PredicateTreeConstantNode(ElementNode elementNode) {

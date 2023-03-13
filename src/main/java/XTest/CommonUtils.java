@@ -24,4 +24,12 @@ public class CommonUtils {
                 return false;
         return true;
     }
+
+    public static Integer getEnclosedInteger(String context, int id) {
+        for(int i = id; i < context.length(); i ++)
+            if(context.charAt(i) == '\"') {
+                return Integer.parseInt(context.substring(id, i));
+            }
+        return null;
+    }
 }

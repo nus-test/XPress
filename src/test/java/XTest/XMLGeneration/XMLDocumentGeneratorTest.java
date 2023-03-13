@@ -29,7 +29,7 @@ public class XMLDocumentGeneratorTest {
     @Test
     void XMLDocumentGenerationWithStructureTest() {
         XMLDocumentGenerator xmlDocumentGenerator = new XMLDocumentGenerator();
-        String xml = xmlDocumentGenerator.getXMLDocumentWithStructure(5);
+        String xml = xmlDocumentGenerator.getXMLDocumentWithStructure(10);
         System.out.println(xml);
     }
 }

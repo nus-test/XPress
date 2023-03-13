@@ -37,8 +37,8 @@ public class SaxonSimple {
         for(String xqueryFile: xqueryFiles) {
             System.out.println("==================Xquery==================");
             String xqueryFilePath = xqueryFile;
-            URL url = SaxonSimple.class.getResource(xqueryFilePath);
-            String xquery = readInputStream(SaxonSimple.class.getResourceAsStream(xqueryFilePath));
+            URL url = SaxonSimple.class.getResource("/" + xqueryFilePath);
+            String xquery = readInputStream(SaxonSimple.class.getResourceAsStream("/" + xqueryFilePath));
             System.out.println(xquery);
             // the Saxon processor object
             Processor saxon = new Processor(false);
@@ -49,7 +49,7 @@ public class SaxonSimple {
 
             // parse the string as a document node
             DocumentBuilder builder = saxon.newDocumentBuilder();
-            url = SaxonSimple.class.getResource("xmldocs/" + xmlFile);
+            url = SaxonSimple.class.getResource("/xmldocs/" + xmlFile);
             File xmldocFile = new File(url.getFile());
 
             String xmlFileContent = readInputStream(new FileInputStream(xmldocFile));

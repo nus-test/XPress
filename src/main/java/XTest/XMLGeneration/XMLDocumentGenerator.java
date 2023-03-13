@@ -4,7 +4,6 @@ import XTest.GlobalRandom;
 
 import java.io.*;
 import java.util.List;
-import java.util.Random;
 
 public class XMLDocumentGenerator {
     ContextTreeGenerator contextTreeGenerator = new ContextTreeGeneratorImpl();

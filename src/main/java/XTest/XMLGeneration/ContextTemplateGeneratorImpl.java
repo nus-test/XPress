@@ -22,7 +22,6 @@ public class ContextTemplateGeneratorImpl implements ContextTemplateGenerator {
         int attributeSize = (int) (templateSize * 0.8);
         List<AttributeNode> attributeTemplateList = attributeTemplateGenerator.GenerateAttributeTemplate(attributeSize);
         List<ContextNode> contextTemplateList = new ArrayList<>();
-
         for(int i = 0; i < templateSize; i ++) {
             ContextNode contextNode = new ContextNode();
             int attributeTotalNum = min(attributeSize, GlobalRandom.getInstance().nextInt(5) + 1);
@@ -30,7 +29,6 @@ public class ContextTemplateGeneratorImpl implements ContextTemplateGenerator {
             List<Integer> attributeIdList = GlobalRandom.getInstance().nextIntListNoRep(attributeTotalNum - 1, attributeSize - 1);
             for(int j = 0; j < attributeTotalNum - 1; j ++)
                 attributeIdList.set(j, attributeIdList.get(j) + 1);
-
             for(int j = 0; j < attributeTotalNum - 1; j ++) {
                 AttributeNode attributeNode = new AttributeNode(
                         attributeTemplateList.get(attributeIdList.get(j))

@@ -1,11 +1,6 @@
 package XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalOperationNode;
 
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalConnectionNode.PredicateTreeLogicalConnectionNode;
-
 public class GreaterOrEqualOperationNode extends PredicateTreeLogicalOperationNode {
-    static {
-        PredicateTreeLogicalOperationNode.comparativeOperationNodeList.add(new GreaterThanOperationNode());
-    }
 
     @Override
     public String toString() {

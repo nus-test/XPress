@@ -4,22 +4,18 @@ import XTest.CommonUtils;
 import XTest.StringUtils;
 import XTest.TestException.MismatchingResultException;
 import XTest.XMLGeneration.ContextNode;
-import XTest.XPathGeneration.PrefixQualifier;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
 
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MainExecutor {
 
     Map<Integer, ContextNode> contextNodeMap = new HashMap<>();
     List<DatabaseExecutor> databaseExecutorList = new ArrayList<>();
+    Map<String, DatabaseExecutor> databaseExecutorNameMap = new HashMap<>();
 
     public MainExecutor() {
 
@@ -42,19 +38,57 @@ public class MainExecutor {
     public void registerDatabase(DatabaseExecutor databaseExecutor) {
         databaseExecutorList.add(databaseExecutor);
     }
+    public void registerDatabase(DatabaseExecutor databaseExecutor, String databaseName) {
+        databaseExecutorNameMap.put(databaseName, databaseExecutor);
+        databaseExecutorList.add(databaseExecutor);
+    }
 
     public List<Integer> execute(String XPath) throws SQLException, XMLDBException, IOException, SaxonApiException, MismatchingResultException {
         List<Integer> nodeIdResultSet = null;
         for(DatabaseExecutor databaseExecutor : databaseExecutorList) {
-            String result = databaseExecutor.execute(XPath);
+            String result = executeSingleProcessor(XPath, databaseExecutor);
+            System.out.println("Result ===============================");
+            System.out.println(result);
             List<Integer> currentNodeIdResultSet = getNodeIdList(result);
-            boolean checkResult = CommonUtils.compareList(nodeIdResultSet, currentNodeIdResultSet);
-            if(checkResult == false) {
-                throw new MismatchingResultException();
+            System.out.println("Result Id List -----------------------");
+            System.out.println(currentNodeIdResultSet);
+            if(nodeIdResultSet != null) {
+                boolean checkResult = CommonUtils.compareList(nodeIdResultSet, currentNodeIdResultSet);
+                if (checkResult == false) {
+                    throw new MismatchingResultException();
+                }
             }
             nodeIdResultSet = currentNodeIdResultSet;
         }
         return nodeIdResultSet;
+    }
+
+    public void cleanUp() throws SQLException, XMLDBException, IOException {
+        for(DatabaseExecutor databaseExecutor : databaseExecutorList)
+            databaseExecutor.clearContextWithCheck();
+    }
+
+    public void close() throws SQLException, XMLDBException, IOException {
+        cleanUp();
+        for(DatabaseExecutor databaseExecutor : databaseExecutorList)
+            databaseExecutor.close();
+    }
+
+    public String executeSingleProcessor(String XPath) throws SQLException, XMLDBException, IOException, SaxonApiException {
+        return executeSingleProcessor(XPath, databaseExecutorList.get(0));
+    }
+
+    public String executeSingleProcessor(String XPath, String databaseName) throws SQLException, XMLDBException, IOException, SaxonApiException {
+        DatabaseExecutor databaseExecutor = databaseExecutorNameMap.get(databaseName);
+        return executeSingleProcessor(XPath, databaseExecutor);
+    }
+
+    public String executeSingleProcessor(String XPath, DatabaseExecutor databaseExecutor) throws SQLException, XMLDBException, IOException, SaxonApiException {
+        System.out.println("Execute single XPath!!!");
+        System.out.println(XPath);
+        String result = databaseExecutor.execute(XPath);
+        System.out.println("Execution result: " + result);
+        return result;
     }
 
     public List<ContextNode> executeGetNodeList(String XPath) throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException {
@@ -63,12 +97,18 @@ public class MainExecutor {
     }
 
     public List<Integer> getNodeIdList(String resultString) {
-        List<Integer> occurrenceList = StringUtils.getOccurrenceInString(resultString, "<id=\"");
         List<Integer> nodeIdList = new ArrayList<>();
-        for(Integer index: occurrenceList) {
-            int endIndex = resultString.indexOf("\"", index + 5);
-            int nodeId = Integer.parseInt(resultString.substring(index + 5, endIndex));
-            nodeIdList.add(nodeId);
+        Stack<Integer> tagStack = new Stack<>();
+        for(int i = 0; i < resultString.length(); i ++) {
+            if(i < resultString.length() - 1
+                    && resultString.substring(i, i + 2).equals("</")) {
+                tagStack.pop();
+            }
+            else if(resultString.charAt(i) == '<')
+                tagStack.add(0);
+            if(tagStack.size() == 1 && i + 4 <= resultString.length() && resultString.substring(i, i + 4).equals("id=\"")) {
+                nodeIdList.add(CommonUtils.getEnclosedInteger(resultString, i + 4));
+            }
         }
         nodeIdList.sort(Integer::compareTo);
         return nodeIdList;

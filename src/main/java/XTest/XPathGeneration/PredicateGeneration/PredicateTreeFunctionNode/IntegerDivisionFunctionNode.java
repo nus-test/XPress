@@ -7,9 +7,8 @@ import XTest.XPathGeneration.PredicateGeneration.PredicateTreeConstantNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 
 public class IntegerDivisionFunctionNode extends PredicateTreeFunctionNode{
-    static {
-        IntegerDivisionFunctionNode divisionFunctionNode = new IntegerDivisionFunctionNode();
-        PredicateTreeFunctionNode.insertFunctionToMap(divisionFunctionNode, XMLDatatype.INTEGER);
+    IntegerDivisionFunctionNode() {
+        this.datatype = XMLDatatype.INTEGER;
     }
 
     @Override
@@ -36,4 +35,5 @@ public class IntegerDivisionFunctionNode extends PredicateTreeFunctionNode{
     public IntegerDivisionFunctionNode newInstance() {
         return new IntegerDivisionFunctionNode();
     }
+
 }

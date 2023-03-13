@@ -5,9 +5,8 @@ import XTest.XPathGeneration.PredicateGeneration.PredicateTreeConstantNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 
 public class ConcatFunctionNode extends PredicateTreeFunctionNode {
-    static {
-        ConcatFunctionNode concatFunctionNode = new ConcatFunctionNode();
-        PredicateTreeFunctionNode.insertFunctionToMap(concatFunctionNode, XMLDatatype.STRING);
+    ConcatFunctionNode() {
+        this.datatype = XMLDatatype.STRING;
     }
     @Override
     public String toString() {

@@ -28,13 +28,13 @@ public abstract class DatabaseExecutor {
     public void setContextByFile(String pathName) throws SQLException, IOException, SaxonApiException, XMLDBException {
         String xmlData =
                 CommonUtils.readInputStream(
-                        new ByteArrayInputStream(MySQLSimple.class.getResourceAsStream("xmldocs/" + pathName).readAllBytes()));
+                        new ByteArrayInputStream(MySQLSimple.class.getResourceAsStream("/xmldocs/" + pathName).readAllBytes()));
         setContextByContentWithCheck(xmlData);
     }
 
     void setContextByContent(String context) throws SaxonApiException, SQLException, XMLDBException, IOException {
         FileWriter writer =
-                new FileWriter((this.getClass().getResource("autotest.xml").getPath()));
+                new FileWriter((this.getClass().getResource("/xmldocs/autotest.xml").getPath()));
         writer.write(context);
         System.out.println(context);
         writer.close();

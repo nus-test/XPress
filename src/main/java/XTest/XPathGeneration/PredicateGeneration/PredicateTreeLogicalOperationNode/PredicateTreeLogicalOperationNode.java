@@ -3,7 +3,6 @@ package XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalOperationN
 import XTest.GlobalRandom;
 import XTest.PrimitiveDatatype.XMLComparable;
 import XTest.PrimitiveDatatype.XMLDatatype;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalConnectionNode.PredicateTreeLogicalConnectionNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 
 import java.util.ArrayList;
@@ -12,6 +11,13 @@ import java.util.List;
 public abstract class PredicateTreeLogicalOperationNode extends PredicateTreeNode {
 
     static List<PredicateTreeLogicalOperationNode> comparativeOperationNodeList = new ArrayList<>();
+
+    static {
+        PredicateTreeLogicalOperationNode.comparativeOperationNodeList.add(new GreaterThanOperationNode());
+        PredicateTreeLogicalOperationNode.comparativeOperationNodeList.add(new GreaterOrEqualOperationNode());
+        PredicateTreeLogicalOperationNode.comparativeOperationNodeList.add(new LessThenOperationNode());
+        PredicateTreeLogicalOperationNode.comparativeOperationNodeList.add(new LessOrEqualOperationNode());
+    }
 
     public static PredicateTreeLogicalOperationNode getRandomLogicalOperationNode(XMLDatatype datatype) {
         double prob = GlobalRandom.getInstance().nextDouble();

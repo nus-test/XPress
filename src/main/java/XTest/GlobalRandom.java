@@ -19,11 +19,21 @@ public class GlobalRandom {
 
     public int nextInt() { return random.nextInt(); }
     public int nextInt(int minBound, int maxBound) {
-        return random.nextInt(maxBound - minBound) + minBound;
+        if (maxBound < 0) {
+            return -(random.nextInt(-maxBound + minBound) - minBound);
+        } else if(minBound >= 0)
+            return random.nextInt(maxBound - minBound) + minBound;
+        else {
+            return (int) (random.nextLong((long) maxBound - (long) minBound) + minBound);
+        }
     }
 
     public int nextInt(int maxBound) {
-        return random.nextInt(maxBound);
+        if(maxBound > 0)
+            return random.nextInt(maxBound);
+        else {
+            return -random.nextInt(-maxBound);
+        }
     }
 
     public double nextDouble() {

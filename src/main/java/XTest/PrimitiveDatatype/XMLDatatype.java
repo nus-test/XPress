@@ -1,8 +1,9 @@
 package XTest.PrimitiveDatatype;
 
+import XTest.GlobalRandom;
+
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 public enum XMLDatatype {
     INTEGER(1, new XMLIntegerHandler()),
@@ -13,7 +14,6 @@ public enum XMLDatatype {
     ValueHandler valueHandler;
     public static int typeCnt = 2;
     public static Map<Integer, XMLDatatype> datatypeIdMap = new HashMap<>();
-    public static Random random = new Random();
 
     private XMLDatatype(int id, ValueHandler valueHandler) {
         this.id = id;
@@ -27,7 +27,7 @@ public enum XMLDatatype {
     }
 
     public static XMLDatatype getRandomDataType() {
-        int dataTypeId = random.nextInt(XMLDatatype.typeCnt) + 1;
+        int dataTypeId = GlobalRandom.getInstance().nextInt(XMLDatatype.typeCnt + 1) + 1;
         return XMLDatatype.datatypeIdMap.get(dataTypeId);
     }
 

@@ -10,9 +10,14 @@ public class XMLBooleanHandler extends ValueHandler {
         double prob2 = GlobalRandom.getInstance().nextDouble();
         String value;
         if(prob1 < 0.5)
-            value = (prob2 < 0.5) ? "1" : "true";
+            value = "true";
         else
-            value = (prob2 < 0.5) ? "0" : "false";
+            value = "false";
         return value;
+    }
+
+    @Override
+    public String mutateValue(String baseString) {
+        return getValue();
     }
 }
