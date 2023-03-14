@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-public class XMLStringTest {
+public class XMLStringHandlerTest {
     @Test
     void GenerateRandomXMLStringTest() {
         XMLStringHandler xmlStringHandler = new XMLStringHandler();

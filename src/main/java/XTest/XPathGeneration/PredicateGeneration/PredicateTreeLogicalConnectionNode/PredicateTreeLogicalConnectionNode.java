@@ -1,25 +1,28 @@
 package XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalConnectionNode;
 
-import XTest.CommonUtils;
 import XTest.GlobalRandom;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
-import org.checkerframework.checker.units.qual.A;
+import XTest.XPathGeneration.PredicateGeneration.UnaryPredicateTreeNode;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class PredicateTreeLogicalConnectionNode extends PredicateTreeNode {
-    static List<PredicateTreeLogicalConnectionNode> logicalConnectionNodeList = new ArrayList<>();
+    static List<PredicateTreeLogicalConnectionNode> binaryLogicalConnectionNodeList = new ArrayList<>();
+    static List<PredicateTreeLogicalConnectionNode> unaryLogicalConnectionNodeList = new ArrayList<>();
 
     static {
-        logicalConnectionNodeList.add(new AndConnectionNode());
-        logicalConnectionNodeList.add(new NotConnectionNode());
-        logicalConnectionNodeList.add(new OrConnectionNode());
+        binaryLogicalConnectionNodeList.add(new AndConnectionNode());
+        binaryLogicalConnectionNodeList.add(new OrConnectionNode());
+        unaryLogicalConnectionNodeList.add(new NotConnectionNode());
     }
 
-    public static PredicateTreeLogicalConnectionNode getRandomLogicalConnectionNode() {
-        System.out.println("length: " + logicalConnectionNodeList.size());
-        return GlobalRandom.getInstance().getRandomFromList(logicalConnectionNodeList).newInstance();
+    public static PredicateTreeLogicalConnectionNode getRandomBinaryLogicalConnectionNode() {
+        return GlobalRandom.getInstance().getRandomFromList(binaryLogicalConnectionNodeList).newInstance();
+    }
+
+    public static PredicateTreeLogicalConnectionNode getRandomUnaryLogicalConnectionNode() {
+        return GlobalRandom.getInstance().getRandomFromList(unaryLogicalConnectionNodeList).newInstance();
     }
 
     public void join(PredicateTreeNode leftChild, PredicateTreeNode rightChild) {
@@ -33,7 +36,7 @@ public abstract class PredicateTreeLogicalConnectionNode extends PredicateTreeNo
 
     public String getChildExpr(PredicateTreeNode child) {
         String expr = child.toString();
-        if(child instanceof PredicateTreeLogicalConnectionNode)
+        if(!(child instanceof UnaryPredicateTreeNode))
             expr = "(" + expr + ")";
         return expr;
     }

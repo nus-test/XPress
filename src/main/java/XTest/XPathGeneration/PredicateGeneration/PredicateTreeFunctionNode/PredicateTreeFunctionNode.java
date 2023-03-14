@@ -4,6 +4,7 @@ import XTest.DatabaseExecutor.MainExecutor;
 import XTest.DefaultListHashMap;
 import XTest.GlobalRandom;
 import XTest.PrimitiveDatatype.XMLDatatype;
+import XTest.PrimitiveDatatype.XMLIntegerHandler;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
@@ -28,8 +29,6 @@ public abstract class PredicateTreeFunctionNode extends PredicateTreeNode {
 
     public static PredicateTreeFunctionNode getRandomPredicateTreeFunctionNode(XMLDatatype datatype) {
         List<PredicateTreeFunctionNode> functionList = functionMap.get(datatype);
-        System.out.println(datatype);
-        System.out.println("Check function list " + datatype);
         double prob = GlobalRandom.getInstance().nextDouble();
         if(functionList != null && functionList.size() > 0 && prob < 0.7)
             return GlobalRandom.getInstance().getRandomFromList(functionList).newInstance();
@@ -43,11 +42,15 @@ public abstract class PredicateTreeFunctionNode extends PredicateTreeNode {
     public abstract void fillContents(PredicateTreeNode inputNode);
 
     public void getDataContent(String XPathPrefix, MainExecutor mainExecutor, String databaseName) throws SQLException, XMLDBException, IOException, SaxonApiException {
-        this.dataContent = mainExecutor.executeSingleProcessor(XPathPrefix + this, databaseName);
+        dataContent = mainExecutor.executeSingleProcessor(XPathPrefix + this, databaseName);
+        if(datatype == XMLDatatype.INTEGER)
+            dataContent = XMLIntegerHandler.parseInt(dataContent).toString();
     }
 
     public abstract PredicateTreeFunctionNode newInstance();
     public String generateRandomCompareValueFromContent() {
+        double prob = GlobalRandom.getInstance().nextDouble();
+        if(prob < 0.5) return this.dataContent;
         return this.datatype.getValueHandler().mutateValue(this.dataContent);
     }
 }

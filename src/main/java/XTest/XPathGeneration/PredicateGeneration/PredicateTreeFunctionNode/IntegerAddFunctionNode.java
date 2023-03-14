@@ -30,7 +30,7 @@ public class IntegerAddFunctionNode extends PredicateTreeFunctionNode{
 
     @Override
     public String toString() {
-        return childList.get(0) + "+" + childList.get(1);
+        return childList.get(0) + " + " + childList.get(1);
     }
 
     @Override

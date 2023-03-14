@@ -2,8 +2,9 @@ package XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode;
 
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
+import XTest.XPathGeneration.PredicateGeneration.UnaryPredicateTreeNode;
 
-public class ExistFunctionNode extends PredicateTreeFunctionNode {
+public class ExistFunctionNode extends PredicateTreeFunctionNode implements UnaryPredicateTreeNode {
     ExistFunctionNode() {
         this.datatype = XMLDatatype.BOOLEAN;
     }

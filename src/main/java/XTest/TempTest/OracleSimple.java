@@ -36,7 +36,7 @@ public class OracleSimple {
 
             String xmlData =
                     CommonUtils.readInputStream(
-                            new ByteArrayInputStream(MySQLSimple.class.getResourceAsStream("xmldocs/" + xmlFile).readAllBytes()));
+                            new ByteArrayInputStream(MySQLSimple.class.getResourceAsStream("/xmldocs/" + xmlFile).readAllBytes()));
 
             Statement statement;
             statement = connection.createStatement();
@@ -52,7 +52,7 @@ public class OracleSimple {
             statement.execute(insertSQL);
 
             for(String xqueryFile: xqueryFiles) {
-                InputStream inputStream = MultiTester.class.getResourceAsStream(xqueryFile);
+                InputStream inputStream = MultiTester.class.getResourceAsStream("/" + xqueryFile);
                 String xquery = CommonUtils.readInputStream(inputStream);
                 String selectSQL = "select extract(OBJECT_VALUE, '" + xquery + "') from test";
                 System.out.println("==================Xquery==================");

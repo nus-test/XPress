@@ -71,9 +71,6 @@ public class XMLDocumentGenerator {
         int templateId = GlobalRandom.getInstance().nextInt(contextNodeTemplateList.size());
         currentNode.assignTemplate(contextNodeTemplateList.get(templateId));
         currentNode.assignRandomValue();
-        if(currentNode.dataContext == null) {
-            System.out.println(currentNode.dataType);
-        }
         for(AttributeNode attributeNode: currentNode.attributeList) {
             if(attributeNode.tagName == "id")
                 attributeNode.dataContext = Integer.toString(currentNode.id);

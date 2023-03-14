@@ -5,7 +5,7 @@ import XTest.XMLGeneration.AttributeNode;
 import XTest.XMLGeneration.ContextNode;
 import XTest.XMLGeneration.ElementNode;
 
-public class PredicateTreeConstantNode extends PredicateTreeNode {
+public class PredicateTreeConstantNode extends PredicateTreeNode implements UnaryPredicateTreeNode {
     PredicateTreeConstantNode() {}
 
     public PredicateTreeConstantNode(XMLDatatype xmlDatatype, String context) {

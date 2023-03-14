@@ -53,9 +53,13 @@ public class XPathGenerator {
         }
         builder += prefix;
         String tempBuilder = builder + "*";
-        System.out.println("tempBuilder: " + tempBuilder + " " + prefix);
         List<Integer> nodeIdList = mainExecutor.execute(tempBuilder);
         List<ContextNode> selectedNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
+
+        //Unwanted situation!
+        if(selectedNodeList.size() == 0)
+            return tempBuilder;
+
         prob = GlobalRandom.getInstance().nextDouble();
         ContextNode randomNode = GlobalRandom.getInstance().getRandomFromList(selectedNodeList);
         double prob2 = GlobalRandom.getInstance().nextDouble();

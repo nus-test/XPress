@@ -47,11 +47,7 @@ public class MainExecutor {
         List<Integer> nodeIdResultSet = null;
         for(DatabaseExecutor databaseExecutor : databaseExecutorList) {
             String result = executeSingleProcessor(XPath, databaseExecutor);
-            System.out.println("Result ===============================");
-            System.out.println(result);
             List<Integer> currentNodeIdResultSet = getNodeIdList(result);
-            System.out.println("Result Id List -----------------------");
-            System.out.println(currentNodeIdResultSet);
             if(nodeIdResultSet != null) {
                 boolean checkResult = CommonUtils.compareList(nodeIdResultSet, currentNodeIdResultSet);
                 if (checkResult == false) {
@@ -84,10 +80,8 @@ public class MainExecutor {
     }
 
     public String executeSingleProcessor(String XPath, DatabaseExecutor databaseExecutor) throws SQLException, XMLDBException, IOException, SaxonApiException {
-        System.out.println("Execute single XPath!!!");
-        System.out.println(XPath);
+        System.out.println("Execute: " + XPath);
         String result = databaseExecutor.execute(XPath);
-        System.out.println("Execution result: " + result);
         return result;
     }
 

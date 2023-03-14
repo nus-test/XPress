@@ -1,6 +1,5 @@
 package XTest.DatabaseExecutor;
 
-import XTest.TempTest.ExistDBSimple;
 import org.exist.xmldb.EXistResource;
 import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.*;
@@ -39,7 +38,7 @@ public class ExistExecutor extends DatabaseExecutor {
         collection = DatabaseManager.getCollection(URI + rootDir + "/" + collName);
         collection.setProperty(OutputKeys.INDENT, "no");
         resource = (XMLResource) collection.createResource(pathName, XMLResource.RESOURCE_TYPE);
-        URL url = ExistDBSimple.class.getResource("/xmldocs/" + pathName);
+        URL url = ExistExecutor.class.getResource("/xmldocs/" + pathName);
         File f = new File(url.getFile());
         resource.setContent(f);
         collection.storeResource(resource);

@@ -1,7 +1,9 @@
 package XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalConnectionNode;
 
-public class NotConnectionNode extends PredicateTreeLogicalConnectionNode {
-    NotConnectionNode() {
+import XTest.XPathGeneration.PredicateGeneration.UnaryPredicateTreeNode;
+
+public class NotConnectionNode extends PredicateTreeLogicalConnectionNode implements UnaryPredicateTreeNode {
+    public NotConnectionNode() {
         this.XPathExpr = "not";
     }
 

@@ -2,11 +2,13 @@ package XTest.XPathGeneration.PredicateGeneration;
 
 import XTest.DatabaseExecutor.MainExecutor;
 import XTest.GlobalRandom;
-import XTest.PrimitiveDatatype.XMLComparable;
+import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.TestException.MismatchingResultException;
 import XTest.XMLGeneration.ContextNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.PredicateTreeFunctionNode;
+import XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalConnectionNode.NotConnectionNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalConnectionNode.PredicateTreeLogicalConnectionNode;
+import XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalOperationNode.EqualOperationNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalOperationNode.PredicateTreeLogicalOperationNode;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
@@ -34,7 +36,6 @@ public class PredicateGenerator {
             }
         }
         String predicate = "[" + currentRoot.toString() + "]";
-        System.out.println("predicate! " + predicate);
         List<ContextNode> executionResult = mainExecutor.executeGetNodeList(XPathPrefix + predicate);
         PredicateContext predicateContext = new PredicateContext(predicate, XPathPrefix, executionResult);
         return predicateContext;
@@ -49,16 +50,32 @@ public class PredicateGenerator {
 
     public PredicateTreeNode generateSinglePhraseFromFunction(String XPathPrefix, PredicateTreeFunctionNode functionNode) throws SQLException, XMLDBException, IOException, SaxonApiException {
         functionNode.getDataContent(XPathPrefix, mainExecutor, "BaseX");
-        double prob = GlobalRandom.getInstance().nextDouble();
         PredicateTreeLogicalOperationNode singlePhraseNode = PredicateTreeLogicalOperationNode.getRandomLogicalOperationNode(functionNode.datatype);
-        PredicateTreeConstantNode constNode = new PredicateTreeConstantNode(
-                functionNode.datatype, functionNode.generateRandomCompareValueFromContent());
+        PredicateTreeConstantNode constNode = getConstantNodeFromContent(functionNode);
         singlePhraseNode.join(functionNode, constNode);
+        if(mainExecutor.executeSingleProcessor(XPathPrefix + singlePhraseNode).equals("false")) {
+            double prob = GlobalRandom.getInstance().nextDouble();
+            if(prob < 0.4) {
+                PredicateTreeLogicalConnectionNode notConnectionNode = new NotConnectionNode();
+                notConnectionNode.childList.add(singlePhraseNode);
+                return notConnectionNode;
+            }
+            else singlePhraseNode = singlePhraseNode.getOppositeOperationNode();
+        }
         return singlePhraseNode;
     }
 
+    public PredicateTreeConstantNode getConstantNodeFromContent(PredicateTreeFunctionNode functionNode) {
+        String randomConstantValue = functionNode.generateRandomCompareValueFromContent();
+        if(functionNode.datatype == XMLDatatype.BOOLEAN)
+            randomConstantValue += "()";
+        PredicateTreeConstantNode constNode = new PredicateTreeConstantNode(
+                functionNode.datatype, randomConstantValue);
+        return constNode;
+    }
+
     public PredicateTreeNode joinSinglePhrases(PredicateTreeNode leftChild, PredicateTreeNode rightChild) {
-        PredicateTreeLogicalConnectionNode connectionNode = PredicateTreeLogicalConnectionNode.getRandomLogicalConnectionNode();
+        PredicateTreeLogicalConnectionNode connectionNode = PredicateTreeLogicalConnectionNode.getRandomBinaryLogicalConnectionNode();
         connectionNode.join(leftChild, rightChild);
         return connectionNode;
     }
@@ -74,7 +91,6 @@ public class PredicateGenerator {
 
     public PredicateTreeFunctionNode generateFunctionExpression(PredicateTreeNode inputNode) {
         PredicateTreeFunctionNode functionNode = PredicateTreeFunctionNode.getRandomPredicateTreeFunctionNode(inputNode.datatype);
-        System.out.println("why? " + inputNode.datatype + " " + functionNode.getClass().getSimpleName());
         functionNode.fillContents(inputNode);
         return functionNode;
     }

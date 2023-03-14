@@ -11,26 +11,35 @@ import org.xmldb.api.base.XMLDBException;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class XPathGenerationTest {
 
     @Test
     void XPathGenerationTest() throws IOException, SQLException, XMLDBException, SaxonApiException, MismatchingResultException, InstantiationException, IllegalAccessException {
         XMLDocumentGenerator xmlDocumentGenerator = new XMLDocumentGenerator();
-        XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(10);
-
+        XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(30);
+        //System.out.println(xmlContext.getXmlContent());
         BaseXExecutor baseXExecutor = BaseXExecutor.getInstance();
         MainExecutor mainExecutor = new MainExecutor();
         XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
         mainExecutor.registerDatabase(baseXExecutor,"BaseX");
-        String XPath;
+        List<Integer> generationDepth = Arrays.asList(5, 6, 3);
+        List<String> XPath = new ArrayList<>();
         try {
             mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
-            XPath = XPathGenerator.getXPath(5);
+            for(Integer depth : generationDepth)
+                XPath.add(XPathGenerator.getXPath(depth));
+            for(String XPathStr: XPath) {
+                System.out.println("Generated XPath: ------------------------------");
+                System.out.println(XPathStr);
+                System.out.println("Execution Result: =============================");
+                System.out.println(mainExecutor.execute(XPathStr));
+            }
         }finally {
             mainExecutor.close();
         }
-        System.out.println("XPath generation result -------------->");
-        System.out.println(XPath);
     }
 }

@@ -50,7 +50,7 @@ public class MultiTester {
         col = DatabaseManager.getCollection(URI + rootDir + "/" + collName);
         col.setProperty(OutputKeys.INDENT, "no");
         res = (XMLResource)col.createResource(xmlFile, XMLResource.RESOURCE_TYPE);
-        URL url = ExistDBSimple.class.getResource("/xmldocs/" + xmlFile);
+        URL url = MultiTester.class.getResource("/xmldocs/" + xmlFile);
         File f = new File(url.getFile());
         res.setContent(f);
         col.storeResource(res);

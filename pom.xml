@@ -39,6 +39,38 @@
         </dependency>
 
         <dependency>
+            <groupId>saxon</groupId>
+            <artifactId>saxonhe</artifactId>
+            <version>12</version>
+            <scope>system</scope>
+            <systemPath>C:/Users/workshop/Desktop/Mine/Repos/jar/SaxonHE12-0J/saxon-he-12.0.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>basex</groupId>
+            <artifactId>basex</artifactId>
+            <version>10.4</version>
+            <scope>system</scope>
+            <systemPath>C:/BaseX/BaseX104.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>saxon</groupId>
+            <artifactId>saxonhe-xqj</artifactId>
+            <version>12</version>
+            <scope>system</scope>
+            <systemPath>C:/Users/workshop/Desktop/Mine/Repos/jar/SaxonHE12-0J/saxon-he-xqj-12.0.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>saxon</groupId>
+            <artifactId>saxonhe-test</artifactId>
+            <version>12</version>
+            <scope>system</scope>
+            <systemPath>C:/Users/workshop/Desktop/Mine/Repos/jar/SaxonHE12-0J/saxon-he-test-12.0.jar</systemPath>
+        </dependency>
+
+        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.18</version>

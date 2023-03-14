@@ -21,6 +21,7 @@ public class BaseCharIDStyleNameGeneratorImpl implements NameGenerator {
         int alphabetId = GlobalRandom.getInstance().nextInt(26);
         char prefix = (char) (baseChar + alphabetId);
         String name = prefix + Integer.toString(alphabetCntList.get(alphabetId));
+        alphabetCntList.set(alphabetId, alphabetCntList.get(alphabetId) + 1);
         return name;
     }
 }
