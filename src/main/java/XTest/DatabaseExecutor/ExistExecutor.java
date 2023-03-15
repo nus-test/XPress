@@ -20,6 +20,7 @@ public class ExistExecutor extends DatabaseExecutor {
     XMLResource resource;
     XQueryService xqs;
     private ExistExecutor() throws XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        dbName = "Exist";
         // initialize database driver
         Class cl = Class.forName(driver);
         Database database = (Database) cl.newInstance();

@@ -1,6 +1,7 @@
 package XTest.XPathGeneration;
 
 import XTest.XMLGeneration.ContextNode;
+import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 
 import java.util.*;
 
@@ -60,6 +61,11 @@ public class PrefixQualifier {
                 availablePrefix.add(getAxis("preceding"));
             availablePrefix.addAll(getAxesList(Arrays.asList("self", "descendant-or-self", "ancestor-or-self")));
         }
+        System.out.println("*******************************");
+        for(ContextNode node:currentNodes)
+            System.out.println(node.childList.isEmpty());
+        System.out.println(availablePrefix);
+        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
         return availablePrefix;
     }
 }

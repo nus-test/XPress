@@ -18,6 +18,7 @@ public class SaxonExecutor extends DatabaseExecutor {
 
 
     private SaxonExecutor() {
+        dbName = "Saxon";
         saxon = new Processor(false);
         builder = saxon.newDocumentBuilder();
     }

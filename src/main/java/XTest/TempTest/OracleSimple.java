@@ -19,7 +19,8 @@ public class OracleSimple {
 
     public static void main(String[] args) {
         Connection connection = null;
-
+        Statement statement = null;
+        String dropSQL = "drop table test";
         try {
             // registers Oracle JDBC driver - though this is no longer required
             // since JDBC 4.0, but added here for backward compatibility
@@ -38,11 +39,10 @@ public class OracleSimple {
                     CommonUtils.readInputStream(
                             new ByteArrayInputStream(MySQLSimple.class.getResourceAsStream("/xmldocs/" + xmlFile).readAllBytes()));
 
-            Statement statement;
+
             statement = connection.createStatement();
 
             String createSQL = "create table test of xmltype";
-            String dropSQL = "drop table test";
             //String insertSQL = "insert into test values (XMLType(bfilename('" + xmlPath + "', '" + xmlFile + "'), nls_charset_id('AL32UTF8')))";
             String insertSQL = "insert into test values (XMLType('" + xmlData + "', nls_charset_id('AL32UTF8')))";
 
@@ -70,7 +70,6 @@ public class OracleSimple {
                 }
                 resultSet.close();
             }
-            statement.execute(dropSQL);
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
         } catch (SQLException ex) {
@@ -80,11 +79,14 @@ public class OracleSimple {
         } finally {
             try {
                 if (connection != null && !connection.isClosed()) {
+                    if(statement != null)
+                        statement.execute(dropSQL);
                     connection.close();
                 }
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
+
         }
     }
 }

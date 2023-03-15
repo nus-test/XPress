@@ -19,6 +19,7 @@ public class OracleExecutor extends DatabaseExecutor {
     String dropSQL = "drop table test";
 
     private OracleExecutor() throws ClassNotFoundException, SQLException {
+        dbName = "Oracle";
         Class.forName("oracle.jdbc.OracleDriver");
         connection = DriverManager.getConnection(url, username, password);
         statement = connection.createStatement();

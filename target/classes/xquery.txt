@@ -1,1 +1,1 @@
-//*/*[text()]
+//Z1[(((upper-case(text())) <= "TP-V ") and (exists(@t1) = true())) or (exists(@id) = true())]/parent::*[(not((@id * -75501113) > -75501094) or ((@id + 2095249469) <= 2095249470)) and (exists(@id) = true())]

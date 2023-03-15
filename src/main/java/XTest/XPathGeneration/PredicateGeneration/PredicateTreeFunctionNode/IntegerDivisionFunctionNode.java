@@ -21,6 +21,8 @@ public class IntegerDivisionFunctionNode extends PredicateTreeFunctionNode{
         else {
             value = XMLDatatype.INTEGER.getValueHandler().getValue(false);
         }
+        if(Integer.parseInt(value) == 0)
+            value = "2";
         PredicateTreeConstantNode constantNode = new PredicateTreeConstantNode(XMLDatatype.INTEGER, value);
         childList.add(inputNode);
         childList.add(constantNode);

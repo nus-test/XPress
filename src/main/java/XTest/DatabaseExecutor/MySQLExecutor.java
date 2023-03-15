@@ -1,13 +1,10 @@
 package XTest.DatabaseExecutor;
 
 import XTest.CommonUtils;
-import XTest.TempTest.MultiTester;
 import XTest.TempTest.MySQLSimple;
-import org.xmldb.api.base.XMLDBException;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.*;
 
 public class MySQLExecutor extends DatabaseExecutor {
@@ -16,6 +13,7 @@ public class MySQLExecutor extends DatabaseExecutor {
     String xmlDataContent;
 
     private MySQLExecutor() throws SQLException, ClassNotFoundException {
+        dbName = "MySQL";
         Class.forName("com.mysql.cj.jdbc.Driver");
         connection = DriverManager.getConnection(
                 "jdbc:mysql://localhost:3306/test?useTimezone=true&serverTimezone=UTC",

@@ -11,7 +11,12 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public abstract class DatabaseExecutor {
+    String dbName;
     boolean clearFlag = false;
+
+    public void registerDatabase(MainExecutor mainExecutor) {
+        mainExecutor.registerDatabase(this, dbName);
+    }
 
     public void setContextByFileWithCheck(String pathName) throws SQLException, XMLDBException, IOException, SaxonApiException {
         clearContextWithCheck();

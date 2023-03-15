@@ -24,11 +24,12 @@ public class PredicateGenerator {
         this.mainExecutor = mainExecutor;
     }
 
-    public PredicateContext generatePredicate(String XPathPrefix, List<ContextNode> candidateNodeList, int maxPhraseLength, ContextNode randomNode) throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException {
+    public PredicateContext generatePredicate(String XPathPrefix, int maxPhraseLength, ContextNode randomNode, boolean allowTextContentFlag)
+            throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException {
         String currentNodePrefix = "//*[@id=\"" + randomNode.id + "\"]/";
         PredicateTreeNode currentRoot = null;
         for(int i = 0; i < maxPhraseLength; i ++) {
-            PredicateTreeNode singlePhraseNode = generateSinglePhrase(currentNodePrefix, randomNode);
+            PredicateTreeNode singlePhraseNode = generateSinglePhrase(currentNodePrefix, randomNode, allowTextContentFlag);
             if(currentRoot == null)
                 currentRoot = singlePhraseNode;
             else {
@@ -41,8 +42,9 @@ public class PredicateGenerator {
         return predicateContext;
     }
 
-    public PredicateTreeNode generateSinglePhrase(String XPathPrefix, ContextNode currentNode) throws SQLException, XMLDBException, IOException, SaxonApiException {
-        PredicateTreeConstantNode inputNode = getSubcontextFromContextNode(currentNode);
+    public PredicateTreeNode generateSinglePhrase(String XPathPrefix, ContextNode currentNode, boolean allowTextContentFlag)
+            throws SQLException, XMLDBException, IOException, SaxonApiException {
+        PredicateTreeConstantNode inputNode = getSubcontextFromContextNode(currentNode, allowTextContentFlag);
         PredicateTreeFunctionNode functionNode = generateFunctionExpression(inputNode, 1);
         PredicateTreeNode phraseNode = generateSinglePhraseFromFunction(XPathPrefix, functionNode);
         return phraseNode;
@@ -53,7 +55,9 @@ public class PredicateGenerator {
         PredicateTreeLogicalOperationNode singlePhraseNode = PredicateTreeLogicalOperationNode.getRandomLogicalOperationNode(functionNode.datatype);
         PredicateTreeConstantNode constNode = getConstantNodeFromContent(functionNode);
         singlePhraseNode.join(functionNode, constNode);
-        if(mainExecutor.executeSingleProcessor(XPathPrefix + singlePhraseNode).equals("false")) {
+        String executionResult = mainExecutor.executeSingleProcessor(XPathPrefix + singlePhraseNode);
+        System.out.println("Result: " + executionResult);
+        if(executionResult.equals("false")) {
             double prob = GlobalRandom.getInstance().nextDouble();
             if(prob < 0.4) {
                 PredicateTreeLogicalConnectionNode notConnectionNode = new NotConnectionNode();
@@ -95,9 +99,9 @@ public class PredicateGenerator {
         return functionNode;
     }
 
-    public PredicateTreeConstantNode getSubcontextFromContextNode(ContextNode currentNode) {
+    public PredicateTreeConstantNode getSubcontextFromContextNode(ContextNode currentNode, boolean allowTextContentFlag) {
         double prob = GlobalRandom.getInstance().nextDouble();
-        if(prob < 0.3)
+        if(prob < 0.3 && allowTextContentFlag)
             return new PredicateTreeConstantNode(currentNode);
         return new PredicateTreeConstantNode(GlobalRandom.getInstance().getRandomFromList(currentNode.attributeList));
     }

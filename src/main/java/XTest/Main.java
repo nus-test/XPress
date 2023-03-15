@@ -1,37 +1,39 @@
-package XTest.XPathGeneration;
+package XTest;
 
-import XTest.DatabaseExecutor.BaseXExecutor;
-import XTest.DatabaseExecutor.MainExecutor;
+import XTest.DatabaseExecutor.*;
 import XTest.TestException.MismatchingResultException;
 import XTest.XMLGeneration.XMLContext;
 import XTest.XMLGeneration.XMLDocumentGenerator;
+import XTest.XPathGeneration.XPathGenerator;
 import net.sf.saxon.s9api.SaxonApiException;
-import org.junit.jupiter.api.Test;
 import org.xmldb.api.base.XMLDBException;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class XPathGenerationTest {
-
-    @Test
-    void XPathGenerationTest() throws IOException, SQLException, XMLDBException, SaxonApiException, MismatchingResultException, InstantiationException, IllegalAccessException {
-        XMLDocumentGenerator xmlDocumentGenerator = new XMLDocumentGenerator();
-        XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(4);
-        //System.out.println(xmlContext.getXmlContent());
-        BaseXExecutor baseXExecutor = BaseXExecutor.getInstance();
+public class Main {
+    public static void main(String[] args) throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, SaxonApiException, MismatchingResultException {
         MainExecutor mainExecutor = new MainExecutor();
+        List<DatabaseExecutor> dbExecuterList = new ArrayList<>();
+
+        dbExecuterList.add(BaseXExecutor.getInstance());
+        dbExecuterList.add(ExistExecutor.getInstance());
+        dbExecuterList.add(SaxonExecutor.getInstance());
+//        dbExecuterList.add(OracleExecutor.getInstance());
+        for(DatabaseExecutor dbExecutor: dbExecuterList)
+            dbExecutor.registerDatabase(mainExecutor);
+
+        XMLDocumentGenerator xmlDocumentGenerator = new XMLDocumentGenerator();
+        XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(30);
         XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
-        mainExecutor.registerDatabase(baseXExecutor,"BaseX");
-        List<Integer> generationDepth = Arrays.asList(5, 6, 3);
         List<String> XPath = new ArrayList<>();
+        int round = 10;
         try {
             mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
-            for(Integer depth : generationDepth)
-                XPath.add(XPathGenerator.getXPath(depth));
+            for(int i = 0; i < round; i ++)
+                XPath.add(XPathGenerator.getXPath(GlobalRandom.getInstance().nextInt(6)));
             for(String XPathStr: XPath) {
                 System.out.println("Generated XPath: ------------------------------");
                 System.out.println(XPathStr);

@@ -2,12 +2,10 @@ package XTest.DatabaseExecutor;
 
 import XTest.TempTest.BaseXClient;
 import XTest.TempTest.BaseXSimple;
-import org.apache.commons.lang3.NotImplementedException;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.SQLOutput;
 
 public class BaseXExecutor extends DatabaseExecutor {
 
@@ -17,6 +15,7 @@ public class BaseXExecutor extends DatabaseExecutor {
     String password = "shuxin";
 
     private BaseXExecutor() throws IOException {
+        dbName = "BaseX";
         BaseXSession = new BaseXClient("localhost", 1984, username, password);
     }
 

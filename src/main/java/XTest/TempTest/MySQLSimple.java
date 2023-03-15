@@ -20,11 +20,11 @@ public class MySQLSimple {
                     "root", "shuxin");
             String xmlData =
                     CommonUtils.readInputStream(
-                            new ByteArrayInputStream(MySQLSimple.class.getResourceAsStream("xmldocs/" + xmlFile).readAllBytes()));
+                            new ByteArrayInputStream(MySQLSimple.class.getResourceAsStream("/xmldocs/" + xmlFile).readAllBytes()));
             Statement statement = connection.createStatement();
             ResultSet resultSet;
             for(String xqueryFile: xqueryFiles) {
-                InputStream inputStream = MultiTester.class.getResourceAsStream(xqueryFile);
+                InputStream inputStream = MultiTester.class.getResourceAsStream("/" + xqueryFile);
                 String xquery = CommonUtils.readInputStream(inputStream);
                 resultSet = statement.executeQuery(
                         "SELECT ExtractValue('" + xmlData + "','" + xquery + "');");
