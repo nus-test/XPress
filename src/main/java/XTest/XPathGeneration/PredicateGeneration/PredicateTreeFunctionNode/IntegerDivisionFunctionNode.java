@@ -15,7 +15,7 @@ public class IntegerDivisionFunctionNode extends PredicateTreeFunctionNode{
     public void fillContents(PredicateTreeNode inputNode) {
         double prob = GlobalRandom.getInstance().nextDouble();
         String value = null;
-        if(prob < 0.7)
+        if(prob < 0.7 && Integer.parseInt(inputNode.dataContent) >= 2)
             value = ((XMLIntegerHandler) XMLDatatype.INTEGER.getValueHandler()).
                     getRandomValueBounded(1, Integer.parseInt(inputNode.dataContent));
         else {

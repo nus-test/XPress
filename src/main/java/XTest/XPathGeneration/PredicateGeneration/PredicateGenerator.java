@@ -4,6 +4,7 @@ import XTest.DatabaseExecutor.MainExecutor;
 import XTest.GlobalRandom;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.TestException.MismatchingResultException;
+import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XMLGeneration.ContextNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.PredicateTreeFunctionNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalConnectionNode.NotConnectionNode;
@@ -25,7 +26,7 @@ public class PredicateGenerator {
     }
 
     public PredicateContext generatePredicate(String XPathPrefix, int maxPhraseLength, ContextNode randomNode, boolean allowTextContentFlag)
-            throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException {
+            throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, UnexpectedExceptionThrownException {
         String currentNodePrefix = "//*[@id=\"" + randomNode.id + "\"]/";
         PredicateTreeNode currentRoot = null;
         for(int i = 0; i < maxPhraseLength; i ++) {
@@ -43,20 +44,19 @@ public class PredicateGenerator {
     }
 
     public PredicateTreeNode generateSinglePhrase(String XPathPrefix, ContextNode currentNode, boolean allowTextContentFlag)
-            throws SQLException, XMLDBException, IOException, SaxonApiException {
+            throws SQLException, XMLDBException, IOException, SaxonApiException, UnexpectedExceptionThrownException {
         PredicateTreeConstantNode inputNode = getSubcontextFromContextNode(currentNode, allowTextContentFlag);
         PredicateTreeFunctionNode functionNode = generateFunctionExpression(inputNode, 1);
         PredicateTreeNode phraseNode = generateSinglePhraseFromFunction(XPathPrefix, functionNode);
         return phraseNode;
     }
 
-    public PredicateTreeNode generateSinglePhraseFromFunction(String XPathPrefix, PredicateTreeFunctionNode functionNode) throws SQLException, XMLDBException, IOException, SaxonApiException {
+    public PredicateTreeNode generateSinglePhraseFromFunction(String XPathPrefix, PredicateTreeFunctionNode functionNode) throws SQLException, XMLDBException, IOException, SaxonApiException, UnexpectedExceptionThrownException {
         functionNode.getDataContent(XPathPrefix, mainExecutor, "BaseX");
         PredicateTreeLogicalOperationNode singlePhraseNode = PredicateTreeLogicalOperationNode.getRandomLogicalOperationNode(functionNode.datatype);
         PredicateTreeConstantNode constNode = getConstantNodeFromContent(functionNode);
         singlePhraseNode.join(functionNode, constNode);
         String executionResult = mainExecutor.executeSingleProcessor(XPathPrefix + singlePhraseNode);
-        System.out.println("Result: " + executionResult);
         if(executionResult.equals("false")) {
             double prob = GlobalRandom.getInstance().nextDouble();
             if(prob < 0.4) {

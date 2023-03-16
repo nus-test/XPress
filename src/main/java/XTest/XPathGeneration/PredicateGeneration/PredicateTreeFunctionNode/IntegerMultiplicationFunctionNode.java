@@ -17,6 +17,8 @@ public class IntegerMultiplicationFunctionNode extends PredicateTreeFunctionNode
         Integer boundValue = Integer.MAX_VALUE / inputValue;
         value = ((XMLIntegerHandler) XMLDatatype.INTEGER.getValueHandler()).
                 getRandomValueBounded(-boundValue,boundValue);
+        if(value.equals("0"))
+            value = Integer.toString(1);
         PredicateTreeConstantNode constantNode = new PredicateTreeConstantNode(XMLDatatype.INTEGER, value);
         childList.add(inputNode);
         childList.add(constantNode);

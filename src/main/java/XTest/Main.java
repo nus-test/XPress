@@ -3,6 +3,7 @@ package XTest;
 import XTest.DatabaseExecutor.*;
 import XTest.ReportGeneration.ReportManager;
 import XTest.TestException.MismatchingResultException;
+import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XMLGeneration.XMLContext;
 import XTest.XMLGeneration.XMLDocumentGenerator;
 import XTest.XPathGeneration.XPathGenerator;
@@ -32,22 +33,14 @@ public class Main {
         XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(30);
         XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
         List<String> XPath = new ArrayList<>();
-        int round = 200;
+        int round = 20000;
         try {
             mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
             for(int i = 0; i < round; i ++) {
                 System.out.println("Generated XPath: " + i);
                 try {
                     XPath.add(XPathGenerator.getXPath(GlobalRandom.getInstance().nextInt(6)));
-                } catch (MismatchingResultException e) {}
-            }
-            int cnt = 0;
-            for(String XPathStr: XPath) {
-                System.out.println("Tested XPath: " + cnt);
-                try {
-                    System.out.println(mainExecutor.executeAndCompare(XPathStr));
-                } catch (MismatchingResultException e){}
-                cnt += 1;
+                } catch (MismatchingResultException | UnexpectedExceptionThrownException e) {}
             }
         }finally {
             mainExecutor.close();

@@ -5,6 +5,7 @@ import XTest.DefaultListHashMap;
 import XTest.GlobalRandom;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLIntegerHandler;
+import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
@@ -41,7 +42,7 @@ public abstract class PredicateTreeFunctionNode extends PredicateTreeNode {
 
     public abstract void fillContents(PredicateTreeNode inputNode);
 
-    public void getDataContent(String XPathPrefix, MainExecutor mainExecutor, String databaseName) throws SQLException, XMLDBException, IOException, SaxonApiException {
+    public void getDataContent(String XPathPrefix, MainExecutor mainExecutor, String databaseName) throws SQLException, XMLDBException, IOException, SaxonApiException, UnexpectedExceptionThrownException {
         dataContent = mainExecutor.executeSingleProcessor(XPathPrefix + this, databaseName);
         if(datatype == XMLDatatype.INTEGER)
             dataContent = XMLIntegerHandler.parseInt(dataContent).toString();

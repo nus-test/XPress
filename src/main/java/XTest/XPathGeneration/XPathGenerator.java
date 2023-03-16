@@ -3,6 +3,7 @@ package XTest.XPathGeneration;
 import XTest.DatabaseExecutor.MainExecutor;
 import XTest.GlobalRandom;
 import XTest.TestException.MismatchingResultException;
+import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XMLGeneration.ContextNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateContext;
 import XTest.XPathGeneration.PredicateGeneration.PredicateGenerator;
@@ -22,7 +23,7 @@ public class XPathGenerator {
         this.predicateGenerator = new PredicateGenerator(mainExecutor);
     }
 
-    String generateXPath(String currentBuilder, List<ContextNode> currentNodeList, int depth) throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException{
+    String generateXPath(String currentBuilder, List<ContextNode> currentNodeList, int depth) throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, UnexpectedExceptionThrownException {
         if(depth == 0) {
             return currentBuilder;
         }
@@ -71,7 +72,7 @@ public class XPathGenerator {
         return generateXPath(builder, selectedNodeList, depth - 1);
     }
 
-    public String getXPath(int depth) throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, InstantiationException, IllegalAccessException {
+    public String getXPath(int depth) throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, InstantiationException, IllegalAccessException, UnexpectedExceptionThrownException {
         return generateXPath("", null, depth);
     }
 }

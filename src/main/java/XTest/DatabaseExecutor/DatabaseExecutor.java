@@ -50,7 +50,6 @@ public abstract class DatabaseExecutor {
         FileWriter writer =
                 new FileWriter((this.getClass().getResource("/xmldocs/autotest.xml").getPath()));
         writer.write(context);
-        System.out.println(context);
         writer.close();
         setContextByFileWithCheck("autotest.xml");
     }
