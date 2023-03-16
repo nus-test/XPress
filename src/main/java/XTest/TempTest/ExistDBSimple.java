@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class ExistDBSimple {
 
-    private static String URI = "xmldb:exist://localhost:8080/exist/xmlrpc";
+    private static String URI = "xmldb:exist://localhost:8089/exist/xmlrpc";
     static String rootDir = "/db";
     private static String collName = "test";
     static String xmlFile = "test1.xml";
