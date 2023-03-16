@@ -36,14 +36,18 @@ public class Main {
         try {
             mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
             for(int i = 0; i < round; i ++) {
+                System.out.println("Generated XPath: " + i);
                 try {
                     XPath.add(XPathGenerator.getXPath(GlobalRandom.getInstance().nextInt(6)));
                 } catch (MismatchingResultException e) {}
             }
+            int cnt = 0;
             for(String XPathStr: XPath) {
+                System.out.println("Tested XPath: " + cnt);
                 try {
                     System.out.println(mainExecutor.executeAndCompare(XPathStr));
                 } catch (MismatchingResultException e){}
+                cnt += 1;
             }
         }finally {
             mainExecutor.close();

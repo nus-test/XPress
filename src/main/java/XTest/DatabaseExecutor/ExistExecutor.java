@@ -13,7 +13,7 @@ import java.net.URL;
 public class ExistExecutor extends DatabaseExecutor {
     static ExistExecutor existExecutor;
     final String driver = "org.exist.xmldb.DatabaseImpl";
-    private static String URI = "xmldb:exist://localhost:8080/exist/xmlrpc";
+    private static String URI = "xmldb:exist://localhost:8089/exist/xmlrpc";
     static String rootDir = "/db";
     private static String collName = "test";
     Collection collection;
