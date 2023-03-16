@@ -45,6 +45,8 @@ public class BaseXExecutor extends DatabaseExecutor {
         return BaseXSession.execute("xquery " + Xquery);
     }
 
+
+
     @Override
     public void close() throws IOException {
     }

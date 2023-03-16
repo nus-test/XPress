@@ -51,7 +51,7 @@
             <artifactId>basex</artifactId>
             <version>10.4</version>
             <scope>system</scope>
-            <systemPath>C:/BaseX/BaseX104.jar</systemPath>
+            <systemPath>C:/BaseX/BaseX105-20230316.100026.jar</systemPath>
         </dependency>
 
         <dependency>

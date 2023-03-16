@@ -1,6 +1,7 @@
 package XTest.TempTest;
 
 import XTest.CommonUtils;
+import net.sf.saxon.s9api.*;
 import org.exist.xmldb.EXistResource;
 import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.*;
@@ -8,6 +9,8 @@ import org.xmldb.api.modules.XMLResource;
 import org.xmldb.api.modules.XQueryService;
 
 import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.net.URL;
 
@@ -18,11 +21,11 @@ public class MultiTester {
     private static String URI = "xmldb:exist://localhost:8080/exist/xmlrpc";
     static String rootDir = "/db";
     private static String collName = "test";
-    static String xmlFile = "test2.xml";
+    static String xmlFile = "test1.xml";
     static String[] xqueryFiles = {"xquery.txt"};
 
 
-    public static void main(final String... args) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, XMLDBException {
+    public static void main(final String... args) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, XMLDBException, SaxonApiException {
         BaseXClient BaseXSession = new BaseXClient("localhost", 1984, username, password);
 
         final String driver = "org.exist.xmldb.DatabaseImpl";
@@ -93,6 +96,28 @@ public class MultiTester {
             catch(Exception e) {
                 System.out.println(e);
                 System.out.println("Exist executed with exception");
+            }
+
+            url = SaxonSimple.class.getResource("/" + xqueryFile);
+            Processor saxon = new Processor(false);
+
+            // compile the query
+            XQueryCompiler compiler = saxon.newXQueryCompiler();
+            XQueryExecutable exec = compiler.compile(new File(url.getFile()));
+            DocumentBuilder builder = saxon.newDocumentBuilder();
+            url = SaxonSimple.class.getResource("/xmldocs/" + xmlFile);
+            File xmldocFile = new File(url.getFile());
+
+            String xmlFileContent = CommonUtils.readInputStream(new FileInputStream(xmldocFile));
+            Source src = new StreamSource(new StringReader(xmlFileContent));
+            XdmNode doc = builder.build(src);
+            System.out.println("==================Execute Xquery Saxon==================");
+            // instantiate the query, bind the input and evaluate
+            XQueryEvaluator query = exec.load();
+            query.setContextItem(doc);
+            XdmValue result = query.evaluate();
+            for(int i = 0; i < result.size(); i ++) {
+                System.out.println(result.itemAt(i));
             }
         }
         // run query on database

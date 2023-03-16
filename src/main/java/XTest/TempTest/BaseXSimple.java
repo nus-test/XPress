@@ -24,11 +24,16 @@ public class BaseXSimple {
             System.out.println(session.info());
             for(String xqueryFile: xqueryFiles) {
                 InputStream inputStream = BaseXSimple.class.getResourceAsStream("/" + xqueryFile);
-                String xquery =  CommonUtils.readInputStream(inputStream);
+                String xquery = CommonUtils.readInputStream(inputStream);
                 System.out.println("==================Xquery==================");
                 System.out.println(xquery);
                 System.out.println("==================Execute Xquery==================");
-                System.out.println(session.execute("xquery " + xquery));
+                try {
+                    System.out.println(session.execute("xquery " + xquery));
+                }catch(Exception e) {
+                    System.out.println("Error message");
+                    System.out.println(e);
+                }
             }
             // run query on database
             session.execute("drop db test");

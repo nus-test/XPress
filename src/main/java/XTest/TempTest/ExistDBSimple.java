@@ -60,18 +60,22 @@ public class ExistDBSimple {
             System.out.println("==================Xquery==================");
             System.out.println(xquery);
             System.out.println("==================Execute Xquery==================");
-            CompiledExpression compiled = xqs.compile(xquery);
-            ResourceSet result = xqs.execute(compiled);
-            ResourceIterator i = result.getIterator();
-            Resource resultRes = null;
-            while(i.hasMoreResources()) {
-                try {
-                    resultRes = i.nextResource();
-                    System.out.println(resultRes.getContent());
-                } finally {
-                    //dont forget to cleanup resources
-                    try { ((EXistResource)resultRes).freeResources(); } catch(XMLDBException xe) {xe.printStackTrace();}
+            try {
+                CompiledExpression compiled = xqs.compile(xquery);
+                ResourceSet result = xqs.execute(compiled);
+                ResourceIterator i = result.getIterator();
+                Resource resultRes = null;
+                while(i.hasMoreResources()) {
+                    try {
+                        resultRes = i.nextResource();
+                        System.out.println(resultRes.getContent());
+                    } finally {
+                        //dont forget to cleanup resources
+                        try { ((EXistResource)resultRes).freeResources(); } catch(XMLDBException xe) {xe.printStackTrace();}
+                    }
                 }
+            }catch(Exception e) {
+                System.out.println(e);
             }
         }
 

@@ -1,6 +1,7 @@
 package XTest;
 
 import XTest.DatabaseExecutor.*;
+import XTest.ReportGeneration.ReportManager;
 import XTest.TestException.MismatchingResultException;
 import XTest.XMLGeneration.XMLContext;
 import XTest.XMLGeneration.XMLDocumentGenerator;
@@ -14,8 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, SaxonApiException, MismatchingResultException {
-        MainExecutor mainExecutor = new MainExecutor();
+    public static void main(String[] args) throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, SaxonApiException {
+        ReportManager reportManager = new ReportManager("C:\\app\\log\\log.txt");
+        MainExecutor mainExecutor = new MainExecutor(reportManager);
+
         List<DatabaseExecutor> dbExecuterList = new ArrayList<>();
 
         dbExecuterList.add(BaseXExecutor.getInstance());
@@ -29,16 +32,18 @@ public class Main {
         XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(30);
         XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
         List<String> XPath = new ArrayList<>();
-        int round = 10;
+        int round = 200;
         try {
             mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
-            for(int i = 0; i < round; i ++)
-                XPath.add(XPathGenerator.getXPath(GlobalRandom.getInstance().nextInt(6)));
+            for(int i = 0; i < round; i ++) {
+                try {
+                    XPath.add(XPathGenerator.getXPath(GlobalRandom.getInstance().nextInt(6)));
+                } catch (MismatchingResultException e) {}
+            }
             for(String XPathStr: XPath) {
-                System.out.println("Generated XPath: ------------------------------");
-                System.out.println(XPathStr);
-                System.out.println("Execution Result: =============================");
-                System.out.println(mainExecutor.executeAndCompare(XPathStr));
+                try {
+                    System.out.println(mainExecutor.executeAndCompare(XPathStr));
+                } catch (MismatchingResultException e){}
             }
         }finally {
             mainExecutor.close();

@@ -1,6 +1,8 @@
 package XTest.DatabaseExecutor;
 
 import XTest.CommonUtils;
+import XTest.ReportGeneration.ReportManager;
+import XTest.TempTest.MultiTester;
 import XTest.TestException.MismatchingResultException;
 import XTest.XMLGeneration.ContextNode;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -13,16 +15,20 @@ import java.util.*;
 public class MainExecutor {
 
     Map<Integer, ContextNode> contextNodeMap = new HashMap<>();
-    List<DatabaseExecutor> databaseExecutorList = new ArrayList<>();
+    public List<DatabaseExecutor> databaseExecutorList = new ArrayList<>();
     Map<String, DatabaseExecutor> databaseExecutorNameMap = new HashMap<>();
+    public String currentContext;
+    ReportManager reportManager = null;
 
-    public MainExecutor() {
-
+    public MainExecutor() {}
+    public MainExecutor(ReportManager reportManager) {
+        this.reportManager = reportManager;
     }
 
     public void setXPathGenerationContext(ContextNode root, String xmlDataContent) throws IOException, SQLException, XMLDBException, SaxonApiException {
         contextNodeMap = new HashMap<>();
         getContextNodeMap(root);
+        currentContext = xmlDataContent;
         for(DatabaseExecutor databaseExecutor : databaseExecutorList) {
             databaseExecutor.setContextByContentWithCheck(xmlDataContent);
         }
@@ -46,18 +52,24 @@ public class MainExecutor {
     public List<Integer> executeAndCompare(String XPath) throws SQLException, XMLDBException, IOException, SaxonApiException, MismatchingResultException {
         List<Integer> nodeIdResultSet = null;
         String lastDBName = null;
+        System.out.println(XPath);
         for(DatabaseExecutor databaseExecutor : databaseExecutorList) {
-            String result = executeSingleProcessor(XPath, databaseExecutor);
-            List<Integer> currentNodeIdResultSet = getNodeIdList(result);
+            List<Integer> currentNodeIdResultSet = executeSingleProcessorGetIdList(XPath, databaseExecutor);
             if(nodeIdResultSet != null) {
                 boolean checkResult = CommonUtils.compareList(nodeIdResultSet, currentNodeIdResultSet);
                 if (checkResult == false) {
-                    System.out.println(lastDBName);
-                    System.out.println("+++++++++++++++++++++++++++++++");
-                    System.out.println(nodeIdResultSet);
-                    System.out.println(databaseExecutor.dbName);
-                    System.out.println("-------------------------------");
-                    System.out.println(currentNodeIdResultSet);
+                    if(reportManager != null) {
+                        System.out.println("Inconsistency found!");
+                        reportManager.reportInconsistency(this, XPath);
+                    }
+                    else {
+                        System.out.println(lastDBName);
+                        System.out.println("+++++++++++++++++++++++++++++++");
+                        System.out.println(nodeIdResultSet);
+                        System.out.println(databaseExecutor.dbName);
+                        System.out.println("-------------------------------");
+                        System.out.println(currentNodeIdResultSet);
+                    }
                     throw new MismatchingResultException();
                 }
             }
@@ -78,6 +90,18 @@ public class MainExecutor {
             databaseExecutor.close();
     }
 
+    public List<Integer> executeSingleProcessorGetIdList(String XPath) throws SQLException, XMLDBException, IOException, SaxonApiException {
+        return executeSingleProcessorGetIdList(XPath, databaseExecutorList.get(0));
+    }
+
+    public List<Integer> executeSingleProcessorGetIdList(String XPath, String databaseName) throws SQLException, XMLDBException, IOException, SaxonApiException {
+        return executeSingleProcessorGetIdList(XPath, databaseExecutorNameMap.get(databaseName));
+    }
+
+    public List<Integer> executeSingleProcessorGetIdList(String XPath, DatabaseExecutor databaseExecutor) throws SQLException, XMLDBException, IOException, SaxonApiException {
+        return databaseExecutor.executeGetNodeIdList(XPath);
+    }
+
     public String executeSingleProcessor(String XPath) throws SQLException, XMLDBException, IOException, SaxonApiException {
         return executeSingleProcessor(XPath, databaseExecutorList.get(0));
     }
@@ -96,24 +120,6 @@ public class MainExecutor {
     public List<ContextNode> executeGetNodeList(String XPath) throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException {
         List<Integer> nodeIdResultSet = executeAndCompare(XPath);
         return getNodeListFromIdList(nodeIdResultSet);
-    }
-
-    public List<Integer> getNodeIdList(String resultString) {
-        List<Integer> nodeIdList = new ArrayList<>();
-        Stack<Integer> tagStack = new Stack<>();
-        for(int i = 0; i < resultString.length(); i ++) {
-            if(i < resultString.length() - 1
-                    && resultString.substring(i, i + 2).equals("</")) {
-                tagStack.pop();
-            }
-            else if(resultString.charAt(i) == '<')
-                tagStack.add(0);
-            if(tagStack.size() == 1 && i + 4 <= resultString.length() && resultString.substring(i, i + 4).equals("id=\"")) {
-                nodeIdList.add(CommonUtils.getEnclosedInteger(resultString, i + 4));
-            }
-        }
-        nodeIdList.sort(Integer::compareTo);
-        return nodeIdList;
     }
 
     public List<ContextNode> getNodeListFromIdList(List<Integer> idList) {
