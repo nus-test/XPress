@@ -55,4 +55,11 @@ public abstract class PooledValueHandler extends ValueHandler {
             valuePoolIdCnt += 1;
         }
     }
+
+    @Override
+    public void clear() {
+        valuePoolIdCnt = 0;
+        valuePool = new HashSet<>();
+        valuePoolLookUpMap = new HashMap<>();
+    }
 }

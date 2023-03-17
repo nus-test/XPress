@@ -6,16 +6,12 @@ import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 public class LowerCaseFunctionNode extends PredicateTreeFunctionNode {
     LowerCaseFunctionNode() {
         this.datatype = XMLDatatype.STRING;
+        XPathExpr = "lower-case";
     }
 
     @Override
     public void fillContents(PredicateTreeNode inputNode) {
         childList.add(inputNode);
-    }
-
-    @Override
-    public String toString() {
-        return "lower-case(" + childList.get(0) + ")";
     }
 
     @Override

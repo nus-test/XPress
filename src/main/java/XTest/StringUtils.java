@@ -23,4 +23,19 @@ public class StringUtils {
         }
         return resultList;
     }
+
+    public static <T> String getListString(List<T> list) {
+        return getListString(list, ",");
+    }
+
+    public static <T> String getListString(List<T> list, String delimiter) {
+        String resultStr = "";
+        boolean needDelim = false;
+        for(T child: list) {
+            if(needDelim) resultStr += delimiter;
+            resultStr += child.toString();
+            if(!needDelim) needDelim = true;
+        }
+        return resultStr;
+    }
 }

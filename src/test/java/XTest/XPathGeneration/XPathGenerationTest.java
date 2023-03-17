@@ -1,7 +1,7 @@
 package XTest.XPathGeneration;
 
-import XTest.DatabaseExecutor.BaseXExecutor;
-import XTest.DatabaseExecutor.MainExecutor;
+import XTest.DatabaseExecutor.*;
+import XTest.ReportGeneration.ReportManager;
 import XTest.TestException.MismatchingResultException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XMLGeneration.XMLContext;
@@ -19,14 +19,23 @@ import java.util.List;
 public class XPathGenerationTest {
 
     @Test
-    void XPathGenerationTest() throws IOException, SQLException, XMLDBException, SaxonApiException, MismatchingResultException, InstantiationException, IllegalAccessException, UnexpectedExceptionThrownException {
+    void XPathGenerationTest() throws IOException, SQLException, XMLDBException, SaxonApiException, MismatchingResultException, InstantiationException, IllegalAccessException, UnexpectedExceptionThrownException, ClassNotFoundException {
         XMLDocumentGenerator xmlDocumentGenerator = new XMLDocumentGenerator();
         XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(4);
-        //System.out.println(xmlContext.getXmlContent());
-        BaseXExecutor baseXExecutor = BaseXExecutor.getInstance();
-        MainExecutor mainExecutor = new MainExecutor();
+        System.out.println(xmlContext.getXmlContent());
+        ReportManager reportManager = new ReportManager("C:\\app\\log\\log.txt");
+        MainExecutor mainExecutor = new MainExecutor(reportManager);
+
+        List<DatabaseExecutor> dbExecuterList = new ArrayList<>();
+
+        dbExecuterList.add(BaseXExecutor.getInstance());
+        dbExecuterList.add(ExistExecutor.getInstance());
+        dbExecuterList.add(SaxonExecutor.getInstance());
+//        dbExecuterList.add(OracleExecutor.getInstance());
+        for(DatabaseExecutor dbExecutor: dbExecuterList)
+            dbExecutor.registerDatabase(mainExecutor);
+
         XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
-        mainExecutor.registerDatabase(baseXExecutor,"BaseX");
         List<Integer> generationDepth = Arrays.asList(5, 6, 3);
         List<String> XPath = new ArrayList<>();
         try {
@@ -40,6 +49,7 @@ public class XPathGenerationTest {
                 System.out.println(mainExecutor.executeAndCompare(XPathStr));
             }
         }finally {
+            reportManager.close();
             mainExecutor.close();
         }
     }

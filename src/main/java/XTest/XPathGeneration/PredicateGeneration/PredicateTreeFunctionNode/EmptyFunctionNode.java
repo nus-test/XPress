@@ -2,12 +2,11 @@ package XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode;
 
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
-import XTest.XPathGeneration.PredicateGeneration.UnaryPredicateTreeNode;
 
-public class ExistFunctionNode extends PredicateTreeFunctionNode implements UnaryPredicateTreeNode {
-    ExistFunctionNode() {
+public class EmptyFunctionNode extends PredicateTreeFunctionNode {
+    EmptyFunctionNode() {
         this.datatype = XMLDatatype.BOOLEAN;
-        XPathExpr = "exists";
+        XPathExpr = "empty";
     }
 
     @Override
@@ -16,8 +15,7 @@ public class ExistFunctionNode extends PredicateTreeFunctionNode implements Unar
     }
 
     @Override
-    public ExistFunctionNode newInstance() {
-        return new ExistFunctionNode();
+    public EmptyFunctionNode newInstance() {
+        return new EmptyFunctionNode();
     }
-
 }

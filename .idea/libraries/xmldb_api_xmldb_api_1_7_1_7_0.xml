@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="xmldb-api-xmldb-api-1.7-1.7.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../jar/xmldb-api-xmldb-api-1.7/xmldb-api-xmldb-api-1.7-1.7.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

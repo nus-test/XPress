@@ -2,7 +2,6 @@ package XTest.DatabaseExecutor;
 
 import XTest.CommonUtils;
 import XTest.ReportGeneration.ReportManager;
-import XTest.TempTest.MultiTester;
 import XTest.TestException.MismatchingResultException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XMLGeneration.ContextNode;
@@ -10,7 +9,6 @@ import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
 
 import java.io.IOException;
-import java.rmi.UnexpectedException;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -61,7 +59,7 @@ public class MainExecutor {
                 currentNodeIdResultSet = executeSingleProcessorGetIdList(XPath, databaseExecutor);
             }catch(Exception e) {
                 System.out.println("Unknown exception thrown!");
-                reportManager.reportInconsistency(this, XPath);
+                reportManager.reportUnexpectedException(this, XPath, e);
                 throw new UnexpectedExceptionThrownException();
             }
             if(nodeIdResultSet != null) {
@@ -69,7 +67,7 @@ public class MainExecutor {
                 if (checkResult == false) {
                     if(reportManager != null) {
                         System.out.println("Inconsistency found!");
-                        reportManager.reportInconsistency(this, XPath);
+                        reportManager.reportPotentialBug(this, XPath);
                     }
                     else {
                         System.out.println(lastDBName);
@@ -113,7 +111,7 @@ public class MainExecutor {
             resultList = databaseExecutor.executeGetNodeIdList(XPath);
         } catch (Exception e) {
             if(reportManager != null)
-                reportManager.reportInconsistency(this, XPath);
+                reportManager.reportUnexpectedException(this, XPath, e);
             else {
                 System.out.println("---------------- Unexpected Exception Thrown ------------------");
                 System.out.println(currentContext);
@@ -140,7 +138,7 @@ public class MainExecutor {
             result = databaseExecutor.execute(XPath);
         } catch(Exception e) {
             if(reportManager != null)
-                reportManager.reportInconsistency(this, XPath);
+                reportManager.reportUnexpectedException(this, XPath, e);
             else {
                 System.out.println("---------------- Unexpected Exception Thrown ------------------");
                 System.out.println(currentContext);

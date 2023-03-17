@@ -36,6 +36,16 @@ public class GlobalRandom {
         }
     }
 
+    public Pair nextInterval(int minBound, int maxBound) {
+        int start = random.nextInt(maxBound - minBound) + minBound;
+        int end = random.nextInt(start, maxBound);
+        return new Pair(start, end);
+    }
+
+    public Pair nextInterval(int maxBound) {
+        return nextInterval(0, maxBound);
+    }
+
     public double nextDouble() {
         return random.nextDouble();
     }

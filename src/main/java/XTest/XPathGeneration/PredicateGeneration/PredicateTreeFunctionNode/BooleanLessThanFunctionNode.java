@@ -6,22 +6,23 @@ import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 
 import static XTest.StringUtils.getListString;
 
-public class ConcatFunctionNode extends PredicateTreeFunctionNode {
-    ConcatFunctionNode() {
-        this.datatype = XMLDatatype.STRING;
-        XPathExpr = "concat";
+public class BooleanLessThanFunctionNode extends PredicateTreeFunctionNode {
+    BooleanLessThanFunctionNode() {
+        this.datatype = XMLDatatype.BOOLEAN;
+        XPathExpr = "boolean-less-than";
     }
+
 
     @Override
     public void fillContents(PredicateTreeNode inputNode) {
         childList.add(inputNode);
-        String randomString = XMLDatatype.STRING.getValueHandler().getValue(false);
-        PredicateTreeConstantNode constantNode = new PredicateTreeConstantNode(XMLDatatype.STRING, randomString);
+        PredicateTreeConstantNode constantNode = new PredicateTreeConstantNode
+                (XMLDatatype.BOOLEAN, XMLDatatype.BOOLEAN.getValueHandler().getValue());
         childList.add(constantNode);
     }
 
     @Override
-    public ConcatFunctionNode newInstance() {
-        return new ConcatFunctionNode();
+    public BooleanLessThanFunctionNode newInstance() {
+        return new BooleanLessThanFunctionNode();
     }
 }

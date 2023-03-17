@@ -1,6 +1,7 @@
 package XTest.XMLGeneration;
 
 import XTest.GlobalRandom;
+import XTest.PrimitiveDatatype.XMLDatatype;
 
 import java.io.*;
 import java.util.List;
@@ -79,6 +80,14 @@ public class XMLDocumentGenerator {
         }
         for(ContextNode childNode: currentNode.childList) {
             assignTemplateToNode(childNode);
+        }
+    }
+
+    public void clearContext() {
+        contextNodeNameGenerator = new BaseCharIDStyleNameGeneratorImpl('A');
+        attributeNodeNameGenerator = new BaseCharIDStyleNameGeneratorImpl('a');
+        for(XMLDatatype datatype : XMLDatatype.values()) {
+            datatype.getValueHandler().clear();
         }
     }
 }

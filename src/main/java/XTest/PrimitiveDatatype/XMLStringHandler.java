@@ -20,6 +20,11 @@ public class XMLStringHandler extends PooledValueHandler implements XMLComparabl
 
     String getRandomValue() {
         int valueLength = GlobalRandom.getInstance().nextInt(maxLength);
+        String generatedString = getRandomValue(valueLength);
+        return generatedString;
+    }
+
+    public String getRandomValue(int valueLength) {
         StringBuilder stringBuilder = new StringBuilder();
         for(int i = 0; i < valueLength; i ++) {
             stringBuilder.append(getRandomCharacter());

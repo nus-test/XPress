@@ -15,6 +15,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static XTest.StringUtils.getListString;
+
 public abstract class PredicateTreeFunctionNode extends PredicateTreeNode {
     public static DefaultListHashMap<XMLDatatype, PredicateTreeFunctionNode> functionMap = new DefaultListHashMap<>();
 
@@ -53,5 +55,10 @@ public abstract class PredicateTreeFunctionNode extends PredicateTreeNode {
         double prob = GlobalRandom.getInstance().nextDouble();
         if(prob < 0.5) return this.dataContent;
         return this.datatype.getValueHandler().mutateValue(this.dataContent);
+    }
+
+    @Override
+    public String toString() {
+        return this.XPathExpr + "(" + getListString(childList) + ")";
     }
 }

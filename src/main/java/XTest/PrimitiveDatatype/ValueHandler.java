@@ -8,4 +8,6 @@ public abstract class ValueHandler {
     }
 
     public abstract String mutateValue(String baseString);
+
+    public void clear() {}
 }

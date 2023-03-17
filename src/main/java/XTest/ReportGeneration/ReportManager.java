@@ -2,8 +2,6 @@ package XTest.ReportGeneration;
 
 import XTest.DatabaseExecutor.DatabaseExecutor;
 import XTest.DatabaseExecutor.MainExecutor;
-import net.sf.saxon.s9api.SaxonApiException;
-import org.xmldb.api.base.XMLDBException;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -13,7 +11,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,12 +46,20 @@ public class ReportManager {
         bufferedWriter.write(text);
     }
 
-    void close() throws IOException {
+    public void close() throws IOException {
         bufferedWriter.flush();
         bufferedWriter.close();
     }
 
-    public void reportInconsistency(MainExecutor mainExecutor, String XPath) throws IOException {
+    public void reportUnexpectedException(MainExecutor mainExecutor, String XPath, Exception e) throws IOException {
+        reportPotentialBug(mainExecutor, XPath);
+        logToFile("incaseoriginalxml:" + mainExecutor.currentContext + "\n");
+        logToFile("incaseoriginalxpath:" + XPath + "\n");
+        logToFile("following incurred unexpected exception of:" + e + "\n");
+        reportPotentialBug(mainExecutor, XPath);
+    }
+
+    public void reportPotentialBug(MainExecutor mainExecutor, String XPath) throws IOException {
         Map<String, String> answerSetMap = new HashMap<>();
         Map<String, String> errorMessageMap = new HashMap<>();
         id += 1;
@@ -90,7 +95,7 @@ public class ReportManager {
             String errorMessage = entry.getValue();
             if(errorMessage.charAt(errorMessage.length() - 1) != '\n')
                 errorMessage += '\n';
-            logToFile(errorMessage);
+            logToFile("errormessage:" + errorMessage);
         }
     }
 }
