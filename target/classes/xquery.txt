@@ -1,1 +1,1 @@
-//*[(@id * -1) > -2]
+//*[(((@id mod 685185948) <= 15) or ((@id idiv 3) <= 5)) or ((empty(@id)) = false())]//E1[(not((abs(@id)) < 5) and ((@id - -57947226) = 57947231)) or (exists(text()) = true())]//E1

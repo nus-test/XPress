@@ -1,6 +1,7 @@
 package XTest.XPathGeneration;
 
 import XTest.DatabaseExecutor.*;
+import XTest.GlobalRandom;
 import XTest.ReportGeneration.ReportManager;
 import XTest.TestException.MismatchingResultException;
 import XTest.TestException.UnexpectedExceptionThrownException;
@@ -21,7 +22,7 @@ public class XPathGenerationTest {
     @Test
     void XPathGenerationTest() throws IOException, SQLException, XMLDBException, SaxonApiException, MismatchingResultException, InstantiationException, IllegalAccessException, UnexpectedExceptionThrownException, ClassNotFoundException {
         XMLDocumentGenerator xmlDocumentGenerator = new XMLDocumentGenerator();
-        XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(4);
+        XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(20);
         System.out.println(xmlContext.getXmlContent());
         ReportManager reportManager = new ReportManager("C:\\app\\log\\log.txt");
         MainExecutor mainExecutor = new MainExecutor(reportManager);
@@ -36,12 +37,11 @@ public class XPathGenerationTest {
             dbExecutor.registerDatabase(mainExecutor);
 
         XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
-        List<Integer> generationDepth = Arrays.asList(5, 6, 3);
         List<String> XPath = new ArrayList<>();
         try {
             mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
-            for(Integer depth : generationDepth)
-                XPath.add(XPathGenerator.getXPath(depth));
+            for(int i = 0; i < 5; i ++)
+                XPath.add(XPathGenerator.getXPath(5));
             for(String XPathStr: XPath) {
                 System.out.println("Generated XPath: ------------------------------");
                 System.out.println(XPathStr);

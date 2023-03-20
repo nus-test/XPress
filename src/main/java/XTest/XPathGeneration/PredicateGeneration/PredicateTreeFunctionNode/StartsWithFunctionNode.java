@@ -7,7 +7,7 @@ import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 
 public class StartsWithFunctionNode extends PredicateTreeFunctionNode{
     StartsWithFunctionNode() {
-        datatype = XMLDatatype.STRING;
+        datatype = XMLDatatype.BOOLEAN;
         XPathExpr = "starts-with";
     }
 

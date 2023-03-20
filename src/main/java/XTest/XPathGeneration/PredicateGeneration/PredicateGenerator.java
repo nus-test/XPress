@@ -7,6 +7,7 @@ import XTest.TestException.MismatchingResultException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XMLGeneration.ContextNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.PredicateTreeFunctionNode;
+import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.SubstringFunctionNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalConnectionNode.NotConnectionNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalConnectionNode.PredicateTreeLogicalConnectionNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalOperationNode.EqualOperationNode;
@@ -95,6 +96,10 @@ public class PredicateGenerator {
 
     public PredicateTreeFunctionNode generateFunctionExpression(PredicateTreeNode inputNode) {
         PredicateTreeFunctionNode functionNode = PredicateTreeFunctionNode.getRandomPredicateTreeFunctionNode(inputNode.datatype);
+        if(inputNode.datatype == XMLDatatype.STRING && inputNode.dataContent.equals("")) {
+            while(functionNode instanceof SubstringFunctionNode)
+                functionNode = PredicateTreeFunctionNode.getRandomPredicateTreeFunctionNode(inputNode.datatype);
+        }
         functionNode.fillContents(inputNode);
         return functionNode;
     }

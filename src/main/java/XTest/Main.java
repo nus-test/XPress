@@ -33,7 +33,7 @@ public class Main {
         XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(30);
         XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
         List<String> XPath = new ArrayList<>();
-        int round = 20000;
+        int round = 40000;
         try {
             mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
             for(int i = 0; i < round; i ++) {

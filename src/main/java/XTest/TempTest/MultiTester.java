@@ -1,6 +1,7 @@
 package XTest.TempTest;
 
 import XTest.CommonUtils;
+import XTest.DatabaseExecutor.DatabaseExecutor;
 import net.sf.saxon.s9api.*;
 import org.exist.xmldb.EXistResource;
 import org.xmldb.api.DatabaseManager;
@@ -66,13 +67,17 @@ public class MultiTester {
             System.out.println("==================Xquery==================");
             System.out.println(xquery);
             System.out.println("==================Execute Xquery BaseX==================");
+            String resultString = "";
             try {
-                System.out.println(BaseXSession.execute("xquery " + xquery));
+                resultString = BaseXSession.execute("xquery " + xquery);
+                System.out.println(resultString);
+                System.out.println(DatabaseExecutor.getNodeIdList(resultString));
             }
             catch(Exception e) {
                 System.out.println(e);
                 System.out.println("BaseX executed with exception");
             }
+            resultString = "";
             System.out.println("==================Execute Xquery Exist==================");
             try {
                 CompiledExpression compiled = xqs.compile(xquery);
@@ -82,7 +87,8 @@ public class MultiTester {
                 while (i.hasMoreResources()) {
                     try {
                         resultRes = i.nextResource();
-                        System.out.println(resultRes.getContent());
+                        //System.out.println(resultRes.getContent());
+                        resultString += resultRes.getContent();
                     } finally {
                         //dont forget to cleanup resources
                         try {
@@ -97,8 +103,12 @@ public class MultiTester {
                 System.out.println(e);
                 System.out.println("Exist executed with exception");
             }
+            System.out.println(resultString);
+            System.out.println(DatabaseExecutor.getNodeIdList(resultString));
+            col.removeResource(res);
 
             url = SaxonSimple.class.getResource("/" + xqueryFile);
+            resultString = "";
             Processor saxon = new Processor(false);
 
             // compile the query
@@ -117,8 +127,10 @@ public class MultiTester {
             query.setContextItem(doc);
             XdmValue result = query.evaluate();
             for(int i = 0; i < result.size(); i ++) {
-                System.out.println(result.itemAt(i));
+                resultString += result.itemAt(i);
+                //System.out.println(result.itemAt(i));
             }
+            System.out.println(DatabaseExecutor.getNodeIdList(resultString));
         }
         // run query on database
         BaseXSession.execute("drop db test");

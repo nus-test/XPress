@@ -71,7 +71,7 @@ public abstract class DatabaseExecutor {
         Stack<Integer> tagStack = new Stack<>();
         for(int i = 0; i < resultString.length(); i ++) {
             if(i < resultString.length() - 1
-                    && resultString.substring(i, i + 2).equals("</")) {
+                    && (resultString.substring(i, i + 2).equals("</") || resultString.substring(i, i + 2).equals("/>"))) {
                 tagStack.pop();
             }
             else if(resultString.charAt(i) == '<')

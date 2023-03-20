@@ -35,7 +35,7 @@ public class PrefixQualifier {
             if(node.parentNode != null) {
                 if (node.childId != node.parentNode.childList.size())
                     haveFollowingSibling = true;
-                if (node.childId != 0)
+                if (node.childId != 1)
                     havePrecedingSibling = true;
             }
             if(node.haveFollowing)

@@ -34,6 +34,7 @@ public class XPathGenerator {
             // Something wrong might be happening?
             return null;
         }
+
         String prefix = GlobalRandom.getInstance().getRandomFromList(availablePrefixes);
         double prob = GlobalRandom.getInstance().nextDouble();
         if(prob < 0.5) {
@@ -68,6 +69,10 @@ public class XPathGenerator {
             PredicateContext predicateContext = predicateGenerator.generatePredicate(builder, 3, randomNode, allowTextContentFlag);
             builder += predicateContext.predicate;
             selectedNodeList = predicateContext.executionResult;
+        }
+        else {
+            nodeIdList = mainExecutor.executeAndCompare(builder);
+            selectedNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
         }
         return generateXPath(builder, selectedNodeList, depth - 1);
     }
