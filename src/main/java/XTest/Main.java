@@ -28,21 +28,35 @@ public class Main {
 //        dbExecuterList.add(OracleExecutor.getInstance());
         for(DatabaseExecutor dbExecutor: dbExecuterList)
             dbExecutor.registerDatabase(mainExecutor);
-
+        int round = 50;
         XMLDocumentGenerator xmlDocumentGenerator = new XMLDocumentGenerator();
-        XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(30);
-        XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
-        List<String> XPath = new ArrayList<>();
-        int round = 40000;
         try {
-            mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
-            for(int i = 0; i < round; i ++) {
-                System.out.println("Generated XPath: " + i);
+            for (int i = 0; i < round; i++) {
+                xmlDocumentGenerator.clearContext();
+                XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(40);
+                XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
+                List<String> XPath = new ArrayList<>();
+                System.out.println(xmlContext.getXmlContent());
                 try {
-                    XPath.add(XPathGenerator.getXPath(GlobalRandom.getInstance().nextInt(6)));
-                } catch (MismatchingResultException | UnexpectedExceptionThrownException e) {}
+                    int xpathCnt = 25;
+                    mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
+                    for (int j = 0; j < xpathCnt; j++) {
+                        System.out.println("Generated XPath: " + j);
+                        try {
+                            XPath.add(XPathGenerator.getXPath(GlobalRandom.getInstance().nextInt(7)));
+                        } catch (MismatchingResultException | UnexpectedExceptionThrownException e) {
+                        }
+                    }
+                }
+                finally {
+                    mainExecutor.cleanUp();
+                }
             }
-        }finally {
+        }catch (Exception e) {
+            System.out.println(e);
+        }
+        finally {
+            reportManager.close();
             mainExecutor.close();
         }
     }

@@ -23,7 +23,7 @@ public class DoubleMultiplicationFunctionNode extends PredicateTreeFunctionNode 
             if(multiplicationValue > 1) multiplicationValue = 1;
         }
         else {
-            Integer pre = GlobalRandom.getInstance().nextInt(10);
+            Integer pre = GlobalRandom.getInstance().nextInt(10) + 1;
             double last = GlobalRandom.getInstance().nextDouble();
             if(last < 0.0001) last = 0.0001;
             multiplicationValue = pre + last;

@@ -17,9 +17,10 @@ public class DoubleDivisionFunctionNode extends PredicateTreeFunctionNode {
         childList.add(inputNode);
         double currentValue = Double.parseDouble(inputNode.dataContent);
         double divisionValue;
-        if(abs(currentValue) > 1) {
+        if(abs(currentValue) > 10) {
             Integer pre = GlobalRandom.getInstance().nextInt(10);
             Integer last = GlobalRandom.getInstance().nextInt(10);
+            if(last == 0) last = 1;
             divisionValue = Double.parseDouble(pre + "." + last);
         }
         else {

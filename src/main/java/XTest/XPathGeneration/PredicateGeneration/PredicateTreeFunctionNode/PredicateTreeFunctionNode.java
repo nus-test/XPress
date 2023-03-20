@@ -70,7 +70,7 @@ public abstract class PredicateTreeFunctionNode extends PredicateTreeNode {
     public abstract PredicateTreeFunctionNode newInstance();
     public String generateRandomCompareValueFromContent() {
         double prob = GlobalRandom.getInstance().nextDouble();
-        if(prob < 0.5) return this.dataContent;
+        if(prob < 0.5 && this.datatype != XMLDatatype.DOUBLE) return this.dataContent;
         return this.datatype.getValueHandler().mutateValue(this.dataContent);
     }
 

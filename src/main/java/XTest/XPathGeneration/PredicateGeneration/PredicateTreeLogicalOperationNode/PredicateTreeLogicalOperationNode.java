@@ -39,7 +39,7 @@ public abstract class PredicateTreeLogicalOperationNode extends PredicateTreeNod
 
     public static PredicateTreeLogicalOperationNode getRandomLogicalOperationNode(XMLDatatype datatype) {
         double prob = GlobalRandom.getInstance().nextDouble();
-        if (datatype.getValueHandler() instanceof XMLComparable && prob < 0.7)
+        if (datatype == XMLDatatype.DOUBLE || (datatype.getValueHandler() instanceof XMLComparable && prob < 0.7))
             return GlobalRandom.getInstance().getRandomFromList(comparativeOperationNodeList).newInstance();
         else return new EqualOperationNode();
     }

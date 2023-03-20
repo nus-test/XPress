@@ -13,7 +13,7 @@ public class IntegerAddFunctionNode extends PredicateTreeFunctionNode{
 
     @Override
     public void fillContents(PredicateTreeNode inputNode) {
-        String value = null;
+        String value;
         Integer inputValue = Integer.parseInt(inputNode.dataContent);
         if(inputValue < 0) {
             value = ((XMLIntegerHandler) XMLDatatype.INTEGER.getValueHandler()).

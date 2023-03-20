@@ -4,6 +4,8 @@ import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeConstantNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 
+import static java.lang.Math.abs;
+
 public class DoubleSubtractionFunctionNode extends PredicateTreeFunctionNode {
     DoubleSubtractionFunctionNode() {
         datatype = XMLDatatype.DOUBLE;
@@ -15,11 +17,16 @@ public class DoubleSubtractionFunctionNode extends PredicateTreeFunctionNode {
         String value = XMLDatatype.DOUBLE.getValueHandler().getValue(false);
         double currentValue = Double.parseDouble(inputNode.dataContent);
         double subtractValue = Double.parseDouble(value);
-        if(currentValue > 10000 && subtractValue < 0) {
-            value = value.substring(1);
+        if(abs(currentValue - subtractValue) < 0.5) {
+            if(subtractValue < 0) value = value.substring(1);
+            else value = "-" + value;
         }
-        else if(currentValue < 10000 && subtractValue > 0) {
-            value = "-" + value;
+        else {
+            if (currentValue > 10000 && subtractValue < 0) {
+                value = value.substring(1);
+            } else if (currentValue < 10000 && subtractValue > 0) {
+                value = "-" + value;
+            }
         }
         childList.add(new PredicateTreeConstantNode(XMLDatatype.DOUBLE, value));
     }

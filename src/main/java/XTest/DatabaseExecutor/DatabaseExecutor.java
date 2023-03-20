@@ -55,8 +55,10 @@ public abstract class DatabaseExecutor {
     }
 
     public void clearContextWithCheck() throws SQLException, XMLDBException, IOException {
-        if(clearFlag)
+        if (clearFlag) {
             clearCurrentContext();
+            clearFlag = false;
+        }
     }
     void clearCurrentContext() throws XMLDBException, IOException, SQLException {};
     public abstract String execute(String Xquery) throws IOException, XMLDBException, SaxonApiException, SQLException;
