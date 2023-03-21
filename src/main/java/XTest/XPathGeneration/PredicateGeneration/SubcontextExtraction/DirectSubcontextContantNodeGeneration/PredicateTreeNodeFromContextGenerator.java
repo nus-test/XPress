@@ -1,0 +1,10 @@
+package XTest.XPathGeneration.PredicateGeneration.SubcontextExtraction.DirectSubcontextContantNodeGeneration;
+
+import XTest.XMLGeneration.ContextNode;
+import XTest.XPathGeneration.PredicateGeneration.PredicateTreeConstantNode;
+import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
+
+public interface PredicateTreeNodeFromContextGenerator {
+    PredicateTreeConstantNode generatePredicateTreeNodeFromContext(ContextNode currentNode);
+}
+

@@ -1,5 +1,6 @@
 package XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalConnectionNode;
 
+import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.XPathGeneration.PredicateGeneration.UnaryPredicateTreeNode;
 
 public class NotConnectionNode extends PredicateTreeLogicalConnectionNode implements UnaryPredicateTreeNode {

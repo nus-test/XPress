@@ -12,6 +12,8 @@ import XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalConnectionN
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalConnectionNode.PredicateTreeLogicalConnectionNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalOperationNode.EqualOperationNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalOperationNode.PredicateTreeLogicalOperationNode;
+import XTest.XPathGeneration.PredicateGeneration.SubcontextExtraction.SubcontextExtractor;
+import XTest.XPathGeneration.XPathGenerator;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
 
@@ -21,17 +23,23 @@ import java.util.List;
 
 public class PredicateGenerator {
     MainExecutor mainExecutor;
+    SubcontextExtractor subcontextExtractor;
+    XPathGenerator xPathGenerator;
 
-    public PredicateGenerator(MainExecutor mainExecutor){
+    public PredicateGenerator(MainExecutor mainExecutor, XPathGenerator xPathGenerator){
         this.mainExecutor = mainExecutor;
+        this.xPathGenerator = xPathGenerator;
+        this.subcontextExtractor = new SubcontextExtractor(mainExecutor, xPathGenerator);
     }
 
-    public PredicateContext generatePredicate(String XPathPrefix, int maxPhraseLength, ContextNode randomNode, boolean allowTextContentFlag)
+    public PredicateContext generatePredicate(String XPathPrefix, int maxPhraseLength,
+                                              ContextNode randomNode, boolean allowTextContentFlag,
+                                              boolean complexFlag)
             throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, UnexpectedExceptionThrownException {
         String currentNodePrefix = "//*[@id=\"" + randomNode.id + "\"]/";
         PredicateTreeNode currentRoot = null;
         for(int i = 0; i < maxPhraseLength; i ++) {
-            PredicateTreeNode singlePhraseNode = generateSinglePhrase(currentNodePrefix, randomNode, allowTextContentFlag);
+            PredicateTreeNode singlePhraseNode = generateSinglePhrase(currentNodePrefix, randomNode, allowTextContentFlag, complexFlag);
             if(currentRoot == null)
                 currentRoot = singlePhraseNode;
             else {
@@ -44,16 +52,22 @@ public class PredicateGenerator {
         return predicateContext;
     }
 
-    public PredicateTreeNode generateSinglePhrase(String XPathPrefix, ContextNode currentNode, boolean allowTextContentFlag)
+    public PredicateContext generatePredicate(String XPathPrefix, int maxPhraseLength, ContextNode randomNode, boolean allowTextContentFlag)
+            throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, UnexpectedExceptionThrownException {
+        return generatePredicate(XPathPrefix, maxPhraseLength, randomNode, allowTextContentFlag, true);
+    }
+
+    public PredicateTreeNode generateSinglePhrase(String XPathPrefix, ContextNode currentNode,
+                                                  boolean allowTextContentFlag, boolean complexFlag)
             throws SQLException, XMLDBException, IOException, SaxonApiException, UnexpectedExceptionThrownException {
-        PredicateTreeConstantNode inputNode = getSubcontextFromContextNode(currentNode, allowTextContentFlag);
+        PredicateTreeConstantNode inputNode = getSubcontextFromContextNode(XPathPrefix, currentNode, allowTextContentFlag, complexFlag);
         PredicateTreeFunctionNode functionNode = generateFunctionExpression(inputNode, 1);
         PredicateTreeNode phraseNode = generateSinglePhraseFromFunction(XPathPrefix, functionNode);
         return phraseNode;
     }
 
     public PredicateTreeNode generateSinglePhraseFromFunction(String XPathPrefix, PredicateTreeFunctionNode functionNode) throws SQLException, XMLDBException, IOException, SaxonApiException, UnexpectedExceptionThrownException {
-        functionNode.getDataContent(XPathPrefix, mainExecutor, "BaseX");
+        functionNode.getDataContent(XPathPrefix, mainExecutor, "Saxon");
         PredicateTreeLogicalOperationNode singlePhraseNode = PredicateTreeLogicalOperationNode.getRandomLogicalOperationNode(functionNode.datatype);
         PredicateTreeConstantNode constNode = getConstantNodeFromContent(functionNode);
         singlePhraseNode.join(functionNode, constNode);
@@ -104,10 +118,9 @@ public class PredicateGenerator {
         return functionNode;
     }
 
-    public PredicateTreeConstantNode getSubcontextFromContextNode(ContextNode currentNode, boolean allowTextContentFlag) {
-        double prob = GlobalRandom.getInstance().nextDouble();
-        if(prob < 0.3 && allowTextContentFlag)
-            return new PredicateTreeConstantNode(currentNode);
-        return new PredicateTreeConstantNode(GlobalRandom.getInstance().getRandomFromList(currentNode.attributeList));
+    public PredicateTreeConstantNode getSubcontextFromContextNode(String XPathPrefix, ContextNode currentNode,
+                                                                  boolean allowTextContentFlag, boolean complexFlag)
+            throws SQLException, XMLDBException, MismatchingResultException, UnexpectedExceptionThrownException, IOException, SaxonApiException, InstantiationException, IllegalAccessException {
+        return subcontextExtractor.extractSubcontext(XPathPrefix, currentNode, allowTextContentFlag, complexFlag);
     }
 }

@@ -71,7 +71,7 @@ public class MultiTester {
             try {
                 resultString = BaseXSession.execute("xquery " + xquery);
                 System.out.println(resultString);
-                System.out.println(DatabaseExecutor.getNodeIdList(resultString));
+                //System.out.println(DatabaseExecutor.getNodeIdList(resultString));
             }
             catch(Exception e) {
                 System.out.println(e);
@@ -104,7 +104,7 @@ public class MultiTester {
                 System.out.println("Exist executed with exception");
             }
             System.out.println(resultString);
-            System.out.println(DatabaseExecutor.getNodeIdList(resultString));
+            //System.out.println(DatabaseExecutor.getNodeIdList(resultString, "Exist"));
             col.removeResource(res);
 
             url = SaxonSimple.class.getResource("/" + xqueryFile);
@@ -130,7 +130,8 @@ public class MultiTester {
                 resultString += result.itemAt(i);
                 //System.out.println(result.itemAt(i));
             }
-            System.out.println(DatabaseExecutor.getNodeIdList(resultString));
+            System.out.println(resultString);
+            //System.out.println(DatabaseExecutor.getNodeIdList(resultString));
         }
         // run query on database
         BaseXSession.execute("drop db test");

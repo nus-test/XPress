@@ -15,8 +15,8 @@ public class PrefixQualifier {
         return axes.stream().map(PrefixQualifier::getAxis).toList();
     }
 
-    List<String> getPrefixes(List<ContextNode> currentNodes) {
-        boolean noAxes = false, haveChildNode = false, haveParentNode = false;
+    List<String> getPrefixes(List<ContextNode> currentNodes, boolean noAxes) {
+        boolean haveChildNode = false, haveParentNode = false;
         boolean haveFollowingSibling = false, haveFollowing = false;
         boolean havePrecedingSibling = false, havePreceding = false;
         List<String> availablePrefix = new ArrayList<>();
@@ -62,5 +62,9 @@ public class PrefixQualifier {
             availablePrefix.addAll(getAxesList(Arrays.asList("self", "descendant-or-self", "ancestor-or-self")));
         }
         return availablePrefix;
+    }
+
+    List<String> getPrefixes(List<ContextNode> currentNodes) {
+        return getPrefixes(currentNodes, false);
     }
 }

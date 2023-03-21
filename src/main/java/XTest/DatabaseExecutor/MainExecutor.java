@@ -105,6 +105,10 @@ public class MainExecutor {
         return executeSingleProcessorGetIdList(XPath, databaseExecutorNameMap.get(databaseName));
     }
 
+    public List<ContextNode> executeSingleProcessorGetNodeList(String XPath, String databaseName) throws SQLException, XMLDBException, IOException, SaxonApiException, UnexpectedExceptionThrownException {
+        return getNodeListFromIdList(executeSingleProcessorGetIdList(XPath, databaseExecutorNameMap.get(databaseName)));
+    }
+
     public List<Integer> executeSingleProcessorGetIdList(String XPath, DatabaseExecutor databaseExecutor) throws SQLException, XMLDBException, IOException, SaxonApiException, UnexpectedExceptionThrownException {
         List<Integer> resultList = null;
         try {

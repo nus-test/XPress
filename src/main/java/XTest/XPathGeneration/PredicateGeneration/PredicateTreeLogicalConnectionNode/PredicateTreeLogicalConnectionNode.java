@@ -1,6 +1,7 @@
 package XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalConnectionNode;
 
 import XTest.GlobalRandom;
+import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 import XTest.XPathGeneration.PredicateGeneration.UnaryPredicateTreeNode;
 
@@ -10,6 +11,10 @@ import java.util.List;
 public abstract class PredicateTreeLogicalConnectionNode extends PredicateTreeNode {
     static List<PredicateTreeLogicalConnectionNode> binaryLogicalConnectionNodeList = new ArrayList<>();
     static List<PredicateTreeLogicalConnectionNode> unaryLogicalConnectionNodeList = new ArrayList<>();
+
+    PredicateTreeLogicalConnectionNode() {
+        datatype = XMLDatatype.BOOLEAN;
+    }
 
     static {
         binaryLogicalConnectionNodeList.add(new AndConnectionNode());

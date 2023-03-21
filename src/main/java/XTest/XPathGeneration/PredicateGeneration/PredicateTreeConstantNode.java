@@ -9,20 +9,33 @@ public class PredicateTreeConstantNode extends PredicateTreeNode implements Unar
     PredicateTreeConstantNode() {}
 
     public PredicateTreeConstantNode(XMLDatatype xmlDatatype, String context) {
-        datatype = xmlDatatype;
-        dataContent = context;
-        XPathExpr = context;
+        this(xmlDatatype, context, context);
         if(this.datatype == XMLDatatype.STRING)
-            XPathExpr = "\"" + context + "\"";
+            this.XPathExpr = "\"" + context + "\"";
     }
 
-    PredicateTreeConstantNode(ElementNode elementNode) {
+    public PredicateTreeConstantNode(XMLDatatype xmlDatatype, String context, String XPathExpr) {
+        datatype = xmlDatatype;
+        dataContent = context;
+        this.XPathExpr = context;
+    }
+
+    public PredicateTreeConstantNode(ElementNode elementNode) {
+        this(elementNode, null);
+    }
+
+    public PredicateTreeConstantNode(ElementNode elementNode, String XPathExpr) {
         dataContent = elementNode.dataContext;
         datatype = elementNode.dataType;
         if(elementNode instanceof AttributeNode)
-            XPathExpr = "@" + elementNode.tagName;
+            this.XPathExpr = "@" + elementNode.tagName;
         else
-            XPathExpr = "text()";
+            this.XPathExpr = XPathExpr;
+    }
+
+    public PredicateTreeConstantNode(String XPathExpr, XMLDatatype datatype) {
+        this.datatype = datatype;
+        this.XPathExpr = XPathExpr;
     }
 
     @Override

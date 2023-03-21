@@ -24,13 +24,13 @@ public class XPathGenerationTest {
         XMLDocumentGenerator xmlDocumentGenerator = new XMLDocumentGenerator();
         XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(20);
         System.out.println(xmlContext.getXmlContent());
-        ReportManager reportManager = new ReportManager("C:\\app\\log\\log.txt");
+        ReportManager reportManager = null; //new ReportManager("C:\\app\\log\\log.txt");
         MainExecutor mainExecutor = new MainExecutor(reportManager);
 
         List<DatabaseExecutor> dbExecuterList = new ArrayList<>();
 
-        dbExecuterList.add(BaseXExecutor.getInstance());
-        dbExecuterList.add(ExistExecutor.getInstance());
+       // dbExecuterList.add(BaseXExecutor.getInstance());
+      //  dbExecuterList.add(ExistExecutor.getInstance());
         dbExecuterList.add(SaxonExecutor.getInstance());
 //        dbExecuterList.add(OracleExecutor.getInstance());
         for(DatabaseExecutor dbExecutor: dbExecuterList)
@@ -49,7 +49,7 @@ public class XPathGenerationTest {
                 System.out.println(mainExecutor.executeAndCompare(XPathStr));
             }
         }finally {
-            reportManager.close();
+            // reportManager.close();
             mainExecutor.close();
         }
     }

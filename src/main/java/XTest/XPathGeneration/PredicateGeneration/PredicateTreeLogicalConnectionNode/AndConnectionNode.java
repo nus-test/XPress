@@ -1,5 +1,7 @@
 package XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalConnectionNode;
 
+import XTest.PrimitiveDatatype.XMLDatatype;
+
 public class AndConnectionNode extends PredicateTreeLogicalConnectionNode {
 
     AndConnectionNode() {

@@ -1,5 +1,7 @@
 package XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalOperationNode;
 
+import XTest.PrimitiveDatatype.XMLDatatype;
+
 public class EqualOperationNode extends PredicateTreeLogicalOperationNode {
     EqualOperationNode() {
         this.XPathExpr = "=";

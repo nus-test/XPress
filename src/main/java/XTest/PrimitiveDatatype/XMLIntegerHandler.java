@@ -4,7 +4,7 @@ import XTest.CommonUtils;
 import XTest.DataCheckUtils;
 import XTest.GlobalRandom;
 
-public class XMLIntegerHandler extends PooledValueHandler implements XMLComparable {
+public class XMLIntegerHandler extends PooledValueHandler implements XMLComparable, XMLNumeric {
     @Override
     String getRandomValue() {
         return Integer.toString(GlobalRandom.getInstance().nextInt());

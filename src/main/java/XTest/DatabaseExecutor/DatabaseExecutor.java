@@ -9,9 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public abstract class DatabaseExecutor {
     public String dbName;
@@ -64,7 +62,7 @@ public abstract class DatabaseExecutor {
     public abstract String execute(String Xquery) throws IOException, XMLDBException, SaxonApiException, SQLException;
     public List<Integer> executeGetNodeIdList(String Xquery) throws SQLException, XMLDBException, IOException, SaxonApiException {
         String result = execute(Xquery);
-        return getNodeIdList(result);
+        return getNodeIdList(result, this.dbName);
     }
     public abstract void close() throws IOException, XMLDBException, SQLException;
 
@@ -82,7 +80,16 @@ public abstract class DatabaseExecutor {
                 nodeIdList.add(CommonUtils.getEnclosedInteger(resultString, i + 4));
             }
         }
-        nodeIdList.sort(Integer::compareTo);
         return nodeIdList;
+    }
+
+    public static List<Integer> getNodeIdList(String resultString, String dbName) {
+        List<Integer> resultList = getNodeIdList(resultString);
+        if(dbName != null && dbName == "Exist") {
+            Set<Integer> s = new LinkedHashSet<>(resultList);
+            resultList.clear();
+            resultList.addAll(s);
+        }
+        return resultList;
     }
 }
