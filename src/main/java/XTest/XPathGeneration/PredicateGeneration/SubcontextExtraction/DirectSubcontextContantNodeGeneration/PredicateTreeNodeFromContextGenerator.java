@@ -4,7 +4,13 @@ import XTest.XMLGeneration.ContextNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeConstantNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 
-public interface PredicateTreeNodeFromContextGenerator {
-    PredicateTreeConstantNode generatePredicateTreeNodeFromContext(ContextNode currentNode);
+public abstract class PredicateTreeNodeFromContextGenerator {
+    String contextFunctionName;
+
+    public abstract PredicateTreeConstantNode generatePredicateTreeNodeFromContext(ContextNode currentNode);
+
+    public String getSubContentXPathGenerator(String XPathPrefix, ContextNode currentNode) {
+        return XPathPrefix + "[@id=\"" + currentNode.id + "\"]/" + contextFunctionName + "()";
+    }
 }
 

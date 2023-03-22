@@ -48,6 +48,8 @@ public enum XMLDirectSubcontext {
         return predicateTreeNodeGenerator;
     }
 
+
+    // XPath prefix: original XPath /*
     public static PredicateTreeConstantNode getDirectSubContext(String XPathPrefix, MainExecutor mainExecutor,
                                                                 ContextNode currentNode, boolean allowTextContent)
             throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
@@ -55,10 +57,14 @@ public enum XMLDirectSubcontext {
         if(prob < 0.5) {
             int id = GlobalRandom.getInstance().nextInt(typeCnt - 1) + 1;
             if(!allowTextContent && id == 1) id += 1;
-            PredicateTreeConstantNode constNode = directSubcontextIdMap.get(id).predicateTreeNodeGenerator
+            PredicateTreeNodeFromContextGenerator predicateTreeNodeFromContextGenerator =
+                    directSubcontextIdMap.get(id).predicateTreeNodeGenerator;
+            PredicateTreeConstantNode constNode = predicateTreeNodeFromContextGenerator
                     .generatePredicateTreeNodeFromContext(currentNode);
             if(id > 1) {
-                constNode.dataContent = mainExecutor.executeSingleProcessor(XPathPrefix + "/" + constNode.XPathExpr, "Saxon");
+                String result = mainExecutor.executeSingleProcessor(
+                        predicateTreeNodeFromContextGenerator.getSubContentXPathGenerator(XPathPrefix, currentNode), "Saxon");
+                constNode.dataContent = result;
             }
             return constNode;
         } else {

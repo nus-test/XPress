@@ -2,6 +2,7 @@ package XTest.XPathGeneration;
 
 import XTest.XMLGeneration.ContextNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
+import org.basex.query.expr.Arr;
 
 import java.util.*;
 

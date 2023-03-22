@@ -23,11 +23,13 @@ public class XPathGenerator {
         this.predicateGenerator = new PredicateGenerator(mainExecutor, this);
     }
 
-    public String generateXPath(String currentBuilder, List<ContextNode> currentNodeList, int depth, boolean complex) throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, UnexpectedExceptionThrownException {
+    public String generateXPath(String currentBuilder, List<ContextNode> currentNodeList, int depth, boolean complex)
+            throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, UnexpectedExceptionThrownException, InstantiationException, IllegalAccessException {
         if(depth == 0) {
             return currentBuilder;
         }
         String builder = currentBuilder;
+
         // First stage
         List<String> availablePrefixes = prefixQualifier.getPrefixes(currentNodeList, !complex);
         if(availablePrefixes.isEmpty()) {
@@ -66,7 +68,8 @@ public class XPathGenerator {
             allowTextContentFlag = true;
         }
         if(prob > 0.3) {
-            PredicateContext predicateContext = predicateGenerator.generatePredicate(builder, 3, randomNode, allowTextContentFlag);
+            PredicateContext predicateContext = predicateGenerator.generatePredicate(builder, 3, randomNode,
+                    allowTextContentFlag, complex);
             builder += predicateContext.predicate;
             selectedNodeList = predicateContext.executionResult;
         }
@@ -74,10 +77,10 @@ public class XPathGenerator {
             nodeIdList = mainExecutor.executeAndCompare(builder);
             selectedNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
         }
-        return generateXPath(builder, selectedNodeList, depth - 1);
+        return generateXPath(builder, selectedNodeList, depth - 1, complex);
     }
 
-    public String generateXPath(String currentBuilder, List<ContextNode> currentNodeList, int depth) throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, UnexpectedExceptionThrownException {
+    public String generateXPath(String currentBuilder, List<ContextNode> currentNodeList, int depth) throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, UnexpectedExceptionThrownException, InstantiationException, IllegalAccessException {
         return generateXPath(currentBuilder, currentNodeList, depth, true);
     }
 

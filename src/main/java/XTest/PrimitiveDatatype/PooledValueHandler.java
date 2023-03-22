@@ -43,8 +43,7 @@ public abstract class PooledValueHandler extends ValueHandler {
         if(valuePoolIdCnt == 0) {
             return getRandomValue();
         }
-        Random random = new Random();
-        int id = random.nextInt(valuePoolIdCnt);
+        int id = GlobalRandom.getInstance().nextInt(valuePoolIdCnt);
         return valuePoolLookUpMap.get(id);
     }
 
