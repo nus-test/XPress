@@ -64,7 +64,8 @@ public enum XMLDirectSubcontext {
             if(id > 1) {
                 String result = mainExecutor.executeSingleProcessor(
                         predicateTreeNodeFromContextGenerator.getSubContentXPathGenerator(XPathPrefix, currentNode), "Saxon");
-                constNode.dataContent = result;
+                constNode.dataContent = constNode.datatype == XMLDatatype.INTEGER ?
+                        Integer.toString(XMLIntegerHandler.parseInt(result)) : result;
             }
             return constNode;
         } else {

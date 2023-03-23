@@ -28,7 +28,7 @@ public class Main {
 //        dbExecuterList.add(OracleExecutor.getInstance());
         for(DatabaseExecutor dbExecutor: dbExecuterList)
             dbExecutor.registerDatabase(mainExecutor);
-        int round = 250;
+        int round = 5;
         XMLDocumentGenerator xmlDocumentGenerator = new XMLDocumentGenerator();
         try {
             for (int i = 0; i < round; i++) {
@@ -53,6 +53,7 @@ public class Main {
             }
         }catch (Exception e) {
             System.out.println(e);
+            e.printStackTrace();
         }
         finally {
             reportManager.close();

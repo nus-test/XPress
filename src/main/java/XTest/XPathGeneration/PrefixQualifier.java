@@ -45,7 +45,9 @@ public class PrefixQualifier {
                 havePreceding = true;
         }
         if(haveChildNode) {
-            availablePrefix.addAll(Arrays.asList("/", "//"));
+            //Exist: waiting for resolve!
+            //availablePrefix.addAll(Arrays.asList("/", "//"));
+            availablePrefix.addAll(Arrays.asList("/"));
             if(!noAxes)
                 availablePrefix.addAll(getAxesList(Arrays.asList("child","descendant")));
         }

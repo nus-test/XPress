@@ -35,4 +35,7 @@ public class IntegerSubtractionFunctionNode extends PredicateTreeFunctionNode {
     public IntegerSubtractionFunctionNode newInstance() {
         return new IntegerSubtractionFunctionNode();
     }
+
+    @Override
+    public String calculationString() { return childList.get(0).dataContent + " - " + childList.get(1).dataContent; }
 }

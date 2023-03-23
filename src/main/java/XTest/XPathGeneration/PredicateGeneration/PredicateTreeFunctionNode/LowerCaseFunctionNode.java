@@ -18,4 +18,8 @@ public class LowerCaseFunctionNode extends PredicateTreeFunctionNode {
     public LowerCaseFunctionNode newInstance() {
         return new LowerCaseFunctionNode();
     }
+
+    @Override
+    public String calculationString() { return XPathExpr + "(\"" + childList.get(0).dataContent + "\")"; }
+
 }

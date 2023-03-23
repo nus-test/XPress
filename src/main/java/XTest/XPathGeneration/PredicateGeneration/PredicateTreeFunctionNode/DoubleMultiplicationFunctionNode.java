@@ -40,4 +40,7 @@ public class DoubleMultiplicationFunctionNode extends PredicateTreeFunctionNode 
     public DoubleMultiplicationFunctionNode newInstance() {
         return new DoubleMultiplicationFunctionNode();
     }
+
+    @Override
+    public String calculationString() { return childList.get(0).dataContent + " * " + childList.get(1).dataContent; }
 }

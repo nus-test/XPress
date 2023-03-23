@@ -28,4 +28,8 @@ public class EndsWithFunctionNode extends PredicateTreeFunctionNode {
     public EndsWithFunctionNode newInstance() {
         return new EndsWithFunctionNode();
     }
+
+    @Override
+    public String calculationString() { return XPathExpr + "(\"" + childList.get(0).dataContent + "\", \"" + childList.get(1).dataContent + "\")"; }
+
 }

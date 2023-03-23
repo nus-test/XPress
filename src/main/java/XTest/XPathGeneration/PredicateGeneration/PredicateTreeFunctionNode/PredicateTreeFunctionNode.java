@@ -46,13 +46,9 @@ public abstract class PredicateTreeFunctionNode extends PredicateTreeNode {
 
     public static PredicateTreeFunctionNode getRandomPredicateTreeFunctionNode(XMLDatatype datatype) {
         List<PredicateTreeFunctionNode> functionList = functionMap.get(datatype);
-        double prob = GlobalRandom.getInstance().nextDouble();
-        if(functionList != null && functionList.size() > 0 && prob < 0.7)
+        if(functionList != null && functionList.size() > 0)
             return GlobalRandom.getInstance().getRandomFromList(functionList).newInstance();
-        prob = GlobalRandom.getInstance().nextDouble();
-        if(prob < 0.5)
-            return new EmptyFunctionNode();
-        return new ExistFunctionNode();
+        return new NoActionFunctionNode();
     }
 
     static void insertFunctionToMap(PredicateTreeFunctionNode functionNode, XMLDatatype datatype) {
@@ -61,8 +57,9 @@ public abstract class PredicateTreeFunctionNode extends PredicateTreeNode {
 
     public abstract void fillContents(PredicateTreeNode inputNode);
 
-    public void getDataContent(String XPathPrefix, MainExecutor mainExecutor, String databaseName) throws SQLException, XMLDBException, IOException, SaxonApiException, UnexpectedExceptionThrownException {
-        dataContent = mainExecutor.executeSingleProcessor(XPathPrefix + this, databaseName);
+    public void getDataContent(MainExecutor mainExecutor, String databaseName) throws SQLException, XMLDBException, IOException, SaxonApiException, UnexpectedExceptionThrownException {
+        System.out.println("show me: " + calculationString() + " " + childList.get(0) + " " + childList.get(0).dataContent);
+        dataContent = mainExecutor.executeSingleProcessor(calculationString(), databaseName);
         if(datatype == XMLDatatype.INTEGER)
             dataContent = XMLIntegerHandler.parseInt(dataContent).toString();
     }
@@ -70,12 +67,42 @@ public abstract class PredicateTreeFunctionNode extends PredicateTreeNode {
     public abstract PredicateTreeFunctionNode newInstance();
     public String generateRandomCompareValueFromContent() {
         double prob = GlobalRandom.getInstance().nextDouble();
+        System.out.println("How? " + this + " " + this.datatype + " " + this.dataContent);
         if(prob < 0.5 && this.datatype != XMLDatatype.DOUBLE) return this.dataContent;
-        return this.datatype.getValueHandler().mutateValue(this.dataContent);
+        String result =  this.datatype.getValueHandler().mutateValue(this.dataContent);
+        System.out.println("Sure? " + result);
+        return result;
     }
 
     @Override
     public String toString() {
         return this.XPathExpr + "(" + getListString(childList) + ")";
+    }
+
+
+    public String calculationString() {
+        return this.XPathExpr + "(" + getContentListString(childList) + ")";
+    }
+
+    public String getContentListString(List<PredicateTreeNode> childList) {
+        String resultStr = "";
+        boolean needDelim = false;
+        for(PredicateTreeNode child: childList) {
+            if(needDelim) resultStr += ",";
+            resultStr += child.dataContent;
+            if(!needDelim) needDelim = true;
+        }
+        return resultStr;
+    }
+
+    public String getContentListOfString(List<PredicateTreeNode> childList) {
+        String resultStr = "";
+        boolean needDelim = false;
+        for(PredicateTreeNode child: childList) {
+            if(needDelim) resultStr += ",";
+            resultStr += "\"" + child.dataContent + "\"";
+            if(!needDelim) needDelim = true;
+        }
+        return resultStr;
     }
 }

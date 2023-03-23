@@ -42,7 +42,9 @@ public class XPathGenerator {
         if(prob < 0.5) {
             if(availablePrefixes.get(0).equals("/")) {
                 prob = GlobalRandom.getInstance().nextDouble();
-                int id = prob < 0.5 ? 0 : 1;
+                // Exist: waiting for resolve!
+                //int id = prob < 0.5 ? 0 : 1;
+                int id = 0;
                 prefix = availablePrefixes.get(id);
             }
         }

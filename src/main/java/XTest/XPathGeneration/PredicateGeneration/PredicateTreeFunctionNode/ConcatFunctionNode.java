@@ -24,4 +24,7 @@ public class ConcatFunctionNode extends PredicateTreeFunctionNode {
     public ConcatFunctionNode newInstance() {
         return new ConcatFunctionNode();
     }
+
+    @Override
+    public String calculationString() { return XPathExpr + "(\"" + childList.get(0).dataContent + "\", \"" + childList.get(1).dataContent + "\")"; }
 }

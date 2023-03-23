@@ -38,4 +38,7 @@ public class IntegerDivisionFunctionNode extends PredicateTreeFunctionNode{
         return new IntegerDivisionFunctionNode();
     }
 
+    @Override
+    public String calculationString() { return childList.get(0).dataContent + " idiv " + childList.get(1).dataContent; }
+
 }

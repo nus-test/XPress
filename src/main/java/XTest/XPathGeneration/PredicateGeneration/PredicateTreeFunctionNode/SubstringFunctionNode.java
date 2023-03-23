@@ -31,4 +31,8 @@ public class SubstringFunctionNode extends PredicateTreeFunctionNode {
     public PredicateTreeFunctionNode newInstance() {
         return new SubstringFunctionNode();
     }
+
+    @Override
+    public String calculationString() { return XPathExpr + "(\"" + childList.get(0).dataContent + "\", "
+            + getContentListString(childList.subList(1, childList.size())) + ")"; }
 }

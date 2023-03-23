@@ -62,19 +62,23 @@ public class PredicateGenerator {
     public PredicateTreeNode generateSinglePhrase(String XPathPrefixFull, String currentNodeIdentifier, ContextNode currentNode,
                                                   boolean allowTextContentFlag, boolean complexFlag)
             throws SQLException, XMLDBException, IOException, SaxonApiException, UnexpectedExceptionThrownException, MismatchingResultException, InstantiationException, IllegalAccessException {
+        System.out.println("XPathPrefix: " + XPathPrefixFull);
+        System.out.println("selected Node: " + currentNode.id);
         PredicateTreeConstantNode inputNode = getSubcontextFromContextNode(XPathPrefixFull, currentNodeIdentifier, currentNode, allowTextContentFlag, complexFlag);
         PredicateTreeFunctionNode functionNode = generateFunctionExpression(inputNode, 1);
         PredicateTreeNode phraseNode = generateSinglePhraseFromFunction(XPathPrefixFull, currentNodeIdentifier, currentNode, functionNode);
         return phraseNode;
     }
 
-    public PredicateTreeNode generateSinglePhraseFromFunction(String XPathPrefixFull, String XPathPrefix, ContextNode currentNode, PredicateTreeFunctionNode functionNode) throws SQLException, XMLDBException, IOException, SaxonApiException, UnexpectedExceptionThrownException {
-        functionNode.getDataContent(XPathPrefix, mainExecutor, "BaseX");
+    public PredicateTreeNode generateSinglePhraseFromFunction(String XPathPrefixFull, String currentNodeIdentifier, ContextNode currentNode, PredicateTreeFunctionNode functionNode) throws SQLException, XMLDBException, IOException, SaxonApiException, UnexpectedExceptionThrownException {
+        System.out.println(XPathPrefixFull);
+        functionNode.getDataContent(mainExecutor, "BaseX");
+        //System.out.println("check function node dataContent", );
         PredicateTreeLogicalOperationNode singlePhraseNode = PredicateTreeLogicalOperationNode.getRandomLogicalOperationNode(functionNode.datatype);
         PredicateTreeConstantNode constNode = getConstantNodeFromContent(functionNode);
+        System.out.println("Check! " + functionNode + " " + constNode);
         singlePhraseNode.join(functionNode, constNode);
-        List<Integer> executionResult = mainExecutor.executeSingleProcessorGetIdList(XPathPrefixFull + "[" + singlePhraseNode + "]", "BaseX");
-        System.out.println("predicate " + XPathPrefix + singlePhraseNode + " " + executionResult);
+        List<Integer> executionResult = mainExecutor.executeSingleProcessorGetIdList(XPathPrefixFull + "[" + singlePhraseNode + "]" + currentNodeIdentifier, "BaseX");
         if(!executionResult.contains(currentNode.id)) {
             double prob = GlobalRandom.getInstance().nextDouble();
             if(prob < 0.4) {
@@ -108,6 +112,12 @@ public class PredicateGenerator {
             functionNode = generateFunctionExpression(inputNode);
             inputNode = functionNode;
         }
+        System.out.println("+++++++++++++++++++++++++++");
+        System.out.println("XPathExpr: " + inputNode);
+        System.out.println("dataType: " + inputNode.datatype);
+        System.out.println("dataContent " + inputNode.dataContent);
+        System.out.println("function node " + functionNode.getClass());
+        System.out.println("--------------------------");
         return functionNode;
     }
 
@@ -124,6 +134,16 @@ public class PredicateGenerator {
     public PredicateTreeConstantNode getSubcontextFromContextNode(String XPathPrefixFull, String currentNodeIdentifier, ContextNode currentNode,
                                                                   boolean allowTextContentFlag, boolean complexFlag)
             throws SQLException, XMLDBException, MismatchingResultException, UnexpectedExceptionThrownException, IOException, SaxonApiException, InstantiationException, IllegalAccessException {
-        return subcontextExtractor.extractSubcontext(XPathPrefixFull, currentNodeIdentifier, currentNode, allowTextContentFlag, complexFlag);
+        PredicateTreeConstantNode resultNode = subcontextExtractor.extractSubcontext(XPathPrefixFull, currentNodeIdentifier, currentNode, allowTextContentFlag, complexFlag);
+        if(resultNode.dataContent == null) {
+            System.out.println("SOS " + resultNode);
+        }
+        else {
+            System.out.println("Prefix: " + XPathPrefixFull);
+            System.out.println("For: " + currentNodeIdentifier);
+            System.out.println("QAQ " + resultNode);
+            System.out.println(resultNode.dataContent);
+        }
+        return resultNode;
     }
 }

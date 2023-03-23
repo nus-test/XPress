@@ -18,4 +18,8 @@ public class UpperCaseFunctionNode extends PredicateTreeFunctionNode {
     public UpperCaseFunctionNode newInstance() {
         return new UpperCaseFunctionNode();
     }
+
+    @Override
+    public String calculationString() { return XPathExpr + "(\"" + childList.get(0).dataContent + "\")"; }
+
 }

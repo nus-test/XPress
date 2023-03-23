@@ -39,4 +39,7 @@ public class IntegerMultiplicationFunctionNode extends PredicateTreeFunctionNode
     public IntegerMultiplicationFunctionNode newInstance() {
         return new IntegerMultiplicationFunctionNode();
     }
+
+    @Override
+    public String calculationString() { return childList.get(0).dataContent + " * " + childList.get(1).dataContent; }
 }

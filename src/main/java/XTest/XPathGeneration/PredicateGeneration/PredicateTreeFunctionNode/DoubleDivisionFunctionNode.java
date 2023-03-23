@@ -40,4 +40,7 @@ public class DoubleDivisionFunctionNode extends PredicateTreeFunctionNode {
     public String toString() {
         return childList.get(0) + " div " + childList.get(1);
     }
+
+    @Override
+    public String calculationString() { return childList.get(0).dataContent + " div " + childList.get(1).dataContent; }
 }

@@ -31,4 +31,7 @@ public class TranslateFunctionNode extends PredicateTreeFunctionNode{
     public PredicateTreeFunctionNode newInstance() {
         return new TranslateFunctionNode();
     }
+
+    @Override
+    public String calculationString() { return XPathExpr + "(" + getContentListOfString(childList) + ")"; }
 }

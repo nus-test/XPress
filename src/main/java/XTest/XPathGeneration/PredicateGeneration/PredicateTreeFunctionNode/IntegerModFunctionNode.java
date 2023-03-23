@@ -36,4 +36,7 @@ public class IntegerModFunctionNode extends PredicateTreeFunctionNode {
     public String toString() {
         return childList.get(0) + " mod " + childList.get(1);
     }
+
+    @Override
+    public String calculationString() { return childList.get(0).dataContent + " mod " + childList.get(1).dataContent; }
 }
