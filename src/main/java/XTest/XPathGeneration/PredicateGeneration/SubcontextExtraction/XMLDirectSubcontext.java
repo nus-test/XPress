@@ -18,12 +18,12 @@ import java.util.Map;
 
 public enum XMLDirectSubcontext {
     TEXT(1, new TextPredicateTreeNodeGenerator()),
-    LAST(2, new LastPredicateTreeNodeGenerator()),
-    POSITION(3, new PositionPredicateTreeNodeGenerator()),
-    HAS_CHILDREN(4, new HasChildrenConstantNodeGenerator()),
-    ATTRIBUTE(5, new AttributePredicateTreeNodeGenerator());
+//    LAST(2, new LastPredicateTreeNodeGenerator()),
+//    POSITION(3, new PositionPredicateTreeNodeGenerator()),
+    HAS_CHILDREN(2, new HasChildrenConstantNodeGenerator()),
+    ATTRIBUTE(3, new AttributePredicateTreeNodeGenerator());
 
-    static int typeCnt = 5;
+    static int typeCnt = 3;
     int id;
     PredicateTreeNodeFromContextGenerator predicateTreeNodeGenerator;
     static Map<Integer, XMLDirectSubcontext> directSubcontextIdMap = new HashMap<>();

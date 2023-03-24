@@ -58,7 +58,6 @@ public abstract class PredicateTreeFunctionNode extends PredicateTreeNode {
     public abstract void fillContents(PredicateTreeNode inputNode);
 
     public void getDataContent(MainExecutor mainExecutor, String databaseName) throws SQLException, XMLDBException, IOException, SaxonApiException, UnexpectedExceptionThrownException {
-        System.out.println("show me: " + calculationString() + " " + childList.get(0) + " " + childList.get(0).dataContent);
         dataContent = mainExecutor.executeSingleProcessor(calculationString(), databaseName);
         if(datatype == XMLDatatype.INTEGER)
             dataContent = XMLIntegerHandler.parseInt(dataContent).toString();
@@ -67,10 +66,8 @@ public abstract class PredicateTreeFunctionNode extends PredicateTreeNode {
     public abstract PredicateTreeFunctionNode newInstance();
     public String generateRandomCompareValueFromContent() {
         double prob = GlobalRandom.getInstance().nextDouble();
-        System.out.println("How? " + this + " " + this.datatype + " " + this.dataContent);
         if(prob < 0.5 && this.datatype != XMLDatatype.DOUBLE) return this.dataContent;
         String result =  this.datatype.getValueHandler().mutateValue(this.dataContent);
-        System.out.println("Sure? " + result);
         return result;
     }
 

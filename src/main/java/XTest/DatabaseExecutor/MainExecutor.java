@@ -57,6 +57,7 @@ public class MainExecutor {
             List<Integer> currentNodeIdResultSet = null;
             try{
                 currentNodeIdResultSet = executeSingleProcessorGetIdList(XPath, databaseExecutor);
+                currentNodeIdResultSet.sort(Integer::compareTo);
             }catch(Exception e) {
                 System.out.println("Unknown exception thrown!");
                 reportManager.reportUnexpectedException(this, XPath, e);

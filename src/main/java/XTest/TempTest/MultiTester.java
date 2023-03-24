@@ -87,7 +87,7 @@ public class MultiTester {
                 while (i.hasMoreResources()) {
                     try {
                         resultRes = i.nextResource();
-                        System.out.println(resultRes.getContent());
+                        //System.out.println(resultRes.getContent());
                         resultString += resultRes.getContent();
                     } finally {
                         //dont forget to cleanup resources
@@ -103,7 +103,7 @@ public class MultiTester {
                 System.out.println(e);
                 System.out.println("Exist executed with exception");
             }
-            //System.out.println(resultString);
+            System.out.println(resultString);
             System.out.println(DatabaseExecutor.getNodeIdList(resultString, "Exist"));
             col.removeResource(res);
 
@@ -128,9 +128,9 @@ public class MultiTester {
             XdmValue result = query.evaluate();
             for(int i = 0; i < result.size(); i ++) {
                 resultString += result.itemAt(i);
-                System.out.println(result.itemAt(i));
+                //System.out.println(result.itemAt(i));
             }
-            //System.out.println(resultString);
+            System.out.println(resultString);
             System.out.println(DatabaseExecutor.getNodeIdList(resultString));
         }
         // run query on database

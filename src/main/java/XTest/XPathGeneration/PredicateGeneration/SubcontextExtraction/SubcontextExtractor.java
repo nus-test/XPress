@@ -74,8 +74,6 @@ public class SubcontextExtractor {
         }
         else {
             XPathExpr = xPathGenerator.generateXPath(selectCurrentNodeXPath, Arrays.asList(currentNode), 2, false);
-            System.out.println("see if empty? " + XPathExpr);
-            System.out.println("select current " + selectCurrentNodeXPath);
             if(XPathExpr == null)
                 return XMLDirectSubcontext.getDirectSubContext(XPathPrefixFull, mainExecutor, currentNode, allowTextContentFlag);
             // XPathExpr: //*[id="4"] //xxxx
@@ -95,9 +93,6 @@ public class SubcontextExtractor {
             XPathExpr = selectSequence(XPathExpr, valueFormat, length, GlobalRandom.getInstance().nextInt(3));
         }
         // XPathExpr = head(sort(./xxxx))
-
-        System.out.println("Selected node? " + selectCurrentNodeXPath);
-        System.out.println("Currently generated: " + XPathExpr);
 
         if(!valueFormat) {
             prob = GlobalRandom.getInstance().nextDouble();
@@ -124,10 +119,6 @@ public class SubcontextExtractor {
         }
         if(selectApplicationProb > 0.5) {
             Integer length = Integer.parseInt(mainExecutor.executeSingleProcessor("count(" + selectCurrentNodeXPath + "/" + XPathExpr + ")", defaultDBName));
-            System.out.println("What happened " + selectCurrentNodeXPath);
-            System.out.println(XPathExpr);
-            System.out.println(length);
-            System.out.println("ending...");
             XPathExpr = selectSequence(XPathExpr, valueFormat, length, GlobalRandom.getInstance().nextInt(3));
         }
         if(numericValueFound) {
@@ -136,16 +127,13 @@ public class SubcontextExtractor {
             String result = mainExecutor.executeSingleProcessor(selectCurrentNodeXPath + "/" + XPathExpr, defaultDBName);
             if(aggregationFunc.equals("avg"))
                 predicateTreeConstantNode.datatype = XMLDatatype.DOUBLE;
-            System.out.println("What happened to result: " + result);
             predicateTreeConstantNode.dataContent = predicateTreeConstantNode.datatype == XMLDatatype.INTEGER ?
                     Integer.toString(XMLIntegerHandler.parseInt(result)) : result;
             predicateTreeConstantNode.XPathExpr = XPathExpr;
-            System.out.println("Executing... " + selectCurrentNodeXPath + "/" + XPathExpr);
             return predicateTreeConstantNode;
         }
         XPathExpr = "count(" + XPathExpr + ")";
         String result = mainExecutor.executeSingleProcessor(selectCurrentNodeXPath + "/" + XPathExpr, defaultDBName);
-        System.out.println("Executing... " + selectCurrentNodeXPath + "/" + XPathExpr);
         predicateTreeConstantNode = new PredicateTreeConstantNode(XMLDatatype.INTEGER, result, XPathExpr);
         return predicateTreeConstantNode;
     }
@@ -156,10 +144,8 @@ public class SubcontextExtractor {
         }
         int id = GlobalRandom.getInstance().nextInt(nodeSequenceTransformationList.size());
         String function = nodeSequenceTransformationList.get(id);
-        System.out.println("-------------------" + function);
         if(function.equals("subsequence")) {
             Pair pair = GlobalRandom.getInstance().nextInterval(nodeSize);
-            System.out.println("Where");
             int length = pair.y - pair.x + 1;
             double prob = GlobalRandom.getInstance().nextDouble();
             XPathExpr = function + "(" + XPathExpr + " , " + (pair.x + 1);
