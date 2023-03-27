@@ -28,6 +28,10 @@ public class MainExecutor {
     public void setXPathGenerationContext(ContextNode root, String xmlDataContent) throws IOException, SQLException, XMLDBException, SaxonApiException {
         contextNodeMap = new HashMap<>();
         getContextNodeMap(root);
+        setXPathGenerationContext(xmlDataContent);
+    }
+
+    public void setXPathGenerationContext(String xmlDataContent) throws IOException, SQLException, XMLDBException, SaxonApiException {
         currentContext = xmlDataContent;
         for(DatabaseExecutor databaseExecutor : databaseExecutorList) {
             databaseExecutor.setContextByContentWithCheck(xmlDataContent);
@@ -61,7 +65,7 @@ public class MainExecutor {
             }catch(Exception e) {
                 System.out.println("Unknown exception thrown!");
                 reportManager.reportUnexpectedException(this, XPath, e);
-                throw new UnexpectedExceptionThrownException();
+                throw new UnexpectedExceptionThrownException(e);
             }
             if(nodeIdResultSet != null) {
                 boolean checkResult = CommonUtils.compareList(nodeIdResultSet, currentNodeIdResultSet);
@@ -122,7 +126,7 @@ public class MainExecutor {
                 System.out.println(currentContext);
                 System.out.println(XPath);
             }
-            throw new UnexpectedExceptionThrownException();
+            throw new UnexpectedExceptionThrownException(e);
         }
         return resultList;
     }
@@ -149,7 +153,7 @@ public class MainExecutor {
                 System.out.println(currentContext);
                 System.out.println(XPath);
             }
-            throw new UnexpectedExceptionThrownException();
+            throw new UnexpectedExceptionThrownException(e);
         }
         return result;
     }

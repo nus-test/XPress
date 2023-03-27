@@ -40,12 +40,13 @@ public class OracleExecutor extends DatabaseExecutor {
 
     @Override
     public void clearCurrentContext() throws XMLDBException, IOException, SQLException {
+        System.out.println("Oracle table dropped!");
         statement.execute(dropSQL);
     }
 
     @Override
     public String execute(String Xquery) throws SQLException {
-        String selectSQL = "select extract(OBJECT_VALUE, '" + Xquery + "') from test";
+        String selectSQL = "select XMLQuery('" + Xquery + "' PASSING by value test.OBJECT_VALUE RETURNING CONTENT) temp from test";
         ResultSet resultSet = statement.executeQuery(selectSQL);
         ResultSetMetaData rsmd = resultSet.getMetaData();
         int columnsNumber = rsmd.getColumnCount();
@@ -54,7 +55,6 @@ public class OracleExecutor extends DatabaseExecutor {
             for (int i = 1; i <= columnsNumber; i++) {
                 result += resultSet.getString(i);
             }
-            System.out.println("");
         }
         resultSet.close();
         return result;

@@ -54,15 +54,15 @@ public class PrefixQualifier {
         if(!noAxes) {
             if(haveParentNode)
                 availablePrefix.addAll(getAxesList(Arrays.asList("parent", "ancestor")));
-            if(haveFollowingSibling)
-                availablePrefix.add(getAxis("following-sibling"));
-            if(havePrecedingSibling)
-                availablePrefix.add(getAxis("preceding-sibling"));
-            if(haveFollowing)
-                availablePrefix.add(getAxis("following"));
-            if(havePreceding)
-                availablePrefix.add(getAxis("preceding"));
-            availablePrefix.addAll(getAxesList(Arrays.asList("self", "descendant-or-self", "ancestor-or-self")));
+//            if(haveFollowingSibling)
+//                availablePrefix.add(getAxis("following-sibling"));
+//            if(havePrecedingSibling)
+//                availablePrefix.add(getAxis("preceding-sibling"));
+//            if(haveFollowing)
+//                availablePrefix.add(getAxis("following"));
+//            if(havePreceding)
+//                availablePrefix.add(getAxis("preceding"));
+          //  availablePrefix.addAll(getAxesList(Arrays.asList("self", "descendant-or-self", "ancestor-or-self")));
         }
         return availablePrefix;
     }

@@ -25,7 +25,7 @@ public abstract class PredicateTreeFunctionNode extends PredicateTreeNode {
         PredicateTreeFunctionNode.insertFunctionToMap(new LowerCaseFunctionNode(), XMLDatatype.STRING);
         PredicateTreeFunctionNode.insertFunctionToMap(new UpperCaseFunctionNode(), XMLDatatype.STRING);
         PredicateTreeFunctionNode.insertFunctionToMap(new SubstringFunctionNode(), XMLDatatype.STRING);
-        PredicateTreeFunctionNode.insertFunctionToMap(new TranslateFunctionNode(), XMLDatatype.STRING);
+        //PredicateTreeFunctionNode.insertFunctionToMap(new TranslateFunctionNode(), XMLDatatype.STRING);
         PredicateTreeFunctionNode.insertFunctionToMap(new StringLengthFunctionNode(), XMLDatatype.STRING);
         //PredicateTreeFunctionNode.insertFunctionToMap(new ContainsFunctionNode(), XMLDatatype.STRING);
 //        PredicateTreeFunctionNode.insertFunctionToMap(new StartsWithFunctionNode(), XMLDatatype.STRING);

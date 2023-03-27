@@ -54,7 +54,7 @@ public class OracleSimple {
             for(String xqueryFile: xqueryFiles) {
                 InputStream inputStream = MultiTester.class.getResourceAsStream("/" + xqueryFile);
                 String xquery = CommonUtils.readInputStream(inputStream);
-                String selectSQL = "select extract(OBJECT_VALUE, '" + xquery + "') from test";
+                String selectSQL = "select XMLQuery('" + xquery + "' PASSING by value test.OBJECT_VALUE RETURNING CONTENT) temp from test";
                 System.out.println("==================Xquery==================");
                 System.out.println(xquery);
                 System.out.println("==================Execute Xquery Oracle==================");

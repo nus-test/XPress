@@ -30,9 +30,9 @@ public class SubcontextExtractor {
     MainExecutor mainExecutor;
     XPathGenerator xPathGenerator;
 
-    List<String> nodeSequenceTransformationList = Arrays.asList("sort", "reverse", "subsequence");
-    List<String> sequenceSelectionList = Arrays.asList("head", "tail");
-    List<String> nodeSequenceSelectionList = Arrays.asList("innermost", "outermost");
+    List<String> nodeSequenceTransformationList = Arrays.asList("reverse", "subsequence");
+    //List<String> sequenceSelectionList = Arrays.asList("head", "tail");
+    //List<String> nodeSequenceSelectionList = Arrays.asList("innermost", "outermost");
     List<String> valueSequenceSelectionList = Arrays.asList("distinct-values");
 
     List<String> valueSequenceAggregationFunctionList = Arrays.asList("sum", "min", "max", "avg");
@@ -89,8 +89,7 @@ public class SubcontextExtractor {
         XPathExpr = transformSequence(XPathExpr, selectedNodeSize, sequenceTransformCnt);
         double selectApplicationProb = GlobalRandom.getInstance().nextDouble();
         if(selectApplicationProb < 0.5) {
-            Integer length = mainExecutor.executeSingleProcessorGetNodeList(selectCurrentNodeXPath + "/" + XPathExpr, defaultDBName).size();
-            XPathExpr = selectSequence(XPathExpr, valueFormat, length, GlobalRandom.getInstance().nextInt(3));
+            XPathExpr = selectSequence(XPathExpr, valueFormat);
         }
         // XPathExpr = head(sort(./xxxx))
 
@@ -118,8 +117,7 @@ public class SubcontextExtractor {
             }
         }
         if(selectApplicationProb > 0.5) {
-            Integer length = Integer.parseInt(mainExecutor.executeSingleProcessor("count(" + selectCurrentNodeXPath + "/" + XPathExpr + ")", defaultDBName));
-            XPathExpr = selectSequence(XPathExpr, valueFormat, length, GlobalRandom.getInstance().nextInt(3));
+            XPathExpr = selectSequence(XPathExpr, valueFormat);
         }
         double aggregateProb = GlobalRandom.getInstance().nextDouble();
         if(numericValueFound && aggregateProb < 0.8) {
@@ -160,24 +158,12 @@ public class SubcontextExtractor {
         return transformSequence(XPathExpr, nodeSize, depth - 1);
     }
 
-    String selectSequence(String XPathExpr, boolean valueFormat, int size, int depth) {
-        if(depth == 0) {
-            return XPathExpr;
-        }
+    String selectSequence(String XPathExpr, boolean valueFormat) {
         String function;
-        double prob = GlobalRandom.getInstance().nextDouble();
-        if(prob < 0.5) {
-            function = GlobalRandom.getInstance().getRandomFromList(sequenceSelectionList);
-            if(function.equals("tail")) {
-                if(size == 1) function = "head";
-                else size -= 1;
-            }
-            if(function.equals("head"))
-                size = 1;
-        } else if(valueFormat) {
+        if(valueFormat) {
             function = GlobalRandom.getInstance().getRandomFromList(valueSequenceSelectionList);
+            return function + "(" +XPathExpr + ")";
         }
-        else function = GlobalRandom.getInstance().getRandomFromList(nodeSequenceSelectionList);
-        return selectSequence(function + "(" +XPathExpr + ")", valueFormat,size, depth - 1);
+        return XPathExpr;
     }
 }

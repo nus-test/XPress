@@ -29,7 +29,11 @@ public enum XMLDatatype {
 
     public static XMLDatatype getRandomDataType() {
         int dataTypeId = GlobalRandom.getInstance().nextInt(XMLDatatype.typeCnt) + 1;
-        return XMLDatatype.datatypeIdMap.get(dataTypeId);
+        XMLDatatype xmlDatatype = XMLDatatype.datatypeIdMap.get(dataTypeId);
+        if(xmlDatatype == xmlDatatype.BOOLEAN) {
+            xmlDatatype = INTEGER;
+        }
+        return xmlDatatype;
     }
 
     public ValueHandler getValueHandler() {

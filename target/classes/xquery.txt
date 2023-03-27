@@ -1,1 +1,1 @@
-//*[count(./*) <= 2]/descendant-or-self::B/following-sibling::C[@id < 4]
+/B1[min(distinct-values(./C1)) < 2]

@@ -20,10 +20,10 @@ public enum XMLDirectSubcontext {
     TEXT(1, new TextPredicateTreeNodeGenerator()),
 //    LAST(2, new LastPredicateTreeNodeGenerator()),
 //    POSITION(3, new PositionPredicateTreeNodeGenerator()),
-    HAS_CHILDREN(2, new HasChildrenConstantNodeGenerator()),
-    ATTRIBUTE(3, new AttributePredicateTreeNodeGenerator());
+    //HAS_CHILDREN(2, new HasChildrenConstantNodeGenerator()),
+    ATTRIBUTE(2, new AttributePredicateTreeNodeGenerator());
 
-    static int typeCnt = 3;
+    static int typeCnt = 2;
     int id;
     PredicateTreeNodeFromContextGenerator predicateTreeNodeGenerator;
     static Map<Integer, XMLDirectSubcontext> directSubcontextIdMap = new HashMap<>();
@@ -68,7 +68,8 @@ public enum XMLDirectSubcontext {
         prob = GlobalRandom.getInstance().nextDouble();
         if(prob < 0.5) {
             int id = GlobalRandom.getInstance().nextInt(typeCnt - 1) + 1;
-            if(!allowTextContent && id == 1) id += 1;
+            if(!allowTextContent && id == 1)
+                return XMLDirectSubcontext.ATTRIBUTE.getPredicateTreeNodeGenerator().generatePredicateTreeNodeFromContext(currentNode);
             PredicateTreeNodeFromContextGenerator predicateTreeNodeFromContextGenerator =
                     directSubcontextIdMap.get(id).predicateTreeNodeGenerator;
             PredicateTreeConstantNode constNode = predicateTreeNodeFromContextGenerator

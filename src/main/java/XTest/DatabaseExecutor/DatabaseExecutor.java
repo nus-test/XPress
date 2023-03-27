@@ -86,7 +86,7 @@ public abstract class DatabaseExecutor {
     public static List<Integer> getNodeIdList(String resultString, String dbName) {
         List<Integer> resultList = getNodeIdList(resultString);
         // Exist: wait for bug resolve!
-        if(dbName != null && dbName == "Exist") {
+        if(dbName != null && (dbName == "Exist" || dbName == "Oracle")) {
             Set<Integer> s = new LinkedHashSet<>(resultList);
             resultList.clear();
             resultList.addAll(s);
