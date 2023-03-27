@@ -6,7 +6,7 @@ import XTest.PrimitiveDatatype.XMLIntegerHandler;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeConstantNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 
-public class IntegerDivisionFunctionNode extends PredicateTreeFunctionNode{
+public class IntegerDivisionFunctionNode extends PredicateTreeFunctionNode implements NumericalBinaryOperator {
     IntegerDivisionFunctionNode() {
         this.datatype = XMLDatatype.INTEGER;
     }
@@ -30,7 +30,9 @@ public class IntegerDivisionFunctionNode extends PredicateTreeFunctionNode{
 
     @Override
     public String toString() {
-        return childList.get(0) + " idiv " + childList.get(1);
+        String leftChild = wrapNumericalBinaryFunctionExpr(childList.get(0), this);
+        String rightChild = wrapNumericalBinaryFunctionExpr(childList.get(1), this);
+        return leftChild + " idiv " + rightChild;
     }
 
     @Override

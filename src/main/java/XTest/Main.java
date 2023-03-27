@@ -28,23 +28,25 @@ public class Main {
 //        dbExecuterList.add(OracleExecutor.getInstance());
         for(DatabaseExecutor dbExecutor: dbExecuterList)
             dbExecutor.registerDatabase(mainExecutor);
-        int round = 1;
+        int round = 10;
         XMLDocumentGenerator xmlDocumentGenerator = new XMLDocumentGenerator();
         try {
             for (int i = 0; i < round; i++) {
                 xmlDocumentGenerator.clearContext();
                 XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(40);
                 XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
+                System.out.println("------------------ " + i);
                 System.out.println(xmlContext.getXmlContent());
                 try {
-                    int xpathCnt = 25;
+                    int xpathCnt = 10;
                     mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
                     for (int j = 0; j < xpathCnt; j++) {
-                        System.out.println("Generated XPath: " + j);
+                        String XPath = "";
                         try {
-                            XPathGenerator.getXPath(GlobalRandom.getInstance().nextInt(7));
+                            XPath = XPathGenerator.getXPath(GlobalRandom.getInstance().nextInt(7));
                         } catch (MismatchingResultException | UnexpectedExceptionThrownException e) {
                         }
+                        System.out.println("Generated XPath: " + j + " " + XPath);
                     }
                 }
                 finally {

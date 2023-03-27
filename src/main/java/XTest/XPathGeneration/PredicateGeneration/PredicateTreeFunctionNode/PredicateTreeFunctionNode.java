@@ -26,6 +26,7 @@ public abstract class PredicateTreeFunctionNode extends PredicateTreeNode {
         PredicateTreeFunctionNode.insertFunctionToMap(new UpperCaseFunctionNode(), XMLDatatype.STRING);
         PredicateTreeFunctionNode.insertFunctionToMap(new SubstringFunctionNode(), XMLDatatype.STRING);
         PredicateTreeFunctionNode.insertFunctionToMap(new TranslateFunctionNode(), XMLDatatype.STRING);
+        PredicateTreeFunctionNode.insertFunctionToMap(new StringLengthFunctionNode(), XMLDatatype.STRING);
         //PredicateTreeFunctionNode.insertFunctionToMap(new ContainsFunctionNode(), XMLDatatype.STRING);
 //        PredicateTreeFunctionNode.insertFunctionToMap(new StartsWithFunctionNode(), XMLDatatype.STRING);
 //        PredicateTreeFunctionNode.insertFunctionToMap(new EndsWithFunctionNode(), XMLDatatype.STRING);
@@ -101,5 +102,12 @@ public abstract class PredicateTreeFunctionNode extends PredicateTreeNode {
             if(!needDelim) needDelim = true;
         }
         return resultStr;
+    }
+
+    public static String wrapNumericalBinaryFunctionExpr(PredicateTreeNode childNode, PredicateTreeFunctionNode currentNode) {
+        if(childNode instanceof NumericalBinaryOperator && childNode.getClass() != currentNode.getClass()) {
+            return "(" + childNode + ")";
+        }
+        return childNode.toString();
     }
 }

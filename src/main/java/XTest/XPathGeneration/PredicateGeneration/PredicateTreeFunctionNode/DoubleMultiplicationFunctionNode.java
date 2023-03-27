@@ -7,7 +7,7 @@ import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 
 import static java.lang.Math.abs;
 
-public class DoubleMultiplicationFunctionNode extends PredicateTreeFunctionNode {
+public class DoubleMultiplicationFunctionNode extends PredicateTreeFunctionNode implements NumericalBinaryOperator {
 
     DoubleMultiplicationFunctionNode() {
         this.datatype = XMLDatatype.DOUBLE;
@@ -33,9 +33,10 @@ public class DoubleMultiplicationFunctionNode extends PredicateTreeFunctionNode 
 
     @Override
     public String toString() {
-        return childList.get(0) + " * " + childList.get(1);
+        String leftChild = wrapNumericalBinaryFunctionExpr(childList.get(0), this);
+        String rightChild = wrapNumericalBinaryFunctionExpr(childList.get(1), this);
+        return leftChild + " * " + rightChild;
     }
-
     @Override
     public DoubleMultiplicationFunctionNode newInstance() {
         return new DoubleMultiplicationFunctionNode();

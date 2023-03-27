@@ -6,7 +6,7 @@ import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 
 import static java.lang.Math.abs;
 
-public class DoubleSubtractionFunctionNode extends PredicateTreeFunctionNode {
+public class DoubleSubtractionFunctionNode extends PredicateTreeFunctionNode implements NumericalBinaryOperator {
     DoubleSubtractionFunctionNode() {
         datatype = XMLDatatype.DOUBLE;
     }

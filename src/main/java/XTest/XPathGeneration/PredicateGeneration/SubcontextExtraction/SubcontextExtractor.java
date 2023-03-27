@@ -121,7 +121,8 @@ public class SubcontextExtractor {
             Integer length = Integer.parseInt(mainExecutor.executeSingleProcessor("count(" + selectCurrentNodeXPath + "/" + XPathExpr + ")", defaultDBName));
             XPathExpr = selectSequence(XPathExpr, valueFormat, length, GlobalRandom.getInstance().nextInt(3));
         }
-        if(numericValueFound) {
+        double aggregateProb = GlobalRandom.getInstance().nextDouble();
+        if(numericValueFound && aggregateProb < 0.8) {
             String aggregationFunc = GlobalRandom.getInstance().getRandomFromList(valueSequenceAggregationFunctionList);
             XPathExpr = aggregationFunc + "(" + XPathExpr + ")";
             String result = mainExecutor.executeSingleProcessor(selectCurrentNodeXPath + "/" + XPathExpr, defaultDBName);
@@ -132,9 +133,10 @@ public class SubcontextExtractor {
             predicateTreeConstantNode.XPathExpr = XPathExpr;
             return predicateTreeConstantNode;
         }
+        XMLDatatype resultType = XMLDatatype.INTEGER;
         XPathExpr = "count(" + XPathExpr + ")";
         String result = mainExecutor.executeSingleProcessor(selectCurrentNodeXPath + "/" + XPathExpr, defaultDBName);
-        predicateTreeConstantNode = new PredicateTreeConstantNode(XMLDatatype.INTEGER, result, XPathExpr);
+        predicateTreeConstantNode = new PredicateTreeConstantNode(resultType, result, XPathExpr);
         return predicateTreeConstantNode;
     }
 

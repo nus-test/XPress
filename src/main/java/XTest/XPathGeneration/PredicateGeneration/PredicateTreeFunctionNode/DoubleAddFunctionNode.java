@@ -6,7 +6,7 @@ import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 
 import static java.lang.Math.abs;
 
-public class DoubleAddFunctionNode extends PredicateTreeFunctionNode {
+public class DoubleAddFunctionNode extends PredicateTreeFunctionNode implements NumericalBinaryOperator {
     DoubleAddFunctionNode() {
         datatype = XMLDatatype.DOUBLE;
     }

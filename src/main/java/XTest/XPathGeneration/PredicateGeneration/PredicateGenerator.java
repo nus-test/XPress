@@ -6,6 +6,7 @@ import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.TestException.MismatchingResultException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XMLGeneration.ContextNode;
+import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.NoActionFunctionNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.PredicateTreeFunctionNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.SubstringFunctionNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalConnectionNode.NotConnectionNode;
@@ -63,17 +64,19 @@ public class PredicateGenerator {
                                                   boolean allowTextContentFlag, boolean complexFlag)
             throws SQLException, XMLDBException, IOException, SaxonApiException, UnexpectedExceptionThrownException, MismatchingResultException, InstantiationException, IllegalAccessException {
         PredicateTreeConstantNode inputNode = getSubcontextFromContextNode(XPathPrefixFull, currentNodeIdentifier, currentNode, allowTextContentFlag, complexFlag);
-        //int depth = GlobalRandom.getInstance().nextInt(4);
-        PredicateTreeFunctionNode functionNode = generateFunctionExpression(inputNode, 1);
+        int depth = GlobalRandom.getInstance().nextInt(4);
+        PredicateTreeFunctionNode functionNode = generateFunctionExpression(inputNode, depth);
+        //System.out.println(functionNode + " " + functionNode.getClass());
         PredicateTreeNode phraseNode = generateSinglePhraseFromFunction(XPathPrefixFull, currentNodeIdentifier, currentNode, functionNode);
         return phraseNode;
     }
 
     public PredicateTreeNode generateSinglePhraseFromFunction(String XPathPrefixFull, String currentNodeIdentifier, ContextNode currentNode, PredicateTreeFunctionNode functionNode) throws SQLException, XMLDBException, IOException, SaxonApiException, UnexpectedExceptionThrownException {
-        functionNode.getDataContent(mainExecutor, "BaseX");
         PredicateTreeLogicalOperationNode singlePhraseNode = PredicateTreeLogicalOperationNode.getRandomLogicalOperationNode(functionNode.datatype);
         PredicateTreeConstantNode constNode = getConstantNodeFromContent(functionNode);
         singlePhraseNode.join(functionNode, constNode);
+        //System.out.println("?????" + XPathPrefixFull);
+        //System.out.println("-----" + singlePhraseNode);
         List<Integer> executionResult = mainExecutor.executeSingleProcessorGetIdList(XPathPrefixFull + "[" + singlePhraseNode + "]" + currentNodeIdentifier, "BaseX");
         if(!executionResult.contains(currentNode.id)) {
             double prob = GlobalRandom.getInstance().nextDouble();
@@ -102,20 +105,22 @@ public class PredicateGenerator {
         return connectionNode;
     }
 
-    public PredicateTreeFunctionNode generateFunctionExpression(PredicateTreeNode inputNode, int depth) {
+    public PredicateTreeFunctionNode generateFunctionExpression(PredicateTreeNode inputNode, int depth) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
         PredicateTreeFunctionNode functionNode = null;
         if(depth == 0) {
             functionNode = generateFunctionExpression(inputNode, true);
         }
         for(int d = 0; d < depth; d ++) {
             functionNode = generateFunctionExpression(inputNode, false);
+            functionNode.getDataContent(mainExecutor, "BaseX");
             inputNode = functionNode;
         }
         return functionNode;
     }
 
     public PredicateTreeFunctionNode generateFunctionExpression(PredicateTreeNode inputNode, boolean noAction) {
-        PredicateTreeFunctionNode functionNode = PredicateTreeFunctionNode.getRandomPredicateTreeFunctionNode(inputNode.datatype);
+        PredicateTreeFunctionNode functionNode = noAction ? new NoActionFunctionNode() :
+                PredicateTreeFunctionNode.getRandomPredicateTreeFunctionNode(inputNode.datatype);
         if(inputNode.datatype == XMLDatatype.STRING && inputNode.dataContent.equals("")) {
             while(functionNode instanceof SubstringFunctionNode)
                 functionNode = PredicateTreeFunctionNode.getRandomPredicateTreeFunctionNode(inputNode.datatype);

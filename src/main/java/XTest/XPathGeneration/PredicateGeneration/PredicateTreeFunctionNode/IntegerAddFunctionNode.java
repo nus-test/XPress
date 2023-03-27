@@ -5,7 +5,7 @@ import XTest.PrimitiveDatatype.XMLIntegerHandler;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeConstantNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 
-public class IntegerAddFunctionNode extends PredicateTreeFunctionNode{
+public class IntegerAddFunctionNode extends PredicateTreeFunctionNode implements NumericalBinaryOperator {
 
     IntegerAddFunctionNode() {
         this.datatype = XMLDatatype.INTEGER;
@@ -39,6 +39,6 @@ public class IntegerAddFunctionNode extends PredicateTreeFunctionNode{
     }
 
     @Override
-    public String calculationString() { return childList.get(0).dataContent + " + " + childList.get(1).dataContent; }
+    public String calculationString() { return "(" + childList.get(0).dataContent + ") + (" + childList.get(1).dataContent + ")"; }
 
 }

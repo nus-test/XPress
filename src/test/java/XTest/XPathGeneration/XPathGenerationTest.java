@@ -24,7 +24,7 @@ public class XPathGenerationTest {
         XMLDocumentGenerator xmlDocumentGenerator = new XMLDocumentGenerator();
         XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(20);
         System.out.println(xmlContext.getXmlContent());
-        ReportManager reportManager = new ReportManager("C:\\app\\log\\log.txt");
+        ReportManager reportManager = null; //new ReportManager("C:\\app\\log\\log.txt");
         MainExecutor mainExecutor = new MainExecutor(reportManager);
 
         List<DatabaseExecutor> dbExecuterList = new ArrayList<>();
@@ -40,8 +40,8 @@ public class XPathGenerationTest {
         List<String> XPath = new ArrayList<>();
         try {
             mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
-            for(int i = 0; i < 40; i ++)
-                XPath.add(XPathGenerator.getXPath(5));
+            for(int i = 0; i < 50; i ++)
+                XPath.add(XPathGenerator.getXPath(3));
             for(String XPathStr: XPath) {
                 System.out.println("Generated XPath: ------------------------------");
                 System.out.println(XPathStr);
@@ -49,7 +49,7 @@ public class XPathGenerationTest {
                 System.out.println(mainExecutor.executeAndCompare(XPathStr));
             }
         }finally {
-            reportManager.close();
+            // reportManager.close();
             mainExecutor.close();
         }
     }

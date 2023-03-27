@@ -5,7 +5,7 @@ import XTest.PrimitiveDatatype.XMLIntegerHandler;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeConstantNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 
-public class IntegerSubtractionFunctionNode extends PredicateTreeFunctionNode {
+public class IntegerSubtractionFunctionNode extends PredicateTreeFunctionNode implements NumericalBinaryOperator {
 
     IntegerSubtractionFunctionNode() {
         this.datatype = XMLDatatype.INTEGER;
