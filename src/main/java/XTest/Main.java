@@ -28,7 +28,7 @@ public class Main {
 //        dbExecuterList.add(OracleExecutor.getInstance());
         for(DatabaseExecutor dbExecutor: dbExecuterList)
             dbExecutor.registerDatabase(mainExecutor);
-        int round = 10;
+        int round = 50;
         XMLDocumentGenerator xmlDocumentGenerator = new XMLDocumentGenerator();
         try {
             for (int i = 0; i < round; i++) {
@@ -38,13 +38,14 @@ public class Main {
                 System.out.println("------------------ " + i);
                 System.out.println(xmlContext.getXmlContent());
                 try {
-                    int xpathCnt = 10;
+                    int xpathCnt = 20;
                     mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
                     for (int j = 0; j < xpathCnt; j++) {
                         String XPath = "";
                         try {
-                            XPath = XPathGenerator.getXPath(GlobalRandom.getInstance().nextInt(7));
+                            XPath = XPathGenerator.getXPath(GlobalRandom.getInstance().nextInt(7) + 1);
                         } catch (MismatchingResultException | UnexpectedExceptionThrownException e) {
+                            XPath = e.toString();
                         }
                         System.out.println("Generated XPath: " + j + " " + XPath);
                     }

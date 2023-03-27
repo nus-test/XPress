@@ -8,7 +8,7 @@ public class GlobalRandom {
     Random random;
     private GlobalRandom() {
         random = new Random();
-        random.setSeed(10000007);
+        random.setSeed(147);
     }
 
     public static GlobalRandom getInstance() {

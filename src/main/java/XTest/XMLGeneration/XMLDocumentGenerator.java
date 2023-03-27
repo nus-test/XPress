@@ -86,6 +86,9 @@ public class XMLDocumentGenerator {
     public void clearContext() {
         contextNodeNameGenerator = new BaseCharIDStyleNameGeneratorImpl('A');
         attributeNodeNameGenerator = new BaseCharIDStyleNameGeneratorImpl('a');
+        attributeTemplateGenerator = new AttributeTemplateGeneratorImpl(attributeNodeNameGenerator);
+        contextTemplateGenerator = new ContextTemplateGeneratorImpl(contextNodeNameGenerator,
+                        attributeTemplateGenerator);
         for(XMLDatatype datatype : XMLDatatype.values()) {
             datatype.getValueHandler().clear();
         }

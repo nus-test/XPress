@@ -54,6 +54,18 @@ public enum XMLDirectSubcontext {
                                                                 ContextNode currentNode, boolean allowTextContent)
             throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
         double prob = GlobalRandom.getInstance().nextDouble();
+        if(prob < 0.3) {
+            XMLDatatype xmlDatatype = XMLDatatype.getRandomDataType();
+            String content = xmlDatatype.getValueHandler().getValue(false);
+            String XPathExpr = content;
+            if(xmlDatatype == XMLDatatype.STRING)
+                XPathExpr = "\"" + XPathExpr + "\"";
+            if(xmlDatatype == XMLDatatype.BOOLEAN)
+                XPathExpr += "()";
+            XPathExpr = "(" + XPathExpr + ")";
+            return new PredicateTreeConstantNode(xmlDatatype, content, XPathExpr);
+        }
+        prob = GlobalRandom.getInstance().nextDouble();
         if(prob < 0.5) {
             int id = GlobalRandom.getInstance().nextInt(typeCnt - 1) + 1;
             if(!allowTextContent && id == 1) id += 1;
