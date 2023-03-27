@@ -43,6 +43,10 @@ public abstract class PredicateTreeFunctionNode extends PredicateTreeNode {
         PredicateTreeFunctionNode.insertFunctionToMap(new DoubleAddFunctionNode(), XMLDatatype.DOUBLE);
         PredicateTreeFunctionNode.insertFunctionToMap(new DoubleMultiplicationFunctionNode(), XMLDatatype.DOUBLE);
         PredicateTreeFunctionNode.insertFunctionToMap(new DoubleDivisionFunctionNode(), XMLDatatype.DOUBLE);
+        PredicateTreeFunctionNode.insertFunctionToMap(new DoubleCeilingFunctionNode(), XMLDatatype.DOUBLE);
+        PredicateTreeFunctionNode.insertFunctionToMap(new DoubleRoundFunctionNode(), XMLDatatype.DOUBLE);
+        PredicateTreeFunctionNode.insertFunctionToMap(new DoubleRoundHalfToEvenFunctionNode(), XMLDatatype.DOUBLE);
+        PredicateTreeFunctionNode.insertFunctionToMap(new DoubleFloorFunctionNode(), XMLDatatype.DOUBLE);
     }
 
     public static PredicateTreeFunctionNode getRandomPredicateTreeFunctionNode(XMLDatatype datatype) {
