@@ -68,6 +68,9 @@ public class ReportManager {
         logToFile("originalxpath:" + XPath + "\n");
         logToFile("executionresults:\n");
         for(DatabaseExecutor databaseExecutor:mainExecutor.databaseExecutorList) {
+            if(databaseExecutor.dbName.equals("MySQL")) {
+                continue;
+            }
             try {
                 List<Integer> resultNodeIntegerList = databaseExecutor.executeGetNodeIdList(XPath);
                 String resultIdStringExpr = "";

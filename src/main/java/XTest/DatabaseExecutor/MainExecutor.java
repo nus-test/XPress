@@ -57,10 +57,31 @@ public class MainExecutor {
         List<Integer> nodeIdResultSet = null;
         String lastDBName = null;
         //System.out.println(XPath);
+        String content = null;
         for(DatabaseExecutor databaseExecutor : databaseExecutorList) {
             List<Integer> currentNodeIdResultSet = null;
+            if(databaseExecutor.dbName.equals("MySQL")) {
+                try{
+                    String currentContent = executeSingleProcessor(XPath, databaseExecutor);
+                    if(content != null && !currentContent.equals(content)) {
+                        throw new MismatchingResultException();
+                    }
+                } catch (Exception e) {
+                    if(reportManager != null) reportManager.reportPotentialBug(this, XPath);
+                    else {
+                        System.out.println(lastDBName);
+                        System.out.println("+++++++++++++++++++++++++++++++");
+                        System.out.println(nodeIdResultSet);
+                        System.out.println(databaseExecutor.dbName);
+                        System.out.println("-------------------------------");
+                    }
+                    throw new MismatchingResultException();
+                }
+                continue;
+            }
             try{
                 currentNodeIdResultSet = executeSingleProcessorGetIdList(XPath, databaseExecutor);
+                content = executeSingleProcessor(XPath + "/text()", databaseExecutor);
                 currentNodeIdResultSet.sort(Integer::compareTo);
             }catch(Exception e) {
                 System.out.println("Unknown exception thrown!");

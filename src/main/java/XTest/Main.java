@@ -21,11 +21,10 @@ public class Main {
         MainExecutor mainExecutor = new MainExecutor(reportManager);
 
         List<DatabaseExecutor> dbExecuterList = new ArrayList<>();
-
+        dbExecuterList.add(SaxonExecutor.getInstance());
         dbExecuterList.add(BaseXExecutor.getInstance());
         dbExecuterList.add(ExistExecutor.getInstance());
-        dbExecuterList.add(SaxonExecutor.getInstance());
-        dbExecuterList.add(OracleExecutor.getInstance());
+        dbExecuterList.add(MySQLExecutor.getInstance());
         //dbExecuterList.add(MySQLExecutor.getInstance());
         for(DatabaseExecutor dbExecutor: dbExecuterList)
             dbExecutor.registerDatabase(mainExecutor);

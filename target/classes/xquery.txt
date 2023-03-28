@@ -1,1 +1,1 @@
-/B1[min(distinct-values(./C1)) < 2]
+//A1[@b1 < 2]

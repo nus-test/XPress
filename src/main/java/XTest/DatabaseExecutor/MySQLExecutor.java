@@ -47,8 +47,9 @@ public class MySQLExecutor extends DatabaseExecutor {
         int columnsNumber = rsmd.getColumnCount();
         String result = "";
         while (resultSet.next()) {
-            for (int i = 1; i <= columnsNumber; i++)
-                result += resultSet.getString(i);
+            for (int i = 1; i <= columnsNumber; i++) {
+                result += resultSet.getString(i).replaceAll("\\s", "");
+            }
         }
         resultSet.close();
         statement.close();

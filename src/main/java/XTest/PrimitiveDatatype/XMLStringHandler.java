@@ -35,11 +35,14 @@ public class XMLStringHandler extends PooledValueHandler implements XMLComparabl
 
     Character getRandomCharacter() {
         boolean flag = false;
-        int maxCharValue = 126;
-        int minCharValue = 32;
+        int maxCharValue = 90;
+        int minCharValue = 65;
         char c = 'a';
         while(!flag) {
             c = (char) (GlobalRandom.getInstance().nextInt(minCharValue, maxCharValue + 1));
+            double prob = GlobalRandom.getInstance().nextDouble();
+            if(prob < 0.5)
+                c += 32;
             if(escapeSet.contains(c) == false)
                 flag = true;
         }

@@ -50,7 +50,8 @@ public class SubcontextExtractor {
 
         String selectCurrentNodeXPath = XPathPrefixFull + currentNodeIdentifier;
         // Get direct subcontext
-        if(prob < 0.5 || !complex) {
+        // Changed for MySQL!
+        if(prob < 2 || !complex) {
             return XMLDirectSubcontext.getDirectSubContext(XPathPrefixFull, mainExecutor, currentNode, allowTextContentFlag);
         }
 
