@@ -60,7 +60,7 @@ public class MainExecutor {
         for(DatabaseExecutor databaseExecutor : databaseExecutorList) {
             List<Integer> currentNodeIdResultSet = null;
             try{
-                currentNodeIdResultSet = executeSingleProcessorGetIdList(XPath, databaseExecutor);
+                currentNodeIdResultSet = executeSingleProcessorGetIdList(XPath, databaseExecutor);  
                 currentNodeIdResultSet.sort(Integer::compareTo);
             }catch(Exception e) {
                 System.out.println("Unknown exception thrown!");

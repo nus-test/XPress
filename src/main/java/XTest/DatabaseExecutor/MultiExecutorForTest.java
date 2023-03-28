@@ -32,7 +32,7 @@ public class MultiExecutorForTest {
         dbExecuterList.add(BaseXExecutor.getInstance());
         dbExecuterList.add(ExistExecutor.getInstance());
         dbExecuterList.add(SaxonExecutor.getInstance());
-        dbExecuterList.add(OracleExecutor.getInstance());
+        //dbExecuterList.add(OracleExecutor.getInstance());
         //dbExecuterList.add(MySQLExecutor.getInstance());
         for(DatabaseExecutor dbExecutor: dbExecuterList)
             dbExecutor.registerDatabase(mainExecutor);

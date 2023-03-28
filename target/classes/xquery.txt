@@ -1,1 +1,1 @@
-//*[count(./*) <= 2]/descendant-or-self::B/following-sibling::C[@id < 4]
+//F1/following-sibling::*/ancestor-or-self::*[count(head(reverse(.//*))) = 1]
