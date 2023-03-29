@@ -12,6 +12,8 @@ import org.xmldb.api.base.XMLDBException;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.sql.SQLOutput;
+import java.util.ArrayList;
 import java.util.List;
 
 public class XPathGenerator {
@@ -69,15 +71,26 @@ public class XPathGenerator {
             builder += randomNode.tagName;
             allowTextContentFlag = true;
         }
-        if(prob > 0.3) {
+        nodeIdList = mainExecutor.executeAndCompare(builder);
+        selectedNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
+        if(prob < 0.2) {
+            XPathResultListPair XPathResultListPair = indexSearchAttempt(builder, selectedNodeList);
+            builder = XPathResultListPair.XPath;
+            selectedNodeList = XPathResultListPair.contextNodeList;
+        }
+        prob = GlobalRandom.getInstance().nextDouble();
+        if(prob < 0.7) {
+            randomNode = GlobalRandom.getInstance().getRandomFromList(selectedNodeList);
             PredicateContext predicateContext = predicateGenerator.generatePredicate(builder, 3, randomNode,
                     allowTextContentFlag, complex);
             builder += predicateContext.predicate;
             selectedNodeList = predicateContext.executionResult;
         }
-        else {
-            nodeIdList = mainExecutor.executeAndCompare(builder);
-            selectedNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
+        prob = GlobalRandom.getInstance().nextDouble();
+        if(prob < 0.3) {
+            XPathResultListPair XPathResultListPair = indexSearchAttempt(builder, selectedNodeList);
+            builder = XPathResultListPair.XPath;
+            selectedNodeList = XPathResultListPair.contextNodeList;
         }
         return generateXPath(builder, selectedNodeList, depth - 1, complex);
     }
@@ -88,5 +101,33 @@ public class XPathGenerator {
 
     public String getXPath(int depth) throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, InstantiationException, IllegalAccessException, UnexpectedExceptionThrownException {
         return generateXPath("", null, depth);
+    }
+
+    XPathResultListPair indexSearchAttempt(String builder, List<ContextNode> selectedNodeList) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
+        int length = selectedNodeList.size();
+        int id = 1, cnt = 0;
+        List<ContextNode> nodeList = new ArrayList<>();
+        List<ContextNode> selectedNodeListToReturn = selectedNodeList;
+        while(nodeList.size() == 0 && cnt <= 3) {
+            id = GlobalRandom.getInstance().nextInt(length) + 1;
+            if(cnt == 3) id = 1;
+            nodeList = mainExecutor.executeSingleProcessorGetNodeList(builder + "[" + id + "]", "Saxon");
+            cnt += 1;
+        }
+        if(nodeList.size() != 0) {
+            builder += "[" + id + "]";
+            selectedNodeListToReturn = nodeList;
+        }
+        return new XPathResultListPair(builder, selectedNodeListToReturn);
+    }
+
+    class XPathResultListPair {
+        String XPath;
+        List<ContextNode> contextNodeList;
+
+        XPathResultListPair(String XPath, List<ContextNode> contextNodeList) {
+            this.XPath = XPath;
+            this.contextNodeList = contextNodeList;
+        }
     }
 }

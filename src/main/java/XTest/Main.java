@@ -28,7 +28,7 @@ public class Main {
 //        dbExecuterList.add(OracleExecutor.getInstance());
         for(DatabaseExecutor dbExecutor: dbExecuterList)
             dbExecutor.registerDatabase(mainExecutor);
-        int round = 5;
+        int round = 25;
         XMLDocumentGenerator xmlDocumentGenerator = new XMLDocumentGenerator();
         try {
             for (int i = 0; i < round; i++) {

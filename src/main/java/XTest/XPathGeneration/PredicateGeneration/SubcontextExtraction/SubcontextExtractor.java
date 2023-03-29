@@ -9,6 +9,7 @@ import XTest.PrimitiveDatatype.XMLNumeric;
 import XTest.PrimitiveDatatype.XMLSequenceHandler;
 import XTest.TestException.MismatchingResultException;
 import XTest.TestException.UnexpectedExceptionThrownException;
+import XTest.XMLGeneration.AttributeNode;
 import XTest.XMLGeneration.ContextNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateGenerator;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeConstantNode;
@@ -60,7 +61,8 @@ public class SubcontextExtractor {
         boolean valueFormat = false;
         boolean numericValueFound = false;
         List<ContextNode> selectedNodeList;
-        int selectedNodeSize;
+
+        String executableXPathExpr;
 
         if(prob < 0.3) {
             // Return constant integer sequence
@@ -69,7 +71,7 @@ public class SubcontextExtractor {
             List<Integer> sequenceList = XMLSequenceHandler.getRandomNodeValue();
             XPathExpr = "(" + sequenceList.get(0) + " to "
                     + sequenceList.get(1) + ")";
-            selectedNodeSize = sequenceList.get(1) - sequenceList.get(0) + 1;
+            executableXPathExpr = XPathExpr;
             predicateTreeConstantNode = new PredicateTreeConstantNode(XMLDatatype.INTEGER, "0", XPathExpr);
         }
         else {
@@ -77,20 +79,18 @@ public class SubcontextExtractor {
             if(XPathExpr == null)
                 return XMLDirectSubcontext.getDirectSubContext(XPathPrefixFull, mainExecutor, currentNode, allowTextContentFlag);
             // XPathExpr: //*[id="4"] //xxxx
-            selectedNodeList = mainExecutor.executeSingleProcessorGetNodeList(XPathExpr, defaultDBName);
+            executableXPathExpr = XPathExpr;
             XPathExpr = XPathExpr.substring(selectCurrentNodeXPath.length());
-            selectedNodeSize = selectedNodeList.size();
             XPathExpr = "." + XPathExpr;
         }
 
         //XPathExpr: //*[id="4"] .//xxxx
 
         int sequenceTransformCnt = GlobalRandom.getInstance().nextInt(3);
-        XPathExpr = transformSequence(XPathExpr, selectedNodeSize, sequenceTransformCnt);
+        XPathExpr = transformSequence(XPathExpr, executableXPathExpr, sequenceTransformCnt);
         double selectApplicationProb = GlobalRandom.getInstance().nextDouble();
         if(selectApplicationProb < 0.5) {
-            Integer length = mainExecutor.executeSingleProcessorGetNodeList(selectCurrentNodeXPath + "/" + XPathExpr, defaultDBName).size();
-            XPathExpr = selectSequence(XPathExpr, valueFormat, length, GlobalRandom.getInstance().nextInt(2));
+            XPathExpr = selectSequence(XPathExpr, valueFormat, selectCurrentNodeXPath + "/" + XPathExpr, GlobalRandom.getInstance().nextInt(3));
         }
         // XPathExpr = head(sort(./xxxx))
 
@@ -118,8 +118,7 @@ public class SubcontextExtractor {
             }
         }
         if(selectApplicationProb > 0.5) {
-            Integer length = Integer.parseInt(mainExecutor.executeSingleProcessor("count(" + selectCurrentNodeXPath + "/" + XPathExpr + ")", defaultDBName));
-            XPathExpr = selectSequence(XPathExpr, valueFormat, length, GlobalRandom.getInstance().nextInt(2));
+            XPathExpr = selectSequence(XPathExpr, valueFormat, selectCurrentNodeXPath + "/" + XPathExpr, GlobalRandom.getInstance().nextInt(2));
         }
         double aggregateProb = GlobalRandom.getInstance().nextDouble();
         if(numericValueFound && aggregateProb < 0.8) {
@@ -140,27 +139,35 @@ public class SubcontextExtractor {
         return predicateTreeConstantNode;
     }
 
-    String transformSequence(String XPathExpr, int nodeSize, int depth) {
+    String transformSequence(String XPathExpr, String executableXPathExpr, int depth) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
         if(depth == 0) {
             return XPathExpr;
         }
+        Integer nodeSize = Integer.parseInt(mainExecutor.executeSingleProcessor("count(" + executableXPathExpr + ")", defaultDBName));
         int id = GlobalRandom.getInstance().nextInt(nodeSequenceTransformationList.size());
         String function = nodeSequenceTransformationList.get(id);
         if(function.equals("subsequence")) {
             Pair pair = GlobalRandom.getInstance().nextInterval(nodeSize);
             int length = pair.y - pair.x + 1;
             double prob = GlobalRandom.getInstance().nextDouble();
-            XPathExpr = function + "(" + XPathExpr + " , " + (pair.x + 1);
-            if(prob < 0.5)
-                XPathExpr += " , " + length;
+            XPathExpr = function + "(" + XPathExpr + "," + (pair.x + 1);
+            executableXPathExpr = function + "(" + executableXPathExpr + "," + (pair.x + 1);
+            if(prob < 0.5) {
+                XPathExpr += "," + length;
+                executableXPathExpr += "," + length;
+            }
             XPathExpr += ")";
-            nodeSize = length;
+            executableXPathExpr += ")";
         }
-        else XPathExpr = function + "(" + XPathExpr + ")";
-        return transformSequence(XPathExpr, nodeSize, depth - 1);
+        else {
+            XPathExpr = function + "(" + XPathExpr + ")";
+            executableXPathExpr = function + "(" + executableXPathExpr + ")";
+        }
+        return transformSequence(XPathExpr, executableXPathExpr, depth - 1);
     }
 
-    String selectSequence(String XPathExpr, boolean valueFormat, int size, int depth) {
+    String selectSequence(String XPathExpr, boolean valueFormat, String executableXPathExpr, int depth) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
+        Integer nodeSize = Integer.parseInt(mainExecutor.executeSingleProcessor("count(" + executableXPathExpr + ")", defaultDBName));
         if(depth == 0) {
             return XPathExpr;
         }
@@ -169,15 +176,13 @@ public class SubcontextExtractor {
         if(prob < 0.5) {
             function = GlobalRandom.getInstance().getRandomFromList(sequenceSelectionList);
             if(function.equals("tail")) {
-                if(size == 1) function = "head";
-                else size -= 1;
+                if(nodeSize == 1) function = "head";
             }
-            if(function.equals("head"))
-                size = 1;
         } else if(valueFormat) {
             function = GlobalRandom.getInstance().getRandomFromList(valueSequenceSelectionList);
         }
         else function = GlobalRandom.getInstance().getRandomFromList(nodeSequenceSelectionList);
-        return selectSequence(function + "(" +XPathExpr + ")", valueFormat,size, depth - 1);
+        return selectSequence(function + "(" +XPathExpr + ")", valueFormat,
+                function + "(" + executableXPathExpr + ")", depth - 1);
     }
 }

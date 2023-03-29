@@ -6,9 +6,7 @@ import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.TestException.MismatchingResultException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XMLGeneration.ContextNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.NoActionFunctionNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.PredicateTreeFunctionNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.SubstringFunctionNode;
+import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.*;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalConnectionNode.NotConnectionNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalConnectionNode.PredicateTreeLogicalConnectionNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalOperationNode.EqualOperationNode;
@@ -122,8 +120,11 @@ public class PredicateGenerator {
         PredicateTreeFunctionNode functionNode = noAction ? new NoActionFunctionNode() :
                 PredicateTreeFunctionNode.getRandomPredicateTreeFunctionNode(inputNode.datatype);
         if(inputNode.datatype == XMLDatatype.STRING && inputNode.dataContent.equals("")) {
-            while(functionNode instanceof SubstringFunctionNode)
-                functionNode = PredicateTreeFunctionNode.getRandomPredicateTreeFunctionNode(inputNode.datatype);
+            if(functionNode instanceof SubstringFunctionNode ||
+               functionNode instanceof EndsWithFunctionNode  ||
+               functionNode instanceof StartsWithFunctionNode ||
+               functionNode instanceof ContainsFunctionNode)
+                functionNode = new NoActionFunctionNode();
         }
         functionNode.fillContents(inputNode);
         return functionNode;
