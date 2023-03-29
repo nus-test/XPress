@@ -1,4 +1,0 @@
-let $_ := 2 to 6
-where false()
-let $a := 1 to 5
-return $a

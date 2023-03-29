@@ -1,3 +1,0 @@
-let $s := ('1', '2')
-where ($s ! (if(.) then <a/> else ()))
-return ()
