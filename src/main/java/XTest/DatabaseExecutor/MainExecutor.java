@@ -14,7 +14,7 @@ import java.util.*;
 
 public class MainExecutor {
 
-    Map<Integer, ContextNode> contextNodeMap = new HashMap<>();
+    public Map<Integer, ContextNode> contextNodeMap = new HashMap<>();
     public List<DatabaseExecutor> databaseExecutorList = new ArrayList<>();
     Map<String, DatabaseExecutor> databaseExecutorNameMap = new HashMap<>();
     public String currentContext;

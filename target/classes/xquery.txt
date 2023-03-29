@@ -1,1 +1,1 @@
-//B[(D/C)[1]/@id = "7"]
+//*[(((floor(@l1)) >= -51707.7844) or not((last()) = 31)) and (((false())) = false())]/ancestor::T1[((((/N1/A1)[1]) != false()) and ((has-children()) != false())) and ((abs(abs(min(distinct-values((-2722 to -1914))))) * 772708) = 2103311176)]

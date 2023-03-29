@@ -30,7 +30,7 @@ public class XPathGenerationTest {
         List<DatabaseExecutor> dbExecuterList = new ArrayList<>();
 
         dbExecuterList.add(BaseXExecutor.getInstance());
-        dbExecuterList.add(ExistExecutor.getInstance());
+       // dbExecuterList.add(ExistExecutor.getInstance());
         dbExecuterList.add(SaxonExecutor.getInstance());
 //        dbExecuterList.add(OracleExecutor.getInstance());
         for(DatabaseExecutor dbExecutor: dbExecuterList)

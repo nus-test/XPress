@@ -1,5 +1,7 @@
 package XTest.XMLGeneration;
 
+import XTest.GlobalRandom;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +14,7 @@ public class ContextNode extends ElementNode {
     public int childId;
     public boolean havePreceding = true;
     public boolean haveFollowing = true;
-    boolean hasLeaf = false;
+    public boolean hasLeaf = false;
 
     void addAttribute(AttributeNode attributeNode) {
         attributeNode.parentNode = this;
@@ -36,5 +38,17 @@ public class ContextNode extends ElementNode {
 
     void setId(int id) {
         this.id = id;
+    }
+
+    public String getStrPathToSpecifiedLeafNode() {
+        if(!hasLeaf) return null;
+        if(childList.size() == 0) return "";
+        ContextNode childWithLeaf = GlobalRandom.getInstance().getRandomFromList(childWithLeafList);
+        String childPath = childWithLeaf.getStrPathToSpecifiedLeafNode();
+        String path = childWithLeaf.tagName;
+        if(childPath != null && childPath.length() != 0)
+            path += "/";
+        path += childPath;
+        return path;
     }
 }

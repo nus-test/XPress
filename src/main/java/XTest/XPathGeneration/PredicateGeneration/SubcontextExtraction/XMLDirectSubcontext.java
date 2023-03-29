@@ -4,16 +4,21 @@ import XTest.DatabaseExecutor.MainExecutor;
 import XTest.GlobalRandom;
 import XTest.PrimitiveDatatype.*;
 import XTest.TestException.UnexpectedExceptionThrownException;
+import XTest.XMLGeneration.AttributeNode;
 import XTest.XMLGeneration.ContextNode;
+import XTest.XMLGeneration.ElementNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeConstantNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 import XTest.XPathGeneration.PredicateGeneration.SubcontextExtraction.DirectSubcontextContantNodeGeneration.*;
 import net.sf.saxon.s9api.SaxonApiException;
+import org.basex.query.value.item.Int;
+import org.basex.query.value.item.Str;
 import org.xmldb.api.base.XMLDBException;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public enum XMLDirectSubcontext {
@@ -54,6 +59,35 @@ public enum XMLDirectSubcontext {
                                                                 ContextNode currentNode, boolean allowTextContent)
             throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
         double prob = GlobalRandom.getInstance().nextDouble();
+        if(prob < 0.3 && currentNode.childWithLeafList.size() != 0) {
+            String pathToLeaf = currentNode.getStrPathToSpecifiedLeafNode();
+            String currentNodeIdentifier = "//*[@id=\"" + currentNode.id + "\"]";
+            String XPathExpr = currentNodeIdentifier + "/" + pathToLeaf;
+            List<Integer> resultList = mainExecutor.executeSingleProcessorGetIdList(XPathExpr);
+            prob = GlobalRandom.getInstance().nextDouble();
+            ContextNode starredNode;
+            if(prob < 0.5) {
+                int id = GlobalRandom.getInstance().nextInt(resultList.size()) + 1;
+                XPathExpr += "[" + id + "]";
+                resultList = mainExecutor.executeSingleProcessorGetIdList(XPathExpr);
+            }
+            starredNode = mainExecutor.contextNodeMap.get(GlobalRandom.getInstance().getRandomFromList(resultList));
+            XPathExpr = XPathExpr.substring(currentNodeIdentifier.length() + 1);
+            XPathExpr = "(" + XPathExpr + ")[" + (GlobalRandom.getInstance().nextInt(resultList.size()) + 1) + "]";
+            prob = GlobalRandom.getInstance().nextDouble();
+            if(prob < 0.6) {
+                ElementNode subContextNode = getAttrOrText(starredNode);
+                String subContextName;
+                if(subContextNode instanceof AttributeNode)
+                    subContextName = "@" + subContextNode.tagName;
+                else subContextName = "text()";
+                PredicateTreeConstantNode predicateTreeConstantNode =
+                        new PredicateTreeConstantNode(subContextNode, XPathExpr + "/" + subContextName);
+                return predicateTreeConstantNode;
+            }
+            return new PredicateTreeConstantNode(starredNode, XPathExpr);
+        }
+        prob = GlobalRandom.getInstance().nextDouble();
         if(prob < 0.3) {
             XMLDatatype xmlDatatype = XMLDatatype.getRandomDataType();
             String content = xmlDatatype.getValueHandler().getValue(false);
@@ -83,5 +117,11 @@ public enum XMLDirectSubcontext {
         } else {
             return XMLDirectSubcontext.ATTRIBUTE.getPredicateTreeNodeGenerator().generatePredicateTreeNodeFromContext(currentNode);
         }
+    }
+
+    public static ElementNode getAttrOrText(ContextNode currentNode) {
+        double prob = GlobalRandom.getInstance().nextDouble();
+        if(prob < 0.3) return currentNode;
+        return GlobalRandom.getInstance().getRandomFromList(currentNode.attributeList);
     }
 }
