@@ -6,6 +6,8 @@ import XTest.PrimitiveDatatype.XMLDatatype;
 import java.io.*;
 import java.util.List;
 
+import static java.lang.Math.max;
+
 public class XMLDocumentGenerator {
     ContextTreeGenerator contextTreeGenerator = new ContextTreeGeneratorImpl();
 
@@ -16,6 +18,7 @@ public class XMLDocumentGenerator {
             new ContextTemplateGeneratorImpl(contextNodeNameGenerator,
                     attributeTemplateGenerator);
     List<ContextNode> contextNodeTemplateList;
+    List<ContextNode> leafContextNodeTemplateList;
 
 
     public XMLDocumentGenerator() {}
@@ -64,13 +67,19 @@ public class XMLDocumentGenerator {
         ContextNode root = contextTreeGenerator.GenerateRandomTree(contextNodeSize);
         int templateSize = contextNodeSize / 2;
         contextNodeTemplateList = contextTemplateGenerator.GenerateContextTemplate(templateSize);
+        int leafTemplateSize = max(1, contextNodeSize / 3);
+        leafContextNodeTemplateList = contextTemplateGenerator.GenerateContextTemplate(leafTemplateSize);
         assignTemplateToNode(root);
         return root;
     }
 
     void assignTemplateToNode(ContextNode currentNode) {
-        int templateId = GlobalRandom.getInstance().nextInt(contextNodeTemplateList.size());
-        currentNode.assignTemplate(contextNodeTemplateList.get(templateId));
+        double prob = GlobalRandom.getInstance().nextDouble();
+        if(prob < 0.5 && currentNode.childList.size() == 0)
+            currentNode.hasLeaf = true;
+        ContextNode templateNode = GlobalRandom.getInstance().getRandomFromList(currentNode.hasLeaf
+                 ? leafContextNodeTemplateList : contextNodeTemplateList);
+        currentNode.assignTemplate(templateNode);
         currentNode.assignRandomValue();
         for(AttributeNode attributeNode: currentNode.attributeList) {
             if(attributeNode.tagName == "id")
@@ -80,6 +89,10 @@ public class XMLDocumentGenerator {
         }
         for(ContextNode childNode: currentNode.childList) {
             assignTemplateToNode(childNode);
+            if(childNode.hasLeaf) {
+                currentNode.hasLeaf = true;
+                currentNode.childWithLeafList.add(childNode);
+            }
         }
     }
 
