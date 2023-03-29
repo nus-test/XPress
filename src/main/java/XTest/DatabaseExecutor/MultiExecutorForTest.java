@@ -53,6 +53,7 @@ public class MultiExecutorForTest {
             mainExecutor.setXPathGenerationContext(xmlDataString);
             for (DatabaseExecutor databaseExecutor : dbExecuterList) {
                 System.out.println("------------------------------ " + databaseExecutor.dbName + " ------------------------");
+                //System.out.println(mainExecutor.executeSingleProcessor(xquery, databaseExecutor));
                 System.out.println(mainExecutor.executeSingleProcessorGetIdList(xquery, databaseExecutor));
             }
         } catch (Exception e) {

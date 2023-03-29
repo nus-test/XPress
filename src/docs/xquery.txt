@@ -1,1 +1,1 @@
-//F1/following-sibling::*/ancestor-or-self::*[count(head(reverse(.//*[(not((@id) > 25))]))) = 1]
+//*[(((concat(concat(lower-case(("}F,9)")),"DLLJ[A"),"pi@b$qI")) = "}f,9)DLLJ[Api@b$qI") and ((count(reverse(./*/*))) >= 1)) and ((abs((count(head(reverse((454 to 1311)))) mod 31678935) idiv -1989266129)) >= 0)]

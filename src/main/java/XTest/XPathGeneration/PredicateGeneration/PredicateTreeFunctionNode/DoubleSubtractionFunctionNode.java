@@ -15,7 +15,16 @@ public class DoubleSubtractionFunctionNode extends PredicateTreeFunctionNode imp
     public void fillContents(PredicateTreeNode inputNode) {
         childList.add(inputNode);
         String value = XMLDatatype.DOUBLE.getValueHandler().getValue(false);
-        double currentValue = Double.parseDouble(inputNode.dataContent);
+        double currentValue;
+        try{
+            currentValue = Double.parseDouble(inputNode.dataContent);
+        } catch(NumberFormatException numberFormatException) {
+            System.out.println("$$$$$$$$$$$$$$$$$$$$");
+            System.out.println(inputNode.XPathExpr);
+            System.out.println(inputNode.dataContent);
+            System.out.println("$$$$$$$$$$$$$$$$$$$$");
+            throw numberFormatException;
+        }
         double subtractValue = Double.parseDouble(value);
         if(abs(currentValue - subtractValue) < 0.5) {
             if(subtractValue < 0) value = value.substring(1);

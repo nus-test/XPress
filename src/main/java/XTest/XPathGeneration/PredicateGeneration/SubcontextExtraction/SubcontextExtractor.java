@@ -90,7 +90,7 @@ public class SubcontextExtractor {
         double selectApplicationProb = GlobalRandom.getInstance().nextDouble();
         if(selectApplicationProb < 0.5) {
             Integer length = mainExecutor.executeSingleProcessorGetNodeList(selectCurrentNodeXPath + "/" + XPathExpr, defaultDBName).size();
-            XPathExpr = selectSequence(XPathExpr, valueFormat, length, GlobalRandom.getInstance().nextInt(3));
+            XPathExpr = selectSequence(XPathExpr, valueFormat, length, GlobalRandom.getInstance().nextInt(2));
         }
         // XPathExpr = head(sort(./xxxx))
 
@@ -119,7 +119,7 @@ public class SubcontextExtractor {
         }
         if(selectApplicationProb > 0.5) {
             Integer length = Integer.parseInt(mainExecutor.executeSingleProcessor("count(" + selectCurrentNodeXPath + "/" + XPathExpr + ")", defaultDBName));
-            XPathExpr = selectSequence(XPathExpr, valueFormat, length, GlobalRandom.getInstance().nextInt(3));
+            XPathExpr = selectSequence(XPathExpr, valueFormat, length, GlobalRandom.getInstance().nextInt(2));
         }
         double aggregateProb = GlobalRandom.getInstance().nextDouble();
         if(numericValueFound && aggregateProb < 0.8) {
