@@ -17,6 +17,7 @@ import org.xmldb.api.base.XMLDBException;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,9 +68,23 @@ public enum XMLDirectSubcontext {
             prob = GlobalRandom.getInstance().nextDouble();
             ContextNode starredNode;
             if(prob < 0.5) {
-                int id = GlobalRandom.getInstance().nextInt(resultList.size()) + 1;
-                XPathExpr += "[" + id + "]";
-                resultList = mainExecutor.executeSingleProcessorGetIdList(XPathExpr);
+                String tempXPathExpr = XPathExpr;
+                int cnt = 0;
+                int originalSize = resultList.size();
+                resultList = new ArrayList<>();
+                while(resultList.size() == 0 && cnt <= 3){
+                    int id = GlobalRandom.getInstance().nextInt(originalSize) + 1;
+                    if(cnt == 3) id = 1;
+                    XPathExpr = tempXPathExpr + "[" + id + "]";
+                    resultList = mainExecutor.executeSingleProcessorGetIdList(XPathExpr);
+                    cnt += 1;
+                }
+            }
+            if(resultList.size() == 0) {
+                System.out.println("------------------------------->");
+                System.out.println(XPathExpr);
+                System.out.println(XPathPrefix);
+                System.out.println("********************************");
             }
             starredNode = mainExecutor.contextNodeMap.get(GlobalRandom.getInstance().getRandomFromList(resultList));
             XPathExpr = XPathExpr.substring(currentNodeIdentifier.length() + 1);
