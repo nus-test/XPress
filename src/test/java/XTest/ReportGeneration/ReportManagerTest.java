@@ -3,6 +3,7 @@ package XTest.ReportGeneration;
 import XTest.DatabaseExecutor.*;
 import XTest.TestException.MismatchingResultException;
 import XTest.TestException.UnexpectedExceptionThrownException;
+import XTest.TestException.UnsupportedContextSetUpException;
 import XTest.XMLGeneration.XMLContext;
 import XTest.XMLGeneration.XMLDocumentGenerator;
 import XTest.XPathGeneration.XPathGenerator;
@@ -19,7 +20,7 @@ import java.util.List;
 public class ReportManagerTest {
 
     @Test
-    void writeToReportTest() throws IOException, SQLException, XMLDBException, SaxonApiException, MismatchingResultException, InstantiationException, IllegalAccessException, UnexpectedExceptionThrownException {
+    void writeToReportTest() throws IOException, SQLException, XMLDBException, SaxonApiException, MismatchingResultException, InstantiationException, IllegalAccessException, UnexpectedExceptionThrownException, UnsupportedContextSetUpException {
         XMLDocumentGenerator xmlDocumentGenerator = new XMLDocumentGenerator();
         XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(4);
         System.out.println(xmlContext.getXmlContent());

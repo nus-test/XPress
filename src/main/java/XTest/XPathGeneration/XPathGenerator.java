@@ -88,6 +88,11 @@ public class XPathGenerator {
         }
         prob = GlobalRandom.getInstance().nextDouble();
         if(prob < 0.3) {
+            if(selectedNodeList.size() == 0) {
+                System.out.println("***********");
+                System.out.println(builder);
+                System.out.println("&&&&&&&&&&");
+            }
             XPathResultListPair XPathResultListPair = indexSearchAttempt(builder, selectedNodeList);
             builder = XPathResultListPair.XPath;
             selectedNodeList = XPathResultListPair.contextNodeList;

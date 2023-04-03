@@ -2,12 +2,11 @@ package XTest.DatabaseExecutor;
 
 import XTest.CommonUtils;
 import XTest.TempTest.MySQLSimple;
+import XTest.TestException.UnsupportedContextSetUpException;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -20,37 +19,42 @@ public abstract class DatabaseExecutor {
         mainExecutor.registerDatabase(this, dbName);
     }
 
-    public void setContextByFileWithCheck(String pathName) throws SQLException, XMLDBException, IOException, SaxonApiException {
+    public void setContextWithCheck(String info) throws SQLException, XMLDBException, IOException, UnsupportedContextSetUpException, SaxonApiException {
         clearContextWithCheck();
-        String xmlData =
-                CommonUtils.readInputStream(
-                        new ByteArrayInputStream(MySQLSimple.class.getResourceAsStream("/xmldocs/" + pathName).readAllBytes()));
+        setContext(info);
+        clearFlag = true;
+    }
+
+    abstract void setContextWithCheck(String content, String fileAddr) throws SQLException, UnsupportedContextSetUpException, XMLDBException, IOException, SaxonApiException;
+
+    public void setContextByFileWithCheck(String fileAddr) throws SQLException, XMLDBException, IOException, SaxonApiException, UnsupportedContextSetUpException {
+        clearContextWithCheck();
+        setContextByFile(fileAddr);
+        clearFlag = true;
+    }
+
+    public void setContextByContentWithCheck(String content) throws SQLException, XMLDBException, IOException, SaxonApiException, UnsupportedContextSetUpException {
+        clearContextWithCheck();
+        setContextByContent(content);
+        clearFlag = true;
+    }
+
+    abstract void setContext(String info) throws SQLException, XMLDBException, IOException, SaxonApiException, UnsupportedContextSetUpException;
+
+    public void setContextByFile(String fileAddr) throws SQLException, IOException, SaxonApiException, XMLDBException, UnsupportedContextSetUpException {
+        String xmlData = CommonUtils.readInputStream(new FileInputStream(fileAddr));
         this.currentContext = xmlData;
-        setContextByFile(pathName);
-        clearFlag = true;
+        setContextByFileLow(fileAddr);
     }
 
-    public void setContextByContentWithCheck(String context) throws SQLException, XMLDBException, IOException, SaxonApiException {
-        clearContextWithCheck();
-        this.currentContext = context;
-        setContextByContent(context);
-        clearFlag = true;
+    abstract void setContextByFileLow(String fileAddr) throws IOException, XMLDBException, UnsupportedContextSetUpException;
+
+    void setContextByContent(String content) throws SaxonApiException, SQLException, XMLDBException, IOException, UnsupportedContextSetUpException {
+        this.currentContext = content;
+        setContextByContentLow(content);
     }
 
-    public void setContextByFile(String pathName) throws SQLException, IOException, SaxonApiException, XMLDBException {
-        String xmlData =
-                CommonUtils.readInputStream(
-                        new ByteArrayInputStream(MySQLSimple.class.getResourceAsStream("/xmldocs/" + pathName).readAllBytes()));
-        setContextByContentWithCheck(xmlData);
-    }
-
-    void setContextByContent(String context) throws SaxonApiException, SQLException, XMLDBException, IOException {
-        FileWriter writer =
-                new FileWriter((this.getClass().getResource("/xmldocs/autotest.xml").getPath()));
-        writer.write(context);
-        writer.close();
-        setContextByFileWithCheck("autotest.xml");
-    }
+    abstract void setContextByContentLow(String content) throws SaxonApiException, SQLException, UnsupportedContextSetUpException;
 
     public void clearContextWithCheck() throws SQLException, XMLDBException, IOException {
         if (clearFlag) {

@@ -4,16 +4,19 @@ import XTest.CommonUtils;
 import XTest.ReportGeneration.ReportManager;
 import XTest.TestException.MismatchingResultException;
 import XTest.TestException.UnexpectedExceptionThrownException;
+import XTest.TestException.UnsupportedContextSetUpException;
 import XTest.XMLGeneration.ContextNode;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 
 public class MainExecutor {
 
+    String fileAddr = "C:\\app\\log\\autotest.xml";
     public Map<Integer, ContextNode> contextNodeMap = new HashMap<>();
     public List<DatabaseExecutor> databaseExecutorList = new ArrayList<>();
     Map<String, DatabaseExecutor> databaseExecutorNameMap = new HashMap<>();
@@ -25,17 +28,25 @@ public class MainExecutor {
         this.reportManager = reportManager;
     }
 
-    public void setXPathGenerationContext(ContextNode root, String xmlDataContent) throws IOException, SQLException, XMLDBException, SaxonApiException {
+    public void setXPathGenerationContext(ContextNode root, String xmlDataContent) throws IOException, SQLException, XMLDBException, SaxonApiException, UnsupportedContextSetUpException {
         contextNodeMap = new HashMap<>();
         getContextNodeMap(root);
         setXPathGenerationContext(xmlDataContent);
     }
 
-    public void setXPathGenerationContext(String xmlDataContent) throws IOException, SQLException, XMLDBException, SaxonApiException {
+    public void setXPathGenerationContext(String xmlDataContent) throws IOException, SQLException, XMLDBException, SaxonApiException, UnsupportedContextSetUpException {
+        writeContextToFile(xmlDataContent);
         currentContext = xmlDataContent;
         for(DatabaseExecutor databaseExecutor : databaseExecutorList) {
-            databaseExecutor.setContextByContentWithCheck(xmlDataContent);
+            databaseExecutor.setContextWithCheck(xmlDataContent, fileAddr);
         }
+    }
+
+    public void writeContextToFile(String xmlDataContent) throws IOException {
+        FileWriter writer =
+                new FileWriter(fileAddr);
+        writer.write(xmlDataContent);
+        writer.close();
     }
 
     void getContextNodeMap(ContextNode currentNode) {

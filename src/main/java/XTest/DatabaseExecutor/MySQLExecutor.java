@@ -2,9 +2,14 @@ package XTest.DatabaseExecutor;
 
 import XTest.CommonUtils;
 import XTest.TempTest.MySQLSimple;
+import XTest.TestException.UnsupportedContextSetUpException;
+import net.sf.saxon.s9api.SaxonApiException;
+import org.xmldb.api.base.XMLDBException;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 
 public class MySQLExecutor extends DatabaseExecutor {
@@ -27,14 +32,24 @@ public class MySQLExecutor extends DatabaseExecutor {
     }
 
     @Override
-    public void setContextByFile(String pathName) throws IOException {
+    public void setContextByFileLow(String pathName) throws IOException {
         xmlDataContent = CommonUtils.readInputStream(
                 new ByteArrayInputStream(MySQLSimple.class.getResourceAsStream("xmldocs/" + pathName).readAllBytes()));
     }
 
     @Override
-    public void setContextByContent(String context) {
+    public void setContextByContentLow(String context) {
         xmlDataContent = context;
+    }
+
+    @Override
+    public void setContext(String info) throws SQLException, XMLDBException, IOException, SaxonApiException, UnsupportedContextSetUpException {
+        super.setContextByContent(info);
+    }
+
+    @Override
+    void setContextWithCheck(String content, String fileAddr) throws SQLException, UnsupportedContextSetUpException, XMLDBException, IOException, SaxonApiException {
+        setContextByContentWithCheck(content);
     }
 
     @Override

@@ -4,6 +4,7 @@ import XTest.DatabaseExecutor.*;
 import XTest.ReportGeneration.ReportManager;
 import XTest.TestException.MismatchingResultException;
 import XTest.TestException.UnexpectedExceptionThrownException;
+import XTest.TestException.UnsupportedContextSetUpException;
 import XTest.XMLGeneration.XMLContext;
 import XTest.XMLGeneration.XMLDocumentGenerator;
 import XTest.XPathGeneration.XPathGenerator;
@@ -54,7 +55,7 @@ public class Main {
                     mainExecutor.cleanUp();
                 }
             }
-        }catch (Exception e) {
+        }catch (Exception | UnsupportedContextSetUpException e) {
             System.out.println(e);
             e.printStackTrace();
         }

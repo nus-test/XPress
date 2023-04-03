@@ -14,6 +14,7 @@ import XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalOperationNo
 import XTest.XPathGeneration.PredicateGeneration.SubcontextExtraction.SubcontextExtractor;
 import XTest.XPathGeneration.XPathGenerator;
 import net.sf.saxon.s9api.SaxonApiException;
+import org.basex.query.value.item.Int;
 import org.xmldb.api.base.XMLDBException;
 
 import java.io.IOException;
@@ -40,10 +41,32 @@ public class PredicateGenerator {
         PredicateTreeNode currentRoot = null;
         for(int i = 0; i < maxPhraseLength; i ++) {
             PredicateTreeNode singlePhraseNode = generateSinglePhrase(XPathPrefix, currentNodeIdentifier, randomNode, allowTextContentFlag, complexFlag);
-            if(currentRoot == null)
+            boolean flag = false;
+            if(currentRoot == null) {
+                flag = true;
                 currentRoot = singlePhraseNode;
+            }
             else {
                 currentRoot = joinSinglePhrases(currentRoot, singlePhraseNode);
+            }
+            String predicate = "[" + currentRoot.toString() + "]";
+            List<Integer> executionResult = mainExecutor.executeSingleProcessorGetIdList(XPathPrefix + predicate, "Saxon");
+            if(!executionResult.contains(randomNode.id)) {
+                if(flag) {
+                    PredicateTreeLogicalConnectionNode notConnectionNode = new NotConnectionNode();
+                    notConnectionNode.childList.add(currentRoot);
+                    currentRoot = notConnectionNode;
+                }
+                else {
+                    int index = currentRoot.childList.size() - 1;
+                    if (currentRoot.childList.get(index) instanceof PredicateTreeLogicalOperationNode) {
+                        currentRoot.childList.set(index, ((PredicateTreeLogicalOperationNode) currentRoot.childList.get(index)).getOppositeOperationNode());
+                    } else {
+                        PredicateTreeLogicalConnectionNode notConnectionNode = new NotConnectionNode();
+                        notConnectionNode.childList.add(singlePhraseNode);
+                        currentRoot.childList.set(index, notConnectionNode);
+                    }
+                }
             }
         }
         String predicate = "[" + currentRoot.toString() + "]";

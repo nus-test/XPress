@@ -2,10 +2,14 @@ package XTest.DatabaseExecutor;
 
 import XTest.CommonUtils;
 import XTest.TempTest.MySQLSimple;
+import XTest.TestException.UnsupportedContextSetUpException;
+import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 
 public class OracleExecutor extends DatabaseExecutor {
@@ -32,9 +36,24 @@ public class OracleExecutor extends DatabaseExecutor {
     }
 
     @Override
-    public void setContextByContent(String context) throws SQLException {
+    void setContextWithCheck(String content, String fileAddr) throws SQLException, UnsupportedContextSetUpException, XMLDBException, IOException, SaxonApiException {
+        setContextByContentWithCheck(content);
+    }
+
+    @Override
+    public void setContext(String info) throws SQLException, XMLDBException, IOException, SaxonApiException, UnsupportedContextSetUpException {
+        super.setContextByContent(info);
+    }
+
+    @Override
+    public void setContextByFileLow(String fileAddr) throws UnsupportedContextSetUpException {
+        throw new UnsupportedContextSetUpException();
+    }
+
+    @Override
+    public void setContextByContentLow(String content) throws SQLException {
         statement.execute(createSQL);
-        String insertSQL = "insert into test values (XMLType('" + context + "', nls_charset_id('AL32UTF8')))";
+        String insertSQL = "insert into test values (XMLType('" + content + "', nls_charset_id('AL32UTF8')))";
         statement.execute(insertSQL);
     }
 

@@ -1,5 +1,7 @@
 package XTest.DatabaseExecutor;
 
+import XTest.TestException.UnsupportedContextSetUpException;
+import net.sf.saxon.s9api.SaxonApiException;
 import org.exist.xmldb.EXistResource;
 import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.*;
@@ -8,7 +10,11 @@ import org.xmldb.api.modules.XQueryService;
 
 import javax.xml.transform.OutputKeys;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.sql.SQLException;
 
 public class ExistExecutor extends DatabaseExecutor {
     static ExistExecutor existExecutor;
@@ -35,16 +41,29 @@ public class ExistExecutor extends DatabaseExecutor {
     }
 
     @Override
-    public void setContextByFile(String pathName) throws XMLDBException {
+    void setContextWithCheck(String content, String fileAddr) throws SQLException, UnsupportedContextSetUpException, XMLDBException, IOException, SaxonApiException {
+        setContextByFileWithCheck(fileAddr);
+    }
+
+    public void setContext(String info) throws SQLException, XMLDBException, IOException, SaxonApiException, UnsupportedContextSetUpException {
+        super.setContextByFile(info);
+    }
+
+    @Override
+    public void setContextByFileLow(String fileAddr) throws IOException, XMLDBException {
         collection = DatabaseManager.getCollection(URI + rootDir + "/" + collName);
         collection.setProperty(OutputKeys.INDENT, "no");
-        resource = (XMLResource) collection.createResource(pathName, XMLResource.RESOURCE_TYPE);
-        URL url = ExistExecutor.class.getResource("/xmldocs/" + pathName);
-        File f = new File(url.getFile());
+        resource = (XMLResource) collection.createResource("autotest", XMLResource.RESOURCE_TYPE);
+        File f = new File(fileAddr);
         resource.setContent(f);
         collection.storeResource(resource);
         xqs = (XQueryService) collection.getService("XQueryService", "1.0");
         xqs.setProperty("indent", "yes");
+    }
+
+    @Override
+    public void setContextByContentLow(String content) throws UnsupportedContextSetUpException {
+        throw new UnsupportedContextSetUpException();
     }
 
     @Override

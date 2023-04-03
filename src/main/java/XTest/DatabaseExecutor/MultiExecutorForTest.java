@@ -7,6 +7,7 @@ import XTest.TempTest.MultiTester;
 import XTest.TempTest.MySQLSimple;
 import XTest.TestException.MismatchingResultException;
 import XTest.TestException.UnexpectedExceptionThrownException;
+import XTest.TestException.UnsupportedContextSetUpException;
 import XTest.XMLGeneration.XMLContext;
 import XTest.XMLGeneration.XMLDocumentGenerator;
 import XTest.XPathGeneration.XPathGenerator;
@@ -24,20 +25,19 @@ public class MultiExecutorForTest {
 
     static String xmlFile = "test1.xml";
     static String xqueryFile = "xquery.txt";
-    public static void main(String[] args) throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, SaxonApiException, UnexpectedExceptionThrownException {
+    public static void main(String[] args) throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, SaxonApiException, UnexpectedExceptionThrownException, UnsupportedContextSetUpException {
         MainExecutor mainExecutor = new MainExecutor(null);
 
         List<DatabaseExecutor> dbExecuterList = new ArrayList<>();
 
-        dbExecuterList.add(BaseXExecutor.getInstance());
-        dbExecuterList.add(ExistExecutor.getInstance());
-        dbExecuterList.add(SaxonExecutor.getInstance());
+        //dbExecuterList.add(BaseXExecutor.getInstance());
+        //dbExecuterList.add(ExistExecutor.getInstance());
+        //dbExecuterList.add(SaxonExecutor.getInstance());
+        dbExecuterList.add(LibXML2Executor.getInstance());
         //dbExecuterList.add(OracleExecutor.getInstance());
         //dbExecuterList.add(MySQLExecutor.getInstance());
         for(DatabaseExecutor dbExecutor: dbExecuterList)
             dbExecutor.registerDatabase(mainExecutor);
-
-
 
         String xmlDataString =
                 CommonUtils.readInputStream(
@@ -53,7 +53,7 @@ public class MultiExecutorForTest {
             mainExecutor.setXPathGenerationContext(xmlDataString);
             for (DatabaseExecutor databaseExecutor : dbExecuterList) {
                 System.out.println("------------------------------ " + databaseExecutor.dbName + " ------------------------");
-                //System.out.println(mainExecutor.executeSingleProcessor(xquery, databaseExecutor));
+                System.out.println(mainExecutor.executeSingleProcessor(xquery, databaseExecutor));
                 System.out.println(mainExecutor.executeSingleProcessorGetIdList(xquery, databaseExecutor));
             }
         } catch (Exception e) {
