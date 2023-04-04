@@ -1,6 +1,7 @@
 package XTest.PrimitiveDatatype;
 
 import XTest.GlobalRandom;
+import XTest.GlobalSettings;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +30,8 @@ public enum XMLDatatype {
 
     public static XMLDatatype getRandomDataType() {
         int dataTypeId = GlobalRandom.getInstance().nextInt(XMLDatatype.typeCnt) + 1;
+        if(dataTypeId == 3 && GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_1)
+            dataTypeId = 1;
         return XMLDatatype.datatypeIdMap.get(dataTypeId);
     }
 

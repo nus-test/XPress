@@ -1,6 +1,7 @@
 package XTest.DatabaseExecutor;
 
 import XTest.CommonUtils;
+import XTest.GlobalSettings;
 import XTest.TempTest.SaxonSimple;
 import XTest.TestException.UnsupportedContextSetUpException;
 import net.sf.saxon.s9api.*;
@@ -23,6 +24,7 @@ public class SaxonExecutor extends DatabaseExecutor {
         dbName = "Saxon";
         saxon = new Processor(false);
         builder = saxon.newDocumentBuilder();
+        dbXPathVersion = GlobalSettings.XPathVersion.VERSION_3;
     }
 
     static public SaxonExecutor getInstance() {

@@ -1,6 +1,7 @@
 package XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalOperationNode;
 
 import XTest.GlobalRandom;
+import XTest.GlobalSettings;
 import XTest.PrimitiveDatatype.XMLComparable;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeConstantNode;
@@ -39,9 +40,11 @@ public abstract class PredicateTreeLogicalOperationNode extends PredicateTreeNod
 
     public static PredicateTreeLogicalOperationNode getRandomLogicalOperationNode(XMLDatatype datatype) {
         double prob = GlobalRandom.getInstance().nextDouble();
-        if (datatype == XMLDatatype.DOUBLE || (datatype.getValueHandler() instanceof XMLComparable && prob < 0.7))
-            return GlobalRandom.getInstance().getRandomFromList(comparativeOperationNodeList).newInstance();
-        else return new EqualOperationNode();
+        if (datatype == XMLDatatype.DOUBLE || (datatype.getValueHandler() instanceof XMLComparable && prob < 0.7)) {
+            if(datatype == XMLDatatype.STRING && GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3)
+                return GlobalRandom.getInstance().getRandomFromList(comparativeOperationNodeList).newInstance();
+        }
+        return new EqualOperationNode();
     }
 
     abstract public PredicateTreeLogicalOperationNode newInstance();

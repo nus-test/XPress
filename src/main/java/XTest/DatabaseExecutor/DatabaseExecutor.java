@@ -1,6 +1,7 @@
 package XTest.DatabaseExecutor;
 
 import XTest.CommonUtils;
+import XTest.GlobalSettings;
 import XTest.TempTest.MySQLSimple;
 import XTest.TestException.UnsupportedContextSetUpException;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -14,6 +15,8 @@ public abstract class DatabaseExecutor {
     public String dbName;
     boolean clearFlag = false;
     String currentContext = null;
+
+    GlobalSettings.XPathVersion dbXPathVersion;
 
     public void registerDatabase(MainExecutor mainExecutor) {
         mainExecutor.registerDatabase(this, dbName);

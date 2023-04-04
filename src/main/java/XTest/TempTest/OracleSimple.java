@@ -46,30 +46,30 @@ public class OracleSimple {
             //String insertSQL = "insert into test values (XMLType(bfilename('" + xmlPath + "', '" + xmlFile + "'), nls_charset_id('AL32UTF8')))";
             String insertSQL = "insert into test values (XMLType('" + xmlData + "', nls_charset_id('AL32UTF8')))";
 
-            System.out.println("Creating database...");
-            statement.execute(createSQL);
-            System.out.println("Inserting XML document...");
-            statement.execute(insertSQL);
-
-            for(String xqueryFile: xqueryFiles) {
-                InputStream inputStream = MultiTester.class.getResourceAsStream("/" + xqueryFile);
-                String xquery = CommonUtils.readInputStream(inputStream);
-                String selectSQL = "select extract(OBJECT_VALUE, '" + xquery + "') from test";
-                System.out.println("==================Xquery==================");
-                System.out.println(xquery);
-                System.out.println("==================Execute Xquery Oracle==================");
-                ResultSet resultSet = statement.executeQuery(selectSQL);
-                ResultSetMetaData rsmd = resultSet.getMetaData();
-                int columnsNumber = rsmd.getColumnCount();
-                while (resultSet.next()) {
-                    for (int i = 1; i <= columnsNumber; i++) {
-                        String columnValue = resultSet.getString(i);
-                        System.out.print(columnValue);
-                    }
-                    System.out.println("");
-                }
-                resultSet.close();
-            }
+//            System.out.println("Creating database...");
+//            statement.execute(createSQL);
+//            System.out.println("Inserting XML document...");
+//            statement.execute(insertSQL);
+//
+//            for(String xqueryFile: xqueryFiles) {
+//                InputStream inputStream = MultiTester.class.getResourceAsStream("/" + xqueryFile);
+//                String xquery = CommonUtils.readInputStream(inputStream);
+//                String selectSQL = "select extract(OBJECT_VALUE, '" + xquery + "') from test";
+//                System.out.println("==================Xquery==================");
+//                System.out.println(xquery);
+//                System.out.println("==================Execute Xquery Oracle==================");
+//                ResultSet resultSet = statement.executeQuery(selectSQL);
+//                ResultSetMetaData rsmd = resultSet.getMetaData();
+//                int columnsNumber = rsmd.getColumnCount();
+//                while (resultSet.next()) {
+//                    for (int i = 1; i <= columnsNumber; i++) {
+//                        String columnValue = resultSet.getString(i);
+//                        System.out.print(columnValue);
+//                    }
+//                    System.out.println("");
+//                }
+//                resultSet.close();
+//            }
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
         } catch (SQLException ex) {

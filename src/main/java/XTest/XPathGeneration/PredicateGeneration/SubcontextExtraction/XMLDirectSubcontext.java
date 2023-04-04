@@ -2,6 +2,7 @@ package XTest.XPathGeneration.PredicateGeneration.SubcontextExtraction;
 
 import XTest.DatabaseExecutor.MainExecutor;
 import XTest.GlobalRandom;
+import XTest.GlobalSettings;
 import XTest.PrimitiveDatatype.*;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XMLGeneration.AttributeNode;
@@ -25,7 +26,7 @@ import java.util.Map;
 public enum XMLDirectSubcontext {
     TEXT(1, new TextPredicateTreeNodeGenerator()),
     LAST(2, new LastPredicateTreeNodeGenerator()),
-   POSITION(3, new PositionPredicateTreeNodeGenerator()),
+    POSITION(3, new PositionPredicateTreeNodeGenerator()),
     HAS_CHILDREN(4, new HasChildrenConstantNodeGenerator()),
     ATTRIBUTE(5, new AttributePredicateTreeNodeGenerator());
 
@@ -117,6 +118,8 @@ public enum XMLDirectSubcontext {
         prob = GlobalRandom.getInstance().nextDouble();
         if(prob < 0.5) {
             int id = GlobalRandom.getInstance().nextInt(typeCnt - 1) + 1;
+            if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_1 && id == 4)
+                id = 2;
             if(!allowTextContent && id == 1) id += 1;
             PredicateTreeNodeFromContextGenerator predicateTreeNodeFromContextGenerator =
                     directSubcontextIdMap.get(id).predicateTreeNodeGenerator;

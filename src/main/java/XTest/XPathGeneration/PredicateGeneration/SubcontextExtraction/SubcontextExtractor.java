@@ -51,7 +51,8 @@ public class SubcontextExtractor {
 
         String selectCurrentNodeXPath = XPathPrefixFull + currentNodeIdentifier;
         // Get direct subcontext
-        if(prob < 0.5 || !complex) {
+        // For libxml2
+        if(prob < 2 || !complex) {
             return XMLDirectSubcontext.getDirectSubContext(XPathPrefixFull, mainExecutor, currentNode, allowTextContentFlag);
         }
 

@@ -1,6 +1,7 @@
 package XTest.DatabaseExecutor;
 
 import XTest.CommonUtils;
+import XTest.GlobalSettings;
 import XTest.TempTest.MySQLSimple;
 import XTest.TestException.UnsupportedContextSetUpException;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -27,6 +28,7 @@ public class OracleExecutor extends DatabaseExecutor {
         Class.forName("oracle.jdbc.OracleDriver");
         connection = DriverManager.getConnection(url, username, password);
         statement = connection.createStatement();
+        dbXPathVersion = GlobalSettings.XPathVersion.VERSION_1;
     }
 
     static public OracleExecutor getInstance() throws SQLException, ClassNotFoundException {
@@ -59,6 +61,7 @@ public class OracleExecutor extends DatabaseExecutor {
 
     @Override
     public void clearCurrentContext() throws XMLDBException, IOException, SQLException {
+        System.out.println("Dropped Oracle!");
         statement.execute(dropSQL);
     }
 
@@ -73,7 +76,6 @@ public class OracleExecutor extends DatabaseExecutor {
             for (int i = 1; i <= columnsNumber; i++) {
                 result += resultSet.getString(i);
             }
-            System.out.println("");
         }
         resultSet.close();
         return result;

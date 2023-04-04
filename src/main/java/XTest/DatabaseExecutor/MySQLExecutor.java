@@ -1,6 +1,7 @@
 package XTest.DatabaseExecutor;
 
 import XTest.CommonUtils;
+import XTest.GlobalSettings;
 import XTest.TempTest.MySQLSimple;
 import XTest.TestException.UnsupportedContextSetUpException;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -23,6 +24,7 @@ public class MySQLExecutor extends DatabaseExecutor {
         connection = DriverManager.getConnection(
                 "jdbc:mysql://localhost:3306/test?useTimezone=true&serverTimezone=UTC",
                 "root", "shuxin");
+        dbXPathVersion = GlobalSettings.XPathVersion.VERSION_1;
     }
 
     static public MySQLExecutor getInstance() throws SQLException, ClassNotFoundException {

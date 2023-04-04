@@ -26,6 +26,7 @@ public class Main {
         dbExecuterList.add(BaseXExecutor.getInstance());
         //dbExecuterList.add(ExistExecutor.getInstance());
         dbExecuterList.add(SaxonExecutor.getInstance());
+     //   dbExecuterList.add(LibXML2Executor.getInstance());
 //        dbExecuterList.add(OracleExecutor.getInstance());
         for(DatabaseExecutor dbExecutor: dbExecuterList)
             dbExecutor.registerDatabase(mainExecutor);
@@ -34,7 +35,7 @@ public class Main {
         try {
             for (int i = 0; i < round; i++) {
                 xmlDocumentGenerator.clearContext();
-                XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(80);
+                XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(100);
                 XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
                 System.out.println("------------------ " + i);
                 System.out.println(xmlContext.getXmlContent());
@@ -47,6 +48,8 @@ public class Main {
                             XPath = XPathGenerator.getXPath(GlobalRandom.getInstance().nextInt(5) + 2);
                         } catch (MismatchingResultException | UnexpectedExceptionThrownException e) {
                             XPath = e.toString();
+                            if(e instanceof UnexpectedExceptionThrownException)
+                                XPath = ((UnexpectedExceptionThrownException) e).originalException.toString();
                         }
                         System.out.println("Generated XPath: " + j + " " + XPath);
                     }

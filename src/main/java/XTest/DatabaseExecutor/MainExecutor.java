@@ -1,6 +1,7 @@
 package XTest.DatabaseExecutor;
 
 import XTest.CommonUtils;
+import XTest.GlobalSettings;
 import XTest.ReportGeneration.ReportManager;
 import XTest.TestException.MismatchingResultException;
 import XTest.TestException.UnexpectedExceptionThrownException;
@@ -69,13 +70,15 @@ public class MainExecutor {
         String lastDBName = null;
         //System.out.println(XPath);
         for(DatabaseExecutor databaseExecutor : databaseExecutorList) {
+            if(databaseExecutor.dbXPathVersion != GlobalSettings.xPathVersion)
+                continue;
             List<Integer> currentNodeIdResultSet = null;
             try{
                 currentNodeIdResultSet = executeSingleProcessorGetIdList(XPath, databaseExecutor);  
                 currentNodeIdResultSet.sort(Integer::compareTo);
             }catch(Exception e) {
                 System.out.println("Unknown exception thrown!");
-                reportManager.reportUnexpectedException(this, XPath, e);
+                if(reportManager != null) reportManager.reportUnexpectedException(this, XPath, e);
                 throw new UnexpectedExceptionThrownException(e);
             }
             if(nodeIdResultSet != null) {
@@ -136,6 +139,7 @@ public class MainExecutor {
                 System.out.println("---------------- Unexpected Exception Thrown ------------------");
                 System.out.println(currentContext);
                 System.out.println(XPath);
+                System.out.println(databaseExecutor.dbName);
             }
             throw new UnexpectedExceptionThrownException(e);
         }
@@ -163,6 +167,7 @@ public class MainExecutor {
                 System.out.println("---------------- Unexpected Exception Thrown ------------------");
                 System.out.println(currentContext);
                 System.out.println(XPath);
+                System.out.println(databaseExecutor.dbName);
             }
             throw new UnexpectedExceptionThrownException(e);
         }

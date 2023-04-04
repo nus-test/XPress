@@ -23,9 +23,9 @@ public class XPathGenerationTest {
     @Test
     void XPathGenerationTest() throws IOException, SQLException, XMLDBException, SaxonApiException, MismatchingResultException, InstantiationException, IllegalAccessException, UnexpectedExceptionThrownException, ClassNotFoundException, UnsupportedContextSetUpException {
         XMLDocumentGenerator xmlDocumentGenerator = new XMLDocumentGenerator();
-        XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(20);
+        XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(15);
         System.out.println(xmlContext.getXmlContent());
-        ReportManager reportManager = null; //new ReportManager("C:\\app\\log\\log.txt");
+        ReportManager reportManager = new ReportManager("C:\\app\\log\\log.txt");
         MainExecutor mainExecutor = new MainExecutor(reportManager);
 
         List<DatabaseExecutor> dbExecuterList = new ArrayList<>();
@@ -33,7 +33,8 @@ public class XPathGenerationTest {
         dbExecuterList.add(BaseXExecutor.getInstance());
        // dbExecuterList.add(ExistExecutor.getInstance());
         dbExecuterList.add(SaxonExecutor.getInstance());
-//        dbExecuterList.add(OracleExecutor.getInstance());
+        dbExecuterList.add(OracleExecutor.getInstance());
+        dbExecuterList.add(LibXML2Executor.getInstance());
         for(DatabaseExecutor dbExecutor: dbExecuterList)
             dbExecutor.registerDatabase(mainExecutor);
 
@@ -41,7 +42,7 @@ public class XPathGenerationTest {
         List<String> XPath = new ArrayList<>();
         try {
             mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
-            for(int i = 0; i < 50; i ++)
+            for(int i = 0; i < 100; i ++)
                 XPath.add(XPathGenerator.getXPath(3));
             for(String XPathStr: XPath) {
                 System.out.println("Generated XPath: ------------------------------");
@@ -50,7 +51,7 @@ public class XPathGenerationTest {
                 System.out.println(mainExecutor.executeAndCompare(XPathStr));
             }
         }finally {
-            // reportManager.close();
+           reportManager.close();
             mainExecutor.close();
         }
     }

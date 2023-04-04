@@ -1,5 +1,6 @@
 package XTest.DatabaseExecutor;
 
+import XTest.GlobalSettings;
 import XTest.TestException.UnsupportedContextSetUpException;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.exist.xmldb.EXistResource;
@@ -31,6 +32,7 @@ public class ExistExecutor extends DatabaseExecutor {
         Class cl = Class.forName(driver);
         Database database = (Database) cl.newInstance();
         database.setProperty("create-database", "true");
+        dbXPathVersion = GlobalSettings.XPathVersion.VERSION_3;
         DatabaseManager.registerDatabase(database);
     }
 

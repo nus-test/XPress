@@ -1,5 +1,6 @@
 package XTest.DatabaseExecutor;
 
+import XTest.GlobalSettings;
 import XTest.TestException.UnsupportedContextSetUpException;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
@@ -16,6 +17,8 @@ public class LibXML2Executor extends DatabaseExecutor {
 
     private LibXML2Executor() {
         libXML2ExecutorLow = new LibXML2ExecutorLow();
+        dbName = "LibXML2";
+        dbXPathVersion = GlobalSettings.XPathVersion.VERSION_1;
     }
     static public LibXML2Executor getInstance() throws SQLException, ClassNotFoundException {
         if(libXML2Executor == null)
@@ -54,6 +57,8 @@ public class LibXML2Executor extends DatabaseExecutor {
     @Override
     public List<Integer> executeGetNodeIdList(String Xquery) throws SQLException, XMLDBException, IOException, SaxonApiException {
         String result = execute(Xquery);
+        if(result.length() == 0)
+            return new ArrayList<>();
         String[] resultIdStrList = result.split("\\s+");
         List<Integer> resultIdList = new ArrayList<>();
         for(String id : resultIdStrList) {

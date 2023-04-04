@@ -3,6 +3,7 @@ package XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode;
 import XTest.DatabaseExecutor.MainExecutor;
 import XTest.DefaultListHashMap;
 import XTest.GlobalRandom;
+import XTest.GlobalSettings;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLIntegerHandler;
 import XTest.TestException.UnexpectedExceptionThrownException;
@@ -22,30 +23,40 @@ public abstract class PredicateTreeFunctionNode extends PredicateTreeNode {
 
     static {
         PredicateTreeFunctionNode.insertFunctionToMap(new ConcatFunctionNode(), XMLDatatype.STRING);
-        PredicateTreeFunctionNode.insertFunctionToMap(new LowerCaseFunctionNode(), XMLDatatype.STRING);
-        PredicateTreeFunctionNode.insertFunctionToMap(new UpperCaseFunctionNode(), XMLDatatype.STRING);
+        if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3) {
+            PredicateTreeFunctionNode.insertFunctionToMap(new LowerCaseFunctionNode(), XMLDatatype.STRING);
+            PredicateTreeFunctionNode.insertFunctionToMap(new UpperCaseFunctionNode(), XMLDatatype.STRING);
+        }
         PredicateTreeFunctionNode.insertFunctionToMap(new SubstringFunctionNode(), XMLDatatype.STRING);
         PredicateTreeFunctionNode.insertFunctionToMap(new TranslateFunctionNode(), XMLDatatype.STRING);
         PredicateTreeFunctionNode.insertFunctionToMap(new StringLengthFunctionNode(), XMLDatatype.STRING);
         PredicateTreeFunctionNode.insertFunctionToMap(new ContainsFunctionNode(), XMLDatatype.STRING);
         PredicateTreeFunctionNode.insertFunctionToMap(new StartsWithFunctionNode(), XMLDatatype.STRING);
-        PredicateTreeFunctionNode.insertFunctionToMap(new EndsWithFunctionNode(), XMLDatatype.STRING);
+        if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3) {
+            PredicateTreeFunctionNode.insertFunctionToMap(new EndsWithFunctionNode(), XMLDatatype.STRING);
+        }
 
         PredicateTreeFunctionNode.insertFunctionToMap(new IntegerAddFunctionNode(), XMLDatatype.INTEGER);
-        PredicateTreeFunctionNode.insertFunctionToMap(new IntegerDivisionFunctionNode(), XMLDatatype.INTEGER);
+        if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3) {
+            PredicateTreeFunctionNode.insertFunctionToMap(new IntegerDivisionFunctionNode(), XMLDatatype.INTEGER);
+            PredicateTreeFunctionNode.insertFunctionToMap(new IntegerAbsFunctionNode(), XMLDatatype.INTEGER);
+        }
         PredicateTreeFunctionNode.insertFunctionToMap(new IntegerMultiplicationFunctionNode(), XMLDatatype.INTEGER);
         PredicateTreeFunctionNode.insertFunctionToMap(new IntegerSubtractionFunctionNode(), XMLDatatype.INTEGER);
-        PredicateTreeFunctionNode.insertFunctionToMap(new IntegerAbsFunctionNode(), XMLDatatype.INTEGER);
         PredicateTreeFunctionNode.insertFunctionToMap(new IntegerModFunctionNode(), XMLDatatype.INTEGER);
 
-        PredicateTreeFunctionNode.insertFunctionToMap(new DoubleAbsFunctionNode(), XMLDatatype.DOUBLE);
+        if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3) {
+            PredicateTreeFunctionNode.insertFunctionToMap(new DoubleAbsFunctionNode(), XMLDatatype.DOUBLE);
+        }
         PredicateTreeFunctionNode.insertFunctionToMap(new DoubleSubtractionFunctionNode(), XMLDatatype.DOUBLE);
         PredicateTreeFunctionNode.insertFunctionToMap(new DoubleAddFunctionNode(), XMLDatatype.DOUBLE);
         PredicateTreeFunctionNode.insertFunctionToMap(new DoubleMultiplicationFunctionNode(), XMLDatatype.DOUBLE);
         PredicateTreeFunctionNode.insertFunctionToMap(new DoubleDivisionFunctionNode(), XMLDatatype.DOUBLE);
         PredicateTreeFunctionNode.insertFunctionToMap(new DoubleCeilingFunctionNode(), XMLDatatype.DOUBLE);
         PredicateTreeFunctionNode.insertFunctionToMap(new DoubleRoundFunctionNode(), XMLDatatype.DOUBLE);
-        PredicateTreeFunctionNode.insertFunctionToMap(new DoubleRoundHalfToEvenFunctionNode(), XMLDatatype.DOUBLE);
+        if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3) {
+            PredicateTreeFunctionNode.insertFunctionToMap(new DoubleRoundHalfToEvenFunctionNode(), XMLDatatype.DOUBLE);
+        }
         PredicateTreeFunctionNode.insertFunctionToMap(new DoubleFloorFunctionNode(), XMLDatatype.DOUBLE);
     }
 

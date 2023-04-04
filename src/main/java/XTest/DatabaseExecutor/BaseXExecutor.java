@@ -1,5 +1,6 @@
 package XTest.DatabaseExecutor;
 
+import XTest.GlobalSettings;
 import XTest.TempTest.BaseXClient;
 import XTest.TempTest.BaseXSimple;
 import XTest.TestException.UnsupportedContextSetUpException;
@@ -21,6 +22,7 @@ public class BaseXExecutor extends DatabaseExecutor {
 
     private BaseXExecutor() throws IOException {
         dbName = "BaseX";
+        dbXPathVersion = GlobalSettings.XPathVersion.VERSION_3;
         BaseXSession = new BaseXClient("localhost", 1984, username, password);
     }
 

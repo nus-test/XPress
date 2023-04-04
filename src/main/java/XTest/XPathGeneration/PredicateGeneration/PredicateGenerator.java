@@ -133,7 +133,7 @@ public class PredicateGenerator {
         }
         for(int d = 0; d < depth; d ++) {
             functionNode = generateFunctionExpression(inputNode, false);
-            functionNode.getDataContent(mainExecutor, "BaseX");
+            functionNode.getDataContent(mainExecutor, "Saxon");
             inputNode = functionNode;
         }
         return functionNode;
