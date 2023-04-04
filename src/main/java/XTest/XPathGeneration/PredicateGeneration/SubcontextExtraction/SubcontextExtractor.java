@@ -2,6 +2,7 @@ package XTest.XPathGeneration.PredicateGeneration.SubcontextExtraction;
 
 import XTest.DatabaseExecutor.MainExecutor;
 import XTest.GlobalRandom;
+import XTest.GlobalSettings;
 import XTest.Pair;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLIntegerHandler;
@@ -50,9 +51,7 @@ public class SubcontextExtractor {
         double prob = GlobalRandom.getInstance().nextDouble();
 
         String selectCurrentNodeXPath = XPathPrefixFull + currentNodeIdentifier;
-        // Get direct subcontext
-        // For libxml2
-        if(prob < 2 || !complex) {
+        if(prob < 0.3 || !complex || GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_1) {
             return XMLDirectSubcontext.getDirectSubContext(XPathPrefixFull, mainExecutor, currentNode, allowTextContentFlag);
         }
 
