@@ -30,17 +30,17 @@ public class Main {
 //        dbExecuterList.add(OracleExecutor.getInstance());
         for(DatabaseExecutor dbExecutor: dbExecuterList)
             dbExecutor.registerDatabase(mainExecutor);
-        int round = 1000;
+        int round = 2;
         XMLDocumentGenerator xmlDocumentGenerator = new XMLDocumentGenerator();
         try {
             for (int i = 0; i < round; i++) {
                 xmlDocumentGenerator.clearContext();
-                XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(100);
+                XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(20);
                 XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
                 System.out.println("------------------ " + i);
                 System.out.println(xmlContext.getXmlContent());
                 try {
-                    int xpathCnt = 100;
+                    int xpathCnt = 10;
                     mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
                     for (int j = 0; j < xpathCnt; j++) {
                         String XPath = "";

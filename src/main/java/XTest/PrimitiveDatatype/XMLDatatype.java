@@ -3,8 +3,7 @@ package XTest.PrimitiveDatatype;
 import XTest.GlobalRandom;
 import XTest.GlobalSettings;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public enum XMLDatatype {
     INTEGER(1, new XMLIntegerHandler()),
@@ -16,6 +15,7 @@ public enum XMLDatatype {
     ValueHandler valueHandler;
     public static int typeCnt = 4;
     public static Map<Integer, XMLDatatype> datatypeIdMap = new HashMap<>();
+    public static List<XMLDatatype> dataTypeList = new ArrayList<>();
 
     private XMLDatatype(int id, ValueHandler valueHandler) {
         this.id = id;
@@ -24,15 +24,15 @@ public enum XMLDatatype {
 
     static {
         for(XMLDatatype xmlDatatype : XMLDatatype.values()) {
-            datatypeIdMap.put(xmlDatatype.id, xmlDatatype);
+            dataTypeList.add(xmlDatatype);
         }
     }
 
     public static XMLDatatype getRandomDataType() {
-        int dataTypeId = GlobalRandom.getInstance().nextInt(XMLDatatype.typeCnt) + 1;
-        if(dataTypeId == 3 && GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_1)
-            dataTypeId = 1;
-        return XMLDatatype.datatypeIdMap.get(dataTypeId);
+        XMLDatatype xmlDatatype = GlobalRandom.getInstance().getRandomFromList(dataTypeList);
+        if(xmlDatatype == BOOLEAN && GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_1)
+            xmlDatatype = INTEGER;
+        return xmlDatatype;
     }
 
     public ValueHandler getValueHandler() {

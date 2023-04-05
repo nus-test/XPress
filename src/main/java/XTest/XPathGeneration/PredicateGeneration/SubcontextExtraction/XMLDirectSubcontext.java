@@ -18,10 +18,7 @@ import org.xmldb.api.base.XMLDBException;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public enum XMLDirectSubcontext {
     TEXT(1, new TextPredicateTreeNodeGenerator()),
@@ -30,10 +27,10 @@ public enum XMLDirectSubcontext {
     HAS_CHILDREN(4, new HasChildrenConstantNodeGenerator()),
     ATTRIBUTE(5, new AttributePredicateTreeNodeGenerator());
 
+    static List<XMLDirectSubcontext> directSubContextListWithoutAttr = new ArrayList<>();
     static int typeCnt = 5;
     int id;
-    PredicateTreeNodeFromContextGenerator predicateTreeNodeGenerator;
-    static Map<Integer, XMLDirectSubcontext> directSubcontextIdMap = new HashMap<>();
+    PredicateTreeNodeFromContextGenerator predicateTreeNodeGenerator;;
 
     XMLDirectSubcontext(int id, PredicateTreeNodeFromContextGenerator predicateTreeConstantNodeGenerator) {
         this.id = id;
@@ -41,14 +38,11 @@ public enum XMLDirectSubcontext {
     }
 
     static {
-        for(XMLDirectSubcontext xmlDirectSubcontext : XMLDirectSubcontext.values()) {
-            directSubcontextIdMap.put(xmlDirectSubcontext.id, xmlDirectSubcontext);
+        for(XMLDirectSubcontext directSubcontext : XMLDirectSubcontext.values()) {
+            if(directSubcontext == ATTRIBUTE)
+                continue;
+            directSubContextListWithoutAttr.add(directSubcontext);
         }
-    }
-
-    public static XMLDatatype getRandomDataType() {
-        int dataTypeId = GlobalRandom.getInstance().nextInt(XMLDatatype.typeCnt) + 1;
-        return XMLDatatype.datatypeIdMap.get(dataTypeId);
     }
 
     public PredicateTreeNodeFromContextGenerator getPredicateTreeNodeGenerator() {
@@ -117,15 +111,15 @@ public enum XMLDirectSubcontext {
         }
         prob = GlobalRandom.getInstance().nextDouble();
         if(prob < 0.5) {
-            int id = GlobalRandom.getInstance().nextInt(typeCnt - 1) + 1;
-            if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_1 && id == 4)
-                id = 2;
-            if(!allowTextContent && id == 1) id += 1;
-            PredicateTreeNodeFromContextGenerator predicateTreeNodeFromContextGenerator =
-                    directSubcontextIdMap.get(id).predicateTreeNodeGenerator;
+            XMLDirectSubcontext subContextType = GlobalRandom.getInstance().getRandomFromList(directSubContextListWithoutAttr);
+            if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_1 &&
+                    subContextType == HAS_CHILDREN)
+                subContextType = POSITION;
+            if(!allowTextContent && subContextType == TEXT) subContextType = HAS_CHILDREN;
+            PredicateTreeNodeFromContextGenerator predicateTreeNodeFromContextGenerator = subContextType.predicateTreeNodeGenerator;
             PredicateTreeConstantNode constNode = predicateTreeNodeFromContextGenerator
                     .generatePredicateTreeNodeFromContext(currentNode);
-            if(id > 1) {
+            if(subContextType != TEXT) {
                 String result = mainExecutor.executeSingleProcessor(
                         predicateTreeNodeFromContextGenerator.getSubContentXPathGenerator(XPathPrefix, currentNode), "Saxon");
                 constNode.dataContent = constNode.datatype == XMLDatatype.INTEGER ?
