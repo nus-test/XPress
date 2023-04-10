@@ -100,6 +100,7 @@ public enum XMLDirectSubcontext {
         prob = GlobalRandom.getInstance().nextDouble();
         if(prob < 0.3) {
             XMLDatatype xmlDatatype = XMLDatatype.getRandomDataType();
+            if(xmlDatatype == XMLDatatype.DURATION) xmlDatatype = XMLDatatype.INTEGER;
             String content = xmlDatatype.getValueHandler().getValue(false);
             String XPathExpr = content;
             if(xmlDatatype == XMLDatatype.STRING)

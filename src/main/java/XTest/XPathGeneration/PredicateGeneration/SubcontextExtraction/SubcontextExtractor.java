@@ -135,6 +135,7 @@ public class SubcontextExtractor {
                 predicateTreeFunctionNode.fillContents(constantNode);
                 XPathExpr = "(" + XPathExpr + "!" + predicateTreeFunctionNode.toStringOmit() + ")";
                 numericValueFound = predicateTreeFunctionNode.datatype.getValueHandler() instanceof XMLNumeric;
+                predicateTreeConstantNode.datatype = predicateTreeFunctionNode.datatype;
             }
         }
         double aggregateProb = GlobalRandom.getInstance().nextDouble();

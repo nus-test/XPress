@@ -9,12 +9,11 @@ public enum XMLDatatype {
     INTEGER(1, new XMLIntegerHandler()),
     STRING(2, new XMLStringHandler()),
     BOOLEAN(3, new XMLBooleanHandler()),
-    DOUBLE(4, new XMLDoubleHandler());
+    DOUBLE(4, new XMLDoubleHandler()),
+    DURATION(5, new XMLDurationHandler());
 
     int id;
     ValueHandler valueHandler;
-    public static int typeCnt = 4;
-    public static Map<Integer, XMLDatatype> datatypeIdMap = new HashMap<>();
     public static List<XMLDatatype> dataTypeList = new ArrayList<>();
 
     private XMLDatatype(int id, ValueHandler valueHandler) {

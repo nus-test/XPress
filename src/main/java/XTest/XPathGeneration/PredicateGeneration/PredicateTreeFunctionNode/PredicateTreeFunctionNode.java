@@ -32,6 +32,10 @@ public abstract class PredicateTreeFunctionNode extends PredicateTreeNode {
         PredicateTreeFunctionNode.insertFunctionToMap(new StringLengthFunctionNode(), XMLDatatype.STRING);
         PredicateTreeFunctionNode.insertFunctionToMap(new ContainsFunctionNode(), XMLDatatype.STRING);
         PredicateTreeFunctionNode.insertFunctionToMap(new StartsWithFunctionNode(), XMLDatatype.STRING);
+        PredicateTreeFunctionNode.insertFunctionToMap(new NormalizeSpaceFunctionNode(), XMLDatatype.STRING);
+        PredicateTreeFunctionNode.insertFunctionToMap(new SubstringBeforeFunctionNode(), XMLDatatype.STRING);
+        PredicateTreeFunctionNode.insertFunctionToMap(new SubstringAfterFunctionNode(), XMLDatatype.STRING);
+
         if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3) {
             PredicateTreeFunctionNode.insertFunctionToMap(new EndsWithFunctionNode(), XMLDatatype.STRING);
         }
@@ -58,6 +62,16 @@ public abstract class PredicateTreeFunctionNode extends PredicateTreeNode {
             PredicateTreeFunctionNode.insertFunctionToMap(new DoubleRoundHalfToEvenFunctionNode(), XMLDatatype.DOUBLE);
         }
         PredicateTreeFunctionNode.insertFunctionToMap(new DoubleFloorFunctionNode(), XMLDatatype.DOUBLE);
+
+
+        if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3) {
+            PredicateTreeFunctionNode.insertFunctionToMap(new YearsFromDurationFunctionNode(), XMLDatatype.DURATION);
+            PredicateTreeFunctionNode.insertFunctionToMap(new MonthsFromDurationFunctionNode(), XMLDatatype.DURATION);
+            PredicateTreeFunctionNode.insertFunctionToMap(new DaysFromDurationFunctionNode(), XMLDatatype.DURATION);
+            PredicateTreeFunctionNode.insertFunctionToMap(new HoursFromDurationFunctionNode(), XMLDatatype.DURATION);
+            PredicateTreeFunctionNode.insertFunctionToMap(new MinutesFromDurationFunctionNode(), XMLDatatype.DURATION);
+            PredicateTreeFunctionNode.insertFunctionToMap(new SecondsFromDurationFunctionNode(), XMLDatatype.DURATION);
+        }
     }
 
     public static PredicateTreeFunctionNode getRandomPredicateTreeFunctionNode(XMLDatatype datatype) {
