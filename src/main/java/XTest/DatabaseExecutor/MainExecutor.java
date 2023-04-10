@@ -20,7 +20,7 @@ public class MainExecutor {
     String fileAddr = "C:\\app\\log\\autotest.xml";
     public Map<Integer, ContextNode> contextNodeMap = new HashMap<>();
     public List<DatabaseExecutor> databaseExecutorList = new ArrayList<>();
-    Map<String, DatabaseExecutor> databaseExecutorNameMap = new HashMap<>();
+    public Map<String, DatabaseExecutor> databaseExecutorNameMap = new HashMap<>();
     public String currentContext;
     ReportManager reportManager = null;
 

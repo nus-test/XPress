@@ -52,14 +52,20 @@ public class ReportManager {
     }
 
     public void reportUnexpectedException(MainExecutor mainExecutor, String XPath, Exception e) throws IOException {
+        if(e.toString().contains("Value out of range"))
+            return;
         reportPotentialBug(mainExecutor, XPath);
         logToFile("incaseoriginalxml:" + mainExecutor.currentContext + "\n");
         logToFile("incaseoriginalxpath:" + XPath + "\n");
         logToFile("following incurred unexpected exception of:" + e + "\n");
-        reportPotentialBug(mainExecutor, XPath);
     }
 
     public void reportPotentialBug(MainExecutor mainExecutor, String XPath) throws IOException {
+        if(
+            mainExecutor.databaseExecutorNameMap.containsKey("BaseX") &&
+            (XPath.contains("tail(inner") || XPath.contains("head(inner") ||
+                    XPath.contains("tail(outer") || XPath.contains("head(outer"))
+        ) return;
         Map<String, String> answerSetMap = new HashMap<>();
         Map<String, String> errorMessageMap = new HashMap<>();
         id += 1;
