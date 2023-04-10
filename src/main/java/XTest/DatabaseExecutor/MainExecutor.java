@@ -70,7 +70,8 @@ public class MainExecutor {
         String lastDBName = null;
         //System.out.println(XPath);
         for(DatabaseExecutor databaseExecutor : databaseExecutorList) {
-            if(databaseExecutor.dbXPathVersion != GlobalSettings.xPathVersion)
+            if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3 &&
+                    databaseExecutor.dbXPathVersion != GlobalSettings.xPathVersion)
                 continue;
             List<Integer> currentNodeIdResultSet = null;
             try{

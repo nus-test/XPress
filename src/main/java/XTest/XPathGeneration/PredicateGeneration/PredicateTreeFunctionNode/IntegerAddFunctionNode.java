@@ -34,6 +34,9 @@ public class IntegerAddFunctionNode extends PredicateTreeFunctionNode implements
     }
 
     @Override
+    public String toStringOmit() { return "(. + " + childList.get(1) + ")"; }
+
+    @Override
     public IntegerAddFunctionNode newInstance() {
         return new IntegerAddFunctionNode();
     }

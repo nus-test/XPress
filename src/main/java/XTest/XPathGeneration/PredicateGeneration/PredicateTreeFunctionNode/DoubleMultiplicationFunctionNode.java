@@ -37,6 +37,13 @@ public class DoubleMultiplicationFunctionNode extends PredicateTreeFunctionNode 
         String rightChild = wrapNumericalBinaryFunctionExpr(childList.get(1), this);
         return leftChild + " * " + rightChild;
     }
+
+    @Override
+    public String toStringOmit() {
+        String rightChild = wrapNumericalBinaryFunctionExpr(childList.get(1), this);
+        return "(. * " + rightChild + ")";
+    }
+
     @Override
     public DoubleMultiplicationFunctionNode newInstance() {
         return new DoubleMultiplicationFunctionNode();

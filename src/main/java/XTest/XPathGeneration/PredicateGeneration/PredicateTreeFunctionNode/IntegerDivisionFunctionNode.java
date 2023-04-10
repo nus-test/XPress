@@ -36,6 +36,12 @@ public class IntegerDivisionFunctionNode extends PredicateTreeFunctionNode imple
     }
 
     @Override
+    public String toStringOmit() {
+        String rightChild = wrapNumericalBinaryFunctionExpr(childList.get(1), this);
+        return "(. idiv " + rightChild + ")";
+    }
+
+    @Override
     public IntegerDivisionFunctionNode newInstance() {
         return new IntegerDivisionFunctionNode();
     }

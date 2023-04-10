@@ -110,12 +110,12 @@ public enum XMLDirectSubcontext {
             return new PredicateTreeConstantNode(xmlDatatype, content, XPathExpr);
         }
         prob = GlobalRandom.getInstance().nextDouble();
-        if(prob < 0.5) {
+        if(prob < 0.5 || GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_1) {
             XMLDirectSubcontext subContextType = GlobalRandom.getInstance().getRandomFromList(directSubContextListWithoutAttr);
             if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_1 &&
                     subContextType == HAS_CHILDREN)
                 subContextType = POSITION;
-            if(!allowTextContent && subContextType == TEXT) subContextType = HAS_CHILDREN;
+            if(!allowTextContent && subContextType == TEXT) subContextType = POSITION;
             PredicateTreeNodeFromContextGenerator predicateTreeNodeFromContextGenerator = subContextType.predicateTreeNodeGenerator;
             PredicateTreeConstantNode constNode = predicateTreeNodeFromContextGenerator
                     .generatePredicateTreeNodeFromContext(currentNode);
@@ -133,7 +133,7 @@ public enum XMLDirectSubcontext {
 
     public static ElementNode getAttrOrText(ContextNode currentNode) {
         double prob = GlobalRandom.getInstance().nextDouble();
-        if(prob < 0.3) return currentNode;
+        if(prob < 0.3 || GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_1) return currentNode;
         return GlobalRandom.getInstance().getRandomFromList(currentNode.attributeList);
     }
 }

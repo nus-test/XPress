@@ -42,5 +42,8 @@ public class DoubleAddFunctionNode extends PredicateTreeFunctionNode implements 
     }
 
     @Override
+    public String toStringOmit() { return "(. + " + childList.get(1) + ")"; }
+
+    @Override
     public String calculationString() { return childList.get(0).dataContent + " + " + childList.get(1).dataContent; }
 }

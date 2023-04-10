@@ -14,6 +14,8 @@ import XTest.XMLGeneration.AttributeNode;
 import XTest.XMLGeneration.ContextNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateGenerator;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeConstantNode;
+import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.NoActionFunctionNode;
+import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.PredicateTreeFunctionNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 import XTest.XPathGeneration.XPathGenerator;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -60,6 +62,7 @@ public class SubcontextExtractor {
         String XPathExpr;
         boolean valueFormat = false;
         boolean numericValueFound = false;
+        XMLDatatype valueDatatype = null;
         List<ContextNode> selectedNodeList;
 
         String executableXPathExpr;
@@ -73,6 +76,7 @@ public class SubcontextExtractor {
                     + sequenceList.get(1) + ")";
             executableXPathExpr = XPathExpr;
             predicateTreeConstantNode = new PredicateTreeConstantNode(XMLDatatype.INTEGER, "0", XPathExpr);
+            valueDatatype = XMLDatatype.INTEGER;
         }
         else {
             XPathExpr = xPathGenerator.generateXPath(selectCurrentNodeXPath, Arrays.asList(currentNode), 2, false);
@@ -111,14 +115,27 @@ public class SubcontextExtractor {
                         numericValueFound = true;
                         XPathExpr += "/" + predicateTreeConstantNode;
                     }
+                    valueDatatype = predicateTreeConstantNode.datatype;
                     tried += 1;
                 }
-                if(!numericValueFound) XPathExpr = savedXPathExpr;
                 valueFormat = true;
             }
         }
         if(selectApplicationProb > 0.5) {
             XPathExpr = selectSequence(XPathExpr, valueFormat, selectCurrentNodeXPath + "/" + XPathExpr, GlobalRandom.getInstance().nextInt(2));
+        }
+        double mapProb = GlobalRandom.getInstance().nextDouble();
+        if(mapProb < 0.3 && valueFormat) {
+            PredicateTreeFunctionNode predicateTreeFunctionNode = PredicateTreeFunctionNode.getRandomPredicateTreeFunctionNode(valueDatatype);
+            if(!(predicateTreeFunctionNode instanceof NoActionFunctionNode)) {
+                int tot = Integer.parseInt(mainExecutor.executeSingleProcessor("count(" + selectCurrentNodeXPath + "/" + XPathExpr + ")", defaultDBName));
+                int selectedIndex = GlobalRandom.getInstance().nextInt(tot) + 1;
+                String constantResult = mainExecutor.executeSingleProcessor("string((" + selectCurrentNodeXPath + "/" + XPathExpr + ")[" + selectedIndex + "])", defaultDBName);
+                PredicateTreeConstantNode constantNode = new PredicateTreeConstantNode(valueDatatype, constantResult);
+                predicateTreeFunctionNode.fillContents(constantNode);
+                XPathExpr = "(" + XPathExpr + "!" + predicateTreeFunctionNode.toStringOmit() + ")";
+                numericValueFound = predicateTreeFunctionNode.datatype.getValueHandler() instanceof XMLNumeric;
+            }
         }
         double aggregateProb = GlobalRandom.getInstance().nextDouble();
         if(numericValueFound && aggregateProb < 0.8) {

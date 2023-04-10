@@ -44,4 +44,10 @@ public class DoubleDivisionFunctionNode extends PredicateTreeFunctionNode implem
     }
     @Override
     public String calculationString() { return childList.get(0).dataContent + " div " + childList.get(1).dataContent; }
+
+    @Override
+    public String toStringOmit() {
+        String rightChild = wrapNumericalBinaryFunctionExpr(childList.get(1), this);
+        return "(. div " + rightChild + ")";
+    }
 }

@@ -38,6 +38,12 @@ public class IntegerMultiplicationFunctionNode extends PredicateTreeFunctionNode
     }
 
     @Override
+    public String toStringOmit() {
+        String rightChild = wrapNumericalBinaryFunctionExpr(childList.get(1), this);
+        return "(. * " + rightChild + ")";
+    }
+
+    @Override
     public IntegerMultiplicationFunctionNode newInstance() {
         return new IntegerMultiplicationFunctionNode();
     }

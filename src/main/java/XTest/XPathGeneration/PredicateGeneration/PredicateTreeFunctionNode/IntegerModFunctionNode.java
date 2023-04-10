@@ -38,6 +38,13 @@ public class IntegerModFunctionNode extends PredicateTreeFunctionNode implements
         String rightChild = wrapNumericalBinaryFunctionExpr(childList.get(1), this);
         return leftChild + " mod " + rightChild;
     }
+
+    @Override
+    public String toStringOmit() {
+        String rightChild = wrapNumericalBinaryFunctionExpr(childList.get(1), this);
+        return "(. mod " + rightChild + ")";
+    }
+
     @Override
     public String calculationString() { return childList.get(0).dataContent + " mod " + childList.get(1).dataContent; }
 }

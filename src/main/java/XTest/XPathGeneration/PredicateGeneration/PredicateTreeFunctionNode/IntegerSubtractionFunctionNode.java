@@ -32,6 +32,11 @@ public class IntegerSubtractionFunctionNode extends PredicateTreeFunctionNode im
     }
 
     @Override
+    public String toStringOmit() {
+        return "(. - " + childList.get(1) + ")";
+    }
+
+    @Override
     public IntegerSubtractionFunctionNode newInstance() {
         return new IntegerSubtractionFunctionNode();
     }

@@ -89,7 +89,18 @@ public abstract class PredicateTreeFunctionNode extends PredicateTreeNode {
 
     @Override
     public String toString() {
+        double prob = GlobalRandom.getInstance().nextDouble();
+        if(prob < 0.3) {
+            return "(" +  childList.get(0) + ") => " + XPathExpr + "(" + getListString(childList.subList(1, childList.size())) + ")";
+        }
         return this.XPathExpr + "(" + getListString(childList) + ")";
+    }
+
+    public String toStringOmit() {
+        if(childList.size() == 1) {
+            return XPathExpr + "(.)";
+        }
+        return XPathExpr + "(., " + getListString(childList.subList(1, childList.size())) + ")";
     }
 
 
