@@ -10,8 +10,12 @@ public class PredicateTreeConstantNode extends PredicateTreeNode implements Unar
 
     public PredicateTreeConstantNode(XMLDatatype xmlDatatype, String context) {
         this(xmlDatatype, context, context);
-        if(this.datatype == XMLDatatype.STRING)
+        if(datatype == XMLDatatype.STRING)
             this.XPathExpr = "\"" + context + "\"";
+        if(datatype == XMLDatatype.DURATION)
+            XPathExpr = "xs:duration('" + context + "')";
+        if(datatype == XMLDatatype.BOOLEAN)
+            XPathExpr = context + "()";
     }
 
     public PredicateTreeConstantNode(XMLDatatype xmlDatatype, String context, String XPathExpr) {

@@ -113,8 +113,8 @@ public class SubcontextExtractor {
                             starredNode, currentAllowTextContent);
                     if(predicateTreeConstantNode.datatype.getValueHandler() instanceof XMLNumeric) {
                         numericValueFound = true;
-                        XPathExpr += "/" + predicateTreeConstantNode;
                     }
+                    XPathExpr += "/" + predicateTreeConstantNode;
                     valueDatatype = predicateTreeConstantNode.datatype;
                     tried += 1;
                 }

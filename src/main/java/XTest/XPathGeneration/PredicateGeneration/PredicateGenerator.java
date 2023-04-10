@@ -113,8 +113,6 @@ public class PredicateGenerator {
 
     public PredicateTreeConstantNode getConstantNodeFromContent(PredicateTreeFunctionNode functionNode) {
         String randomConstantValue = functionNode.generateRandomCompareValueFromContent();
-        if(functionNode.datatype == XMLDatatype.BOOLEAN)
-            randomConstantValue += "()";
         PredicateTreeConstantNode constNode = new PredicateTreeConstantNode(
                 functionNode.datatype, randomConstantValue);
         return constNode;
@@ -143,10 +141,14 @@ public class PredicateGenerator {
         PredicateTreeFunctionNode functionNode = noAction ? new NoActionFunctionNode() :
                 PredicateTreeFunctionNode.getRandomPredicateTreeFunctionNode(inputNode.datatype);
         if(inputNode.datatype == XMLDatatype.STRING && inputNode.dataContent.equals("")) {
-            if(functionNode instanceof SubstringFunctionNode ||
-               functionNode instanceof EndsWithFunctionNode  ||
-               functionNode instanceof StartsWithFunctionNode ||
-               functionNode instanceof ContainsFunctionNode)
+            if(
+                functionNode instanceof SubstringFunctionNode ||
+                functionNode instanceof EndsWithFunctionNode  ||
+                functionNode instanceof StartsWithFunctionNode ||
+                functionNode instanceof ContainsFunctionNode ||
+                functionNode instanceof SubstringAfterFunctionNode ||
+                functionNode instanceof SubstringBeforeFunctionNode
+            )
                 functionNode = new NoActionFunctionNode();
         }
         functionNode.fillContents(inputNode);
