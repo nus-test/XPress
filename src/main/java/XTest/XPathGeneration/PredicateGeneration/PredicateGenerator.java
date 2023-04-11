@@ -39,7 +39,8 @@ public class PredicateGenerator {
             throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, UnexpectedExceptionThrownException, InstantiationException, IllegalAccessException {
         String currentNodeIdentifier = "[@id=\"" + randomNode.id + "\"]";
         PredicateTreeNode currentRoot = null;
-        for(int i = 0; i < maxPhraseLength; i ++) {
+        int phraseLength = GlobalRandom.getInstance().nextInt(maxPhraseLength) + 1;
+        for(int i = 0; i < phraseLength; i ++) {
             PredicateTreeNode singlePhraseNode = generateSinglePhrase(XPathPrefix, currentNodeIdentifier, randomNode, allowTextContentFlag, complexFlag);
             boolean flag = false;
             if(currentRoot == null) {
@@ -98,7 +99,7 @@ public class PredicateGenerator {
         singlePhraseNode.join(functionNode, constNode);
         //System.out.println("?????" + XPathPrefixFull);
         //System.out.println("-----" + singlePhraseNode);
-        List<Integer> executionResult = mainExecutor.executeSingleProcessorGetIdList(XPathPrefixFull + "[" + singlePhraseNode + "]" + currentNodeIdentifier, "BaseX");
+        List<Integer> executionResult = mainExecutor.executeSingleProcessorGetIdList(XPathPrefixFull + "[" + singlePhraseNode + "]" + currentNodeIdentifier, "Saxon");
         if(!executionResult.contains(currentNode.id)) {
             double prob = GlobalRandom.getInstance().nextDouble();
             if(prob < 0.4) {

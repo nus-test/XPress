@@ -79,7 +79,6 @@ public class MainExecutor {
                 currentNodeIdResultSet.sort(Integer::compareTo);
             }catch(Exception e) {
                 System.out.println("Unknown exception thrown!");
-                if(reportManager != null) reportManager.reportUnexpectedException(this, XPath, e);
                 throw new UnexpectedExceptionThrownException(e);
             }
             if(nodeIdResultSet != null) {
@@ -134,8 +133,10 @@ public class MainExecutor {
         try {
             resultList = databaseExecutor.executeGetNodeIdList(XPath);
         } catch (Exception e) {
-            if(reportManager != null)
-                reportManager.reportUnexpectedException(this, XPath, e);
+            if(reportManager != null) {
+                if(databaseExecutor.dbName == null || databaseExecutor.dbName != "Exist")
+                    reportManager.reportUnexpectedException(this, XPath, e);
+            }
             else {
                 System.out.println("---------------- Unexpected Exception Thrown ------------------");
                 System.out.println(currentContext);
@@ -162,8 +163,10 @@ public class MainExecutor {
         try {
             result = databaseExecutor.execute(XPath);
         } catch(Exception e) {
-            if(reportManager != null)
-                reportManager.reportUnexpectedException(this, XPath, e);
+            if(reportManager != null) {
+                if(databaseExecutor.dbName == null || databaseExecutor.dbName != "Exist")
+                    reportManager.reportUnexpectedException(this, XPath, e);
+            }
             else {
                 System.out.println("---------------- Unexpected Exception Thrown ------------------");
                 System.out.println(currentContext);

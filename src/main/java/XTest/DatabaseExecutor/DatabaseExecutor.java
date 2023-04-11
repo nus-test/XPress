@@ -2,6 +2,7 @@ package XTest.DatabaseExecutor;
 
 import XTest.CommonUtils;
 import XTest.GlobalSettings;
+import XTest.ReportGeneration.KnownBugs;
 import XTest.TempTest.MySQLSimple;
 import XTest.TestException.UnsupportedContextSetUpException;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -92,8 +93,7 @@ public abstract class DatabaseExecutor {
 
     public static List<Integer> getNodeIdList(String resultString, String dbName) {
         List<Integer> resultList = getNodeIdList(resultString);
-        // Exist: wait for bug resolve!
-        if(dbName != null && dbName == "Exist") {
+        if(dbName != null && dbName.equals("Exist") && KnownBugs.exist4811) {
             Set<Integer> s = new LinkedHashSet<>(resultList);
             resultList.clear();
             resultList.addAll(s);

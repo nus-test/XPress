@@ -8,25 +8,19 @@ import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLIntegerHandler;
 import XTest.PrimitiveDatatype.XMLNumeric;
 import XTest.PrimitiveDatatype.XMLSequenceHandler;
+import XTest.ReportGeneration.KnownBugs;
 import XTest.TestException.MismatchingResultException;
 import XTest.TestException.UnexpectedExceptionThrownException;
-import XTest.XMLGeneration.AttributeNode;
 import XTest.XMLGeneration.ContextNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateGenerator;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeConstantNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.NoActionFunctionNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.PredicateTreeFunctionNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 import XTest.XPathGeneration.XPathGenerator;
 import net.sf.saxon.s9api.SaxonApiException;
-import org.basex.query.value.item.Int;
 import org.xmldb.api.base.XMLDBException;
 
-import javax.xml.xpath.XPath;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,7 +28,7 @@ public class SubcontextExtractor {
     MainExecutor mainExecutor;
     XPathGenerator xPathGenerator;
 
-    List<String> nodeSequenceTransformationList = Arrays.asList("sort", "reverse", "subsequence");
+    List<String> sequenceTransformationList = Arrays.asList("sort", "reverse", "subsequence");
     List<String> sequenceSelectionList = Arrays.asList("head", "tail");
     List<String> nodeSequenceSelectionList = Arrays.asList("innermost", "outermost");
     List<String> valueSequenceSelectionList = Arrays.asList("distinct-values");
@@ -162,8 +156,8 @@ public class SubcontextExtractor {
             return XPathExpr;
         }
         Integer nodeSize = Integer.parseInt(mainExecutor.executeSingleProcessor("count(" + executableXPathExpr + ")", defaultDBName));
-        int id = GlobalRandom.getInstance().nextInt(nodeSequenceTransformationList.size());
-        String function = nodeSequenceTransformationList.get(id);
+        int id = GlobalRandom.getInstance().nextInt(sequenceTransformationList.size());
+        String function = sequenceTransformationList.get(id);
         if(function.equals("subsequence")) {
             Pair pair = GlobalRandom.getInstance().nextInterval(nodeSize);
             int length = pair.y - pair.x + 1;
@@ -194,7 +188,7 @@ public class SubcontextExtractor {
         if(prob < 0.5) {
             function = GlobalRandom.getInstance().getRandomFromList(sequenceSelectionList);
             if(function.equals("tail")) {
-                if(nodeSize == 1) function = "head";
+                if((KnownBugs.exist && KnownBugs.exist4830) || nodeSize == 1) function = "head";
             }
         } else if(valueFormat) {
             function = GlobalRandom.getInstance().getRandomFromList(valueSequenceSelectionList);

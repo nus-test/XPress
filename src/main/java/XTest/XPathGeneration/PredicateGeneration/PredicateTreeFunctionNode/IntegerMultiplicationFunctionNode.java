@@ -16,7 +16,7 @@ public class IntegerMultiplicationFunctionNode extends PredicateTreeFunctionNode
         String value;
         Integer inputValue = Math.abs(Integer.parseInt(inputNode.dataContent));
         if(inputValue == 0) {
-            value = Integer.toString(GlobalRandom.getInstance().nextInt());
+            value = Integer.toString(GlobalRandom.getInstance().nextInt(1000));
         }
         else {
             Integer boundValue = Integer.MAX_VALUE / inputValue;

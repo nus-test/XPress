@@ -55,7 +55,7 @@ public class ExistExecutor extends DatabaseExecutor {
     public void setContextByFileLow(String fileAddr) throws IOException, XMLDBException {
         collection = DatabaseManager.getCollection(URI + rootDir + "/" + collName);
         collection.setProperty(OutputKeys.INDENT, "no");
-        resource = (XMLResource) collection.createResource("autotest", XMLResource.RESOURCE_TYPE);
+        resource = (XMLResource) collection.createResource("autotest.xml", XMLResource.RESOURCE_TYPE);
         File f = new File(fileAddr);
         resource.setContent(f);
         collection.storeResource(resource);

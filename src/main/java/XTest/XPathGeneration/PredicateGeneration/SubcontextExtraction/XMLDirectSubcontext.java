@@ -4,6 +4,7 @@ import XTest.DatabaseExecutor.MainExecutor;
 import XTest.GlobalRandom;
 import XTest.GlobalSettings;
 import XTest.PrimitiveDatatype.*;
+import XTest.ReportGeneration.KnownBugs;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XMLGeneration.AttributeNode;
 import XTest.XMLGeneration.ContextNode;
@@ -41,6 +42,9 @@ public enum XMLDirectSubcontext {
         for(XMLDirectSubcontext directSubcontext : XMLDirectSubcontext.values()) {
             if(directSubcontext == ATTRIBUTE)
                 continue;
+            if(KnownBugs.exist && KnownBugs.exist4824 && (directSubcontext == POSITION || directSubcontext == LAST)) {
+                continue;
+            }
             directSubContextListWithoutAttr.add(directSubcontext);
         }
     }
@@ -55,7 +59,7 @@ public enum XMLDirectSubcontext {
                                                                 ContextNode currentNode, boolean allowTextContent)
             throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
         double prob = GlobalRandom.getInstance().nextDouble();
-        if(prob < 0.3 && currentNode.childWithLeafList.size() != 0) {
+        if(prob < 0.3 && currentNode.childWithLeafList.size() != 0 && KnownBugs.exist == false) {
             String pathToLeaf = currentNode.getStrPathToSpecifiedLeafNode();
             String currentNodeIdentifier = "//*[@id=\"" + currentNode.id + "\"]";
             String XPathExpr = currentNodeIdentifier + "/" + pathToLeaf;
@@ -116,7 +120,10 @@ public enum XMLDirectSubcontext {
             if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_1 &&
                     subContextType == HAS_CHILDREN)
                 subContextType = POSITION;
-            if(!allowTextContent && subContextType == TEXT) subContextType = POSITION;
+            if(!allowTextContent && subContextType == TEXT) {
+                if(!KnownBugs.exist || !KnownBugs.exist4824) subContextType = POSITION;
+                else subContextType = HAS_CHILDREN;
+            }
             PredicateTreeNodeFromContextGenerator predicateTreeNodeFromContextGenerator = subContextType.predicateTreeNodeGenerator;
             PredicateTreeConstantNode constNode = predicateTreeNodeFromContextGenerator
                     .generatePredicateTreeNodeFromContext(currentNode);

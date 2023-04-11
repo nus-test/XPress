@@ -24,28 +24,28 @@ public class Main {
         List<DatabaseExecutor> dbExecuterList = new ArrayList<>();
 
         dbExecuterList.add(BaseXExecutor.getInstance());
-        //dbExecuterList.add(ExistExecutor.getInstance());
+        dbExecuterList.add(ExistExecutor.getInstance());
         dbExecuterList.add(SaxonExecutor.getInstance());
      //   dbExecuterList.add(LibXML2Executor.getInstance());
 //        dbExecuterList.add(OracleExecutor.getInstance());
         for(DatabaseExecutor dbExecutor: dbExecuterList)
             dbExecutor.registerDatabase(mainExecutor);
-        int round = 40;
+        int round = 70;
         XMLDocumentGenerator xmlDocumentGenerator = new XMLDocumentGenerator();
         try {
             for (int i = 0; i < round; i++) {
                 xmlDocumentGenerator.clearContext();
-                XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(50);
+                XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(70);
                 XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
                 System.out.println("------------------ " + i);
                 System.out.println(xmlContext.getXmlContent());
                 try {
-                    int xpathCnt = 150;
+                    int xpathCnt = 5;
                     mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
                     for (int j = 0; j < xpathCnt; j++) {
                         String XPath = "";
                         try {
-                            XPath = XPathGenerator.getXPath(GlobalRandom.getInstance().nextInt(6) + 2);
+                            XPath = XPathGenerator.getXPath(GlobalRandom.getInstance().nextInt(3) + 2);
                         } catch (MismatchingResultException | UnexpectedExceptionThrownException e) {
                             XPath = e.toString();
                             if(e instanceof UnexpectedExceptionThrownException)

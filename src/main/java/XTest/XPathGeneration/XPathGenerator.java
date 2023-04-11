@@ -2,6 +2,7 @@ package XTest.XPathGeneration;
 
 import XTest.DatabaseExecutor.MainExecutor;
 import XTest.GlobalRandom;
+import XTest.ReportGeneration.KnownBugs;
 import XTest.TestException.MismatchingResultException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XMLGeneration.ContextNode;
@@ -44,9 +45,7 @@ public class XPathGenerator {
         if(prob < 0.5) {
             if(availablePrefixes.get(0).equals("/")) {
                 prob = GlobalRandom.getInstance().nextDouble();
-                // Exist: waiting for resolve!
-                //int id = prob < 0.5 ? 0 : 1;
-                int id = 0;
+                int id = prob < 0.5 ? 0 : 1;
                 prefix = availablePrefixes.get(id);
             }
         }
@@ -73,7 +72,7 @@ public class XPathGenerator {
         }
         nodeIdList = mainExecutor.executeAndCompare(builder);
         selectedNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
-        if(prob < 0.2) {
+        if(prob < 0.2 && (!KnownBugs.exist)) {
             XPathResultListPair XPathResultListPair = indexSearchAttempt(builder, selectedNodeList);
             builder = XPathResultListPair.XPath;
             selectedNodeList = XPathResultListPair.contextNodeList;
@@ -87,7 +86,7 @@ public class XPathGenerator {
             selectedNodeList = predicateContext.executionResult;
         }
         prob = GlobalRandom.getInstance().nextDouble();
-        if(prob < 0.3) {
+        if(prob < 0.3 && (!KnownBugs.exist)) {
             if(selectedNodeList.size() == 0) {
                 System.out.println("***********");
                 System.out.println(builder);

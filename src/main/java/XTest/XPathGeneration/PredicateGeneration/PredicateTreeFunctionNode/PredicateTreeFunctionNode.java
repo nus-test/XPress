@@ -6,6 +6,7 @@ import XTest.GlobalRandom;
 import XTest.GlobalSettings;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLIntegerHandler;
+import XTest.ReportGeneration.KnownBugs;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -30,14 +31,19 @@ public abstract class PredicateTreeFunctionNode extends PredicateTreeNode {
         PredicateTreeFunctionNode.insertFunctionToMap(new SubstringFunctionNode(), XMLDatatype.STRING);
         PredicateTreeFunctionNode.insertFunctionToMap(new TranslateFunctionNode(), XMLDatatype.STRING);
         PredicateTreeFunctionNode.insertFunctionToMap(new StringLengthFunctionNode(), XMLDatatype.STRING);
-        PredicateTreeFunctionNode.insertFunctionToMap(new ContainsFunctionNode(), XMLDatatype.STRING);
-        PredicateTreeFunctionNode.insertFunctionToMap(new StartsWithFunctionNode(), XMLDatatype.STRING);
+
+        if(!KnownBugs.exist || !KnownBugs.exist4810) {
+            PredicateTreeFunctionNode.insertFunctionToMap(new ContainsFunctionNode(), XMLDatatype.STRING);
+            PredicateTreeFunctionNode.insertFunctionToMap(new StartsWithFunctionNode(), XMLDatatype.STRING);
+        }
+
         PredicateTreeFunctionNode.insertFunctionToMap(new NormalizeSpaceFunctionNode(), XMLDatatype.STRING);
         PredicateTreeFunctionNode.insertFunctionToMap(new SubstringBeforeFunctionNode(), XMLDatatype.STRING);
         PredicateTreeFunctionNode.insertFunctionToMap(new SubstringAfterFunctionNode(), XMLDatatype.STRING);
 
         if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3) {
-            PredicateTreeFunctionNode.insertFunctionToMap(new EndsWithFunctionNode(), XMLDatatype.STRING);
+            if(!KnownBugs.exist || !KnownBugs.exist4810)
+                PredicateTreeFunctionNode.insertFunctionToMap(new EndsWithFunctionNode(), XMLDatatype.STRING);
         }
 
         PredicateTreeFunctionNode.insertFunctionToMap(new IntegerAddFunctionNode(), XMLDatatype.INTEGER);
