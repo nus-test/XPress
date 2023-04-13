@@ -7,6 +7,7 @@ import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.TestException.UnsupportedContextSetUpException;
 import XTest.XMLGeneration.XMLContext;
 import XTest.XMLGeneration.XMLDocumentGenerator;
+import XTest.XMLGeneration.XMLStructuredDocumentGenerator;
 import XTest.XPathGeneration.XPathGenerator;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
@@ -23,24 +24,29 @@ public class Main {
 
         List<DatabaseExecutor> dbExecuterList = new ArrayList<>();
 
-        dbExecuterList.add(BaseXExecutor.getInstance());
-        dbExecuterList.add(ExistExecutor.getInstance());
+       // dbExecuterList.add(BaseXExecutor.getInstance());
+     //   dbExecuterList.add(ExistExecutor.getInstance());
         dbExecuterList.add(SaxonExecutor.getInstance());
-     //   dbExecuterList.add(LibXML2Executor.getInstance());
+        dbExecuterList.add(LibXML2Executor.getInstance());
 //        dbExecuterList.add(OracleExecutor.getInstance());
         for(DatabaseExecutor dbExecutor: dbExecuterList)
             dbExecutor.registerDatabase(mainExecutor);
-        int round = 70;
-        XMLDocumentGenerator xmlDocumentGenerator = new XMLDocumentGenerator();
+        int round = 1000;
+        XMLDocumentGenerator xmlDocumentGenerator;
+        if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3)
+            xmlDocumentGenerator = new XMLDocumentGenerator();
+        else {
+            xmlDocumentGenerator = new XMLStructuredDocumentGenerator();
+        }
         try {
             for (int i = 0; i < round; i++) {
                 xmlDocumentGenerator.clearContext();
-                XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(70);
+                XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(120);
                 XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
                 System.out.println("------------------ " + i);
                 System.out.println(xmlContext.getXmlContent());
                 try {
-                    int xpathCnt = 5;
+                    int xpathCnt = 50;
                     mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
                     for (int j = 0; j < xpathCnt; j++) {
                         String XPath = "";

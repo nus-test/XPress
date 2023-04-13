@@ -17,7 +17,7 @@ public class BaseCharIDStyleNameGeneratorImpl implements NameGenerator {
         }
     }
     @Override
-    public String GenerateName() {
+    public String generateName() {
         int alphabetId = GlobalRandom.getInstance().nextInt(26);
         char prefix = (char) (baseChar + alphabetId);
         String name = prefix + Integer.toString(alphabetCntList.get(alphabetId));

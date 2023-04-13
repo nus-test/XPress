@@ -86,6 +86,8 @@ public class PredicateGenerator {
                                                   boolean allowTextContentFlag, boolean complexFlag)
             throws SQLException, XMLDBException, IOException, SaxonApiException, UnexpectedExceptionThrownException, MismatchingResultException, InstantiationException, IllegalAccessException {
         PredicateTreeConstantNode inputNode = getSubcontextFromContextNode(XPathPrefixFull, currentNodeIdentifier, currentNode, allowTextContentFlag, complexFlag);
+        if(inputNode.datatype == XMLDatatype.NODE)
+            return inputNode;
         int depth = GlobalRandom.getInstance().nextInt(4);
         PredicateTreeFunctionNode functionNode = generateFunctionExpression(inputNode, depth);
         //System.out.println(functionNode + " " + functionNode.getClass());

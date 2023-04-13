@@ -2,6 +2,7 @@ package XTest.XPathGeneration;
 
 import XTest.DatabaseExecutor.MainExecutor;
 import XTest.GlobalRandom;
+import XTest.GlobalSettings;
 import XTest.ReportGeneration.KnownBugs;
 import XTest.TestException.MismatchingResultException;
 import XTest.TestException.UnexpectedExceptionThrownException;
@@ -64,7 +65,7 @@ public class XPathGenerator {
         ContextNode randomNode = GlobalRandom.getInstance().getRandomFromList(selectedNodeList);
         double prob2 = GlobalRandom.getInstance().nextDouble();
         boolean allowTextContentFlag = false;
-        if(prob2 < 0.6)
+        if(prob2 < 0.6 && GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3)
             builder += "*";
         else {
             builder += randomNode.tagName;
@@ -72,13 +73,13 @@ public class XPathGenerator {
         }
         nodeIdList = mainExecutor.executeAndCompare(builder);
         selectedNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
-        if(prob < 0.2 && (!KnownBugs.exist)) {
+        if(prob < 0.15 && (!KnownBugs.exist)) {
             XPathResultListPair XPathResultListPair = indexSearchAttempt(builder, selectedNodeList);
             builder = XPathResultListPair.XPath;
             selectedNodeList = XPathResultListPair.contextNodeList;
         }
         prob = GlobalRandom.getInstance().nextDouble();
-        if(prob < 0.7) {
+        if(prob < 0.6) {
             randomNode = GlobalRandom.getInstance().getRandomFromList(selectedNodeList);
             PredicateContext predicateContext = predicateGenerator.generatePredicate(builder, 3, randomNode,
                     allowTextContentFlag, complex);
@@ -86,7 +87,7 @@ public class XPathGenerator {
             selectedNodeList = predicateContext.executionResult;
         }
         prob = GlobalRandom.getInstance().nextDouble();
-        if(prob < 0.3 && (!KnownBugs.exist)) {
+        if(prob < 0.2 && (!KnownBugs.exist)) {
             if(selectedNodeList.size() == 0) {
                 System.out.println("***********");
                 System.out.println(builder);

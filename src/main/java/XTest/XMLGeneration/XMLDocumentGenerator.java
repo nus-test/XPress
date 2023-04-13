@@ -66,9 +66,9 @@ public class XMLDocumentGenerator {
     ContextNode generateXMLDocument(int contextNodeSize) {
         ContextNode root = contextTreeGenerator.GenerateRandomTree(contextNodeSize);
         int templateSize = contextNodeSize / 2;
-        contextNodeTemplateList = contextTemplateGenerator.GenerateContextTemplate(templateSize);
+        contextNodeTemplateList = contextTemplateGenerator.generateContextTemplate(templateSize);
         int leafTemplateSize = max(1, contextNodeSize / 3);
-        leafContextNodeTemplateList = contextTemplateGenerator.GenerateContextTemplate(leafTemplateSize);
+        leafContextNodeTemplateList = contextTemplateGenerator.generateContextTemplate(leafTemplateSize);
         assignTemplateToNode(root);
         return root;
     }
@@ -80,19 +80,23 @@ public class XMLDocumentGenerator {
         ContextNode templateNode = GlobalRandom.getInstance().getRandomFromList(currentNode.hasLeaf
                  ? leafContextNodeTemplateList : contextNodeTemplateList);
         currentNode.assignTemplate(templateNode);
-        currentNode.assignRandomValue();
-        for(AttributeNode attributeNode: currentNode.attributeList) {
-            if(attributeNode.tagName == "id")
-                attributeNode.dataContext = Integer.toString(currentNode.id);
-            else
-                attributeNode.assignRandomValue();
-        }
+        assignValueToNode(currentNode);
         for(ContextNode childNode: currentNode.childList) {
             assignTemplateToNode(childNode);
             if(childNode.hasLeaf) {
                 currentNode.hasLeaf = true;
                 currentNode.childWithLeafList.add(childNode);
             }
+        }
+    }
+
+    void assignValueToNode(ContextNode currentNode) {
+        currentNode.assignRandomValue();
+        for(AttributeNode attributeNode: currentNode.attributeList) {
+            if(attributeNode.tagName == "id")
+                attributeNode.dataContext = Integer.toString(currentNode.id);
+            else
+                attributeNode.assignRandomValue();
         }
     }
 
@@ -103,7 +107,8 @@ public class XMLDocumentGenerator {
         contextTemplateGenerator = new ContextTemplateGeneratorImpl(contextNodeNameGenerator,
                         attributeTemplateGenerator);
         for(XMLDatatype datatype : XMLDatatype.values()) {
-            datatype.getValueHandler().clear();
+            if(datatype != XMLDatatype.NODE)
+                datatype.getValueHandler().clear();
         }
     }
 }

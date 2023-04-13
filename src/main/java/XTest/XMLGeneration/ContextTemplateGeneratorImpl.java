@@ -18,9 +18,9 @@ public class ContextTemplateGeneratorImpl implements ContextTemplateGenerator {
     }
 
     @Override
-    public List<ContextNode> GenerateContextTemplate(int templateSize) {
-        int attributeSize = (int) (templateSize * 0.8);
-        List<AttributeNode> attributeTemplateList = attributeTemplateGenerator.GenerateAttributeTemplate(attributeSize);
+    public List<ContextNode> generateContextTemplate(int templateSize) {
+        int attributeSize = (int) (templateSize * 0.8) + 1;
+        List<AttributeNode> attributeTemplateList = attributeTemplateGenerator.generateAttributeTemplate(attributeSize);
         List<ContextNode> contextTemplateList = new ArrayList<>();
         for(int i = 0; i < templateSize; i ++) {
             ContextNode contextNode = new ContextNode();
@@ -35,7 +35,7 @@ public class ContextTemplateGeneratorImpl implements ContextTemplateGenerator {
                 );
                 contextNode.addAttribute(attributeNode);
             }
-            contextNode.tagName = contextNodeNameGenerator.GenerateName();
+            contextNode.tagName = contextNodeNameGenerator.generateName();
             contextNode.dataType = XMLDatatype.getRandomDataType();
             contextTemplateList.add(contextNode);
         }

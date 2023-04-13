@@ -8,7 +8,7 @@ public class GlobalRandom {
     Random random;
     private GlobalRandom() {
         random = new Random();
-        random.setSeed(19588441);
+        random.setSeed(279758447);
     }
 
     public static GlobalRandom getInstance() {
@@ -58,8 +58,20 @@ public class GlobalRandom {
         return intList.stream().limit(length).collect(Collectors.toList());
     }
 
+    public List<Integer> nextIntListWithRep(int length, int maxBound) {
+        List<Integer> intList = new ArrayList<>();
+        for(int i = 0; i < length; i ++)
+            intList.add(nextInt(maxBound));
+        return intList;
+    }
+
     public <T> T getRandomFromList(List<T> list) {
         int id = nextInt(0, list.size());
         return list.get(id);
+    }
+
+    public <T> List<T> shuffleList(List<T> list) {
+        Collections.shuffle(list, random);
+        return list;
     }
 }

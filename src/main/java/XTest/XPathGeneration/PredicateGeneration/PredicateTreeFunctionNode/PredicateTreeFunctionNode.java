@@ -110,7 +110,7 @@ public abstract class PredicateTreeFunctionNode extends PredicateTreeNode {
     @Override
     public String toString() {
         double prob = GlobalRandom.getInstance().nextDouble();
-        if(prob < 0.3) {
+        if(prob < 0.3 && GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3) {
             return "(" +  childList.get(0) + ") => " + XPathExpr + "(" + getListString(childList.subList(1, childList.size())) + ")";
         }
         return this.XPathExpr + "(" + getListString(childList) + ")";

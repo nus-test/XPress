@@ -10,7 +10,8 @@ public enum XMLDatatype {
     STRING(2, new XMLStringHandler()),
     BOOLEAN(3, new XMLBooleanHandler()),
     DOUBLE(4, new XMLDoubleHandler()),
-    DURATION(5, new XMLDurationHandler());
+    DURATION(5, new XMLDurationHandler()),
+    NODE(6, null);
 
     int id;
     ValueHandler valueHandler;
@@ -23,7 +24,10 @@ public enum XMLDatatype {
 
     static {
         for(XMLDatatype xmlDatatype : XMLDatatype.values()) {
-            dataTypeList.add(xmlDatatype);
+            if(xmlDatatype == DURATION && GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_1)
+                continue;
+            if(xmlDatatype != NODE)
+                dataTypeList.add(xmlDatatype);
         }
     }
 

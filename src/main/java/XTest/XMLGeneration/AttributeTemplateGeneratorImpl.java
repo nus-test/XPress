@@ -13,7 +13,7 @@ public class AttributeTemplateGeneratorImpl implements AttributeTemplateGenerato
     }
 
     @Override
-    public List<AttributeNode> GenerateAttributeTemplate(int templateSize) {
+    public List<AttributeNode> generateAttributeTemplate(int templateSize) {
         List<AttributeNode> attributeNodeList = new ArrayList<>();
         AttributeNode attributeID = new AttributeNode();
         attributeID.tagName = "id";
@@ -22,7 +22,7 @@ public class AttributeTemplateGeneratorImpl implements AttributeTemplateGenerato
 
         for(int i = 1; i < templateSize; i ++) {
             AttributeNode attributeNode = new AttributeNode();
-            attributeNode.tagName = nameGenerator.GenerateName();
+            attributeNode.tagName = nameGenerator.generateName();
             attributeNode.dataType = XMLDatatype.getRandomDataType();
             attributeNodeList.add(attributeNode);
         }

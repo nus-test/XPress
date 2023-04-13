@@ -1,8 +1,6 @@
 package XTest.XPathGeneration;
 
 import XTest.XMLGeneration.ContextNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
-import org.basex.query.expr.Arr;
 
 import java.util.*;
 
@@ -39,9 +37,9 @@ public class PrefixQualifier {
                 if (node.childId != 1)
                     havePrecedingSibling = true;
             }
-            if(node.haveFollowing)
+            if(node.hasFollowing)
                 haveFollowing = true;
-            if(node.havePreceding)
+            if(node.hasPreceding)
                 havePreceding = true;
         }
         if(haveChildNode) {

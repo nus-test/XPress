@@ -3,5 +3,5 @@ package XTest.XMLGeneration;
 import java.util.List;
 
 public interface AttributeTemplateGenerator {
-    List<AttributeNode> GenerateAttributeTemplate(int templateSize);
+    List<AttributeNode> generateAttributeTemplate(int templateSize);
 }
