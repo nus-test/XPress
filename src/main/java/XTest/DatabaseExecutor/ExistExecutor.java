@@ -83,7 +83,7 @@ public class ExistExecutor extends DatabaseExecutor {
         while (i.hasMoreResources()) {
             try {
                 resultRes = i.nextResource();
-                resultString += resultRes.getContent();
+                resultString += resultRes.getContent() + " ";
             } finally {
                 //dont forget to cleanup resources
                 try {

@@ -15,6 +15,35 @@ public class XMLStringHandler extends PooledValueHandler implements XMLComparabl
     }
 
     public String mutateValue(String value) {
+        double prob = GlobalRandom.getInstance().nextDouble();
+        if(prob < 0.3) {
+            int randomStringLength = GlobalRandom.getInstance().nextInt(3) + 1;
+            String randomString = getRandomValue(randomStringLength);
+            prob = GlobalRandom.getInstance().nextDouble();
+            if(prob < 0.5) value += randomString;
+            else value = randomString + value;
+        }
+        else {
+            prob = GlobalRandom.getInstance().nextDouble();
+            if(prob < 0.5) {
+                String randomString = getRandomValueFromPool();
+                prob = GlobalRandom.getInstance().nextDouble();
+                if(prob < 0.5) value += randomString;
+                else value = randomString + value;
+            }
+            else {
+                if(value.length() != 0) {
+                    int index = GlobalRandom.getInstance().nextInt(value.length());
+                    if (index == 0)
+                        value = getRandomCharacter() + value.substring(index);
+                    else if (index == value.length() - 1)
+                        value = value.substring(0, index) + getRandomCharacter();
+                    else
+                        value = value.substring(0, index) + getRandomCharacter() + value.substring(index);
+                }
+                else value = getRandomCharacter().toString();
+            }
+        }
         return value;
     }
 

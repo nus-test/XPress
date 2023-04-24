@@ -2,12 +2,10 @@ package XTest.DatabaseExecutor;
 
 import XTest.GlobalSettings;
 import XTest.TempTest.BaseXClient;
-import XTest.TempTest.BaseXSimple;
 import XTest.TestException.UnsupportedContextSetUpException;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
 
-import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
