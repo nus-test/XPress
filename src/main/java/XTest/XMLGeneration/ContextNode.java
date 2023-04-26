@@ -87,4 +87,24 @@ public class ContextNode extends ElementNode {
         path += childPath;
         return path;
     }
+
+    public String getStrPathToRandomChildNode(boolean child) {
+        if(childList.size() == 0) return "";
+        ContextNode childNode = GlobalRandom.getInstance().getRandomFromList(childList);
+        double prob = GlobalRandom.getInstance().nextDouble();
+        String childPath;
+        if(prob < 0.3 || !child) {
+            childPath = childNode.getStrPathToRandomChildNode(true);
+        }
+        else return "";
+        String path = childNode.tagName;
+        if(childPath != null && childPath.length() != 0)
+            path += "/";
+        path += childPath;
+        return path;
+    }
+
+    public String getStrPathToRandomChildNode() {
+        return getStrPathToRandomChildNode(false);
+    }
 }

@@ -24,11 +24,7 @@ public class NoActionFunctionNode extends PredicateTreeFunctionNode {
 
     @Override
     public String calculationString() {
-        String calculationStr = childList.get(0).dataContent;
-        if(childList.get(0).datatype == XMLDatatype.BOOLEAN)
-            calculationStr += "()";
-        else if(childList.get(0).datatype == XMLDatatype.STRING)
-            calculationStr = "\"" + calculationStr + "\"";
+        String calculationStr = XMLDatatype.wrapExpression(childList.get(0).dataContent, childList.get(0).datatype);
         return calculationStr;
     }
 }

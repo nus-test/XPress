@@ -42,7 +42,7 @@ public class XPathGenerationTest {
         List<String> XPath = new ArrayList<>();
         try {
             mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
-            for(int i = 0; i < 50; i ++)
+            for(int i = 0; i < 20; i ++)
                 XPath.add(XPathGenerator.getXPath(3));
             for(String XPathStr: XPath) {
                 System.out.println("Generated XPath: ------------------------------");

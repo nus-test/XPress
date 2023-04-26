@@ -1,22 +1,18 @@
 package XTest.XMLGeneration;
 
 public class XMLWriter {
-    String XMLWriter(ContextNode root) {
-        String XMLBuilder = new String();
-        return writeContext(XMLBuilder, root);
-    }
 
-    String newLine(String currentBuilder, Boolean withStructure) {
+    static public String newLine(String currentBuilder, Boolean withStructure) {
         if(withStructure) currentBuilder += "\n";
         return currentBuilder;
     }
 
-    String newTab(String currentBuilder, Boolean withStructure) {
+    static public String newTab(String currentBuilder, Boolean withStructure) {
         if(withStructure) currentBuilder += "\t";
         return currentBuilder;
     }
 
-    String writeContext(String currentBuilder, ContextNode currentNode, Boolean withStructure) {
+    static public String writeContext(String currentBuilder, ContextNode currentNode, Boolean withStructure) {
         String preSpace = "";
         if(withStructure)
             for(int i = 0; i < currentNode.depth; i ++)
@@ -40,11 +36,11 @@ public class XMLWriter {
         return currentBuilder;
     }
 
-    String writeContext(String currentBuilder, ContextNode currentNode) {
+    static public String writeContext(String currentBuilder, ContextNode currentNode) {
         return writeContext(currentBuilder, currentNode, false);
     }
 
-    String writeAttribute(String currentBuilder, AttributeNode currentNode) {
+    static public String writeAttribute(String currentBuilder, AttributeNode currentNode) {
         currentBuilder += currentNode.tagName + "=\"" + currentNode.dataContext + "\"";
         return currentBuilder;
     }

@@ -10,11 +10,8 @@ import XTest.XMLGeneration.AttributeNode;
 import XTest.XMLGeneration.ContextNode;
 import XTest.XMLGeneration.ElementNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeConstantNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
-import XTest.XPathGeneration.PredicateGeneration.SubcontextExtraction.DirectSubcontextContantNodeGeneration.*;
+import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.PredicateTreeContextNodeFunctionNode.*;
 import net.sf.saxon.s9api.SaxonApiException;
-import org.basex.query.value.item.Int;
-import org.basex.query.value.item.Str;
 import org.xmldb.api.base.XMLDBException;
 
 import java.io.IOException;
@@ -22,18 +19,17 @@ import java.sql.SQLException;
 import java.util.*;
 
 public enum XMLDirectSubcontext {
-    TEXT(1, new TextPredicateTreeNodeGenerator()),
-    LAST(2, new LastPredicateTreeNodeGenerator()),
-    POSITION(3, new PositionPredicateTreeNodeGenerator()),
-    HAS_CHILDREN(4, new HasChildrenConstantNodeGenerator()),
-    ATTRIBUTE(5, new AttributePredicateTreeNodeGenerator());
+    TEXT(1, new TextFunctionNode()),
+    LAST(2, new LastFunctionNode()),
+    POSITION(3, new PositionFunctionNode()),
+    HAS_CHILDREN(4, new HasChildrenFunctionNode()),
+    ATTRIBUTE(5, new AttributeFunctionNode());
 
     static List<XMLDirectSubcontext> directSubContextListWithoutAttr = new ArrayList<>();
-    static int typeCnt = 5;
     int id;
-    PredicateTreeNodeFromContextGenerator predicateTreeNodeGenerator;;
+    PredicateTreeContextNodeFunctionNode predicateTreeNodeGenerator;;
 
-    XMLDirectSubcontext(int id, PredicateTreeNodeFromContextGenerator predicateTreeConstantNodeGenerator) {
+    XMLDirectSubcontext(int id, PredicateTreeContextNodeFunctionNode predicateTreeConstantNodeGenerator) {
         this.id = id;
         this.predicateTreeNodeGenerator = predicateTreeConstantNodeGenerator;
     }
@@ -49,7 +45,7 @@ public enum XMLDirectSubcontext {
         }
     }
 
-    public PredicateTreeNodeFromContextGenerator getPredicateTreeNodeGenerator() {
+    public PredicateTreeContextNodeFunctionNode getPredicateTreeNodeGenerator() {
         return predicateTreeNodeGenerator;
     }
 
@@ -111,10 +107,7 @@ public enum XMLDirectSubcontext {
             if(xmlDatatype == XMLDatatype.DURATION) xmlDatatype = XMLDatatype.INTEGER;
             String content = xmlDatatype.getValueHandler().getValue(false);
             String XPathExpr = content;
-            if(xmlDatatype == XMLDatatype.STRING)
-                XPathExpr = "\"" + XPathExpr + "\"";
-            if(xmlDatatype == XMLDatatype.BOOLEAN)
-                XPathExpr += "()";
+            XPathExpr = XMLDatatype.wrapExpression(XPathExpr, xmlDatatype);
             XPathExpr = "(" + XPathExpr + ")";
             return new PredicateTreeConstantNode(xmlDatatype, content, XPathExpr);
         }
@@ -128,12 +121,12 @@ public enum XMLDirectSubcontext {
                 if(!KnownBugs.exist || !KnownBugs.exist4824) subContextType = POSITION;
                 else subContextType = HAS_CHILDREN;
             }
-            PredicateTreeNodeFromContextGenerator predicateTreeNodeFromContextGenerator = subContextType.predicateTreeNodeGenerator;
-            PredicateTreeConstantNode constNode = predicateTreeNodeFromContextGenerator
+            PredicateTreeContextNodeFunctionNode predicateTreeContextNodeFunctionNode = subContextType.predicateTreeNodeGenerator;
+            PredicateTreeConstantNode constNode = predicateTreeContextNodeFunctionNode
                     .generatePredicateTreeNodeFromContext(currentNode);
             if(subContextType != TEXT) {
                 String result = mainExecutor.executeSingleProcessor(
-                        predicateTreeNodeFromContextGenerator.getSubContentXPathGenerator(XPathPrefix, currentNode), "Saxon");
+                        predicateTreeContextNodeFunctionNode.getSubContentXPathGenerator(XPathPrefix, currentNode), "Saxon");
                 constNode.dataContent = constNode.datatype == XMLDatatype.INTEGER ?
                         Integer.toString(XMLIntegerHandler.parseInt(result)) : result;
             }

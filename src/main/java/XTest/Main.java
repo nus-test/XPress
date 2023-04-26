@@ -31,7 +31,7 @@ public class Main {
 //        dbExecuterList.add(OracleExecutor.getInstance());
         for(DatabaseExecutor dbExecutor: dbExecuterList)
             dbExecutor.registerDatabase(mainExecutor);
-        int round = 1000;
+        int round = 5;
         XMLDocumentGenerator xmlDocumentGenerator;
         if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3)
             xmlDocumentGenerator = new XMLDocumentGenerator();

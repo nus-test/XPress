@@ -12,7 +12,7 @@ public class XMLStructuredDocumentGenerator extends XMLDocumentGenerator {
     int tot = 1;
 
     @Override
-    ContextNode generateXMLDocument(int contextNodeSize) {
+    public ContextNode generateXMLDocument(int contextNodeSize) {
         ContextNode root = generateStructuredXMLDocument(contextNodeSize);
         markPrecedingFollowing(root, ContextTreeGeneratorImpl.MarkChoice.PRECEDING);
         markPrecedingFollowing(root, ContextTreeGeneratorImpl.MarkChoice.FOLLOWING);

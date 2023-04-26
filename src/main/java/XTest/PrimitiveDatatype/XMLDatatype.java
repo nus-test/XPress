@@ -11,7 +11,9 @@ public enum XMLDatatype {
     BOOLEAN(3, new XMLBooleanHandler()),
     DOUBLE(4, new XMLDoubleHandler()),
     DURATION(5, new XMLDurationHandler()),
-    NODE(6, null);
+    NODE(6, null),
+    SEQUENCE(7, null),
+    MIXED_SEQUENCE(8, null);
 
     int id;
     ValueHandler valueHandler;
@@ -26,7 +28,7 @@ public enum XMLDatatype {
         for(XMLDatatype xmlDatatype : XMLDatatype.values()) {
             if(xmlDatatype == DURATION && GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_1)
                 continue;
-            if(xmlDatatype != NODE)
+            if(xmlDatatype != NODE && xmlDatatype != SEQUENCE && xmlDatatype != MIXED_SEQUENCE)
                 dataTypeList.add(xmlDatatype);
         }
     }
@@ -40,5 +42,13 @@ public enum XMLDatatype {
 
     public ValueHandler getValueHandler() {
         return valueHandler;
+    }
+
+    public static String wrapExpression(String value, XMLDatatype xmlDatatype) {
+        if(xmlDatatype == XMLDatatype.BOOLEAN)
+            value += "()";
+        else if(xmlDatatype == XMLDatatype.STRING)
+            value = "\"" + value + "\"";
+        return value;
     }
 }

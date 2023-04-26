@@ -11,6 +11,9 @@ import static org.apache.commons.lang3.math.NumberUtils.min;
 public class ContextTemplateGeneratorImpl implements ContextTemplateGenerator {
     NameGenerator contextNodeNameGenerator;
     AttributeTemplateGenerator attributeTemplateGenerator;
+    List<AttributeNode> attributeTemplateList;
+
+
     ContextTemplateGeneratorImpl(NameGenerator contextNodeNameGenerator,
                                  AttributeTemplateGenerator attributeTemplateGenerator) {
         this.contextNodeNameGenerator = contextNodeNameGenerator;
@@ -19,8 +22,12 @@ public class ContextTemplateGeneratorImpl implements ContextTemplateGenerator {
 
     @Override
     public List<ContextNode> generateContextTemplate(int templateSize) {
-        int attributeSize = (int) (templateSize * 0.8) + 1;
-        List<AttributeNode> attributeTemplateList = attributeTemplateGenerator.generateAttributeTemplate(attributeSize);
+        int attributeSize;
+        if(attributeTemplateList == null) {
+            attributeSize = (int) (templateSize * 0.8) + 1;
+            attributeTemplateList = attributeTemplateGenerator.generateAttributeTemplate(attributeSize);
+        }
+        else attributeSize = attributeTemplateList.size();
         List<ContextNode> contextTemplateList = new ArrayList<>();
         for(int i = 0; i < templateSize; i ++) {
             ContextNode contextNode = new ContextNode();

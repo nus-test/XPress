@@ -50,7 +50,6 @@ public class SubcontextExtractor {
         if(prob < 0.3 || !complex || GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_1) {
             return XMLDirectSubcontext.getDirectSubContext(XPathPrefixFull, mainExecutor, currentNode, allowTextContentFlag);
         }
-
         prob = GlobalRandom.getInstance().nextDouble();
         PredicateTreeConstantNode predicateTreeConstantNode = null;
         String XPathExpr;
@@ -74,8 +73,9 @@ public class SubcontextExtractor {
         }
         else {
             XPathExpr = xPathGenerator.generateXPath(selectCurrentNodeXPath, Arrays.asList(currentNode), 2, false);
-            if(XPathExpr == null)
+            if(XPathExpr == null) {
                 return XMLDirectSubcontext.getDirectSubContext(XPathPrefixFull, mainExecutor, currentNode, allowTextContentFlag);
+            }
             // XPathExpr: //*[id="4"] //xxxx
             executableXPathExpr = XPathExpr;
             XPathExpr = XPathExpr.substring(selectCurrentNodeXPath.length());
@@ -147,8 +147,7 @@ public class SubcontextExtractor {
         XMLDatatype resultType = XMLDatatype.INTEGER;
         XPathExpr = "count(" + XPathExpr + ")";
         String result = mainExecutor.executeSingleProcessor(selectCurrentNodeXPath + "/" + XPathExpr, defaultDBName);
-        predicateTreeConstantNode = new PredicateTreeConstantNode(resultType, result, XPathExpr);
-        return predicateTreeConstantNode;
+        return new PredicateTreeConstantNode(resultType, result, XPathExpr);
     }
 
     String transformSequence(String XPathExpr, String executableXPathExpr, int depth) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {

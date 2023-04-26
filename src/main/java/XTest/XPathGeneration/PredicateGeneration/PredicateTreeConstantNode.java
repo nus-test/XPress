@@ -23,6 +23,13 @@ public class PredicateTreeConstantNode extends PredicateTreeNode implements Unar
         this.XPathExpr = XPathExpr;
     }
 
+    public PredicateTreeConstantNode(XMLDatatype xmlDatatype, XMLDatatype subXMLDatatype, String context, String XPathExpr) {
+        datatype = xmlDatatype;
+        subDatatype = subXMLDatatype;
+        dataContent = context;
+        this.XPathExpr = XPathExpr;
+    }
+
     public PredicateTreeConstantNode(ElementNode elementNode) {
         this(elementNode, null);
     }

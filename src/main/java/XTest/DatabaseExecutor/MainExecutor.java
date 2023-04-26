@@ -2,6 +2,7 @@ package XTest.DatabaseExecutor;
 
 import XTest.CommonUtils;
 import XTest.GlobalSettings;
+import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.ReportGeneration.ReportManager;
 import XTest.TestException.MismatchingResultException;
 import XTest.TestException.UnexpectedExceptionThrownException;
@@ -10,6 +11,7 @@ import XTest.XMLGeneration.ContextNode;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
 
+import javax.naming.Context;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -19,6 +21,7 @@ public class MainExecutor {
 
     String fileAddr = "C:\\app\\log\\autotest.xml";
     public Map<Integer, ContextNode> contextNodeMap = new HashMap<>();
+    public List<ContextNode> extraLeafNodeList = new ArrayList<>();
     public List<DatabaseExecutor> databaseExecutorList = new ArrayList<>();
     public Map<String, DatabaseExecutor> databaseExecutorNameMap = new HashMap<>();
     public String currentContext;
@@ -33,6 +36,13 @@ public class MainExecutor {
         contextNodeMap = new HashMap<>();
         getContextNodeMap(root);
         setXPathGenerationContext(xmlDataContent);
+    }
+
+    public void setExtraLeafNodeContext(List<ContextNode> contextNodeList) {
+        for(ContextNode contextNode : contextNodeList) {
+            contextNodeMap.put(contextNode.id, contextNode);
+            extraLeafNodeList.add(contextNode);
+        }
     }
 
     public void setXPathGenerationContext(String xmlDataContent) throws IOException, SQLException, XMLDBException, SaxonApiException, UnsupportedContextSetUpException {

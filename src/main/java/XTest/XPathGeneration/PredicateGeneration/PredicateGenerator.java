@@ -129,6 +129,9 @@ public class PredicateGenerator {
 
     public PredicateTreeFunctionNode generateFunctionExpression(PredicateTreeNode inputNode, int depth) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
         PredicateTreeFunctionNode functionNode = null;
+        if(inputNode.toString().equals("null()")) {
+            System.out.println("Warning");
+        }
         if(depth == 0) {
             functionNode = generateFunctionExpression(inputNode, true);
         }

@@ -9,6 +9,7 @@ import java.util.List;
 import static java.lang.Math.max;
 
 public class XMLDocumentGenerator {
+    int maxId = 0;
     ContextTreeGenerator contextTreeGenerator = new ContextTreeGeneratorImpl();
 
     NameGenerator contextNodeNameGenerator = new BaseCharIDStyleNameGeneratorImpl('A');
@@ -33,8 +34,7 @@ public class XMLDocumentGenerator {
     }
 
     String getXMLDocument(ContextNode root) {
-        XMLWriter xmlWriter = new XMLWriter();
-        return xmlWriter.writeContext(new String(), root);
+        return XMLWriter.writeContext(new String(), root);
     }
 
     String getXMLDocumentWithStructure(int contextNodeSize) {
@@ -63,14 +63,25 @@ public class XMLDocumentGenerator {
         return new XMLContext(root, xmlData);
     }
 
-    ContextNode generateXMLDocument(int contextNodeSize) {
+    public ContextNode generateXMLDocument(int contextNodeSize) {
         ContextNode root = contextTreeGenerator.GenerateRandomTree(contextNodeSize);
         int templateSize = contextNodeSize / 2;
         contextNodeTemplateList = contextTemplateGenerator.generateContextTemplate(templateSize);
         int leafTemplateSize = max(1, contextNodeSize / 3);
         leafContextNodeTemplateList = contextTemplateGenerator.generateContextTemplate(leafTemplateSize);
         assignTemplateToNode(root);
+        maxId = contextNodeSize;
         return root;
+    }
+
+    public List<ContextNode> generateExtraLeafNodes(int contextNodeSize) {
+        List<ContextNode> contextNodeList = contextTemplateGenerator.generateContextTemplate(contextNodeSize);
+        for(ContextNode contextNode : contextNodeList) {
+            maxId += 1;
+            contextNode.id = maxId;
+            assignValueToNode(contextNode);
+        }
+        return contextNodeList;
     }
 
     void assignTemplateToNode(ContextNode currentNode) {
@@ -90,7 +101,7 @@ public class XMLDocumentGenerator {
         }
     }
 
-    void assignValueToNode(ContextNode currentNode) {
+    static void assignValueToNode(ContextNode currentNode) {
         currentNode.assignRandomValue();
         for(AttributeNode attributeNode: currentNode.attributeList) {
             if(attributeNode.tagName == "id")
@@ -101,13 +112,14 @@ public class XMLDocumentGenerator {
     }
 
     public void clearContext() {
+        maxId = 0;
         contextNodeNameGenerator = new BaseCharIDStyleNameGeneratorImpl('A');
         attributeNodeNameGenerator = new BaseCharIDStyleNameGeneratorImpl('a');
         attributeTemplateGenerator = new AttributeTemplateGeneratorImpl(attributeNodeNameGenerator);
         contextTemplateGenerator = new ContextTemplateGeneratorImpl(contextNodeNameGenerator,
                         attributeTemplateGenerator);
         for(XMLDatatype datatype : XMLDatatype.values()) {
-            if(datatype != XMLDatatype.NODE)
+            if(datatype.getValueHandler() != null)
                 datatype.getValueHandler().clear();
         }
     }
