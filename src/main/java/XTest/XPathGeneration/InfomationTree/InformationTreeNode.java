@@ -1,14 +1,22 @@
 package XTest.XPathGeneration.InfomationTree;
 
 import XTest.PrimitiveDatatype.XMLDatatype;
+import XTest.TestException.DebugErrorException;
+import XTest.XPathGeneration.InfomationTree.InformationTreeFunctionNode.InformationTreeDirectContentFunctionNode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class InformationTreeNode {
     /**
+     * Cached XPathExpr with no constant substitution.
+     */
+    String XPathExpr = null;
+
+    /**
      * Datatype of result of the current information tree node
      */
-    XMLDatatype xmlDatatype;
+    protected XMLDatatype xmlDatatype;
 
     /**
      * If tree node represents a sequence, denotes the datatype of the elements in sequence
@@ -23,19 +31,25 @@ public abstract class InformationTreeNode {
     /**
      * If is sequence type, contains the length of sequence for the starred node
      */
-    String length;
+    int length;
 
     /**
-     * If subtree contains a context node is set to true.
-     */
-    boolean containsContext = false; // Check if subtree contains a context node
-    /**
-     * If within subtree an ancestor node of the context node is with calculated context value is set to true.
+     * If within subtree there is no context node or an ancestor node of the context node is
+     * with calculated context value is set to true.
      */
     boolean containsContextConstant = false;
+
+    /**
+     * Starred node id which is recorded in the unique context node.
+     */
     int starredNodeId = -1;
-    InformationTreeNode contextChildNode = null;
-    List<InformationTreeNode> paramChildNode = null;
+    /**
+     * If set to true unique context node refers to the starred node in context of XPath prefix.
+     * Else refers to a derived sequence from the starred node with itself as the context.
+     */
+    boolean selfContext = true;
+
+    public List<InformationTreeNode> childList = new ArrayList<>();
 
     /**
      *
@@ -43,7 +57,11 @@ public abstract class InformationTreeNode {
      * e.g. for current XPath expression /A with a generated tree to express lower-case(@name) = "xx",
      * root node calling this method should return string "lower-case(@name) = "xx"".
      */
-    String getXPathExpression() { return getXPathExpression(false); }
+    String getXPathExpression() {
+        if(XPathExpr != null) return XPathExpr;
+        XPathExpr = getXPathExpression(false);
+        return XPathExpr;
+    }
 
     /**
      *
@@ -52,25 +70,44 @@ public abstract class InformationTreeNode {
      */
     String getXPathExpression(boolean returnConstant) { return null; }
 
+    @Override
+    public String toString() {
+        return getXPathExpression();
+    }
+
+    /**
+     * Cache the XPath expression calculated for current subtree with no constant replacement.
+     * @param XPathExpr Calculated XPath expression
+     * @param returnConstant XPath expression calculated w/o constant replacement
+     */
+    void cacheXPathExpression(String XPathExpr, boolean returnConstant) {
+        if(!returnConstant) this.XPathExpr = XPathExpr;
+    }
+
     /**
      *
      * @return The calculation string which could compute the correct result for the starred node of
      * current information tree. For nodes which returns a sequence calculates the sequence length instead of
      * actual value.
      */
-    String getCalculationString() {
+    String getCalculationString() throws DebugErrorException {
         String calculationString = "";
-        if(!containsContext) calculationString = getXPathExpression(false);
-        else if(containsContextConstant) calculationString = getXPathExpression(true);
-        else {
-            calculationString = getCurrentLevelCalculationString();
-        }
+        if(containsContextConstant) calculationString = getXPathExpression(true);
+        else if(!selfContext) {
+            calculationString = "//*[id = \"" + starredNodeId + "\"]/" + getXPathExpression();
+        } else if(this instanceof InformationTreeDirectContentFunctionNode)
+            calculationString = ((InformationTreeDirectContentFunctionNode) this).getCurrentLevelCalculationString();
+        else throw new DebugErrorException();
         if(xmlDatatype == XMLDatatype.SEQUENCE)
             calculationString = "count(" + calculationString + ")";
         return calculationString;
     }
 
-    String getCurrentLevelCalculationString() {
-        return null;
+    /**
+     *
+     * @return Context of subtree represented by current node.
+     */
+    String getContext() {
+        return context;
     }
 }
