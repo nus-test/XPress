@@ -30,26 +30,26 @@ public class XPathGenerator {
         sequenceGenerator = new SequenceGenerator(mainExecutor);
     }
 
-    public String generateXPath(String currentBuilder, List<ContextNode> currentNodeList, int depth, boolean complex)
+    public String generateXPath(XPathResultListPair starterBuildPair, int depth, boolean complex)
             throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, UnexpectedExceptionThrownException, InstantiationException, IllegalAccessException {
         if(depth == 0) {
-            return currentBuilder;
+            return starterBuildPair.XPath;
         }
-        String builder = currentBuilder;
+
+        XPathResultListPair currentBuildPair = new XPathResultListPair(starterBuildPair);
         // First stage
-        List<String> availablePrefixes = prefixQualifier.getPrefixes(currentNodeList, !complex);
+        List<String> availablePrefixes = prefixQualifier.getPrefixes(starterBuildPair.contextNodeList, !complex);
         if(availablePrefixes.isEmpty()) {
             // Something wrong might be happening?
             return null;
         }
 
         List<Integer> nodeIdList;
-        List<ContextNode> selectedNodeList;
         boolean allowTextContentFlag = false;
         ContextNode randomNode;
 
         double prob = GlobalRandom.getInstance().nextDouble();
-        if(prob < 0.8 || currentBuilder.length() == 0 || mainExecutor.extraLeafNodeList == null) {
+        if(prob < 0.8 || starterBuildPair.XPath.length() == 0 || mainExecutor.extraLeafNodeList == null) {
             String prefix = GlobalRandom.getInstance().getRandomFromList(availablePrefixes);
             prob = GlobalRandom.getInstance().nextDouble();
             if (prob < 0.5) {
@@ -59,60 +59,55 @@ public class XPathGenerator {
                     prefix = availablePrefixes.get(id);
                 }
             }
-            if (currentBuilder.length() == 0) {
+            if (starterBuildPair.XPath.length() == 0) {
                 prefix = "//";
             }
-            builder += prefix;
-            String tempBuilder = builder + "*";
+            currentBuildPair.XPath += prefix;
+            String tempBuilder = currentBuildPair.XPath + "*";
             nodeIdList = mainExecutor.executeAndCompare(tempBuilder);
-            selectedNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
+            currentBuildPair.contextNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
             //Unwanted situation!
-            if (selectedNodeList.size() == 0)
+            if (currentBuildPair.contextNodeList.size() == 0)
                 return tempBuilder;
 
             prob = GlobalRandom.getInstance().nextDouble();
-            randomNode = GlobalRandom.getInstance().getRandomFromList(selectedNodeList);
+            randomNode = GlobalRandom.getInstance().getRandomFromList(currentBuildPair.contextNodeList);
             double prob2 = GlobalRandom.getInstance().nextDouble();
             if (prob2 < 0.6 && GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3)
-                builder += "*";
+                currentBuildPair.XPath += "*";
             else {
-                builder += randomNode.tagName;
+                currentBuildPair.XPath += randomNode.tagName;
                 allowTextContentFlag = true;
             }
-            nodeIdList = mainExecutor.executeAndCompare(builder);
-            selectedNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
+            nodeIdList = mainExecutor.executeAndCompare(currentBuildPair.XPath);
+            currentBuildPair.contextNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
         } else {
             int length = GlobalRandom.getInstance().nextInt(5) + 1;
-            PredicateTreeConstantNode directSequence = sequenceGenerator.generateNodeSequenceFromContext(length, currentNodeList);
-            builder += "/" + directSequence.dataContent;
-            nodeIdList = mainExecutor.executeAndCompare(builder);
-            selectedNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
+            PredicateTreeConstantNode directSequence = sequenceGenerator.generateNodeSequenceFromContext(length, starterBuildPair.contextNodeList);
+            currentBuildPair.XPath += "/" + directSequence.dataContent;
+            nodeIdList = mainExecutor.executeAndCompare(currentBuildPair.XPath);
+            currentBuildPair.contextNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
         }
         if(prob < 0.15 && (!KnownBugs.exist)) {
-            XPathResultListPair XPathResultListPair = indexSearchAttempt(builder, selectedNodeList);
-            builder = XPathResultListPair.XPath;
-            selectedNodeList = XPathResultListPair.contextNodeList;
+            currentBuildPair = indexSearchAttempt(currentBuildPair.XPath, currentBuildPair.contextNodeList);
         }
         prob = GlobalRandom.getInstance().nextDouble();
         if(prob < 0.6) {
-            randomNode = GlobalRandom.getInstance().getRandomFromList(selectedNodeList);
-            PredicateContext predicateContext = predicateGenerator.generatePredicate(builder, 3, randomNode,
+            randomNode = GlobalRandom.getInstance().getRandomFromList(currentBuildPair.contextNodeList);
+            PredicateContext predicateContext = predicateGenerator.generatePredicate(currentBuildPair.XPath, 3, randomNode,
                     allowTextContentFlag, complex);
-            builder += predicateContext.predicate;
-            selectedNodeList = predicateContext.executionResult;
+            currentBuildPair.XPath += predicateContext.predicate;
+            currentBuildPair.contextNodeList = predicateContext.executionResult;
         }
         prob = GlobalRandom.getInstance().nextDouble();
         if(prob < 0.2 && (!KnownBugs.exist)) {
-            if(selectedNodeList.size() == 0) {
-                System.out.println("***********");
-                System.out.println(builder);
-                System.out.println("&&&&&&&&&&");
-            }
-            XPathResultListPair XPathResultListPair = indexSearchAttempt(builder, selectedNodeList);
-            builder = XPathResultListPair.XPath;
-            selectedNodeList = XPathResultListPair.contextNodeList;
+            currentBuildPair = indexSearchAttempt(currentBuildPair.XPath, currentBuildPair.contextNodeList);
         }
-        return generateXPath(builder, selectedNodeList, depth - 1, complex);
+        return generateXPath(currentBuildPair, depth - 1, complex);
+    }
+
+    public String generateXPath(String currentBuilder, List<ContextNode> currentNodeList, int depth, boolean complex) throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, UnexpectedExceptionThrownException, InstantiationException, IllegalAccessException {
+        return generateXPath(new XPathResultListPair(currentBuilder, currentNodeList), depth, complex);
     }
 
     public String generateXPath(String currentBuilder, List<ContextNode> currentNodeList, int depth) throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, UnexpectedExceptionThrownException, InstantiationException, IllegalAccessException {
@@ -148,6 +143,14 @@ public class XPathGenerator {
         XPathResultListPair(String XPath, List<ContextNode> contextNodeList) {
             this.XPath = XPath;
             this.contextNodeList = contextNodeList;
+        }
+
+        XPathResultListPair(XPathResultListPair xPathResultListPair) {
+            XPath = xPathResultListPair.XPath;
+            if(xPathResultListPair.contextNodeList == null)
+                contextNodeList = null;
+            else
+                contextNodeList = new ArrayList<ContextNode>(xPathResultListPair.contextNodeList);
         }
     }
 }
