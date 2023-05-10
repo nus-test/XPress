@@ -89,9 +89,11 @@ public class XPathGenerator {
             currentBuildPair.contextNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
         }
         if(prob < 0.15 && (!KnownBugs.exist)) {
-            currentBuildPair = indexSearchAttempt(currentBuildPair.XPath, currentBuildPair.contextNodeList);
+            currentBuildPair = indexSearchAttempt(currentBuildPair);
         }
         prob = GlobalRandom.getInstance().nextDouble();
+
+        // Predicate application start
         if(prob < 0.6) {
             randomNode = GlobalRandom.getInstance().getRandomFromList(currentBuildPair.contextNodeList);
             PredicateContext predicateContext = predicateGenerator.generatePredicate(currentBuildPair.XPath, 3, randomNode,
@@ -99,10 +101,11 @@ public class XPathGenerator {
             currentBuildPair.XPath += predicateContext.predicate;
             currentBuildPair.contextNodeList = predicateContext.executionResult;
         }
+        // Predicate application end
+
         prob = GlobalRandom.getInstance().nextDouble();
-        if(prob < 0.2 && (!KnownBugs.exist)) {
-            currentBuildPair = indexSearchAttempt(currentBuildPair.XPath, currentBuildPair.contextNodeList);
-        }
+        if(prob < 0.2 && (!KnownBugs.exist))
+            currentBuildPair = indexSearchAttempt(currentBuildPair);
         return generateXPath(currentBuildPair, depth - 1, complex);
     }
 
@@ -118,7 +121,9 @@ public class XPathGenerator {
         return generateXPath("", null, depth);
     }
 
-    XPathResultListPair indexSearchAttempt(String builder, List<ContextNode> selectedNodeList) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
+    XPathResultListPair indexSearchAttempt(XPathResultListPair buildPair) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
+        String builder = buildPair.XPath;
+        List<ContextNode> selectedNodeList = buildPair.contextNodeList;
         int length = selectedNodeList.size();
         int id = 1, cnt = 0;
         List<ContextNode> nodeList = new ArrayList<>();
@@ -150,7 +155,7 @@ public class XPathGenerator {
             if(xPathResultListPair.contextNodeList == null)
                 contextNodeList = null;
             else
-                contextNodeList = new ArrayList<ContextNode>(xPathResultListPair.contextNodeList);
+                contextNodeList = new ArrayList<>(xPathResultListPair.contextNodeList);
         }
     }
 }
