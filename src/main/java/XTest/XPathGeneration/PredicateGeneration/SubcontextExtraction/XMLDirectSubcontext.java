@@ -27,11 +27,11 @@ public enum XMLDirectSubcontext {
 
     static List<XMLDirectSubcontext> directSubContextListWithoutAttr = new ArrayList<>();
     int id;
-    PredicateTreeContextNodeFunctionNode predicateTreeNodeGenerator;;
+    PredicateTreeContextNodeFunctionNode contextNodeFunctionNode;;
 
-    XMLDirectSubcontext(int id, PredicateTreeContextNodeFunctionNode predicateTreeConstantNodeGenerator) {
+    XMLDirectSubcontext(int id, PredicateTreeContextNodeFunctionNode contextNodeFunctionNode) {
         this.id = id;
-        this.predicateTreeNodeGenerator = predicateTreeConstantNodeGenerator;
+        this.contextNodeFunctionNode = contextNodeFunctionNode;
     }
 
     static {
@@ -45,8 +45,8 @@ public enum XMLDirectSubcontext {
         }
     }
 
-    public PredicateTreeContextNodeFunctionNode getPredicateTreeNodeGenerator() {
-        return predicateTreeNodeGenerator;
+    public PredicateTreeContextNodeFunctionNode getContextNodeFunctionNode() {
+        return contextNodeFunctionNode.newInstance();
     }
 
 
@@ -121,7 +121,7 @@ public enum XMLDirectSubcontext {
                 if(!KnownBugs.exist || !KnownBugs.exist4824) subContextType = POSITION;
                 else subContextType = HAS_CHILDREN;
             }
-            PredicateTreeContextNodeFunctionNode predicateTreeContextNodeFunctionNode = subContextType.predicateTreeNodeGenerator;
+            PredicateTreeContextNodeFunctionNode predicateTreeContextNodeFunctionNode = subContextType.contextNodeFunctionNode;
             PredicateTreeConstantNode constNode = predicateTreeContextNodeFunctionNode
                     .generatePredicateTreeNodeFromContext(currentNode);
             if(subContextType != TEXT) {
@@ -132,7 +132,7 @@ public enum XMLDirectSubcontext {
             }
             return constNode;
         } else {
-            return XMLDirectSubcontext.ATTRIBUTE.getPredicateTreeNodeGenerator().generatePredicateTreeNodeFromContext(currentNode);
+            return XMLDirectSubcontext.ATTRIBUTE.getContextNodeFunctionNode().generatePredicateTreeNodeFromContext(currentNode);
         }
     }
 

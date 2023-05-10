@@ -32,7 +32,9 @@ public class SequenceGenerator {
         for(int i = 0; i < length; i ++) {
             String node = generateSingleNodeExprFromContext(currentNodeList);
             if(!node.contains("<")) {
-                if(checkMap.containsKey(node)) node = generateSingleConstantNodeExpr();
+                if(checkMap.containsKey(node)) {
+                    continue;
+                }
                 else checkMap.put(node, true);
             }
             if(!start) stringBuild += ",";
@@ -91,7 +93,8 @@ public class SequenceGenerator {
         ContextNode starredNode = GlobalRandom.getInstance().getRandomFromList(currentNodeList);
         if(prob < 0.7 && starredNode.childList.size() != 0)
             return starredNode.getStrPathToRandomChildNode();
-        return generateSingleConstantNodeExpr();
+        return starredNode.getPath();
+        //return generateSingleConstantNodeExpr();
     }
     
     String generateSingleConstantNodeExpr() {

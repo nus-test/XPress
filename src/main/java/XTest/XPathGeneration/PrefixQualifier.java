@@ -25,7 +25,6 @@ public class PrefixQualifier {
             haveChildNode = true;
             currentNodes = new ArrayList<>();
         }
-
         for(ContextNode node : currentNodes) {
             if(!node.childList.isEmpty())
                 haveChildNode = true;

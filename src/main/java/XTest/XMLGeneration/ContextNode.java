@@ -88,6 +88,12 @@ public class ContextNode extends ElementNode {
         return path;
     }
 
+    public String getPath() {
+        if(parentNode == null)
+            return "/" + tagName;
+        return parentNode.getPath() + "/" + tagName;
+    }
+
     public String getStrPathToRandomChildNode(boolean child) {
         if(childList.size() == 0) return "";
         ContextNode childNode = GlobalRandom.getInstance().getRandomFromList(childList);

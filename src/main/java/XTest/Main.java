@@ -31,7 +31,7 @@ public class Main {
 //        dbExecuterList.add(OracleExecutor.getInstance());
         for(DatabaseExecutor dbExecutor: dbExecuterList)
             dbExecutor.registerDatabase(mainExecutor);
-        int round = 5;
+        int round = 1;
         XMLDocumentGenerator xmlDocumentGenerator;
         if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3)
             xmlDocumentGenerator = new XMLDocumentGenerator();
@@ -42,6 +42,7 @@ public class Main {
             for (int i = 0; i < round; i++) {
                 xmlDocumentGenerator.clearContext();
                 XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(120);
+                mainExecutor.setExtraLeafNodeContext(xmlDocumentGenerator.generateExtraLeafNodes(20));
                 XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
                 System.out.println("------------------ " + i);
                 System.out.println(xmlContext.getXmlContent());

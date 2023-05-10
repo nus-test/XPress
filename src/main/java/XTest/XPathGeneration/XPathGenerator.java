@@ -9,6 +9,7 @@ import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XMLGeneration.ContextNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateContext;
 import XTest.XPathGeneration.PredicateGeneration.PredicateGenerator;
+import XTest.XPathGeneration.PredicateGeneration.PredicateTreeConstantNode;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
 
@@ -20,11 +21,13 @@ import java.util.List;
 
 public class XPathGenerator {
     MainExecutor mainExecutor;
+    SequenceGenerator sequenceGenerator;
     PrefixQualifier prefixQualifier = new PrefixQualifier();
     PredicateGenerator predicateGenerator;
     public XPathGenerator(MainExecutor mainExecutor) {
         this.mainExecutor = mainExecutor;
-        this.predicateGenerator = new PredicateGenerator(mainExecutor, this);
+        predicateGenerator = new PredicateGenerator(mainExecutor, this);
+        sequenceGenerator = new SequenceGenerator(mainExecutor);
     }
 
     public String generateXPath(String currentBuilder, List<ContextNode> currentNodeList, int depth, boolean complex)
@@ -33,7 +36,6 @@ public class XPathGenerator {
             return currentBuilder;
         }
         String builder = currentBuilder;
-
         // First stage
         List<String> availablePrefixes = prefixQualifier.getPrefixes(currentNodeList, !complex);
         if(availablePrefixes.isEmpty()) {
@@ -41,38 +43,51 @@ public class XPathGenerator {
             return null;
         }
 
-        String prefix = GlobalRandom.getInstance().getRandomFromList(availablePrefixes);
-        double prob = GlobalRandom.getInstance().nextDouble();
-        if(prob < 0.5) {
-            if(availablePrefixes.get(0).equals("/")) {
-                prob = GlobalRandom.getInstance().nextDouble();
-                int id = prob < 0.5 ? 0 : 1;
-                prefix = availablePrefixes.get(id);
-            }
-        }
-        if(currentBuilder.length() == 0) {
-            prefix = "//";
-        }
-        builder += prefix;
-        String tempBuilder = builder + "*";
-        List<Integer> nodeIdList = mainExecutor.executeAndCompare(tempBuilder);
-        List<ContextNode> selectedNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
-        //Unwanted situation!
-        if(selectedNodeList.size() == 0)
-            return tempBuilder;
-
-        prob = GlobalRandom.getInstance().nextDouble();
-        ContextNode randomNode = GlobalRandom.getInstance().getRandomFromList(selectedNodeList);
-        double prob2 = GlobalRandom.getInstance().nextDouble();
+        List<Integer> nodeIdList;
+        List<ContextNode> selectedNodeList;
         boolean allowTextContentFlag = false;
-        if(prob2 < 0.6 && GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3)
-            builder += "*";
-        else {
-            builder += randomNode.tagName;
-            allowTextContentFlag = true;
+        ContextNode randomNode;
+
+        double prob = GlobalRandom.getInstance().nextDouble();
+        if(prob < 0.8 || currentBuilder.length() == 0 || mainExecutor.extraLeafNodeList == null) {
+            String prefix = GlobalRandom.getInstance().getRandomFromList(availablePrefixes);
+            prob = GlobalRandom.getInstance().nextDouble();
+            if (prob < 0.5) {
+                if (availablePrefixes.get(0).equals("/")) {
+                    prob = GlobalRandom.getInstance().nextDouble();
+                    int id = prob < 0.5 ? 0 : 1;
+                    prefix = availablePrefixes.get(id);
+                }
+            }
+            if (currentBuilder.length() == 0) {
+                prefix = "//";
+            }
+            builder += prefix;
+            String tempBuilder = builder + "*";
+            nodeIdList = mainExecutor.executeAndCompare(tempBuilder);
+            selectedNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
+            //Unwanted situation!
+            if (selectedNodeList.size() == 0)
+                return tempBuilder;
+
+            prob = GlobalRandom.getInstance().nextDouble();
+            randomNode = GlobalRandom.getInstance().getRandomFromList(selectedNodeList);
+            double prob2 = GlobalRandom.getInstance().nextDouble();
+            if (prob2 < 0.6 && GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3)
+                builder += "*";
+            else {
+                builder += randomNode.tagName;
+                allowTextContentFlag = true;
+            }
+            nodeIdList = mainExecutor.executeAndCompare(builder);
+            selectedNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
+        } else {
+            int length = GlobalRandom.getInstance().nextInt(5) + 1;
+            PredicateTreeConstantNode directSequence = sequenceGenerator.generateNodeSequenceFromContext(length, currentNodeList);
+            builder += "/" + directSequence.dataContent;
+            nodeIdList = mainExecutor.executeAndCompare(builder);
+            selectedNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
         }
-        nodeIdList = mainExecutor.executeAndCompare(builder);
-        selectedNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
         if(prob < 0.15 && (!KnownBugs.exist)) {
             XPathResultListPair XPathResultListPair = indexSearchAttempt(builder, selectedNodeList);
             builder = XPathResultListPair.XPath;
