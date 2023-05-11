@@ -1,6 +1,6 @@
-package XTest.XPathGeneration.InfomationTree.InformationTreeFunctionNode;
+package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode;
 
-import XTest.XPathGeneration.InfomationTree.InformationTreeNode;
+import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 import static XTest.StringUtils.getListString;
 
@@ -8,7 +8,7 @@ public abstract class InformationTreeFunctionNode extends InformationTreeNode {
     String functionExpr;
 
 
-    abstract InformationTreeFunctionNode newInstance();
+    abstract public InformationTreeFunctionNode newInstance();
 
     /**
      * Fill the content parameters of current function node with given child node as context.
@@ -16,8 +16,8 @@ public abstract class InformationTreeFunctionNode extends InformationTreeNode {
      * to be evaluated true for given context.
      * @param childNode Given context.
      */
-    abstract void fillContents(InformationTreeNode childNode);
-    abstract void fillContentsRandom(InformationTreeNode childNode);
+    abstract public void fillContents(InformationTreeNode childNode);
+    abstract public void fillContentsRandom(InformationTreeNode childNode);
 
     /**
      *

@@ -127,15 +127,31 @@ public class MainExecutor {
     }
 
     public List<Integer> executeSingleProcessorGetIdList(String XPath) throws SQLException, XMLDBException, IOException, SaxonApiException, UnexpectedExceptionThrownException {
-        return executeSingleProcessorGetIdList(XPath, databaseExecutorList.get(0));
+        String dbName = GlobalSettings.defaultDBName;
+        if(dbName == null)
+            return executeSingleProcessorGetIdList(XPath, databaseExecutorList.get(0));
+        else
+            return executeSingleProcessorGetIdList(XPath, dbName);
     }
 
     public List<Integer> executeSingleProcessorGetIdList(String XPath, String databaseName) throws SQLException, XMLDBException, IOException, SaxonApiException, UnexpectedExceptionThrownException {
         return executeSingleProcessorGetIdList(XPath, databaseExecutorNameMap.get(databaseName));
     }
 
+    public List<ContextNode> executeSingleProcessorGetNodeList(String XPath) throws SQLException, XMLDBException, IOException, SaxonApiException, UnexpectedExceptionThrownException {
+        String dbName = GlobalSettings.defaultDBName;
+        if(dbName == null)
+            return executeSingleProcessorGetNodeList(XPath, databaseExecutorList.get(0));
+        else
+            return executeSingleProcessorGetNodeList(XPath, dbName);
+    }
+
     public List<ContextNode> executeSingleProcessorGetNodeList(String XPath, String databaseName) throws SQLException, XMLDBException, IOException, SaxonApiException, UnexpectedExceptionThrownException {
         return getNodeListFromIdList(executeSingleProcessorGetIdList(XPath, databaseExecutorNameMap.get(databaseName)));
+    }
+
+    public List<ContextNode> executeSingleProcessorGetNodeList(String XPath, DatabaseExecutor databaseExecutor) throws SQLException, XMLDBException, IOException, SaxonApiException, UnexpectedExceptionThrownException {
+        return getNodeListFromIdList(executeSingleProcessorGetIdList(XPath, databaseExecutor));
     }
 
     public List<Integer> executeSingleProcessorGetIdList(String XPath, DatabaseExecutor databaseExecutor) throws SQLException, XMLDBException, IOException, SaxonApiException, UnexpectedExceptionThrownException {

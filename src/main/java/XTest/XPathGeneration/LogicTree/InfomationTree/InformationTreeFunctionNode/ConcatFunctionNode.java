@@ -1,15 +1,12 @@
-package XTest.XPathGeneration.InfomationTree.InformationTreeFunctionNode;
+package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode;
 
 import XTest.PrimitiveDatatype.XMLDatatype;
-import XTest.XPathGeneration.InfomationTree.InformationTreeConstantNode;
-import XTest.XPathGeneration.InfomationTree.InformationTreeNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeConstantNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.PredicateTreeFunctionNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
+import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
+import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class ConcatFunctionNode extends InformationTreeFunctionNode {
     ConcatFunctionNode() {
-        this.xmlDatatype = XMLDatatype.STRING;
+        this.dataTypeRecorder.xmlDatatype = XMLDatatype.STRING;
         functionExpr = "concat";
     }
 
@@ -19,12 +16,12 @@ public class ConcatFunctionNode extends InformationTreeFunctionNode {
     }
 
     @Override
-    void fillContents(InformationTreeNode childNode) {
+    public void fillContents(InformationTreeNode childNode) {
         fillContentsRandom(childNode);
     }
 
     @Override
-    void fillContentsRandom(InformationTreeNode childNode) {
+    public void fillContentsRandom(InformationTreeNode childNode) {
         childList.add(childNode);
         String randomString = XMLDatatype.STRING.getValueHandler().getValue(false);
         InformationTreeConstantNode constantNode = new InformationTreeConstantNode(XMLDatatype.STRING, randomString);

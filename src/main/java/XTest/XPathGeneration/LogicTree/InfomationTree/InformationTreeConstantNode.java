@@ -1,4 +1,4 @@
-package XTest.XPathGeneration.InfomationTree;
+package XTest.XPathGeneration.LogicTree.InfomationTree;
 
 import XTest.PrimitiveDatatype.XMLDatatype;
 
@@ -9,7 +9,7 @@ public class InformationTreeConstantNode extends InformationTreeNode {
      * @param context
      */
     public InformationTreeConstantNode(XMLDatatype datatype, String context) {
-        this.xmlDatatype = datatype;
+        this.dataTypeRecorder.xmlDatatype = datatype;
         this.context = context;
     }
 
@@ -21,8 +21,8 @@ public class InformationTreeConstantNode extends InformationTreeNode {
      * @param context
      */
     public InformationTreeConstantNode(XMLDatatype datatype, XMLDatatype subDatatype, int length, String context) {
-        this.xmlDatatype = datatype;
-        this.subDatatype = subDatatype;
+        this.dataTypeRecorder.xmlDatatype = datatype;
+        this.dataTypeRecorder.subDatatype = subDatatype;
         this.length = length;
         this.context = context;
     }
@@ -32,7 +32,7 @@ public class InformationTreeConstantNode extends InformationTreeNode {
      * @param returnConstant Whether to return constant context when approached or always reach the leaf nodes.
      * @return
      */
-    String getXPathExpression(boolean returnConstant) {
-        return XMLDatatype.wrapExpression(context, xmlDatatype);
+    public String getXPathExpression(boolean returnConstant) {
+        return XMLDatatype.wrapExpression(context, this.dataTypeRecorder.xmlDatatype);
     }
 }

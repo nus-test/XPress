@@ -6,7 +6,7 @@ import org.basex.query.value.item.Int;
 import java.util.Arrays;
 import java.util.List;
 
-public class XMLDurationHandler extends PooledValueHandler {
+public class XMLDurationHandler extends PooledValueHandler implements XMLSimple {
 
     List<Character> yearMonthDurationPostfix = Arrays.asList('Y', 'M', 'D');
     List<Character> dayTimeDurationPostfix = Arrays.asList('H', 'M', 'S');

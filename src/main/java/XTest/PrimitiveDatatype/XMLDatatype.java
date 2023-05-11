@@ -2,26 +2,35 @@ package XTest.PrimitiveDatatype;
 
 import XTest.GlobalRandom;
 import XTest.GlobalSettings;
+import org.apache.xpath.operations.Bool;
 
 import java.util.*;
 
 public enum XMLDatatype {
-    INTEGER(1, new XMLIntegerHandler()),
-    STRING(2, new XMLStringHandler()),
-    BOOLEAN(3, new XMLBooleanHandler()),
-    DOUBLE(4, new XMLDoubleHandler()),
-    DURATION(5, new XMLDurationHandler()),
-    NODE(6, null),
-    SEQUENCE(7, null),
-    MIXED_SEQUENCE(8, null);
+    INTEGER(1, new XMLIntegerHandler(), true),
+    STRING(2, new XMLStringHandler(), true),
+    BOOLEAN(3, new XMLBooleanHandler(), true),
+    DOUBLE(4, new XMLDoubleHandler(), true),
+    DURATION(5, new XMLDurationHandler(), true),
+    NODE(6, null, false),
+    SEQUENCE(7, null, false),
+    MIXED_SEQUENCE(8, null, false);
 
     int id;
     ValueHandler valueHandler;
     public static List<XMLDatatype> dataTypeList = new ArrayList<>();
+    /**
+     * Only value types of integrated would be generated directly: string, boolean, etc.
+     * Non-integrated types could appear as castable types or be constructed through casting: QName, etc.
+     * Not all data types are covered.
+     * Also, only integrated types would be accepted as function node inputs (Non-integrated types are not implemented).
+     */
+    public boolean integrated;
 
-    private XMLDatatype(int id, ValueHandler valueHandler) {
+    private XMLDatatype(int id, ValueHandler valueHandler, boolean integrated) {
         this.id = id;
         this.valueHandler = valueHandler;
+        this.integrated = integrated;
     }
 
     static {
@@ -50,5 +59,25 @@ public enum XMLDatatype {
         else if(xmlDatatype == XMLDatatype.STRING)
             value = "\"" + value + "\"";
         return value;
+    }
+
+    /**
+     *
+     * @param from
+     * @param to
+     * @return True if data type "from" castable as "to"
+     */
+    public Boolean checkCastable(XMLDatatype from, XMLDatatype to) {
+        return null;
+    }
+
+    /**
+     *
+     * @param datatype
+     * @return Random integrated datatype which "datatype" is castable as, no requirements on "datatype":
+     * could be non-integrated.
+     */
+    public XMLDatatype getRandomCastableIntegratedDatatype(XMLDatatype datatype) {
+        return null;
     }
 }

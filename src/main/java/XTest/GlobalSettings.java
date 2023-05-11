@@ -10,6 +10,8 @@ public class GlobalSettings {
 
     public static XPathVersion xPathVersion = XPathVersion.VERSION_3;
 
+    public static String defaultDBName = "Saxon";
+
     private GlobalSettings(){};
 
     public GlobalSettings getInstance() {

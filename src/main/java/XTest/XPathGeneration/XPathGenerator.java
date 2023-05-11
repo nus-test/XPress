@@ -7,7 +7,6 @@ import XTest.ReportGeneration.KnownBugs;
 import XTest.TestException.MismatchingResultException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XMLGeneration.ContextNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateContext;
 import XTest.XPathGeneration.PredicateGeneration.PredicateGenerator;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeConstantNode;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -15,7 +14,6 @@ import org.xmldb.api.base.XMLDBException;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,12 +92,19 @@ public class XPathGenerator {
         prob = GlobalRandom.getInstance().nextDouble();
 
         // Predicate application start
+//        if(prob < 0.6) {
+//            randomNode = GlobalRandom.getInstance().getRandomFromList(currentBuildPair.contextNodeList);
+//            PredicateContext predicateContext = predicateGenerator.generatePredicate(currentBuildPair.XPath, 3, randomNode,
+//                    allowTextContentFlag, complex);
+//            currentBuildPair.XPath += predicateContext.predicate;
+//            currentBuildPair.contextNodeList = predicateContext.executionResult;
+//        }
         if(prob < 0.6) {
             randomNode = GlobalRandom.getInstance().getRandomFromList(currentBuildPair.contextNodeList);
-            PredicateContext predicateContext = predicateGenerator.generatePredicate(currentBuildPair.XPath, 3, randomNode,
+            XPathResultListPair predicateContext = predicateGenerator.generatePredicate(currentBuildPair.XPath, 3, randomNode,
                     allowTextContentFlag, complex);
-            currentBuildPair.XPath += predicateContext.predicate;
-            currentBuildPair.contextNodeList = predicateContext.executionResult;
+            currentBuildPair.XPath += predicateContext.XPath;
+            currentBuildPair.contextNodeList = predicateContext.contextNodeList;
         }
         // Predicate application end
 
@@ -139,23 +144,5 @@ public class XPathGenerator {
             selectedNodeListToReturn = nodeList;
         }
         return new XPathResultListPair(builder, selectedNodeListToReturn);
-    }
-
-    class XPathResultListPair {
-        String XPath;
-        List<ContextNode> contextNodeList;
-
-        XPathResultListPair(String XPath, List<ContextNode> contextNodeList) {
-            this.XPath = XPath;
-            this.contextNodeList = contextNodeList;
-        }
-
-        XPathResultListPair(XPathResultListPair xPathResultListPair) {
-            XPath = xPathResultListPair.XPath;
-            if(xPathResultListPair.contextNodeList == null)
-                contextNodeList = null;
-            else
-                contextNodeList = new ArrayList<>(xPathResultListPair.contextNodeList);
-        }
     }
 }

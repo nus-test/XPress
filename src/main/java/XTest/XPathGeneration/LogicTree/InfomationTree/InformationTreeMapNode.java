@@ -1,11 +1,11 @@
-package XTest.XPathGeneration.InfomationTree;
+package XTest.XPathGeneration.LogicTree.InfomationTree;
 
-import XTest.XPathGeneration.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNode;
+import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNode;
 
 public class InformationTreeMapNode extends InformationTreeNode {
 
     @Override
-    String getXPathExpression(boolean returnConstant) {
+    public String getXPathExpression(boolean returnConstant) {
         // TODO: Check the first child type and decide whether needs to be wrapped by "()"
 
         String builder = childList.get(0).getXPathExpression(returnConstant) + "! ";

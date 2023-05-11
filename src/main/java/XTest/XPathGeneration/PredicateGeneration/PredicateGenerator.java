@@ -13,6 +13,7 @@ import XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalOperationNo
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeLogicalOperationNode.PredicateTreeLogicalOperationNode;
 import XTest.XPathGeneration.PredicateGeneration.SubcontextExtraction.SubcontextExtractor;
 import XTest.XPathGeneration.XPathGenerator;
+import XTest.XPathGeneration.XPathResultListPair;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.basex.query.value.item.Int;
 import org.xmldb.api.base.XMLDBException;
@@ -33,7 +34,7 @@ public class PredicateGenerator {
     }
 
     // XPathPrefix : //*
-    public PredicateContext generatePredicate(String XPathPrefix, int maxPhraseLength,
+    public XPathResultListPair generatePredicate(String XPathPrefix, int maxPhraseLength,
                                               ContextNode randomNode, boolean allowTextContentFlag,
                                               boolean complexFlag)
             throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, UnexpectedExceptionThrownException, InstantiationException, IllegalAccessException {
@@ -72,11 +73,11 @@ public class PredicateGenerator {
         }
         String predicate = "[" + currentRoot.toString() + "]";
         List<ContextNode> executionResult = mainExecutor.executeGetNodeList(XPathPrefix + predicate);
-        PredicateContext predicateContext = new PredicateContext(predicate, XPathPrefix, executionResult);
+        XPathResultListPair predicateContext = new XPathResultListPair(predicate, executionResult);
         return predicateContext;
     }
 
-    public PredicateContext generatePredicate(String XPathPrefix, int maxPhraseLength, ContextNode randomNode, boolean allowTextContentFlag)
+    public XPathResultListPair generatePredicate(String XPathPrefix, int maxPhraseLength, ContextNode randomNode, boolean allowTextContentFlag)
             throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, UnexpectedExceptionThrownException, InstantiationException, IllegalAccessException {
         return generatePredicate(XPathPrefix, maxPhraseLength, randomNode, allowTextContentFlag, true);
     }
