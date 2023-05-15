@@ -2,7 +2,6 @@ package XTest.PrimitiveDatatype;
 
 import XTest.GlobalRandom;
 import XTest.GlobalSettings;
-import org.apache.xpath.operations.Bool;
 
 import java.util.*;
 
@@ -14,7 +13,7 @@ public enum XMLDatatype {
     DURATION(5, new XMLDurationHandler(), true),
     NODE(6, null, false),
     SEQUENCE(7, null, false),
-    MIXED_SEQUENCE(8, null, false);
+    MIXED(8, null, false);
 
     int id;
     ValueHandler valueHandler;
@@ -37,7 +36,7 @@ public enum XMLDatatype {
         for(XMLDatatype xmlDatatype : XMLDatatype.values()) {
             if(xmlDatatype == DURATION && GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_1)
                 continue;
-            if(xmlDatatype != NODE && xmlDatatype != SEQUENCE && xmlDatatype != MIXED_SEQUENCE)
+            if(xmlDatatype != NODE && xmlDatatype != SEQUENCE && xmlDatatype != MIXED)
                 dataTypeList.add(xmlDatatype);
         }
     }
@@ -58,6 +57,8 @@ public enum XMLDatatype {
             value += "()";
         else if(xmlDatatype == XMLDatatype.STRING)
             value = "\"" + value + "\"";
+        else if(xmlDatatype == XMLDatatype.DURATION)
+            value = "xs:duration('" + value + "')";
         return value;
     }
 

@@ -5,7 +5,7 @@ import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
-import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeDirectContentFunctionNode;
+import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeDirectContentFunctionNode.InformationTreeDirectContentFunctionNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeNotFunctionNode;
 import XTest.XPathGeneration.LogicTree.LogicTreeNode;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -23,12 +23,17 @@ public abstract class InformationTreeNode extends LogicTreeNode {
     /**
      * If is calculable, contains the real value of evaluated context for the starred node
      */
-    String context;
+    public String context = null;
 
     /**
      * If is sequence type, contains the length of sequence for the starred node
      */
     int length;
+
+    /**
+     * Only set to true when there is a context node in represented subtree.
+     */
+    public boolean containsContext = false;
 
     /**
      * If within subtree there is no context node or an ancestor node of the context node is
@@ -44,9 +49,19 @@ public abstract class InformationTreeNode extends LogicTreeNode {
      * If set to true unique context node refers to the starred node in context of XPath prefix.
      * Else refers to a derived sequence from the starred node with itself as the context.
      */
-    protected boolean selfContext = true;
+    public boolean selfContext = true;
 
     public List<InformationTreeNode> childList = new ArrayList<>();
+
+    public String getXPathExpressionCheck(boolean returnConstant) {
+        if(!containsContext && context != null)
+            return XMLDatatype.wrapExpression(context, dataTypeRecorder.xmlDatatype);
+        if(returnConstant && context != null)
+            return XMLDatatype.wrapExpression(context, dataTypeRecorder.xmlDatatype);
+        if(!returnConstant && XPathExpr != null)
+            return XPathExpr;
+        return null;
+    }
 
     /**
      *
@@ -92,5 +107,16 @@ public abstract class InformationTreeNode extends LogicTreeNode {
         InformationTreeNotFunctionNode newRoot = new InformationTreeNotFunctionNode();
         newRoot.fillContents(this);
         return newRoot;
+    }
+
+    /**
+     * Every ancestor in the information tree of the unique context node should contain the necessary information
+     * about the unique context node.
+     * @param childNode
+     */
+    public void inheritContextChildInfo(InformationTreeNode childNode) {
+        this.containsContextConstant = childNode.containsContextConstant;
+        this.selfContext = childNode.selfContext;
+        this.starredNodeId = childNode.starredNodeId;
     }
 }

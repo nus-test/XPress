@@ -3,12 +3,14 @@ package XTest.XPathGeneration.PredicateGeneration;
 import XTest.DatabaseExecutor.MainExecutor;
 import XTest.GlobalRandom;
 import XTest.PrimitiveDatatype.XMLDatatype;
+import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.ReportGeneration.KnownBugs;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XMLGeneration.ContextNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeContextNode;
+import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNodeManager;
+import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeMapNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
-import XTest.XPathGeneration.LogicTree.LogicTreeAndComparisonNode;
 import XTest.XPathGeneration.LogicTree.LogicTreeComparisonNode;
 import XTest.XPathGeneration.LogicTree.LogicTreeNode;
 import XTest.XPathGeneration.XPathResultListPair;
@@ -78,7 +80,12 @@ public class PredicateGeneratorNew {
             contextNode.dataTypeRecorder.nodeMix = mixedContent;
             contextNode.setSelfContextFlag(true);
         }
-        return null;
+
+        // Build information tree from context node
+        int levelLimit = GlobalRandom.getInstance().nextInt(5);
+        if(contextNode.selfContext == true) levelLimit += 1;
+        InformationTreeNode root = buildBooleanInformationTree(contextNode, levelLimit);
+        return root;
     }
 
     public InformationTreeNode buildBooleanInformationTree(InformationTreeNode informationTreeNode, int levelLimit) {
@@ -89,8 +96,13 @@ public class PredicateGeneratorNew {
         if(levelLimit == 0)  return informationTreeNode;
 
         // Update information tree node in to a new root
-        
+        double prob = GlobalRandom.getInstance().nextDouble();
 
-        return buildInformationTree(informationTreeNode, levelLimit - 1);
+        InformationTreeNode newRoot;
+
+        XMLDatatypeComplexRecorder recorder = InformationTreeFunctionNodeManager.getRandomTargetedDatatypeRecorder(informationTreeNode.dataTypeRecorder);
+        newRoot = InformationTreeFunctionNodeManager.getRandomMatchingFunctionNodeWithContentAttached(informationTreeNode, recorder);
+
+        return buildInformationTree(newRoot, levelLimit - 1);
     }
 }

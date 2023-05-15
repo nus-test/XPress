@@ -1,8 +1,10 @@
-package XTest.XPathGeneration.LogicTree.InfomationTree;
+package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode;
 
+import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNode;
+import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
-public class InformationTreeMapNode extends InformationTreeNode {
+public class InformationTreeMapNode extends InformationTreeFunctionNode {
 
     @Override
     public String getXPathExpression(boolean returnConstant) {
@@ -20,5 +22,25 @@ public class InformationTreeMapNode extends InformationTreeNode {
         if(childList.size() > 2)
             builder += ")";
         return builder;
+    }
+
+    @Override
+    public InformationTreeFunctionNode newInstance() {
+        return new InformationTreeMapNode();
+    }
+
+    @Override
+    public void fillContents(InformationTreeNode childNode) {
+
+    }
+
+    @Override
+    public void fillContentsRandom(InformationTreeNode childNode) {
+
+    }
+
+    @Override
+    public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
+        return null;
     }
 }

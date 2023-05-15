@@ -46,6 +46,14 @@ public class GlobalRandom {
         return nextInterval(0, maxBound);
     }
 
+    public String nextSubstring(String str) {
+        Pair subStringInterval = GlobalRandom.getInstance().nextInterval(str.length());
+        int l = subStringInterval.x, r = subStringInterval.y;
+        String subString;
+        subString = str.substring(l, r);
+        return str;
+    }
+
     public double nextDouble() {
         return random.nextDouble();
     }

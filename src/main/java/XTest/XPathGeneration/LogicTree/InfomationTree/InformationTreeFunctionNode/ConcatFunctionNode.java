@@ -1,6 +1,7 @@
 package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode;
 
 import XTest.PrimitiveDatatype.XMLDatatype;
+import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
@@ -26,5 +27,11 @@ public class ConcatFunctionNode extends InformationTreeFunctionNode {
         String randomString = XMLDatatype.STRING.getValueHandler().getValue(false);
         InformationTreeConstantNode constantNode = new InformationTreeConstantNode(XMLDatatype.STRING, randomString);
         childList.add(constantNode);
+    }
+
+    @Override
+    public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
+        // TODO: Current observation all could be transformed into type of string, but not verified.
+        return true;
     }
 }

@@ -39,7 +39,7 @@ public abstract class PooledValueHandler extends ValueHandler {
         return generatedString;
     }
 
-    String getRandomValueFromPool() {
+    public String getRandomValueFromPool() {
         if(valuePoolIdCnt == 0) {
             return getRandomValue();
         }

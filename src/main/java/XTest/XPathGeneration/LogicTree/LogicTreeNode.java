@@ -37,6 +37,7 @@ public abstract class LogicTreeNode {
      */
     public String getXPathExpression(boolean returnConstant) { return null; }
 
+
     @Override
     public String toString() {
         return getXPathExpression();

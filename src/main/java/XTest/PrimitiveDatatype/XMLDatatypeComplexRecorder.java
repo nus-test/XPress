@@ -16,4 +16,16 @@ public class XMLDatatypeComplexRecorder {
      * is ensured has the same dataType.
      */
     public boolean nodeMix = true;
+
+    public XMLDatatypeComplexRecorder(XMLDatatype xmlDatatype) {
+        this.xmlDatatype = xmlDatatype;
+    }
+
+    public XMLDatatypeComplexRecorder(XMLDatatypeComplexRecorder prevRecorder) {
+        this.xmlDatatype = prevRecorder.xmlDatatype;
+        this.subDatatype = prevRecorder.subDatatype;
+        this.nodeMix = prevRecorder.nodeMix;
+    }
+
+    public XMLDatatypeComplexRecorder() {}
 }
