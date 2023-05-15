@@ -7,7 +7,7 @@ import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class NotEqualOperatorNode extends InformationTreeComparisonOperatorNode {
     @Override
-    public InformationTreeComparisonOperatorNode modifyToContainStarredNode(MainExecutor mainExecutor, int starredNodeId) {
+    public InformationTreeComparisonOperatorNode modifyToContainStarredNode(int starredNodeId) {
         InformationTreeComparisonOperatorNode newRoot = new EqualOperatorNode();
         newRoot.transferInfo(this);
         return newRoot;
@@ -19,12 +19,12 @@ public class NotEqualOperatorNode extends InformationTreeComparisonOperatorNode 
     }
 
     @Override
-    public void fillContents(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
+    public void fillContents(InformationTreeNode childNode) {
 
     }
 
     @Override
-    public void fillContentsRandom(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
+    public void fillContentsRandom(InformationTreeNode childNode) {
 
     }
 

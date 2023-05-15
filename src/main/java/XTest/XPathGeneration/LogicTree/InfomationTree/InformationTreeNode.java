@@ -1,6 +1,5 @@
 package XTest.XPathGeneration.LogicTree.InfomationTree;
 
-import XTest.DatabaseExecutor.MainExecutor;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.TestException.DebugErrorException;
@@ -22,8 +21,15 @@ public abstract class InformationTreeNode extends LogicTreeNode {
 
     /**
      * If is calculable, contains the real value of evaluated context for the starred node
+     * For a sequence, context contains the length of the sequence
+     * For a node, context refers to the id number of the node
      */
     public String context = null;
+
+    /**
+     * Supplementary context only works for sequence of nodes, includes id of one random node in sequence
+     */
+    public String supplementaryContext = null;
 
     /**
      * If is sequence type, contains the length of sequence for the starred node
@@ -90,19 +96,19 @@ public abstract class InformationTreeNode extends LogicTreeNode {
         return context;
     }
 
-    boolean checkIfContainsStarredNode(MainExecutor mainExecutor) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
-        return checkIfContainsStarredNode(mainExecutor, starredNodeId);
+    boolean checkIfContainsStarredNode() throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
+        return checkIfContainsStarredNode(starredNodeId);
     }
 
-    boolean checkIfContainsStarredNode(MainExecutor mainExecutor, int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
+    boolean checkIfContainsStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
         String expr = getXPathExpression();
         List<Integer> resultList = mainExecutor.executeSingleProcessorGetIdList(expr);
         return resultList.contains(starredNodeId);
     }
 
     @Override
-    public InformationTreeNode modifyToContainStarredNode(MainExecutor mainExecutor, int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
-        boolean contains = checkIfContainsStarredNode(mainExecutor, starredNodeId);
+    public InformationTreeNode modifyToContainStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
+        boolean contains = checkIfContainsStarredNode(starredNodeId);
         if(contains) return this;
         InformationTreeNotFunctionNode newRoot = new InformationTreeNotFunctionNode();
         newRoot.fillContents(this);

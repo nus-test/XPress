@@ -10,7 +10,7 @@ import org.apache.xpath.operations.Bool;
 import static XTest.StringUtils.getListString;
 
 public abstract class InformationTreeFunctionNode extends InformationTreeNode {
-    String functionExpr;
+    public String functionExpr;
 
 
     abstract public InformationTreeFunctionNode newInstance();

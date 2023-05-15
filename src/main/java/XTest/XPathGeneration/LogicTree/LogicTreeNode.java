@@ -16,7 +16,8 @@ public abstract class LogicTreeNode {
      */
     protected String XPathExpr = null;
     public XMLDatatypeComplexRecorder dataTypeRecorder = new XMLDatatypeComplexRecorder();
-    public abstract LogicTreeNode modifyToContainStarredNode(MainExecutor mainExecutor, int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException;
+    public MainExecutor mainExecutor = null;
+    public abstract LogicTreeNode modifyToContainStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException;
 
     /**
      *

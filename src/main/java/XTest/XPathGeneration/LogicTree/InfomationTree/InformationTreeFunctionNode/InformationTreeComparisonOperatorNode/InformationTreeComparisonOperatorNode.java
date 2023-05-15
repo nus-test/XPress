@@ -5,7 +5,7 @@ import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNod
 
 public abstract class InformationTreeComparisonOperatorNode extends InformationTreeFunctionNode {
     @Override
-    public abstract InformationTreeComparisonOperatorNode modifyToContainStarredNode(MainExecutor mainExecutor, int starredNodeId);
+    public abstract InformationTreeComparisonOperatorNode modifyToContainStarredNode(int starredNodeId);
 
     void transferInfo(InformationTreeComparisonOperatorNode prevNode) {
         // TODO: Check if there is more information necessary to transfer
