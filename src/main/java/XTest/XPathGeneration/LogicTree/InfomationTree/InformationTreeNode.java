@@ -72,19 +72,16 @@ public abstract class InformationTreeNode extends LogicTreeNode {
     /**
      *
      * @return The calculation string which could compute the correct result for the starred node of
-     * current information tree. For nodes which returns a sequence calculates the sequence length instead of
-     * actual value.
+     * current information tree.
      */
     String getCalculationString() throws DebugErrorException {
         String calculationString = "";
         if(containsContextConstant) calculationString = getXPathExpression(true);
         else if(!selfContext) {
-            calculationString = "//*[id = \"" + starredNodeId + "\"]/" + getXPathExpression();
+            calculationString = "//*[id = \"" + starredNodeId + "\"]/" + getXPathExpression(true);
         } else if(this instanceof InformationTreeDirectContentFunctionNode)
             calculationString = ((InformationTreeDirectContentFunctionNode) this).getCurrentLevelCalculationString();
-        else throw new DebugErrorException();
-        if(dataTypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
-            calculationString = "count(" + calculationString + ")";
+        else calculationString = getXPathExpression(false);
         return calculationString;
     }
 

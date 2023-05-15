@@ -25,12 +25,18 @@ public abstract class InformationTreeDirectContentFunctionNode extends Informati
 
     /**
      * 
-     * @return XPath expression string for calculating the result of current information tree which should result in single value.
-     * If return type is sequence, an exception should be thrown.
+     * @return XPath expression string for calculating the result of current information tree. If results in single value should evaluate
+     * to single value, if is a sequence should give XPath expression of sequence.
      */
     public String getCurrentLevelCalculationString() {
+        if(dataTypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
+            return getSequenceCalculationString();
         String calculationStr = getXPathExpression(false) + "[@id=\"" + childList.get(0).context + "\"]";
         calculationStr += "/" + functionExpr + "()";
         return calculationStr;
+    }
+
+    public String getSequenceCalculationString() {
+        return getXPathExpression(true);
     }
 }
