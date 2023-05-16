@@ -9,6 +9,8 @@ public class AttributeFunctionNode extends InformationTreeDirectContentFunctionN
 
     @Override
     public String getCurrentLevelCalculationString() {
+        if(dataTypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
+            return getSequenceCalculationString();
         String calculationStr = getXPathExpression(false) + "[@id=\"" + childList.get(0).context + "\"]";
         calculationStr += "/@" + functionExpr;
         return calculationStr;

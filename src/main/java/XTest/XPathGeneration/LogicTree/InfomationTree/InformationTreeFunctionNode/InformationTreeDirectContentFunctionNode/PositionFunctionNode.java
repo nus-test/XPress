@@ -11,6 +11,8 @@ public class PositionFunctionNode extends InformationTreeDirectContentFunctionNo
 
     @Override
     public String getCurrentLevelCalculationString() {
+        if(dataTypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
+            return getSequenceCalculationString();
         return "index-of(" + childList.get(0).getXPathExpression(false)
                 + ", //*[id=\"" + childList.get(0).context + "\"])";
     }
