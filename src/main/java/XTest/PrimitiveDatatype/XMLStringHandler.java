@@ -4,7 +4,7 @@ import XTest.GlobalRandom;
 
 import java.util.*;
 
-public class XMLStringHandler extends PooledValueHandler implements XMLComparable {
+public class XMLStringHandler extends PooledValueHandler implements XMLComparable, XMLSimple, XMLAtomic {
     Set<Character> escapeSet = new HashSet<>(Arrays.asList('\'', '\"', '<', '>', '/', '&'));
     int valuePoolIdCnt = 0;
     Set<String> valuePool = new HashSet<>();
@@ -12,6 +12,7 @@ public class XMLStringHandler extends PooledValueHandler implements XMLComparabl
     static int minLength = 0, maxLength = 10;
 
     XMLStringHandler() {
+        officialTypeName = "xs:string";
     }
 
     public String mutateValue(String value) {

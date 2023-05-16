@@ -10,13 +10,18 @@ public class InformationTreeNotFunctionNode extends InformationTreeFunctionNode 
     }
 
     @Override
-    public void fillContents(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
+    public void fillContents(InformationTreeNode childNode) {
 
     }
 
     @Override
-    public void fillContentsRandom(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
+    public void fillContentsRandom(InformationTreeNode childNode) {
 
+    }
+
+    @Override
+    public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
+        return null;
     }
 
 }

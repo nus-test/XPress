@@ -4,7 +4,12 @@ import XTest.CommonUtils;
 import XTest.DataCheckUtils;
 import XTest.GlobalRandom;
 
-public class XMLIntegerHandler extends PooledValueHandler implements XMLComparable, XMLNumeric, XMLSimple {
+public class XMLIntegerHandler extends PooledValueHandler implements XMLComparable, XMLNumeric, XMLSimple, XMLAtomic {
+
+    XMLIntegerHandler() {
+        officialTypeName = "xs:integer";
+    }
+
     @Override
     String getRandomValue() {
         return Integer.toString(GlobalRandom.getInstance().nextInt());

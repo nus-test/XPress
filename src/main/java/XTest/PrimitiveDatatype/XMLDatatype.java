@@ -1,19 +1,33 @@
 package XTest.PrimitiveDatatype;
 
+import XTest.DatabaseExecutor.MainExecutor;
 import XTest.GlobalRandom;
 import XTest.GlobalSettings;
+import XTest.TestException.UnexpectedExceptionThrownException;
+import com.ibm.icu.impl.Pair;
+import net.sf.saxon.s9api.SaxonApiException;
+import org.apache.xpath.operations.Bool;
+import org.xmldb.api.base.XMLDBException;
 
+import javax.xml.transform.Source;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.sql.SQLException;
 import java.util.*;
 
 public enum XMLDatatype {
-    INTEGER(1, new XMLIntegerHandler(), true),
-    STRING(2, new XMLStringHandler(), true),
-    BOOLEAN(3, new XMLBooleanHandler(), true),
-    DOUBLE(4, new XMLDoubleHandler(), true),
-    DURATION(5, new XMLDurationHandler(), true),
-    NODE(6, null, false),
-    SEQUENCE(7, null, false),
-    MIXED(8, null, false);
+    INTEGER(1, new XMLIntegerHandler()),
+    STRING(2, new XMLStringHandler()),
+    BOOLEAN(3, new XMLBooleanHandler()),
+    DOUBLE(4, new XMLDoubleHandler()),
+    DURATION(5, new XMLDurationHandler()),
+    NODE(6, new XMLNodeHandler()),
+    SEQUENCE(7, new XMLSequenceHandler()),
+    MIXED(8, new XMLMixedHandler());
 
     int id;
     ValueHandler valueHandler;
@@ -26,10 +40,15 @@ public enum XMLDatatype {
      */
     public boolean integrated;
 
-    private XMLDatatype(int id, ValueHandler valueHandler, boolean integrated) {
+
+    /**
+     * Check if 'A castable as B' is true or false.
+     */
+    static Map<Pair<XMLDatatype, XMLDatatype>, Boolean> castableMap = new HashMap<>();
+
+    private XMLDatatype(int id, ValueHandler valueHandler) {
         this.id = id;
         this.valueHandler = valueHandler;
-        this.integrated = integrated;
     }
 
     static {
@@ -68,8 +87,27 @@ public enum XMLDatatype {
      * @param to
      * @return True if data type "from" castable as "to"
      */
-    public Boolean checkCastable(XMLDatatype from, XMLDatatype to) {
-        return null;
+    public static Boolean checkCastable(MainExecutor mainExecutor, XMLDatatype from, XMLDatatype to) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
+        Boolean answer = null;
+        Pair<XMLDatatype, XMLDatatype> pair = Pair.of(from, to);
+        if(castableMap.containsKey(Pair.of(from, to))) {
+            answer = castableMap.get(pair);
+        }
+        else {
+            if(to == NODE)
+                answer = false;
+            else {
+                answer = true;
+                for(int i = 1; i <= 3; i ++) {
+                    String value = from.getValueHandler().getValue(false);
+                    String XPathExpr = wrapExpression(value, from) + " castable as " + to.getValueHandler().officialTypeName;
+                    String result = mainExecutor.executeSingleProcessor(XPathExpr, GlobalSettings.defaultDBName).strip();
+                    if(result.equals("false")) answer = false;
+                }
+            }
+            castableMap.put(pair, answer);
+        }
+        return answer;
     }
 
     /**
@@ -80,5 +118,17 @@ public enum XMLDatatype {
      */
     public XMLDatatype getRandomCastableIntegratedDatatype(XMLDatatype datatype) {
         return null;
+    }
+
+    public static void getCastable(MainExecutor mainExecutor) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
+        for(XMLDatatype xmlDatatype : XMLDatatype.values()) {
+            if(xmlDatatype.getValueHandler() instanceof XMLSimple) {
+                for(XMLDatatype xmlDatatype2 : XMLDatatype.values()) {
+                    if(xmlDatatype2.getValueHandler() instanceof XMLSimple) {
+                        checkCastable(mainExecutor, xmlDatatype, xmlDatatype2);
+                    }
+                }
+            }
+        }
     }
 }

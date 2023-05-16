@@ -2,7 +2,11 @@ package XTest.PrimitiveDatatype;
 
 import XTest.GlobalRandom;
 
-public class XMLDoubleHandler extends PooledValueHandler implements XMLComparable, XMLNumeric, XMLSimple {
+public class XMLDoubleHandler extends PooledValueHandler implements XMLComparable, XMLNumeric, XMLSimple, XMLAtomic {
+    XMLDoubleHandler() {
+        officialTypeName = "xs:double";
+    }
+
     @Override
     String getRandomValue() {
         Integer pre = GlobalRandom.getInstance().nextInt(100000);

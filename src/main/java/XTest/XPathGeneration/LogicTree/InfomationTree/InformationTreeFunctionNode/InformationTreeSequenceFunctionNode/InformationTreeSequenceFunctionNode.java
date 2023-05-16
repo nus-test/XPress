@@ -6,7 +6,7 @@ import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNod
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public abstract class InformationTreeSequenceFunctionNode extends InformationTreeFunctionNode {
-    InformationTreeSequenceFunctionNode() {
+    public InformationTreeSequenceFunctionNode() {
         dataTypeRecorder.xmlDatatype = XMLDatatype.SEQUENCE;
     }
 

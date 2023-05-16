@@ -11,9 +11,9 @@ import java.sql.SQLException;
 
 public class LogicTreeOrComparisonNode extends LogicTreeComparisonNode{
     @Override
-    public LogicTreeNode modifyToContainStarredNode(MainExecutor mainExecutor, int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
+    public LogicTreeNode modifyToContainStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
         int id = GlobalRandom.getInstance().nextInt(2);
-        childList.set(id, childList.get(id).modifyToContainStarredNode(mainExecutor, starredNodeId));
+        childList.set(id, childList.get(id).modifyToContainStarredNode(starredNodeId));
         return this;
     }
 }

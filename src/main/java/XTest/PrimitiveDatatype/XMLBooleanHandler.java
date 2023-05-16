@@ -2,7 +2,10 @@ package XTest.PrimitiveDatatype;
 
 import XTest.GlobalRandom;
 
-public class XMLBooleanHandler extends ValueHandler implements XMLSimple {
+public class XMLBooleanHandler extends ValueHandler implements XMLSimple, XMLAtomic {
+    XMLBooleanHandler() {
+        officialTypeName = "xs:boolean";
+    }
 
     @Override
     public String getValue() {

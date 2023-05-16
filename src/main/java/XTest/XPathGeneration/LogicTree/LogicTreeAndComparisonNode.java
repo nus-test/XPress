@@ -10,9 +10,9 @@ import java.sql.SQLException;
 
 public class LogicTreeAndComparisonNode extends LogicTreeComparisonNode {
     @Override
-    public LogicTreeComparisonNode modifyToContainStarredNode(MainExecutor mainExecutor, int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
-        childList.set(0, childList.get(0).modifyToContainStarredNode(mainExecutor, starredNodeId));
-        childList.set(1, childList.get(1).modifyToContainStarredNode(mainExecutor, starredNodeId));
+    public LogicTreeComparisonNode modifyToContainStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
+        childList.set(0, childList.get(0).modifyToContainStarredNode(starredNodeId));
+        childList.set(1, childList.get(1).modifyToContainStarredNode(starredNodeId));
         return this;
     }
 }

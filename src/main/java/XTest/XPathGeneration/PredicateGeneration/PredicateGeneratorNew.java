@@ -50,7 +50,7 @@ public class PredicateGeneratorNew {
             rootList.add(newRoot);
         }
         LogicTreeNode root = rootList.get(0);
-        root = root.modifyToContainStarredNode(mainExecutor, starredNode.id);
+        root = root.modifyToContainStarredNode(starredNode.id);
         String XPathExpression = XPathPrefix + "[" + root.getXPathExpression() + "]";
         List<ContextNode> selectedList = mainExecutor.executeSingleProcessorGetNodeList(XPathExpression);
         return new XPathResultListPair(XPathExpression, selectedList);
