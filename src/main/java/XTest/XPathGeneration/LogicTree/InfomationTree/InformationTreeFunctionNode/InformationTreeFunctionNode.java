@@ -1,11 +1,18 @@
 package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode;
 
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
+import XTest.TestException.DebugErrorException;
+import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.NumericalBinaryOperator;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.PredicateTreeFunctionNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
+import net.sf.saxon.s9api.SaxonApiException;
 import org.apache.xpath.operations.Bool;
+import org.xmldb.api.base.XMLDBException;
+
+import java.io.IOException;
+import java.sql.SQLException;
 
 import static XTest.StringUtils.getListString;
 
@@ -21,14 +28,14 @@ public abstract class InformationTreeFunctionNode extends InformationTreeNode {
      * to be evaluated true for given context.
      * @param childNode Given context.
      */
-    abstract public void fillContents(InformationTreeNode childNode);
+    abstract public void fillContents(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException;
 
     /**
      * Fill the content parameters of current function node with given child node as context.
      * The given context is either not evaluable or sequence, fill the remaining contents randomly.
      * @param childNode Given context.
      */
-    abstract public void fillContentsRandom(InformationTreeNode childNode);
+    abstract public void fillContentsRandom(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException;
     /**
      *
      * @return String expression of simplified function with current context.
@@ -36,7 +43,7 @@ public abstract class InformationTreeFunctionNode extends InformationTreeNode {
      * Default for function with pattern "function(., param_a, param_b)"
      */
     public String getCurrentContextFunctionExpr() {
-        return functionExpr + "(., " + getListString(childList.subList(1, childList.size())) + ")";
+        return functionExpr + "(., " + getParametersXPathExpression(true, 1) + ")";
     }
 
     /**
@@ -48,13 +55,40 @@ public abstract class InformationTreeFunctionNode extends InformationTreeNode {
     public String getXPathExpression(boolean returnConstant) {
         String returnString = getXPathExpressionCheck(returnConstant);
         if(returnString != null) return returnString;
-        return getDefaultFunctionXPathExpression(returnConstant);
+        returnString = getDefaultFunctionXPathExpression(returnConstant);
+        cacheXPathExpression(returnString, returnConstant);
+        return returnString;
     }
 
     public String getDefaultFunctionXPathExpression(boolean returnConstant) {
         String builder = functionExpr + "(";
-        for(int i = 0; i < childList.size(); i ++) {
-            if(i != 0) builder += ", ";
+        builder += getParametersXPathExpression(returnConstant, 0);
+        return builder;
+    }
+
+    /**
+     *
+     * @param returnConstant
+     * @param startIndex
+     * @return XPath expression of parameters in childList with start index separated by ',',
+     * end index default set to list size.
+     */
+    public String getParametersXPathExpression(boolean returnConstant, int startIndex) {
+        return getParametersXPathExpression(returnConstant, startIndex, childList.size());
+    }
+
+    /**
+     *
+     * @param returnConstant
+     * @param startIndex
+     * @param endIndex
+     * @return XPath expression of parameters in childList with start index and end index separated by ','
+     * (end index exclusive).
+     */
+    public String getParametersXPathExpression(boolean returnConstant, int startIndex, int endIndex) {
+        String builder = "";
+        for(int i = startIndex; i < endIndex; i ++) {
+            if(i != startIndex) builder += ", ";
             builder += childList.get(i).getXPathExpression(returnConstant);
         }
         return builder;

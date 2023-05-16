@@ -55,7 +55,9 @@ public class IntegerDivisionFunctionNode extends InformationTreeFunctionNode imp
     public String getXPathExpression(boolean returnConstant) {
         String leftChild = wrapNumericalBinaryFunctionExpr(childList.get(0), this, returnConstant);
         String rightChild = wrapNumericalBinaryFunctionExpr(childList.get(1), this, returnConstant);
-        return leftChild + " idiv " + rightChild;
+        String returnString = leftChild + " idiv " + rightChild;
+        cacheXPathExpression(returnString, returnConstant);
+        return returnString;
     }
 
     @Override

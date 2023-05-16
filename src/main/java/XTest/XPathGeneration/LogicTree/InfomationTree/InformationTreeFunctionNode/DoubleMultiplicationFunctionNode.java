@@ -75,7 +75,9 @@ public class DoubleMultiplicationFunctionNode extends InformationTreeFunctionNod
     public String getXPathExpression(boolean returnConstant) {
         String leftChild = wrapNumericalBinaryFunctionExpr(childList.get(0), this, returnConstant);
         String rightChild = wrapNumericalBinaryFunctionExpr(childList.get(1), this, returnConstant);
-        return leftChild + " mul " + rightChild;
+        String returnString = leftChild + " mul " + rightChild;
+        cacheXPathExpression(returnString, returnConstant);
+        return returnString;
     }
 
     @Override

@@ -116,7 +116,7 @@ public enum XMLDatatype {
      * @return Random integrated datatype which "datatype" is castable as, no requirements on "datatype":
      * could be non-integrated.
      */
-    public XMLDatatype getRandomCastableIntegratedDatatype(XMLDatatype datatype) {
+    public static XMLDatatype getRandomCastableIntegratedDatatype(XMLDatatype datatype) {
         return null;
     }
 

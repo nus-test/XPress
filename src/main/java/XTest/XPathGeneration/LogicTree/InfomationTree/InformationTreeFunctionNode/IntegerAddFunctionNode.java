@@ -60,8 +60,10 @@ public class IntegerAddFunctionNode extends InformationTreeFunctionNode implemen
     public String getXPathExpression(boolean returnConstant) {
         String returnString = getXPathExpressionCheck(returnConstant);
         if(returnString != null) return returnString;
-        return childList.get(0).getXPathExpression(returnConstant) + " + " +
+        returnString = childList.get(0).getXPathExpression(returnConstant) + " + " +
                 childList.get(1).getXPathExpression(returnConstant);
+        cacheXPathExpression(returnString, returnConstant);
+        return returnString;
     }
 
     @Override

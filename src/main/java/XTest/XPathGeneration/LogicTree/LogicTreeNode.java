@@ -49,7 +49,7 @@ public abstract class LogicTreeNode {
      * @param XPathExpr Calculated XPath expression
      * @param returnConstant XPath expression calculated w/o constant replacement
      */
-    void cacheXPathExpression(String XPathExpr, boolean returnConstant) {
+    protected void cacheXPathExpression(String XPathExpr, boolean returnConstant) {
         if(!returnConstant) this.XPathExpr = XPathExpr;
     }
 

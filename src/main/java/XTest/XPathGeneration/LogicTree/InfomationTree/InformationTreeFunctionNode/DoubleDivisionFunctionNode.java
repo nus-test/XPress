@@ -62,7 +62,9 @@ public class DoubleDivisionFunctionNode extends InformationTreeFunctionNode impl
     public String getXPathExpression(boolean returnConstant) {
         String leftChild = wrapNumericalBinaryFunctionExpr(childList.get(0), this, returnConstant);
         String rightChild = wrapNumericalBinaryFunctionExpr(childList.get(1), this, returnConstant);
-        return leftChild + " div " + rightChild;
+        String returnString = leftChild + " div " + rightChild;
+        cacheXPathExpression(returnString, returnConstant);
+        return returnString;
     }
 
     @Override
