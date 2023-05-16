@@ -51,6 +51,20 @@ public class IntegerAddFunctionNode extends InformationTreeFunctionNode implemen
     }
 
     @Override
+    public String getCurrentContextFunctionExpr() {
+        return ". + " +
+                childList.get(1).getXPathExpression(true);
+    }
+
+    @Override
+    public String getXPathExpression(boolean returnConstant) {
+        String returnString = getXPathExpressionCheck(returnConstant);
+        if(returnString != null) return returnString;
+        return childList.get(0).getXPathExpression(returnConstant) + " + " +
+                childList.get(1).getXPathExpression(returnConstant);
+    }
+
+    @Override
     public IntegerAddFunctionNode newInstance() {
         return new IntegerAddFunctionNode();
     }

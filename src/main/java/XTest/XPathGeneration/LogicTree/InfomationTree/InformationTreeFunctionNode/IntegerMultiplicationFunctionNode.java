@@ -45,6 +45,13 @@ public class IntegerMultiplicationFunctionNode extends InformationTreeFunctionNo
         String value = Integer.toString(GlobalRandom.getInstance().nextInt(1000));
         childList.add(new InformationTreeConstantNode(XMLDatatype.INTEGER, value));
     }
+
+    @Override
+    public String getCurrentContextFunctionExpr() {
+        String rightChild = wrapNumericalBinaryFunctionExpr(childList.get(1), this, true);
+        return ". mul " + rightChild;
+    }
+
     @Override
     public String getXPathExpression(boolean returnConstant) {
         String leftChild = wrapNumericalBinaryFunctionExpr(childList.get(0), this, returnConstant);

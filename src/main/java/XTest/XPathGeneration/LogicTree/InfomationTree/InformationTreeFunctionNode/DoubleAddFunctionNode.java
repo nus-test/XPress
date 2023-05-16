@@ -9,6 +9,7 @@ import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.Numer
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.PredicateTreeFunctionNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 
+import static XTest.StringUtils.getListString;
 import static java.lang.Math.abs;
 
 public class DoubleAddFunctionNode extends InformationTreeFunctionNode implements NumericalBinaryOperator {
@@ -56,6 +57,12 @@ public class DoubleAddFunctionNode extends InformationTreeFunctionNode implement
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
         return recorder.xmlDatatype == XMLDatatype.DOUBLE;
+    }
+
+    @Override
+    public String getCurrentContextFunctionExpr() {
+        return ". + " +
+                childList.get(1).getXPathExpression(true);
     }
 
     @Override

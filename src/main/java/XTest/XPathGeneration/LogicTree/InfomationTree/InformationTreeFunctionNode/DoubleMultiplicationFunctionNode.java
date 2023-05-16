@@ -66,6 +66,12 @@ public class DoubleMultiplicationFunctionNode extends InformationTreeFunctionNod
     }
 
     @Override
+    public String getCurrentContextFunctionExpr() {
+        String rightChild = wrapNumericalBinaryFunctionExpr(childList.get(1), this, true);
+        return ". mul " + rightChild;
+    }
+
+    @Override
     public String getXPathExpression(boolean returnConstant) {
         String leftChild = wrapNumericalBinaryFunctionExpr(childList.get(0), this, returnConstant);
         String rightChild = wrapNumericalBinaryFunctionExpr(childList.get(1), this, returnConstant);
