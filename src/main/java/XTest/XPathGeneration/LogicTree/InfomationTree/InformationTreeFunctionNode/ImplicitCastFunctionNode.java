@@ -72,6 +72,7 @@ public class ImplicitCastFunctionNode extends InformationTreeFunctionNode {
             String XPathExpr = originalContext + " cast as " + transformedDatatype.getValueHandler().officialTypeName;
             context = mainExecutor.executeSingleProcessor(XPathExpr, GlobalSettings.defaultDBName);
         }
+        childList.add(childNode);
     }
 
     @Override
@@ -88,7 +89,7 @@ public class ImplicitCastFunctionNode extends InformationTreeFunctionNode {
     public String getXPathExpression(boolean returnConstant) {
         String returnString = getXPathExpressionCheck(returnConstant);
         if(returnString != null) return returnString;
-        returnString = childList.get(0).getXPathExpressionCheck(returnConstant);
+        returnString = childList.get(0).getXPathExpression(returnConstant);
         cacheXPathExpression(returnString, returnConstant);
         return returnString;
     }
