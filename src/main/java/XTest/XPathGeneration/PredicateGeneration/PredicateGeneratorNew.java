@@ -20,6 +20,7 @@ import org.xmldb.api.base.XMLDBException;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PredicateGeneratorNew {
@@ -46,7 +47,7 @@ public class PredicateGeneratorNew {
     public XPathResultListPair generatePredicate(String XPathPrefix, int maxPhraseLength,
                                                  boolean mixedContent, ContextNode starredNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         String currentNodeIdentifier = "[@id=\"" + starredNode.id + "\"]";
-        List<LogicTreeNode> rootList = null;
+        List<LogicTreeNode> rootList = new ArrayList<>();
         int phraseLength = GlobalRandom.getInstance().nextInt(maxPhraseLength) + 1;
         for(int i = 0; i < phraseLength; i ++) {
             InformationTreeNode currentRoot = generateInformationTree(XPathPrefix, mixedContent, starredNode);
@@ -162,9 +163,22 @@ public class PredicateGeneratorNew {
         if(informationTreeNode.childList.size() == 0) {
             return null;
         }
+        if(new BooleanFunctionNode().checkContextAcceptability(informationTreeNode))
+            return informationTreeNode;
         return booleanSubtreeSearch(informationTreeNode.childList.get(0));
     }
 
+    /**
+     * Build an information tree which results in type evaluable to boolean with limited levels added.
+     * @param informationTreeNode
+     * @return
+     * @throws SQLException
+     * @throws XMLDBException
+     * @throws UnexpectedExceptionThrownException
+     * @throws IOException
+     * @throws SaxonApiException
+     * @throws DebugErrorException
+     */
     public InformationTreeNode aimedBooleanInformationTreeBuild(InformationTreeNode informationTreeNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         if(new BooleanFunctionNode().checkContextAcceptability(informationTreeNode))
             return informationTreeNode;

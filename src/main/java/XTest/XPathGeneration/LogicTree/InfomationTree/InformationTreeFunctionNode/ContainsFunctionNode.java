@@ -20,7 +20,7 @@ public class ContainsFunctionNode extends InformationTreeFunctionNode {
 
     @Override
     public void fillContents(InformationTreeNode childNode) {
-        if(childList.get(0).context == null) {
+        if(childNode.context == null) {
             fillContentsRandom(childNode);
             return;
         }

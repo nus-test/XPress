@@ -2,6 +2,7 @@ package XTest.XPathGeneration;
 
 import XTest.DatabaseExecutor.*;
 import XTest.GlobalRandom;
+import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.ReportGeneration.ReportManager;
 import XTest.TestException.DebugErrorException;
 import XTest.TestException.MismatchingResultException;
@@ -70,6 +71,7 @@ public class XPathGenerationTest {
         dbExecuterList.add(SaxonExecutor.getInstance());
         for(DatabaseExecutor dbExecutor: dbExecuterList)
             dbExecutor.registerDatabase(mainExecutor);
+        XMLDatatype.getCastable(mainExecutor);
 
         XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
         List<String> XPath = new ArrayList<>();
