@@ -165,6 +165,7 @@ public class PredicateGeneratorNew {
     public InformationTreeNode aimedBooleanInformationTreeBuild(InformationTreeNode informationTreeNode) {
         if(new BooleanFunctionNode().checkContextAcceptability(informationTreeNode))
             return informationTreeNode;
+        informationTreeNode = InformationTreeFunctionNodeManager.getRandomMatchingFunctionNodeWithContentAttached(informationTreeNode, informationTreeNode.datatypeRecorder);
         return aimedBooleanInformationTreeBuild(informationTreeNode);
     }
 }
