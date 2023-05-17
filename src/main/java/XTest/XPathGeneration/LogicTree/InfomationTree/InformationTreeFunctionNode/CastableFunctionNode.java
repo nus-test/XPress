@@ -32,6 +32,7 @@ public class CastableFunctionNode extends InformationTreeFunctionNode {
         XMLDatatype transformedDatatype = XMLDatatype.getRandomCastableIntegratedDatatype(originalDatatype);
         transformedDatatypeName = transformedDatatype.getValueHandler().officialTypeName;
         childList.add(childNode);
+        inheritContextChildInfo(childNode);
     }
 
     /**
@@ -43,6 +44,7 @@ public class CastableFunctionNode extends InformationTreeFunctionNode {
         XMLDatatype transformedDatatype = XMLDatatype.getRandomDataType();
         transformedDatatypeName = transformedDatatype.getValueHandler().officialTypeName;
         childList.add(childNode);
+        inheritContextChildInfo(childNode);
     }
 
     @Override

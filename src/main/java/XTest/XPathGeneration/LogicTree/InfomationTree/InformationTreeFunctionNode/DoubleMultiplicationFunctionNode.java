@@ -36,6 +36,7 @@ public class DoubleMultiplicationFunctionNode extends InformationTreeFunctionNod
             multiplicationValue = pre + last;
         }
         childList.add(new InformationTreeConstantNode(XMLDatatype.DOUBLE, Double.toString(multiplicationValue)));
+        inheritContextChildInfo(childNode);
     }
 
     @Override
@@ -55,6 +56,7 @@ public class DoubleMultiplicationFunctionNode extends InformationTreeFunctionNod
         }
         String multiplicationValueStr = Double.toString(multiplicationValue);
         childList.add(new InformationTreeConstantNode(XMLDatatype.DOUBLE, multiplicationValueStr));
+        inheritContextChildInfo(childNode);
     }
 
     @Override

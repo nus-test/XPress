@@ -40,6 +40,7 @@ public class IntegerAddFunctionNode extends InformationTreeFunctionNode implemen
                     getRandomValueBounded(Integer.MIN_VALUE, Integer.MAX_VALUE);
         childList.add(childNode);
         childList.add(new InformationTreeConstantNode(XMLDatatype.INTEGER, value));
+        inheritContextChildInfo(childNode);
     }
 
     @Override

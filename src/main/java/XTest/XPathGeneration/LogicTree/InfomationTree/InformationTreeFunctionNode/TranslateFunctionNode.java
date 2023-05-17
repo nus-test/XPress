@@ -19,6 +19,7 @@ public class TranslateFunctionNode extends InformationTreeFunctionNode {
     @Override
     public void fillContentsRandom(InformationTreeNode childNode) {
         childList.add(childNode);
+        inheritContextChildInfo(childNode);
         String mapStr = XMLDatatype.STRING.getValueHandler().getValue();
         String transStr = XMLDatatype.STRING.getValueHandler().getValue();
         InformationTreeConstantNode mapNode = new InformationTreeConstantNode(XMLDatatype.STRING, mapStr);

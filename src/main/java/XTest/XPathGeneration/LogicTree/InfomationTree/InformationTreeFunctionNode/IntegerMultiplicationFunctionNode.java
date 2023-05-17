@@ -34,11 +34,13 @@ public class IntegerMultiplicationFunctionNode extends InformationTreeFunctionNo
                 value = Integer.toString(1);
         }
         childList.add(childNode);
+        inheritContextChildInfo(childNode);
         childList.add(new InformationTreeConstantNode(XMLDatatype.INTEGER, value));
     }
     @Override
     public void fillContentsRandom(InformationTreeNode childNode) {
         childList.add(childNode);
+        inheritContextChildInfo(childNode);
         String value = Integer.toString(GlobalRandom.getInstance().nextInt(1000));
         childList.add(new InformationTreeConstantNode(XMLDatatype.INTEGER, value));
     }

@@ -36,6 +36,7 @@ public class ContainsFunctionNode extends InformationTreeFunctionNode {
         InformationTreeConstantNode constantNode = new InformationTreeConstantNode
                 (XMLDatatype.STRING, subString);
         childList.add(constantNode);
+        inheritContextChildInfo(childNode);
     }
 
     @Override
@@ -46,6 +47,7 @@ public class ContainsFunctionNode extends InformationTreeFunctionNode {
         InformationTreeConstantNode constantNode = new InformationTreeConstantNode
                 (XMLDatatype.STRING, subString);
         childList.add(constantNode);
+        inheritContextChildInfo(childNode);
     }
 
     @Override

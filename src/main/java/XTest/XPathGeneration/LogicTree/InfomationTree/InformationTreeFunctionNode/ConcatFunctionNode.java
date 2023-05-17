@@ -27,6 +27,7 @@ public class ConcatFunctionNode extends InformationTreeFunctionNode {
         String randomString = XMLDatatype.STRING.getValueHandler().getValue(false);
         InformationTreeConstantNode constantNode = new InformationTreeConstantNode(XMLDatatype.STRING, randomString);
         childList.add(constantNode);
+        inheritContextChildInfo(childNode);
     }
 
     @Override

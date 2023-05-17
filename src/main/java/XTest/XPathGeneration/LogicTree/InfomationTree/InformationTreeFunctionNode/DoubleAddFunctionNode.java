@@ -41,6 +41,7 @@ public class DoubleAddFunctionNode extends InformationTreeFunctionNode implement
             }
         }
         childList.add(new InformationTreeConstantNode(XMLDatatype.DOUBLE, value));
+        inheritContextChildInfo(childNode);
     }
 
     @Override

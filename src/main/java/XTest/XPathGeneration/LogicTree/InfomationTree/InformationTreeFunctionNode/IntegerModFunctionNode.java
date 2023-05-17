@@ -28,6 +28,7 @@ public class IntegerModFunctionNode extends InformationTreeFunctionNode implemen
         double prob = GlobalRandom.getInstance().nextDouble();
         if(prob < 0.5) value = "-" + value;
         childList.add(childNode);
+        inheritContextChildInfo(childNode);
         childList.add(new InformationTreeConstantNode(XMLDatatype.INTEGER, value));
     }
 

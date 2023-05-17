@@ -29,6 +29,7 @@ public class DoubleDivisionFunctionNode extends InformationTreeFunctionNode impl
         double divisionValue = GlobalRandom.getInstance().nextDouble() + 0.5;
         if(divisionValue > 1.2) divisionValue = 1;
         childList.add(childNode);
+        inheritContextChildInfo(childNode);
         String divisionValueStr = Double.toString(divisionValue);
         childList.add(new InformationTreeConstantNode(XMLDatatype.DOUBLE, divisionValueStr));
     }
@@ -40,6 +41,7 @@ public class DoubleDivisionFunctionNode extends InformationTreeFunctionNode impl
         if(last == 0) last = 1;
         double divisionValue = Double.parseDouble(pre + "." + last);
         childList.add(childNode);
+        inheritContextChildInfo(childNode);
         String divisionValueStr = Double.toString(divisionValue);
         childList.add(new InformationTreeConstantNode(XMLDatatype.DOUBLE, divisionValueStr));
     }

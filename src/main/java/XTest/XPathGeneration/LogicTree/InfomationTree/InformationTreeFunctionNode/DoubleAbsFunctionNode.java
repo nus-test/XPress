@@ -23,6 +23,7 @@ public class DoubleAbsFunctionNode extends InformationTreeFunctionNode {
     @Override
     public void fillContentsRandom(InformationTreeNode childNode) {
         childList.add(childNode);
+        inheritContextChildInfo(childNode);
     }
 
     @Override

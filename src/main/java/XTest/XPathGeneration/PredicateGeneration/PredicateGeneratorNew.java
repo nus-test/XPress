@@ -141,8 +141,6 @@ public class PredicateGeneratorNew {
         if(levelLimit == 0)  return informationTreeNode;
 
         // Update information tree node in to a new root
-        double prob = GlobalRandom.getInstance().nextDouble();
-
         InformationTreeNode newRoot;
 
         XMLDatatypeComplexRecorder recorder = InformationTreeFunctionNodeManager.getInstance()

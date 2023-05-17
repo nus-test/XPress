@@ -28,15 +28,16 @@ public class IntegerSubtractionFunctionNode extends InformationTreeFunctionNode 
                     getRandomValueBounded(inputValue - Integer.MAX_VALUE, Integer.MAX_VALUE);
         }
         childList.add(childNode);
+        inheritContextChildInfo(childNode);
         childList.add(new InformationTreeConstantNode(XMLDatatype.INTEGER, value));
     }
 
     @Override
     public void fillContentsRandom(InformationTreeNode childNode) {
         childList.add(childNode);
+        inheritContextChildInfo(childNode);
         String value = ((XMLIntegerHandler) XMLDatatype.INTEGER.getValueHandler()).
                 getRandomValueBounded(Integer.MIN_VALUE, Integer.MAX_VALUE);
-        childList.add(childNode);
         childList.add(new InformationTreeConstantNode(XMLDatatype.INTEGER, value));
     }
 

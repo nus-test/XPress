@@ -30,6 +30,7 @@ public class SubstringFunctionNode extends InformationTreeFunctionNode {
 
     private void fillContentsWithGivenLength(InformationTreeNode childNode, int length) {
         childList.add(childNode);
+        inheritContextChildInfo(childNode);
         double prob = GlobalRandom.getInstance().nextDouble();
         Pair interval = GlobalRandom.getInstance().nextInterval(length);
         InformationTreeConstantNode constantNodeStart = new InformationTreeConstantNode

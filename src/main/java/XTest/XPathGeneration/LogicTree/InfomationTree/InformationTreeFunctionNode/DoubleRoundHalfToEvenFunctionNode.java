@@ -13,10 +13,12 @@ public class DoubleRoundHalfToEvenFunctionNode extends InformationTreeFunctionNo
     @Override
     public void fillContents(InformationTreeNode childNode) {
         fillContentsRandom(childNode);
+        inheritContextChildInfo(childNode);
     }
     @Override
     public void fillContentsRandom(InformationTreeNode childNode) {
         childList.add(childNode);
+        inheritContextChildInfo(childNode);
     }
 
     @Override

@@ -29,6 +29,7 @@ public class BooleanFunctionNode extends InformationTreeFunctionNode {
 
     @Override
     public void fillContentsRandom(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+        inheritContextChildInfo(childNode);
         childList.add(childNode);
     }
 

@@ -73,6 +73,7 @@ public class ImplicitCastFunctionNode extends InformationTreeFunctionNode {
             context = mainExecutor.executeSingleProcessor(XPathExpr, GlobalSettings.defaultDBName);
         }
         childList.add(childNode);
+        inheritContextChildInfo(childNode);
     }
 
     @Override

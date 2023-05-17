@@ -36,6 +36,7 @@ public class DoubleSubtractFunctionNode extends InformationTreeFunctionNode impl
             }
         }
         childList.add(new InformationTreeConstantNode(XMLDatatype.DOUBLE, value));
+        inheritContextChildInfo(childNode);
     }
 
     @Override
@@ -44,6 +45,7 @@ public class DoubleSubtractFunctionNode extends InformationTreeFunctionNode impl
         // TODO: Control interval of randomly generated value to avoid overflow if necessary
         String value = XMLDatatype.DOUBLE.getValueHandler().getValue(false);
         childList.add(new InformationTreeConstantNode(XMLDatatype.DOUBLE, value));
+        inheritContextChildInfo(childNode);
     }
 
     @Override

@@ -32,6 +32,7 @@ public class IntegerDivisionFunctionNode extends InformationTreeFunctionNode imp
         if(Integer.parseInt(value) == 0)
             value = "2";
         childList.add(childNode);
+        inheritContextChildInfo(childNode);
         childList.add(new InformationTreeConstantNode(XMLDatatype.INTEGER, value));
     }
 
@@ -39,6 +40,7 @@ public class IntegerDivisionFunctionNode extends InformationTreeFunctionNode imp
     public void fillContentsRandom(InformationTreeNode childNode) {
         String value = XMLDatatype.INTEGER.getValueHandler().getValue(false);
         childList.add(childNode);
+        inheritContextChildInfo(childNode);
         childList.add(new InformationTreeConstantNode(XMLDatatype.INTEGER, value));
     }
 
