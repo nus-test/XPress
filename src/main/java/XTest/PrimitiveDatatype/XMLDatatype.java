@@ -45,6 +45,7 @@ public enum XMLDatatype {
      * Check if 'A castable as B' is true or false.
      */
     static Map<Pair<XMLDatatype, XMLDatatype>, Boolean> castableMap = new HashMap<>();
+    static Boolean castableMapSet = false;
 
     private XMLDatatype(int id, ValueHandler valueHandler) {
         this.id = id;
@@ -60,6 +61,10 @@ public enum XMLDatatype {
         }
     }
 
+    /**
+     *
+     * @return Random integrated datatype.
+     */
     public static XMLDatatype getRandomDataType() {
         XMLDatatype xmlDatatype = GlobalRandom.getInstance().getRandomFromList(dataTypeList);
         if(xmlDatatype == BOOLEAN && GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_1)
@@ -110,6 +115,15 @@ public enum XMLDatatype {
         return answer;
     }
 
+    public static Boolean checkCastableFromMap(XMLDatatype from, XMLDatatype to) {
+        Boolean answer = null;
+        Pair<XMLDatatype, XMLDatatype> pair = Pair.of(from, to);
+        if(castableMap.containsKey(Pair.of(from, to))) {
+            answer = castableMap.get(pair);
+        }
+        return answer;
+    }
+
     /**
      *
      * @param datatype
@@ -130,5 +144,6 @@ public enum XMLDatatype {
                 }
             }
         }
+        castableMapSet = true;
     }
 }

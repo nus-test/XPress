@@ -3,6 +3,8 @@ package XTest.XPathGeneration.LogicTree.InfomationTree;
 import XTest.PrimitiveDatatype.XMLDatatype;
 
 public class InformationTreeConstantNode extends InformationTreeNode {
+    public InformationTreeConstantNode() {}
+
     /**
      * Create new constant node with base type and string expression of context (raw value)
      * @param datatype

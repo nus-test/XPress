@@ -4,6 +4,7 @@ import XTest.DatabaseExecutor.MainExecutor;
 import XTest.GlobalRandom;
 import XTest.GlobalSettings;
 import XTest.ReportGeneration.KnownBugs;
+import XTest.TestException.DebugErrorException;
 import XTest.TestException.MismatchingResultException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XMLGeneration.ContextNode;
@@ -30,7 +31,7 @@ public class XPathGenerator {
     }
 
     public String generateXPath(XPathResultListPair starterBuildPair, int depth, boolean complex)
-            throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, UnexpectedExceptionThrownException, InstantiationException, IllegalAccessException {
+            throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, UnexpectedExceptionThrownException, InstantiationException, IllegalAccessException, DebugErrorException {
         if(depth == 0) {
             return starterBuildPair.XPath;
         }
@@ -116,15 +117,15 @@ public class XPathGenerator {
         return generateXPath(currentBuildPair, depth - 1, complex);
     }
 
-    public String generateXPath(String currentBuilder, List<ContextNode> currentNodeList, int depth, boolean complex) throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, UnexpectedExceptionThrownException, InstantiationException, IllegalAccessException {
+    public String generateXPath(String currentBuilder, List<ContextNode> currentNodeList, int depth, boolean complex) throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, UnexpectedExceptionThrownException, InstantiationException, IllegalAccessException, DebugErrorException {
         return generateXPath(new XPathResultListPair(currentBuilder, currentNodeList), depth, complex);
     }
 
-    public String generateXPath(String currentBuilder, List<ContextNode> currentNodeList, int depth) throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, UnexpectedExceptionThrownException, InstantiationException, IllegalAccessException {
+    public String generateXPath(String currentBuilder, List<ContextNode> currentNodeList, int depth) throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, UnexpectedExceptionThrownException, InstantiationException, IllegalAccessException, DebugErrorException {
         return generateXPath(currentBuilder, currentNodeList, depth, true);
     }
 
-    public String getXPath(int depth) throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, InstantiationException, IllegalAccessException, UnexpectedExceptionThrownException {
+    public String getXPath(int depth) throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, InstantiationException, IllegalAccessException, UnexpectedExceptionThrownException, DebugErrorException {
         return generateXPath("", null, depth);
     }
 

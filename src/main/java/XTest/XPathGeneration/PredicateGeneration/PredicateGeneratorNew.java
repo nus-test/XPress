@@ -5,6 +5,7 @@ import XTest.GlobalRandom;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.ReportGeneration.KnownBugs;
+import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XMLGeneration.ContextNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeContextNode;
@@ -43,7 +44,7 @@ public class PredicateGeneratorNew {
      * @throws SaxonApiException
      */
     public XPathResultListPair generatePredicate(String XPathPrefix, int maxPhraseLength,
-                                                 boolean mixedContent, ContextNode starredNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
+                                                 boolean mixedContent, ContextNode starredNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         String currentNodeIdentifier = "[@id=\"" + starredNode.id + "\"]";
         List<LogicTreeNode> rootList = null;
         int phraseLength = GlobalRandom.getInstance().nextInt(maxPhraseLength) + 1;
@@ -77,7 +78,7 @@ public class PredicateGeneratorNew {
      * @param starredNode The starred node in current candidate node set which is required to be in the answer set.
      * @return Root node of the generated information tree (tree height is random within range).
      */
-    public InformationTreeNode generateInformationTree(String XPathPrefix, boolean mixedContent, ContextNode starredNode) {
+    public InformationTreeNode generateInformationTree(String XPathPrefix, boolean mixedContent, ContextNode starredNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         // First select the direct context for current evaluation.
         double prob = GlobalRandom.getInstance().nextDouble();
 
@@ -115,7 +116,7 @@ public class PredicateGeneratorNew {
      * @param levelLimit Limitation of generated tree height, but is not guaranteed to strictly meet the limits.
      * @return The root node of the generated information tree.
      */
-    public InformationTreeNode buildBooleanInformationTree(InformationTreeNode informationTreeNode, int levelLimit) {
+    public InformationTreeNode buildBooleanInformationTree(InformationTreeNode informationTreeNode, int levelLimit) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         InformationTreeNode root = buildInformationTree(informationTreeNode, levelLimit);
         double prob = GlobalRandom.getInstance().nextDouble();
         InformationTreeNode newRoot = null;
@@ -135,7 +136,7 @@ public class PredicateGeneratorNew {
      * @param levelLimit Limitation of generated tree height.
      * @return The root node of the generated information tree.
      */
-    public InformationTreeNode buildInformationTree(InformationTreeNode informationTreeNode, int levelLimit) {
+    public InformationTreeNode buildInformationTree(InformationTreeNode informationTreeNode, int levelLimit) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         if(levelLimit == 0)  return informationTreeNode;
 
         // Update information tree node in to a new root
@@ -143,8 +144,10 @@ public class PredicateGeneratorNew {
 
         InformationTreeNode newRoot;
 
-        XMLDatatypeComplexRecorder recorder = InformationTreeFunctionNodeManager.getRandomTargetedDatatypeRecorder(informationTreeNode.datatypeRecorder);
-        newRoot = InformationTreeFunctionNodeManager.getRandomMatchingFunctionNodeWithContentAttached(informationTreeNode, recorder);
+        XMLDatatypeComplexRecorder recorder = InformationTreeFunctionNodeManager.getInstance()
+                .getRandomTargetedDatatypeRecorder(informationTreeNode.datatypeRecorder);
+        newRoot = InformationTreeFunctionNodeManager.getInstance()
+                .getRandomMatchingFunctionNodeWithContentAttached(informationTreeNode, recorder);
 
         return buildInformationTree(newRoot, levelLimit - 1);
     }
@@ -162,10 +165,10 @@ public class PredicateGeneratorNew {
         return booleanSubtreeSearch(informationTreeNode.childList.get(0));
     }
 
-    public InformationTreeNode aimedBooleanInformationTreeBuild(InformationTreeNode informationTreeNode) {
+    public InformationTreeNode aimedBooleanInformationTreeBuild(InformationTreeNode informationTreeNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         if(new BooleanFunctionNode().checkContextAcceptability(informationTreeNode))
             return informationTreeNode;
-        informationTreeNode = InformationTreeFunctionNodeManager.getRandomMatchingFunctionNodeWithContentAttached(informationTreeNode, informationTreeNode.datatypeRecorder);
+        informationTreeNode = InformationTreeFunctionNodeManager.getInstance().getRandomMatchingFunctionNodeWithContentAttached(informationTreeNode, informationTreeNode.datatypeRecorder);
         return aimedBooleanInformationTreeBuild(informationTreeNode);
     }
 }

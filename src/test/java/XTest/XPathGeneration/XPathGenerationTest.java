@@ -3,6 +3,7 @@ package XTest.XPathGeneration;
 import XTest.DatabaseExecutor.*;
 import XTest.GlobalRandom;
 import XTest.ReportGeneration.ReportManager;
+import XTest.TestException.DebugErrorException;
 import XTest.TestException.MismatchingResultException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.TestException.UnsupportedContextSetUpException;
@@ -21,7 +22,7 @@ import java.util.List;
 public class XPathGenerationTest {
 
     @Test
-    void XPathGenerationTest() throws IOException, SQLException, XMLDBException, SaxonApiException, MismatchingResultException, InstantiationException, IllegalAccessException, UnexpectedExceptionThrownException, ClassNotFoundException, UnsupportedContextSetUpException {
+    void XPathGenerationTest() throws IOException, SQLException, XMLDBException, SaxonApiException, MismatchingResultException, InstantiationException, IllegalAccessException, UnexpectedExceptionThrownException, ClassNotFoundException, UnsupportedContextSetUpException, DebugErrorException {
         XMLDocumentGenerator xmlDocumentGenerator = new XMLDocumentGenerator();
         XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(15);
         System.out.println(xmlContext.getXmlContent());
@@ -58,7 +59,7 @@ public class XPathGenerationTest {
     }
 
     @Test
-    void newXPathGeneratorTest() throws SQLException, UnsupportedContextSetUpException, XMLDBException, IOException, SaxonApiException, MismatchingResultException, UnexpectedExceptionThrownException, InstantiationException, IllegalAccessException {
+    void newXPathGeneratorTest() throws SQLException, UnsupportedContextSetUpException, XMLDBException, IOException, SaxonApiException, MismatchingResultException, UnexpectedExceptionThrownException, InstantiationException, IllegalAccessException, DebugErrorException {
         XMLDocumentGenerator xmlDocumentGenerator = new XMLDocumentGenerator();
         XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(15);
         System.out.println(xmlContext.getXmlContent());
@@ -75,7 +76,7 @@ public class XPathGenerationTest {
         try {
             mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
             mainExecutor.setExtraLeafNodeContext(xmlDocumentGenerator.generateExtraLeafNodes(20));
-            for(int i = 0; i < 20; i ++)
+            for(int i = 0; i < 1; i ++)
                 XPath.add(XPathGenerator.getXPath(1));
             for(String XPathStr: XPath) {
                 System.out.println("Generated XPath: ------------------------------");

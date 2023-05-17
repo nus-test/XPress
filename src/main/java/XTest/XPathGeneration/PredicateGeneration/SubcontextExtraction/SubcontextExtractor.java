@@ -9,6 +9,7 @@ import XTest.PrimitiveDatatype.XMLIntegerHandler;
 import XTest.PrimitiveDatatype.XMLNumeric;
 import XTest.PrimitiveDatatype.XMLSequenceHandler;
 import XTest.ReportGeneration.KnownBugs;
+import XTest.TestException.DebugErrorException;
 import XTest.TestException.MismatchingResultException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XMLGeneration.ContextNode;
@@ -43,7 +44,7 @@ public class SubcontextExtractor {
 
     public PredicateTreeConstantNode extractSubcontext(String XPathPrefixFull, String currentNodeIdentifier, ContextNode currentNode,
                                                boolean allowTextContentFlag, boolean complex)
-            throws SQLException, XMLDBException, MismatchingResultException, UnexpectedExceptionThrownException, IOException, SaxonApiException, InstantiationException, IllegalAccessException {
+            throws SQLException, XMLDBException, MismatchingResultException, UnexpectedExceptionThrownException, IOException, SaxonApiException, InstantiationException, IllegalAccessException, DebugErrorException {
         double prob = GlobalRandom.getInstance().nextDouble();
 
         String selectCurrentNodeXPath = XPathPrefixFull + currentNodeIdentifier;
