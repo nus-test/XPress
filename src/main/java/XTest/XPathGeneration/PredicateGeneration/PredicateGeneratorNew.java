@@ -27,6 +27,20 @@ public class PredicateGeneratorNew {
         this.mainExecutor = mainExecutor;
     }
 
+    /**
+     * Generates a predicate for selected node set by XPath prefix. e.g. XPath prefix = "/A",
+     * generated result predicate string could be [@id = "1" and text() = "hello"].
+     * @param XPathPrefix The prefix current candidate node set is selected by.
+     * @param maxPhraseLength The number of individual information trees included in the generated predicate.
+     * @param mixedContent If set to true, the nodes selected by XPathPrefix has different text types.
+     * @param starredNode The starred node in current candidate node set which is required to be in the answer set.
+     * @return The generated predicate string without square brackets and the result node set after predicate filtering.
+     * @throws SQLException
+     * @throws XMLDBException
+     * @throws UnexpectedExceptionThrownException
+     * @throws IOException
+     * @throws SaxonApiException
+     */
     public XPathResultListPair generatePredicate(String XPathPrefix, int maxPhraseLength,
                                                  boolean mixedContent, ContextNode starredNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
         String currentNodeIdentifier = "[@id=\"" + starredNode.id + "\"]";
@@ -55,7 +69,13 @@ public class PredicateGeneratorNew {
         return new XPathResultListPair(XPathExpression, selectedList);
     }
 
-
+    /**
+     * Generate a information tree which root node could be evaluated as boolean type.
+     * @param XPathPrefix The prefix current candidate node set is selected by.
+     * @param mixedContent If set to true, the nodes selected by XPathPrefix has different text types.
+     * @param starredNode The starred node in current candidate node set which is required to be in the answer set.
+     * @return Root node of the generated information tree (tree height is random within range).
+     */
     public InformationTreeNode generateInformationTree(String XPathPrefix, boolean mixedContent, ContextNode starredNode) {
         // First select the direct context for current evaluation.
         double prob = GlobalRandom.getInstance().nextDouble();
@@ -87,10 +107,25 @@ public class PredicateGeneratorNew {
         return root;
     }
 
+    /**
+     * Build an information tree starting from informationTreeNode to grow upwards, with tree height to be controlled
+     * around levelLimit. The resulting information tree is guaranteed to be evaluable as boolean.
+     * @param informationTreeNode Starting node to build the information tree. Tree will be constructed upwards.
+     * @param levelLimit Limitation of generated tree height, but is not guaranteed to strictly meet the limits.
+     * @return The root node of the generated information tree.
+     */
     public InformationTreeNode buildBooleanInformationTree(InformationTreeNode informationTreeNode, int levelLimit) {
+        InformationTreeNode root = buildInformationTree(informationTreeNode, levelLimit);
         return null;
     }
 
+    /**
+     * Build an information tree starting from informationTreeNode to grow upwards, with tree height limited to levelLimit.
+     * The evaluation of the resulting information tree could result in any type.
+     * @param informationTreeNode Starting node to build the information tree. Tree will be constructed upwards.
+     * @param levelLimit Limitation of generated tree height.
+     * @return The root node of the generated information tree.
+     */
     public InformationTreeNode buildInformationTree(InformationTreeNode informationTreeNode, int levelLimit) {
         if(levelLimit == 0)  return informationTreeNode;
 

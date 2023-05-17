@@ -8,6 +8,7 @@ import XTest.TestException.MismatchingResultException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XMLGeneration.ContextNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateGenerator;
+import XTest.XPathGeneration.PredicateGeneration.PredicateGeneratorNew;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeConstantNode;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
@@ -21,10 +22,10 @@ public class XPathGenerator {
     MainExecutor mainExecutor;
     SequenceGenerator sequenceGenerator;
     PrefixQualifier prefixQualifier = new PrefixQualifier();
-    PredicateGenerator predicateGenerator;
+    PredicateGeneratorNew predicateGenerator;
     public XPathGenerator(MainExecutor mainExecutor) {
         this.mainExecutor = mainExecutor;
-        predicateGenerator = new PredicateGenerator(mainExecutor, this);
+        predicateGenerator = new PredicateGeneratorNew(mainExecutor);
         sequenceGenerator = new SequenceGenerator(mainExecutor);
     }
 
@@ -86,11 +87,13 @@ public class XPathGenerator {
             nodeIdList = mainExecutor.executeAndCompare(currentBuildPair.XPath);
             currentBuildPair.contextNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
         }
-        if(prob < 0.15 && (!KnownBugs.exist)) {
-            currentBuildPair = indexSearchAttempt(currentBuildPair);
-        }
+//        if(prob < 0.15 && (!KnownBugs.exist)) {
+//            currentBuildPair = indexSearchAttempt(currentBuildPair);
+//        }
         prob = GlobalRandom.getInstance().nextDouble();
 
+        // Debug: currently make sure that predicate is generated.
+        prob = 0.1;
         // Predicate application start
 //        if(prob < 0.6) {
 //            randomNode = GlobalRandom.getInstance().getRandomFromList(currentBuildPair.contextNodeList);
@@ -101,16 +104,15 @@ public class XPathGenerator {
 //        }
         if(prob < 0.6) {
             randomNode = GlobalRandom.getInstance().getRandomFromList(currentBuildPair.contextNodeList);
-            XPathResultListPair predicateContext = predicateGenerator.generatePredicate(currentBuildPair.XPath, 3, randomNode,
-                    allowTextContentFlag, complex);
+            XPathResultListPair predicateContext = predicateGenerator.generatePredicate(currentBuildPair.XPath, 1, !allowTextContentFlag, randomNode);
             currentBuildPair.XPath += predicateContext.XPath;
             currentBuildPair.contextNodeList = predicateContext.contextNodeList;
         }
         // Predicate application end
 
-        prob = GlobalRandom.getInstance().nextDouble();
-        if(prob < 0.2 && (!KnownBugs.exist))
-            currentBuildPair = indexSearchAttempt(currentBuildPair);
+//        prob = GlobalRandom.getInstance().nextDouble();
+//        if(prob < 0.2 && (!KnownBugs.exist))
+//            currentBuildPair = indexSearchAttempt(currentBuildPair);
         return generateXPath(currentBuildPair, depth - 1, complex);
     }
 

@@ -56,4 +56,35 @@ public class XPathGenerationTest {
             mainExecutor.close();
         }
     }
+
+    @Test
+    void newXPathGeneratorTest() throws SQLException, UnsupportedContextSetUpException, XMLDBException, IOException, SaxonApiException, MismatchingResultException, UnexpectedExceptionThrownException, InstantiationException, IllegalAccessException {
+        XMLDocumentGenerator xmlDocumentGenerator = new XMLDocumentGenerator();
+        XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(15);
+        System.out.println(xmlContext.getXmlContent());
+        MainExecutor mainExecutor = new MainExecutor();
+
+        List<DatabaseExecutor> dbExecuterList = new ArrayList<>();
+
+        dbExecuterList.add(SaxonExecutor.getInstance());
+        for(DatabaseExecutor dbExecutor: dbExecuterList)
+            dbExecutor.registerDatabase(mainExecutor);
+
+        XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
+        List<String> XPath = new ArrayList<>();
+        try {
+            mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
+            mainExecutor.setExtraLeafNodeContext(xmlDocumentGenerator.generateExtraLeafNodes(20));
+            for(int i = 0; i < 20; i ++)
+                XPath.add(XPathGenerator.getXPath(1));
+            for(String XPathStr: XPath) {
+                System.out.println("Generated XPath: ------------------------------");
+                System.out.println(XPathStr);
+                System.out.println("Execution Result: =============================");
+                System.out.println(mainExecutor.executeAndCompare(XPathStr));
+            }
+        } finally {
+            mainExecutor.close();
+        }
+    }
 }
