@@ -1,5 +1,6 @@
 package XTest.XPathGeneration.LogicTree.InfomationTree;
 
+import XTest.GlobalRandom;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.TestException.DebugErrorException;
@@ -74,7 +75,7 @@ public abstract class InformationTreeNode extends LogicTreeNode {
      * @return The calculation string which could compute the correct result for the starred node of
      * current information tree.
      */
-    String getCalculationString() throws DebugErrorException {
+    public String getCalculationString() throws DebugErrorException {
         String calculationString = "";
         if(containsContextConstant) calculationString = getXPathExpression(true);
         else if(!selfContext) {
@@ -121,5 +122,21 @@ public abstract class InformationTreeNode extends LogicTreeNode {
         this.containsContextConstant = childNode.containsContextConstant;
         this.selfContext = childNode.selfContext;
         this.starredNodeId = childNode.starredNodeId;
+    }
+
+    public void calculateInfo() throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+        String calculationString = getCalculationString();
+        if(calculationString != null) {
+            if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) {
+                context = mainExecutor.executeSingleProcessor("count(" + calculationString + ")");
+            }
+            else context = mainExecutor.executeSingleProcessor(calculationString);
+            if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE && datatypeRecorder.subDatatype == XMLDatatype.NODE) {
+                Integer size = Integer.parseInt(context);
+                Integer randomId = GlobalRandom.getInstance().nextInt(size) + 1;
+                supplementaryContext = mainExecutor.executeSingleProcessor(calculationString + '[' +
+                        randomId + "]/@id");
+            }
+        }
     }
 }

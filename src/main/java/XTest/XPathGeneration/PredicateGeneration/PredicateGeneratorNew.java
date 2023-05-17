@@ -95,13 +95,13 @@ public class PredicateGeneratorNew {
                 contextNode.datatypeRecorder.nodeMix = false;
             contextNode.setXPath(pathToLeaf);
             contextNode.setSelfContextFlag(false);
-
         } else {
             // Select current node
             contextNode.datatypeRecorder.xmlDatatype = XMLDatatype.NODE;
             contextNode.datatypeRecorder.nodeMix = mixedContent;
             contextNode.setSelfContextFlag(true);
         }
+        contextNode.calculateInfo();
 
         // Build information tree from context node
         int levelLimit = GlobalRandom.getInstance().nextInt(5);
@@ -125,9 +125,9 @@ public class PredicateGeneratorNew {
             newRoot = booleanSubtreeSearch(root);
         }
         if(newRoot == null) {
-
+            newRoot = aimedBooleanInformationTreeBuild(root);
         }
-        return null;
+        return newRoot;
     }
 
     /**
@@ -149,7 +149,7 @@ public class PredicateGeneratorNew {
                 .getRandomTargetedDatatypeRecorder(informationTreeNode.datatypeRecorder);
         newRoot = InformationTreeFunctionNodeManager.getInstance()
                 .getRandomMatchingFunctionNodeWithContentAttached(informationTreeNode, recorder);
-
+        newRoot.calculateInfo();
         return buildInformationTree(newRoot, levelLimit - 1);
     }
 

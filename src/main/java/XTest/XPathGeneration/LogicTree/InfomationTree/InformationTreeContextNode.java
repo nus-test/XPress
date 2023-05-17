@@ -1,5 +1,7 @@
 package XTest.XPathGeneration.LogicTree.InfomationTree;
 
+import XTest.PrimitiveDatatype.XMLDatatype;
+
 public class InformationTreeContextNode extends InformationTreeNode {
     /**
      * Record down the XPathPrefix to produce node candidates before applying current information tree selection.
@@ -8,7 +10,7 @@ public class InformationTreeContextNode extends InformationTreeNode {
     public String XPathPrefix;
 
     // For context node, XPathExpr refers to the sub selection XPath expression.
-    // If is referring to current node, should be ignored. Or returned as .
+    // If referring to current node, should be ignored. Or returned as .
     public void setXPath(String XPath) {
         this.XPathExpr = XPath;
     }
@@ -19,5 +21,12 @@ public class InformationTreeContextNode extends InformationTreeNode {
 
     public void setStarredNodeId(int starredNodeId) {
         this.starredNodeId = starredNodeId;
+    }
+
+    @Override
+    public String getCalculationString() {
+        if(dataTypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
+            return "//*[@id=\"" + starredNodeId + "\"]/" + XPathExpr + "";
+        return null;
     }
 }
