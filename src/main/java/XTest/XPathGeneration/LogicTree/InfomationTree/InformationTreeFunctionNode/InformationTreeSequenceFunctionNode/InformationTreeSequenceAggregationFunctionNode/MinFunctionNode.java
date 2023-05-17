@@ -7,7 +7,7 @@ import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNod
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class MinFunctionNode extends InformationTreeSequenceAggregationFunctionNode {
-    MinFunctionNode() {
+    public MinFunctionNode() {
         functionExpr = "min";
     }
 

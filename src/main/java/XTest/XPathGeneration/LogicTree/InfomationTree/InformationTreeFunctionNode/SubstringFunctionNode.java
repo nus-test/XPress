@@ -9,7 +9,7 @@ import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class SubstringFunctionNode extends InformationTreeFunctionNode {
 
-    SubstringFunctionNode() {
+    public SubstringFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.STRING;
         functionExpr = "substring";
     }

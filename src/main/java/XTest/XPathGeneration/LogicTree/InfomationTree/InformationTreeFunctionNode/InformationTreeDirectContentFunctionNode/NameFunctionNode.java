@@ -4,7 +4,7 @@ import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class NameFunctionNode extends InformationTreeDirectContentFunctionNode {
-    NameFunctionNode() {
+    public NameFunctionNode() {
         functionExpr = "name";
     }
 

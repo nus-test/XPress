@@ -6,7 +6,7 @@ import XTest.PrimitiveDatatype.XMLNumeric;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class MaxFunctionNode extends InformationTreeSequenceAggregationFunctionNode {
-    MaxFunctionNode() {
+    public MaxFunctionNode() {
         functionExpr = "max";
     }
 

@@ -5,7 +5,7 @@ import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNod
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class HeadFunctionNode extends InformationTreeSequenceFunctionNode {
-    HeadFunctionNode() {
+    public HeadFunctionNode() {
         functionExpr = "head";
     }
 

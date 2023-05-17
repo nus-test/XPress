@@ -3,7 +3,7 @@ package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNo
 import XTest.PrimitiveDatatype.XMLDatatype;
 
 public class AverageFunctionNode extends InformationTreeSequenceAggregationFunctionNode {
-    AverageFunctionNode() {
+    public AverageFunctionNode() {
         functionExpr = "avg";
         datatypeRecorder.xmlDatatype = XMLDatatype.DOUBLE;
     }

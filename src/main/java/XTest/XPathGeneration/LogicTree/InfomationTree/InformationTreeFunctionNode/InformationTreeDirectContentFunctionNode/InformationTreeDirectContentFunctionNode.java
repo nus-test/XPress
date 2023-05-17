@@ -2,13 +2,20 @@ package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNo
 
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
+import XTest.TestException.DebugErrorException;
+import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
+import net.sf.saxon.s9api.SaxonApiException;
+import org.xmldb.api.base.XMLDBException;
+
+import java.io.IOException;
+import java.sql.SQLException;
 
 public abstract class InformationTreeDirectContentFunctionNode extends InformationTreeFunctionNode {
 
     @Override
-    public void fillContents(InformationTreeNode childNode) {
+    public void fillContents(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         fillContentsRandom(childNode);
     }
 

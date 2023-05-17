@@ -12,7 +12,7 @@ import static java.lang.Math.abs;
 
 public class DoubleMultiplicationFunctionNode extends InformationTreeFunctionNode implements NumericalBinaryOperator {
 
-    DoubleMultiplicationFunctionNode() {
+    public DoubleMultiplicationFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.DOUBLE;
     }
 

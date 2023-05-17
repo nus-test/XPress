@@ -5,7 +5,7 @@ import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 // TODO: Should only accept atomic types (could be with implicit cast) and would also result in list of atomic types.
 public class DistinctValuesFunctionNode extends InformationTreeSequenceFunctionNode {
-    DistinctValuesFunctionNode() {
+    public DistinctValuesFunctionNode() {
         functionExpr = "distinct-values";
     }
 

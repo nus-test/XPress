@@ -5,7 +5,7 @@ import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class DoubleRoundHalfToEvenFunctionNode extends InformationTreeFunctionNode {
-    DoubleRoundHalfToEvenFunctionNode() {
+    public DoubleRoundHalfToEvenFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.DOUBLE;
         functionExpr = "round-half-to-even";
     }

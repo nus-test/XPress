@@ -9,7 +9,7 @@ import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.Numer
 
 public class IntegerSubtractionFunctionNode extends InformationTreeFunctionNode implements NumericalBinaryOperator {
 
-    IntegerSubtractionFunctionNode() {
+    public IntegerSubtractionFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;
     }
     @Override

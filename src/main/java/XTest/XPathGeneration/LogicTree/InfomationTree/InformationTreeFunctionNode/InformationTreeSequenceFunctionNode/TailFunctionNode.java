@@ -5,7 +5,7 @@ import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class TailFunctionNode extends InformationTreeSequenceFunctionNode {
-    TailFunctionNode() {
+    public TailFunctionNode() {
         functionExpr = "tail";
     }
 

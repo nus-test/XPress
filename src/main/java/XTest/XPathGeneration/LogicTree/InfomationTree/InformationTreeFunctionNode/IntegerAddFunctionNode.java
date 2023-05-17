@@ -9,7 +9,7 @@ import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.Numer
 
 public class IntegerAddFunctionNode extends InformationTreeFunctionNode implements NumericalBinaryOperator {
 
-    IntegerAddFunctionNode() {
+    public IntegerAddFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;
     }
 

@@ -3,7 +3,7 @@ package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNo
 import XTest.PrimitiveDatatype.XMLDatatype;
 
 public class CountFunctionNode extends InformationTreeSequenceAggregationFunctionNode {
-    CountFunctionNode() {
+    public CountFunctionNode() {
         functionExpr = "count";
         datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;
     }

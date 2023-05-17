@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class BooleanFunctionNode extends InformationTreeFunctionNode {
-    BooleanFunctionNode() {
+    public BooleanFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.BOOLEAN;
         functionExpr = "boolean";
     }

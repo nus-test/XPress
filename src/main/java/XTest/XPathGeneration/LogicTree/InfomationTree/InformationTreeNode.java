@@ -97,7 +97,7 @@ public abstract class InformationTreeNode extends LogicTreeNode {
         return checkIfContainsStarredNode(starredNodeId);
     }
 
-    boolean checkIfContainsStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
+    public boolean checkIfContainsStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
         String expr = getXPathExpression();
         List<Integer> resultList = mainExecutor.executeSingleProcessorGetIdList(expr);
         return resultList.contains(starredNodeId);

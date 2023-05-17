@@ -5,7 +5,7 @@ import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class LowerCaseFunctionNode extends InformationTreeFunctionNode {
-    LowerCaseFunctionNode() {
+    public LowerCaseFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.STRING;
         functionExpr = "lower-case";
     }

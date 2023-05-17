@@ -5,7 +5,7 @@ import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class MinutesFromDurationFunctionNode extends InformationTreeFunctionNode {
-    MinutesFromDurationFunctionNode() {
+    public MinutesFromDurationFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;
         functionExpr = "minutes-from-duration";
     }

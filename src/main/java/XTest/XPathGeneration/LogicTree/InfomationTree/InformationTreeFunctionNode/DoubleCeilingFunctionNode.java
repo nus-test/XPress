@@ -5,7 +5,7 @@ import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class DoubleCeilingFunctionNode extends InformationTreeFunctionNode {
-    DoubleCeilingFunctionNode() {
+    public DoubleCeilingFunctionNode() {
         this.datatypeRecorder.xmlDatatype = XMLDatatype.DOUBLE;
         functionExpr = "ceiling";
     }

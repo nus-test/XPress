@@ -6,7 +6,7 @@ import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNod
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class TranslateFunctionNode extends InformationTreeFunctionNode {
-    TranslateFunctionNode() {
+    public TranslateFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.STRING;
         functionExpr = "translate";
     }

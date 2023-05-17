@@ -3,7 +3,7 @@ package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNo
 import XTest.PrimitiveDatatype.XMLDatatype;
 
 public class ExistsFunctionNode extends InformationTreeSequenceFunctionNode {
-    ExistsFunctionNode() {
+    public ExistsFunctionNode() {
         functionExpr = "exists";
         datatypeRecorder.xmlDatatype = XMLDatatype.BOOLEAN;
     }

@@ -7,7 +7,7 @@ import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNod
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class SubstringBeforeFunctionNode extends InformationTreeFunctionNode {
-    SubstringBeforeFunctionNode() {
+    public SubstringBeforeFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.STRING;
         functionExpr = "substring-before";
     }

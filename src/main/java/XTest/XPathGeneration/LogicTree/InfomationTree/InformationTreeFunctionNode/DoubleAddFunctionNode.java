@@ -10,7 +10,7 @@ import static XTest.StringUtils.getListString;
 import static java.lang.Math.abs;
 
 public class DoubleAddFunctionNode extends InformationTreeFunctionNode implements NumericalBinaryOperator {
-    DoubleAddFunctionNode() {
+    public DoubleAddFunctionNode() {
         this.datatypeRecorder.xmlDatatype = XMLDatatype.DOUBLE;
     }
 

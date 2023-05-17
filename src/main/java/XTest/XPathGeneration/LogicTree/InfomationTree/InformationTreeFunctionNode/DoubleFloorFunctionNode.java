@@ -6,7 +6,7 @@ import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class DoubleFloorFunctionNode extends InformationTreeFunctionNode {
 
-    DoubleFloorFunctionNode() {
+    public DoubleFloorFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.DOUBLE;
         functionExpr = "floor";
     }

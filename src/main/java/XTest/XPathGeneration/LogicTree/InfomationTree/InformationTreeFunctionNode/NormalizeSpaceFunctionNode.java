@@ -5,7 +5,7 @@ import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class NormalizeSpaceFunctionNode extends InformationTreeFunctionNode {
-    NormalizeSpaceFunctionNode() {
+    public NormalizeSpaceFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.STRING;
         functionExpr = "normalize-space";
     }

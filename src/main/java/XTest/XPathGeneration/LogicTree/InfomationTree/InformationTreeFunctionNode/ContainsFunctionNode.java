@@ -8,7 +8,7 @@ import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNod
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class ContainsFunctionNode extends InformationTreeFunctionNode {
-    ContainsFunctionNode() {
+    public ContainsFunctionNode() {
         this.datatypeRecorder.xmlDatatype = XMLDatatype.BOOLEAN;
         functionExpr = "contains";
     }

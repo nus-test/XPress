@@ -9,7 +9,7 @@ import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.Numer
 import static java.lang.Math.abs;
 
 public class DoubleSubtractFunctionNode extends InformationTreeFunctionNode implements NumericalBinaryOperator {
-    DoubleSubtractFunctionNode() {
+    public DoubleSubtractFunctionNode() {
         this.datatypeRecorder.xmlDatatype  = XMLDatatype.DOUBLE;
     }
 

@@ -5,7 +5,7 @@ import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class SortFunctionNode extends InformationTreeSequenceFunctionNode {
 
-    SortFunctionNode() {
+    public SortFunctionNode() {
         functionExpr = "sort";
     }
 

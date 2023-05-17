@@ -5,7 +5,7 @@ import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class DoubleRoundFunctionNode extends InformationTreeFunctionNode {
-    DoubleRoundFunctionNode() {
+    public DoubleRoundFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.DOUBLE;
         functionExpr = "round";
     }

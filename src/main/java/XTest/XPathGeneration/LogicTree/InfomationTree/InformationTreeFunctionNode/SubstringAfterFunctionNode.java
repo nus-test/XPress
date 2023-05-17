@@ -7,7 +7,7 @@ import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNod
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class SubstringAfterFunctionNode extends InformationTreeFunctionNode {
-    SubstringAfterFunctionNode() {
+    public SubstringAfterFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.STRING;
         functionExpr = "substring-after";
     }

@@ -5,7 +5,7 @@ import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class UpperCaseFunctionNode extends InformationTreeFunctionNode {
-    UpperCaseFunctionNode() {
+    public UpperCaseFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.STRING;
         functionExpr = "upper-case";
     }

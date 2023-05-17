@@ -4,7 +4,7 @@ import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class LastFunctionNode extends InformationTreeDirectContentFunctionNode {
-    LastFunctionNode() {
+    public LastFunctionNode() {
         functionExpr = "last";
     }
 

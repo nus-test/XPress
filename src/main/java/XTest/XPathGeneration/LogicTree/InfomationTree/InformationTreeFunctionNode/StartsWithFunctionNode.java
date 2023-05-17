@@ -7,7 +7,7 @@ import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNod
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class StartsWithFunctionNode extends InformationTreeFunctionNode {
-    StartsWithFunctionNode() {
+    public StartsWithFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.BOOLEAN;
         functionExpr = "starts-with";
     }

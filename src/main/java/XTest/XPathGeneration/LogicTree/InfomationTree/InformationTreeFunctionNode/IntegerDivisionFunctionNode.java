@@ -11,7 +11,7 @@ import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.Numer
 import static XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNodeManager.wrapNumericalBinaryFunctionExpr;
 
 public class IntegerDivisionFunctionNode extends InformationTreeFunctionNode implements NumericalBinaryOperator {
-    IntegerDivisionFunctionNode() {
+    public IntegerDivisionFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;
     }
 

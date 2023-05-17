@@ -7,7 +7,7 @@ import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNod
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class SubsequenceFunctionNode extends InformationTreeSequenceFunctionNode {
-    SubsequenceFunctionNode() {
+    public SubsequenceFunctionNode() {
         functionExpr = "subsequence";
     }
 

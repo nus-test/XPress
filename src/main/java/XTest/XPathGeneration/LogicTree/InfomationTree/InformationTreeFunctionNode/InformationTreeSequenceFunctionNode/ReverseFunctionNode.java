@@ -3,7 +3,7 @@ package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNo
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNode;
 
 public class ReverseFunctionNode extends InformationTreeSequenceFunctionNode {
-    ReverseFunctionNode() {
+    public ReverseFunctionNode() {
         functionExpr = "reverse";
     }
     @Override

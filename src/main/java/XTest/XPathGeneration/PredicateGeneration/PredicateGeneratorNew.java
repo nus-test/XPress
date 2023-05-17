@@ -8,6 +8,7 @@ import XTest.ReportGeneration.KnownBugs;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XMLGeneration.ContextNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeContextNode;
+import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.BooleanFunctionNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNodeManager;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 import XTest.XPathGeneration.LogicTree.LogicTreeComparisonNode;
@@ -116,6 +117,14 @@ public class PredicateGeneratorNew {
      */
     public InformationTreeNode buildBooleanInformationTree(InformationTreeNode informationTreeNode, int levelLimit) {
         InformationTreeNode root = buildInformationTree(informationTreeNode, levelLimit);
+        double prob = GlobalRandom.getInstance().nextDouble();
+        InformationTreeNode newRoot = null;
+        if(prob < 0.5) {
+            newRoot = booleanSubtreeSearch(root);
+        }
+        if(newRoot == null) {
+
+        }
         return null;
     }
 
@@ -138,5 +147,24 @@ public class PredicateGeneratorNew {
         newRoot = InformationTreeFunctionNodeManager.getRandomMatchingFunctionNodeWithContentAttached(informationTreeNode, recorder);
 
         return buildInformationTree(newRoot, levelLimit - 1);
+    }
+
+    /**
+     * Search in the given information tree for a subtree which includes the context node and ends in a value
+     * which could be evaluated as boolean.
+     * @param informationTreeNode The root of the information tree to be searched for.
+     * @return The root node of the subtree which could be evaluated as boolean (If none is found null is returned).
+     */
+    public InformationTreeNode booleanSubtreeSearch(InformationTreeNode informationTreeNode) {
+        if(informationTreeNode.childList.size() == 0) {
+            return null;
+        }
+        return booleanSubtreeSearch(informationTreeNode.childList.get(0));
+    }
+
+    public InformationTreeNode aimedBooleanInformationTreeBuild(InformationTreeNode informationTreeNode) {
+        if(new BooleanFunctionNode().checkContextAcceptability(informationTreeNode))
+            return informationTreeNode;
+        return aimedBooleanInformationTreeBuild(informationTreeNode);
     }
 }

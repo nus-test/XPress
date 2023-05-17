@@ -6,7 +6,7 @@ import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNod
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class ConcatFunctionNode extends InformationTreeFunctionNode {
-    ConcatFunctionNode() {
+    public ConcatFunctionNode() {
         this.datatypeRecorder.xmlDatatype = XMLDatatype.STRING;
         functionExpr = "concat";
     }

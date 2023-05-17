@@ -4,7 +4,7 @@ import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class HasChildrenFunctionNode extends InformationTreeDirectContentFunctionNode {
-    HasChildrenFunctionNode() {
+    public HasChildrenFunctionNode() {
         functionExpr = "has-children";
     }
 

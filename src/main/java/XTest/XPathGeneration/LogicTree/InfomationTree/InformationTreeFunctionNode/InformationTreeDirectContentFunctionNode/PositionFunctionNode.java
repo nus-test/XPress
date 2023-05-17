@@ -4,7 +4,7 @@ import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class PositionFunctionNode extends InformationTreeDirectContentFunctionNode {
-    PositionFunctionNode() {
+    public PositionFunctionNode() {
         functionExpr = "position";
     }
 
