@@ -61,9 +61,9 @@ public abstract class InformationTreeNode extends LogicTreeNode {
     public List<InformationTreeNode> childList = new ArrayList<>();
 
     public String getXPathExpressionCheck(boolean returnConstant) {
-        if(!containsContext && context != null)
+        if(!containsContext && checkCalculableContext())
             return XMLDatatype.wrapExpression(context, datatypeRecorder.xmlDatatype);
-        if(returnConstant && context != null)
+        if(returnConstant && checkCalculableContext())
             return XMLDatatype.wrapExpression(context, datatypeRecorder.xmlDatatype);
         if(!returnConstant && XPathExpr != null)
             return XPathExpr;
@@ -138,5 +138,11 @@ public abstract class InformationTreeNode extends LogicTreeNode {
                         randomId + "]/@id");
             }
         }
+    }
+
+    public Boolean checkCalculableContext() {
+        if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) return false;
+        if(datatypeRecorder.xmlDatatype == XMLDatatype.NODE) return false;
+        return context != null;
     }
 }
