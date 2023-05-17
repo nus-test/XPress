@@ -5,15 +5,12 @@ import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.PrimitiveDatatype.XMLIntegerHandler;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeConstantNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.NumericalBinaryOperator;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.PredicateTreeFunctionNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 
 public class IntegerAddFunctionNode extends InformationTreeFunctionNode implements NumericalBinaryOperator {
 
     IntegerAddFunctionNode() {
-        dataTypeRecorder.xmlDatatype = XMLDatatype.INTEGER;
+        datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;
     }
 
     @Override

@@ -3,7 +3,6 @@ package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNo
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XMLGeneration.ContextNode;
-import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class TextFunctionNode extends InformationTreeDirectContentFunctionNode {
@@ -12,7 +11,7 @@ public class TextFunctionNode extends InformationTreeDirectContentFunctionNode {
     public void fillContentsRandom(InformationTreeNode childNode) {
         childList.add(childNode);
         int nodeId;
-        if(childNode.dataTypeRecorder.xmlDatatype == XMLDatatype.NODE) {
+        if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.NODE) {
             nodeId = Integer.parseInt(childNode.context);
         }
         else {
@@ -20,12 +19,12 @@ public class TextFunctionNode extends InformationTreeDirectContentFunctionNode {
             nodeId = Integer.parseInt(childNode.supplementaryContext);
         }
         ContextNode contextNode = mainExecutor.contextNodeMap.get(nodeId);
-        if(childNode.dataTypeRecorder.xmlDatatype == XMLDatatype.NODE) {
-            dataTypeRecorder.xmlDatatype = contextNode.dataType;
+        if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.NODE) {
+            datatypeRecorder.xmlDatatype = contextNode.dataType;
         }
         else {
-            dataTypeRecorder.xmlDatatype = XMLDatatype.SEQUENCE;
-            dataTypeRecorder.subDatatype = contextNode.dataType;
+            datatypeRecorder.xmlDatatype = XMLDatatype.SEQUENCE;
+            datatypeRecorder.subDatatype = contextNode.dataType;
         }
     }
 

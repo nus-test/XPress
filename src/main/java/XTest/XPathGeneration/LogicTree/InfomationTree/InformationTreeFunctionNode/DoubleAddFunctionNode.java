@@ -4,17 +4,14 @@ import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeConstantNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.NumericalBinaryOperator;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.PredicateTreeFunctionNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 
 import static XTest.StringUtils.getListString;
 import static java.lang.Math.abs;
 
 public class DoubleAddFunctionNode extends InformationTreeFunctionNode implements NumericalBinaryOperator {
     DoubleAddFunctionNode() {
-        this.dataTypeRecorder.xmlDatatype = XMLDatatype.DOUBLE;
+        this.datatypeRecorder.xmlDatatype = XMLDatatype.DOUBLE;
     }
 
     @Override

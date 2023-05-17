@@ -4,7 +4,6 @@ import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
-import org.apache.xpath.operations.Bool;
 
 public abstract class InformationTreeDirectContentFunctionNode extends InformationTreeFunctionNode {
 
@@ -29,7 +28,7 @@ public abstract class InformationTreeDirectContentFunctionNode extends Informati
      * to single value, if is a sequence should give XPath expression of sequence.
      */
     public String getCurrentLevelCalculationString() {
-        if(dataTypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
+        if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
             return getSequenceCalculationString();
         String calculationStr = getXPathExpression(false) + "[@id=\"" + childList.get(0).context + "\"]";
         calculationStr += "/" + functionExpr + "()";

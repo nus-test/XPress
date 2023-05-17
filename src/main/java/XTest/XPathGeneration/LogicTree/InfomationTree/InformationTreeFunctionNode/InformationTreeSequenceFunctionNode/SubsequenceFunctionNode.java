@@ -4,7 +4,6 @@ import XTest.GlobalRandom;
 import XTest.Pair;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
-import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class SubsequenceFunctionNode extends InformationTreeSequenceFunctionNode {
@@ -20,7 +19,7 @@ public class SubsequenceFunctionNode extends InformationTreeSequenceFunctionNode
     @Override
     public void fillContents(InformationTreeNode childNode) {
         int originalSequenceLength;
-        if(childNode.dataTypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
+        if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
             originalSequenceLength = Integer.parseInt(childNode.context);
         else originalSequenceLength = 1;
         fillContentsWithSequenceLength(childNode, originalSequenceLength);

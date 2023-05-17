@@ -1,6 +1,5 @@
 package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode;
 
-import XTest.GlobalSettings;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.TestException.DebugErrorException;
@@ -26,10 +25,10 @@ public class CastableFunctionNode extends InformationTreeFunctionNode {
     @Override
     public void fillContents(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         XMLDatatype originalDatatype = null;
-        if(childNode.dataTypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
-            originalDatatype = childNode.dataTypeRecorder.subDatatype;
+        if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
+            originalDatatype = childNode.datatypeRecorder.subDatatype;
         else
-            originalDatatype = childNode.dataTypeRecorder.xmlDatatype;
+            originalDatatype = childNode.datatypeRecorder.xmlDatatype;
         XMLDatatype transformedDatatype = XMLDatatype.getRandomCastableIntegratedDatatype(originalDatatype);
         transformedDatatypeName = transformedDatatype.getValueHandler().officialTypeName;
         childList.add(childNode);

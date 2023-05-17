@@ -1,10 +1,11 @@
 package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeSequenceFunctionNode.InformationTreeSequenceAggregationFunctionNode;
 
-import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNode;
+import XTest.PrimitiveDatatype.XMLDatatype;
 
 public class CountFunctionNode extends InformationTreeSequenceAggregationFunctionNode {
     CountFunctionNode() {
         functionExpr = "count";
+        datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;
     }
 
     @Override

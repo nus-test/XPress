@@ -3,12 +3,10 @@ package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNo
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.PredicateTreeFunctionNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 
 public class SecondsFromDurationFunctionNode extends InformationTreeFunctionNode {
     SecondsFromDurationFunctionNode() {
-        dataTypeRecorder.xmlDatatype = XMLDatatype.INTEGER;
+        datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;
         functionExpr = "seconds-from-duration";
     }
 

@@ -9,7 +9,6 @@ import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XMLGeneration.ContextNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeContextNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNodeManager;
-import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeMapNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 import XTest.XPathGeneration.LogicTree.LogicTreeComparisonNode;
 import XTest.XPathGeneration.LogicTree.LogicTreeNode;
@@ -67,17 +66,17 @@ public class PredicateGeneratorNew {
         // Select a sequence
         if(prob < 0.3 && starredNode.childWithLeafList.size() != 0 && !KnownBugs.exist) {
             String pathToLeaf = starredNode.getStrPathToSpecifiedLeafNode();
-            contextNode.dataTypeRecorder.xmlDatatype = XMLDatatype.SEQUENCE;
-            contextNode.dataTypeRecorder.subDatatype = XMLDatatype.NODE;
+            contextNode.datatypeRecorder.xmlDatatype = XMLDatatype.SEQUENCE;
+            contextNode.datatypeRecorder.subDatatype = XMLDatatype.NODE;
             if(!pathToLeaf.endsWith("*"))
-                contextNode.dataTypeRecorder.nodeMix = false;
+                contextNode.datatypeRecorder.nodeMix = false;
             contextNode.setXPath(pathToLeaf);
             contextNode.setSelfContextFlag(false);
 
         } else {
             // Select current node
-            contextNode.dataTypeRecorder.xmlDatatype = XMLDatatype.NODE;
-            contextNode.dataTypeRecorder.nodeMix = mixedContent;
+            contextNode.datatypeRecorder.xmlDatatype = XMLDatatype.NODE;
+            contextNode.datatypeRecorder.nodeMix = mixedContent;
             contextNode.setSelfContextFlag(true);
         }
 
@@ -100,7 +99,7 @@ public class PredicateGeneratorNew {
 
         InformationTreeNode newRoot;
 
-        XMLDatatypeComplexRecorder recorder = InformationTreeFunctionNodeManager.getRandomTargetedDatatypeRecorder(informationTreeNode.dataTypeRecorder);
+        XMLDatatypeComplexRecorder recorder = InformationTreeFunctionNodeManager.getRandomTargetedDatatypeRecorder(informationTreeNode.datatypeRecorder);
         newRoot = InformationTreeFunctionNodeManager.getRandomMatchingFunctionNodeWithContentAttached(informationTreeNode, recorder);
 
         return buildInformationTree(newRoot, levelLimit - 1);

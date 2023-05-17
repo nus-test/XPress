@@ -8,7 +8,7 @@ import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class EndsWithFunctionNode extends InformationTreeFunctionNode {
     EndsWithFunctionNode() {
-        dataTypeRecorder.xmlDatatype = XMLDatatype.BOOLEAN;
+        datatypeRecorder.xmlDatatype = XMLDatatype.BOOLEAN;
         functionExpr = "ends-with";
     }
 

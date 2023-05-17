@@ -3,12 +3,10 @@ package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNo
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.PredicateTreeFunctionNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 
 public class DoubleRoundHalfToEvenFunctionNode extends InformationTreeFunctionNode {
     DoubleRoundHalfToEvenFunctionNode() {
-        dataTypeRecorder.xmlDatatype = XMLDatatype.DOUBLE;
+        datatypeRecorder.xmlDatatype = XMLDatatype.DOUBLE;
         functionExpr = "round-half-to-even";
     }
 

@@ -1,9 +1,6 @@
 package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeSequenceFunctionNode;
 
 import XTest.PrimitiveDatatype.XMLDatatype;
-import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
-import XTest.PrimitiveDatatype.XMLNumeric;
-import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 // TODO: Should only accept atomic types (could be with implicit cast) and would also result in list of atomic types.
@@ -20,12 +17,12 @@ public class DistinctValuesFunctionNode extends InformationTreeSequenceFunctionN
     @Override
     public void fillContentsRandom(InformationTreeNode childNode) {
         childList.add(childNode);
-        dataTypeRecorder.xmlDatatype = XMLDatatype.SEQUENCE;
-        if(childNode.dataTypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) {
-            dataTypeRecorder.subDatatype = childNode.dataTypeRecorder.subDatatype;
+        datatypeRecorder.xmlDatatype = XMLDatatype.SEQUENCE;
+        if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) {
+            datatypeRecorder.subDatatype = childNode.datatypeRecorder.subDatatype;
         }
         else {
-            dataTypeRecorder.xmlDatatype = childNode.dataTypeRecorder.xmlDatatype;
+            datatypeRecorder.xmlDatatype = childNode.datatypeRecorder.xmlDatatype;
         }
     }
 }

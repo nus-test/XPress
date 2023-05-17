@@ -9,7 +9,7 @@ public class InformationTreeConstantNode extends InformationTreeNode {
      * @param context
      */
     public InformationTreeConstantNode(XMLDatatype datatype, String context) {
-        this.dataTypeRecorder.xmlDatatype = datatype;
+        this.datatypeRecorder.xmlDatatype = datatype;
         this.context = context;
     }
 
@@ -21,8 +21,8 @@ public class InformationTreeConstantNode extends InformationTreeNode {
      * @param context
      */
     public InformationTreeConstantNode(XMLDatatype datatype, XMLDatatype subDatatype, int length, String context) {
-        this.dataTypeRecorder.xmlDatatype = datatype;
-        this.dataTypeRecorder.subDatatype = subDatatype;
+        this.datatypeRecorder.xmlDatatype = datatype;
+        this.datatypeRecorder.subDatatype = subDatatype;
         this.length = length;
         this.context = context;
     }
@@ -33,6 +33,6 @@ public class InformationTreeConstantNode extends InformationTreeNode {
      * @return
      */
     public String getXPathExpression(boolean returnConstant) {
-        return XMLDatatype.wrapExpression(context, this.dataTypeRecorder.xmlDatatype);
+        return XMLDatatype.wrapExpression(context, this.datatypeRecorder.xmlDatatype);
     }
 }

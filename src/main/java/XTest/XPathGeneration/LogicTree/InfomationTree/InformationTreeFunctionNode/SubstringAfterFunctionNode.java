@@ -1,18 +1,14 @@
 package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode;
 
 import XTest.GlobalRandom;
-import XTest.Pair;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeConstantNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.PredicateTreeFunctionNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 
 public class SubstringAfterFunctionNode extends InformationTreeFunctionNode {
     SubstringAfterFunctionNode() {
-        dataTypeRecorder.xmlDatatype = XMLDatatype.STRING;
+        datatypeRecorder.xmlDatatype = XMLDatatype.STRING;
         functionExpr = "substring-after";
     }
 

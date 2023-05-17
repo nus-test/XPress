@@ -6,16 +6,13 @@ import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.PrimitiveDatatype.XMLIntegerHandler;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeConstantNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.NumericalBinaryOperator;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.PredicateTreeFunctionNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 
 import static XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNodeManager.wrapNumericalBinaryFunctionExpr;
 
 public class IntegerModFunctionNode extends InformationTreeFunctionNode implements NumericalBinaryOperator {
     IntegerModFunctionNode() {
-        dataTypeRecorder.xmlDatatype = XMLDatatype.INTEGER;
+        datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;
     }
 
     @Override

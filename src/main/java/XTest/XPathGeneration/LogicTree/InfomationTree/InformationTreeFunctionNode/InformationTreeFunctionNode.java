@@ -4,11 +4,7 @@ import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.NumericalBinaryOperator;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.PredicateTreeFunctionNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 import net.sf.saxon.s9api.SaxonApiException;
-import org.apache.xpath.operations.Bool;
 import org.xmldb.api.base.XMLDBException;
 
 import java.io.IOException;
@@ -95,7 +91,7 @@ public abstract class InformationTreeFunctionNode extends InformationTreeNode {
     }
 
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
-        return checkContextAcceptability(childNode, childNode.dataTypeRecorder);
+        return checkContextAcceptability(childNode, childNode.datatypeRecorder);
     }
 
     abstract public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder);

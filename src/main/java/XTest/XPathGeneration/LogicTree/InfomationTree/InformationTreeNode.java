@@ -17,7 +17,7 @@ import java.util.List;
 
 public abstract class InformationTreeNode extends LogicTreeNode {
 
-    public XMLDatatypeComplexRecorder dataTypeRecorder = new XMLDatatypeComplexRecorder();
+    public XMLDatatypeComplexRecorder datatypeRecorder = new XMLDatatypeComplexRecorder();
 
     /**
      * If is calculable, contains the real value of evaluated context for the starred node
@@ -61,9 +61,9 @@ public abstract class InformationTreeNode extends LogicTreeNode {
 
     public String getXPathExpressionCheck(boolean returnConstant) {
         if(!containsContext && context != null)
-            return XMLDatatype.wrapExpression(context, dataTypeRecorder.xmlDatatype);
+            return XMLDatatype.wrapExpression(context, datatypeRecorder.xmlDatatype);
         if(returnConstant && context != null)
-            return XMLDatatype.wrapExpression(context, dataTypeRecorder.xmlDatatype);
+            return XMLDatatype.wrapExpression(context, datatypeRecorder.xmlDatatype);
         if(!returnConstant && XPathExpr != null)
             return XPathExpr;
         return null;

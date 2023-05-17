@@ -5,17 +5,14 @@ import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeConstantNode;
 import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.NumericalBinaryOperator;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.PredicateTreeFunctionNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeNode;
 
 import static XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNodeManager.wrapNumericalBinaryFunctionExpr;
 import static java.lang.Math.abs;
 
 public class DoubleDivisionFunctionNode extends InformationTreeFunctionNode implements NumericalBinaryOperator {
     DoubleDivisionFunctionNode() {
-        this.dataTypeRecorder.xmlDatatype = XMLDatatype.DOUBLE;
+        this.datatypeRecorder.xmlDatatype = XMLDatatype.DOUBLE;
     }
 
     @Override

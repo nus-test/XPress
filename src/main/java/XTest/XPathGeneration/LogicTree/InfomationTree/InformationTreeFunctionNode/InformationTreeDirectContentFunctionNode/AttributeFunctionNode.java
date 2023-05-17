@@ -9,7 +9,7 @@ public class AttributeFunctionNode extends InformationTreeDirectContentFunctionN
 
     @Override
     public String getCurrentLevelCalculationString() {
-        if(dataTypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
+        if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
             return getSequenceCalculationString();
         String calculationStr = getXPathExpression(false) + "[@id=\"" + childList.get(0).context + "\"]";
         calculationStr += "/@" + functionExpr;
@@ -20,7 +20,7 @@ public class AttributeFunctionNode extends InformationTreeDirectContentFunctionN
     public void fillContentsRandom(InformationTreeNode childNode) {
         childList.add(childNode);
         int nodeId;
-        if(childNode.dataTypeRecorder.xmlDatatype == XMLDatatype.NODE) {
+        if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.NODE) {
             nodeId = Integer.parseInt(childNode.context);
         }
         else {
@@ -30,12 +30,12 @@ public class AttributeFunctionNode extends InformationTreeDirectContentFunctionN
         AttributeNode attributeNode = GlobalRandom.getInstance().getRandomFromList(
                 mainExecutor.contextNodeMap.get(nodeId).attributeList);
         functionExpr = attributeNode.tagName;
-        if(childNode.dataTypeRecorder.xmlDatatype == XMLDatatype.NODE) {
-            dataTypeRecorder.xmlDatatype = attributeNode.dataType;
+        if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.NODE) {
+            datatypeRecorder.xmlDatatype = attributeNode.dataType;
         }
         else {
-            dataTypeRecorder.xmlDatatype = XMLDatatype.SEQUENCE;
-            dataTypeRecorder.subDatatype = attributeNode.dataType;
+            datatypeRecorder.xmlDatatype = XMLDatatype.SEQUENCE;
+            datatypeRecorder.subDatatype = attributeNode.dataType;
         }
     }
 

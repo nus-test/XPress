@@ -1,7 +1,6 @@
 package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeDirectContentFunctionNode;
 
 import XTest.PrimitiveDatatype.XMLDatatype;
-import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class NameFunctionNode extends InformationTreeDirectContentFunctionNode {
@@ -17,12 +16,12 @@ public class NameFunctionNode extends InformationTreeDirectContentFunctionNode {
     @Override
     public void fillContentsRandom(InformationTreeNode childNode) {
         childList.add(childNode);
-        if(childNode.dataTypeRecorder.xmlDatatype == XMLDatatype.NODE) {
-            dataTypeRecorder.xmlDatatype = XMLDatatype.STRING;
+        if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.NODE) {
+            datatypeRecorder.xmlDatatype = XMLDatatype.STRING;
         }
         else {
-            dataTypeRecorder.xmlDatatype = XMLDatatype.SEQUENCE;
-            dataTypeRecorder.subDatatype = XMLDatatype.STRING;
+            datatypeRecorder.xmlDatatype = XMLDatatype.SEQUENCE;
+            datatypeRecorder.subDatatype = XMLDatatype.STRING;
         }
     }
 }
