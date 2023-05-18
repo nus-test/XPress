@@ -4,8 +4,7 @@ import XTest.GlobalRandom;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
-import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNode;
-import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeNotFunctionNode;
+import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.NotFunctionNode;
 import XTest.XPathGeneration.LogicTree.LogicTreeNode;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
@@ -94,7 +93,10 @@ public abstract class InformationTreeNode extends LogicTreeNode {
 
     public boolean checkIfContainsStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
         String expr = getXPathExpression();
-        List<Integer> resultList = mainExecutor.executeSingleProcessorGetIdList(expr);
+        List<Integer> resultList = mainExecutor.executeSingleProcessorGetIdList(XPathPrefix + "[" + expr + "]");
+        System.out.println("*************** Check if contains " + starredNodeId);
+        System.out.println("XPath expression: " + XPathPrefix + "[" + expr + "]");
+        System.out.println(resultList);
         return resultList.contains(starredNodeId);
     }
 
@@ -102,7 +104,7 @@ public abstract class InformationTreeNode extends LogicTreeNode {
     public InformationTreeNode modifyToContainStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
         boolean contains = checkIfContainsStarredNode(starredNodeId);
         if(contains) return this;
-        InformationTreeNotFunctionNode newRoot = new InformationTreeNotFunctionNode();
+        NotFunctionNode newRoot = new NotFunctionNode();
         newRoot.fillContents(this);
         return newRoot;
     }
@@ -118,6 +120,8 @@ public abstract class InformationTreeNode extends LogicTreeNode {
         this.selfContext = childNode.selfContext;
         this.starredNodeId = childNode.starredNodeId;
         this.mainExecutor = childNode.mainExecutor;
+        this.XPathPrefix = childNode.XPathPrefix;
+        System.out.println("dada___________" + XPathPrefix + " " + (childNode instanceof InformationTreeContextNode));
     }
 
     public void calculateInfo() throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {

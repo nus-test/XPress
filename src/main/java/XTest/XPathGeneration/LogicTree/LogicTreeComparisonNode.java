@@ -28,6 +28,7 @@ public abstract class LogicTreeComparisonNode extends LogicTreeNode {
     public void fillContents(LogicTreeNode nodeA, LogicTreeNode nodeB) {
         childList.add(nodeA);
         childList.add(nodeB);
+        XPathPrefix = nodeA.XPathPrefix;
     }
 
     @Override

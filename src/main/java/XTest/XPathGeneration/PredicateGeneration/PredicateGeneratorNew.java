@@ -12,6 +12,7 @@ import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNod
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeContextNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.BooleanFunctionNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.ImplicitCastFunctionNode;
+import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNodeManager;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 import XTest.XPathGeneration.LogicTree.LogicTreeComparisonNode;
@@ -71,8 +72,9 @@ public class PredicateGeneratorNew {
             rootList.add(newRoot);
         }
         LogicTreeNode root = rootList.get(0);
-        //root = root.modifyToContainStarredNode(starredNode.id);
+        root = root.modifyToContainStarredNode(starredNode.id);
         String XPathExpression = XPathPrefix + "[" + root.getXPathExpression() + "]";
+        System.out.println("final generated: " + XPathExpression);
         List<ContextNode> selectedList = mainExecutor.executeSingleProcessorGetNodeList(XPathExpression);
         return new XPathResultListPair("[" + root.getXPathExpression() + "]", selectedList);
     }
@@ -117,10 +119,10 @@ public class PredicateGeneratorNew {
             System.out.println("Selected node");
         }
         contextNode.calculateInfo();
-
         // Build information tree from context node
         int levelLimit = GlobalRandom.getInstance().nextInt(5);
         if(contextNode.selfContext) levelLimit += 1;
+        System.out.println("|||||||||||||||||||||||||||||||||||" + contextNode.XPathPrefix);
         InformationTreeNode root = buildBooleanInformationTree(contextNode, levelLimit);
         return root;
     }
@@ -133,6 +135,7 @@ public class PredicateGeneratorNew {
      * @return The root node of the generated information tree.
      */
     public InformationTreeNode buildBooleanInformationTree(InformationTreeNode informationTreeNode, int levelLimit) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+        System.out.println("What " + informationTreeNode.XPathPrefix);
         InformationTreeNode root = buildInformationTree(informationTreeNode, levelLimit);
         double prob = GlobalRandom.getInstance().nextDouble();
         InformationTreeNode newRoot = null;
@@ -157,7 +160,7 @@ public class PredicateGeneratorNew {
 
         // Update information tree node in to a new root
         InformationTreeNode newRoot;
-        System.out.println("+++++++++ Build Information Tree");
+        System.out.println("+++++++++ Build Information Tree " + informationTreeNode.XPathPrefix);
         double prob = GlobalRandom.getInstance().nextDouble();
         if(prob < 0.4) {
             XMLDatatypeComplexRecorder recorder = InformationTreeFunctionNodeManager.getInstance()
@@ -169,7 +172,7 @@ public class PredicateGeneratorNew {
         }
         newRoot = InformationTreeFunctionNodeManager.getInstance()
                 .getRandomMatchingFunctionNodeWithContentAttached(informationTreeNode, informationTreeNode.datatypeRecorder);
-        System.out.println("Matched with function node " + newRoot.getClass());
+        System.out.println("Matched with function node " + newRoot.getClass() + " " + informationTreeNode.XPathPrefix);
         newRoot.calculateInfo();
         System.out.println("current root XPath expr state: " + newRoot.XPathExpr);
         if(newRoot.datatypeRecorder.xmlDatatype != XMLDatatype.SEQUENCE && newRoot.datatypeRecorder.subDatatype != XMLDatatype.NODE)
@@ -204,8 +207,15 @@ public class PredicateGeneratorNew {
      * @throws DebugErrorException
      */
     public InformationTreeNode aimedBooleanInformationTreeBuild(InformationTreeNode informationTreeNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
-        if(new BooleanFunctionNode().checkContextAcceptability(informationTreeNode))
+        if(new BooleanFunctionNode().checkContextAcceptability(informationTreeNode)) {
+            if(informationTreeNode.datatypeRecorder.xmlDatatype != XMLDatatype.BOOLEAN) {
+                ImplicitCastFunctionNode newRoot = new ImplicitCastFunctionNode();
+                newRoot.fillContentsSpecificAimedType(informationTreeNode, XMLDatatype.BOOLEAN);
+                newRoot.calculateInfo();
+                informationTreeNode = newRoot;
+            }
             return informationTreeNode;
+        }
         informationTreeNode = InformationTreeFunctionNodeManager.getInstance().getRandomMatchingFunctionNodeWithContentAttached(informationTreeNode, informationTreeNode.datatypeRecorder);
         return aimedBooleanInformationTreeBuild(informationTreeNode);
     }

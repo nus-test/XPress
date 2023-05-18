@@ -4,11 +4,6 @@ import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.XPathGeneration.LogicTree.LogicTreeNode;
 
 public class InformationTreeContextNode extends InformationTreeNode {
-    /**
-     * Record down the XPathPrefix to produce node candidates before applying current information tree selection.
-     * e.g. /A1/B1, /A1/(B1, C1)
-     */
-    public String XPathPrefix;
 
     // For context node, XPathExpr refers to the sub selection XPath expression.
     // If referring to current node, should be node selection expression.

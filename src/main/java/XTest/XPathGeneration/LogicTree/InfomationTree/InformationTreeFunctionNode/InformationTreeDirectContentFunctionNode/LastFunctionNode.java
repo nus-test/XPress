@@ -12,7 +12,7 @@ public class LastFunctionNode extends InformationTreeDirectContentFunctionNode {
     public String getCurrentLevelCalculationString() {
         if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
             return getSequenceCalculationString();
-        return "count(" + childList.get(0).getXPathExpression(false) + ")";
+        return "count(" + XPathExpr + "[" + childList.get(0).getXPathExpression(false) + "])";
     }
 
     @Override

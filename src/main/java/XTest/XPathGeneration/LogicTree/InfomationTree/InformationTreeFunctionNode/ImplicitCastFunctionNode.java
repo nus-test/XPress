@@ -6,6 +6,7 @@ import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
+import XTest.XPathGeneration.LogicTree.LogicTreeNode;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
 
@@ -71,7 +72,10 @@ public class ImplicitCastFunctionNode extends InformationTreeFunctionNode {
             if(originalDatatype == XMLDatatype.NODE) {
                 originalContext = "//*[@id=\"" + originalContext + "\"]";
             }
-            String XPathExpr = originalContext + " cast as " + transformedDatatype.getValueHandler().officialTypeName;
+            String XPathExpr;
+            if(transformedDatatype != XMLDatatype.BOOLEAN)
+                XPathExpr = originalContext + " cast as " + transformedDatatype.getValueHandler().officialTypeName;
+            else XPathExpr = "boolean(" + originalContext + ")";
             context = mainExecutor.executeSingleProcessor(XPathExpr, GlobalSettings.defaultDBName);
         }
         childList.add(childNode);
@@ -107,10 +111,10 @@ public class ImplicitCastFunctionNode extends InformationTreeFunctionNode {
     }
 
     @Override
-    public String getXPathExpression(boolean returnConstant) {
+    public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode) {
         String returnString = getXPathExpressionCheck(returnConstant);
         if(returnString != null) return returnString;
-        returnString = childList.get(0).getXPathExpression(returnConstant);
+        returnString = childList.get(0).getXPathExpression(returnConstant, parentNode);
         cacheXPathExpression(returnString, returnConstant);
         return returnString;
     }

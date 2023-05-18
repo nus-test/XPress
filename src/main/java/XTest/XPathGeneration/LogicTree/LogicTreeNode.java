@@ -12,6 +12,11 @@ import java.sql.SQLException;
 
 public abstract class LogicTreeNode {
     public XMLDatatypeComplexRecorder datatypeRecorder = new XMLDatatypeComplexRecorder();
+    /**
+     * Record down the XPathPrefix to produce node candidates before applying current information tree selection.
+     * e.g. /A1/B1, /A1/(B1, C1)
+     */
+    public String XPathPrefix;
 
     /**
      * If is calculable, contains the real value of evaluated context for the starred node
