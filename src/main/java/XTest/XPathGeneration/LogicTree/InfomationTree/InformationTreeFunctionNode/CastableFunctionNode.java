@@ -5,16 +5,20 @@ import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
+import XTest.XPathGeneration.LogicTree.LogicTreeComparisonNode;
+import XTest.XPathGeneration.LogicTree.LogicTreeNode;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class CastableFunctionNode extends InformationTreeFunctionNode {
+public class CastableFunctionNode extends BinaryOperatorFunctionNode {
     String transformedDatatypeName;
     public CastableFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.BOOLEAN;
+        priorityLevel = 1;
+        functionExpr = "castable as";
     }
 
     @Override
@@ -58,10 +62,12 @@ public class CastableFunctionNode extends InformationTreeFunctionNode {
     }
 
     @Override
-    public String getXPathExpression(boolean returnConstant) {
+    public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode) {
         String returnString = getXPathExpressionCheck(returnConstant);
         if(returnString != null) return returnString;
-        returnString = childList.get(0).getXPathExpression(returnConstant) + " castable as " + transformedDatatypeName;
+        returnString = childList.get(0).getXPathExpression(returnConstant, this) + " castable as " + transformedDatatypeName;
+        if(parentNode instanceof BinaryOperatorFunctionNode || parentNode instanceof LogicTreeComparisonNode)
+            returnString = "(" + returnString + ")";
         cacheXPathExpression(returnString, returnConstant);
         return returnString;
     }

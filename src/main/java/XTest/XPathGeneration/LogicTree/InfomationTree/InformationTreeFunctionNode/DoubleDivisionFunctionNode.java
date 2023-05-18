@@ -5,14 +5,14 @@ import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.NumericalBinaryOperator;
-
-import static XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNodeManager.wrapNumericalBinaryFunctionExpr;
+import XTest.XPathGeneration.LogicTree.LogicTreeNode;
 import static java.lang.Math.abs;
 
-public class DoubleDivisionFunctionNode extends InformationTreeFunctionNode implements NumericalBinaryOperator {
+public class DoubleDivisionFunctionNode extends BinaryOperatorFunctionNode {
     public DoubleDivisionFunctionNode() {
         this.datatypeRecorder.xmlDatatype = XMLDatatype.DOUBLE;
+        priorityLevel = 3;
+        functionExpr = "div";
     }
 
     @Override
@@ -53,17 +53,8 @@ public class DoubleDivisionFunctionNode extends InformationTreeFunctionNode impl
 
     @Override
     public String getCurrentContextFunctionExpr() {
-        String rightChild = wrapNumericalBinaryFunctionExpr(childList.get(1), this, true);
+        String rightChild = childList.get(1).getXPathExpression(false, this);
         return ". div " + rightChild;
-    }
-
-    @Override
-    public String getXPathExpression(boolean returnConstant) {
-        String leftChild = wrapNumericalBinaryFunctionExpr(childList.get(0), this, returnConstant);
-        String rightChild = wrapNumericalBinaryFunctionExpr(childList.get(1), this, returnConstant);
-        String returnString = leftChild + " div " + rightChild;
-        cacheXPathExpression(returnString, returnConstant);
-        return returnString;
     }
 
     @Override

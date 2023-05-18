@@ -6,13 +6,12 @@ import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.PrimitiveDatatype.XMLIntegerHandler;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.NumericalBinaryOperator;
 
-import static XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNodeManager.wrapNumericalBinaryFunctionExpr;
-
-public class IntegerModFunctionNode extends InformationTreeFunctionNode implements NumericalBinaryOperator {
+public class IntegerModFunctionNode extends BinaryOperatorFunctionNode {
     public IntegerModFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;
+        functionExpr = "mod";
+        priorityLevel = 3;
     }
 
     @Override
@@ -35,21 +34,6 @@ public class IntegerModFunctionNode extends InformationTreeFunctionNode implemen
     @Override
     public IntegerModFunctionNode newInstance() {
         return new IntegerModFunctionNode();
-    }
-
-    @Override
-    public String getCurrentContextFunctionExpr() {
-        String rightChild = wrapNumericalBinaryFunctionExpr(childList.get(1), this, true);
-        return ". mod " + rightChild;
-    }
-
-    @Override
-    public String getXPathExpression(boolean returnConstant) {
-        String leftChild = wrapNumericalBinaryFunctionExpr(childList.get(0), this, returnConstant);
-        String rightChild = wrapNumericalBinaryFunctionExpr(childList.get(1), this, returnConstant);
-        String returnString = leftChild + " mod " + rightChild;
-        cacheXPathExpression(returnString, returnConstant);
-        return returnString;
     }
 
     @Override

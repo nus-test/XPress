@@ -5,12 +5,13 @@ import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.PrimitiveDatatype.XMLIntegerHandler;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.NumericalBinaryOperator;
 
-public class IntegerSubtractionFunctionNode extends InformationTreeFunctionNode implements NumericalBinaryOperator {
+public class IntegerSubtractionFunctionNode extends BinaryOperatorFunctionNode {
 
     public IntegerSubtractionFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;
+        functionExpr = "-";
+        priorityLevel = 2;
     }
     @Override
     public void fillContents(InformationTreeNode childNode) {
@@ -44,22 +45,6 @@ public class IntegerSubtractionFunctionNode extends InformationTreeFunctionNode 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
         return recorder.xmlDatatype == XMLDatatype.INTEGER;
-    }
-
-    @Override
-    public String getCurrentContextFunctionExpr() {
-        return ". - " +
-                childList.get(1).getXPathExpression(true);
-    }
-
-    @Override
-    public String getXPathExpression(boolean returnConstant) {
-        String returnString = getXPathExpressionCheck(returnConstant);
-        if(returnString != null) return returnString;
-        returnString = childList.get(0).getXPathExpression(returnConstant) + " - " +
-                childList.get(1).getXPathExpression(returnConstant);
-        cacheXPathExpression(returnString, returnConstant);
-        return returnString;
     }
 
     @Override

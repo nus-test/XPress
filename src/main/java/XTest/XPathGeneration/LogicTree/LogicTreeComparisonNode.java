@@ -30,16 +30,14 @@ public abstract class LogicTreeComparisonNode extends LogicTreeNode {
         childList.add(nodeB);
     }
 
-    public static String wrapComparisonExpr(LogicTreeNode node, boolean returnConstant) {
-        if(node instanceof LogicTreeComparisonNode)
-            return "(" + node.getXPathExpression(returnConstant) + ")";
-        return node.getXPathExpression(returnConstant);
-    }
-
     @Override
-    public String getXPathExpression(boolean returnConstant) {
+    public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode) {
         if(returnConstant && context != null) return context;
-        return wrapComparisonExpr(childList.get(0), returnConstant)
-                + funcExpr + wrapComparisonExpr(childList.get(1), returnConstant);
+        String returnString = childList.get(0).getXPathExpression(returnConstant, this)
+                + funcExpr + childList.get(1).getXPathExpression(returnConstant, this);
+        if(parentNode instanceof LogicTreeComparisonNode) {
+            returnString = "(" + returnString + ")";
+        }
+        return returnString;
     }
 }

@@ -6,13 +6,12 @@ import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.PrimitiveDatatype.XMLIntegerHandler;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.NumericalBinaryOperator;
 
-import static XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNodeManager.wrapNumericalBinaryFunctionExpr;
-
-public class IntegerMultiplicationFunctionNode extends InformationTreeFunctionNode implements NumericalBinaryOperator {
+public class IntegerMultiplicationFunctionNode extends BinaryOperatorFunctionNode {
     public IntegerMultiplicationFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;
+        functionExpr = "mul";
+        priorityLevel = 3;
     }
 
     @Override
@@ -46,21 +45,6 @@ public class IntegerMultiplicationFunctionNode extends InformationTreeFunctionNo
     }
 
     @Override
-    public String getCurrentContextFunctionExpr() {
-        String rightChild = wrapNumericalBinaryFunctionExpr(childList.get(1), this, true);
-        return ". mul " + rightChild;
-    }
-
-    @Override
-    public String getXPathExpression(boolean returnConstant) {
-        String leftChild = wrapNumericalBinaryFunctionExpr(childList.get(0), this, returnConstant);
-        String rightChild = wrapNumericalBinaryFunctionExpr(childList.get(1), this, returnConstant);
-        String returnString = leftChild + " mul " + rightChild;
-        cacheXPathExpression(returnString, returnConstant);
-        return returnString;
-    }
-
-    @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
         return recorder.xmlDatatype == XMLDatatype.INTEGER;
     }
@@ -69,4 +53,5 @@ public class IntegerMultiplicationFunctionNode extends InformationTreeFunctionNo
     public IntegerMultiplicationFunctionNode newInstance() {
         return new IntegerMultiplicationFunctionNode();
     }
+
 }

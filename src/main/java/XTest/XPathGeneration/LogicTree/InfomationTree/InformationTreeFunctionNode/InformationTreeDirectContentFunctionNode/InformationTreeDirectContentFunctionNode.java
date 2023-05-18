@@ -6,6 +6,7 @@ import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
+import XTest.XPathGeneration.LogicTree.LogicTreeNode;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
 
@@ -29,10 +30,10 @@ public abstract class InformationTreeDirectContentFunctionNode extends Informati
         return checkResult;
     }
 
-    public String getXPathExpression(boolean returnConstant) {
+    public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode) {
         String expr = getXPathExpressionCheck(returnConstant);
         if(expr != null) return expr;
-        String childExpr = childList.get(0).getXPathExpression();
+        String childExpr = childList.get(0).getXPathExpression(returnConstant);
         if(childExpr.equals(".")) {
             return functionExpr;
         }

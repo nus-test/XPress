@@ -5,12 +5,13 @@ import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.PrimitiveDatatype.XMLIntegerHandler;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.NumericalBinaryOperator;
 
-public class IntegerAddFunctionNode extends InformationTreeFunctionNode implements NumericalBinaryOperator {
+public class IntegerAddFunctionNode extends BinaryOperatorFunctionNode {
 
     public IntegerAddFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;
+        priorityLevel = 2;
+        functionExpr = "+";
     }
 
     @Override
@@ -46,22 +47,6 @@ public class IntegerAddFunctionNode extends InformationTreeFunctionNode implemen
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
         return recorder.xmlDatatype == XMLDatatype.INTEGER;
-    }
-
-    @Override
-    public String getCurrentContextFunctionExpr() {
-        return ". + " +
-                childList.get(1).getXPathExpression(true);
-    }
-
-    @Override
-    public String getXPathExpression(boolean returnConstant) {
-        String returnString = getXPathExpressionCheck(returnConstant);
-        if(returnString != null) return returnString;
-        returnString = childList.get(0).getXPathExpression(returnConstant) + " + " +
-                childList.get(1).getXPathExpression(returnConstant);
-        cacheXPathExpression(returnString, returnConstant);
-        return returnString;
     }
 
     @Override

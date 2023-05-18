@@ -144,13 +144,6 @@ public class InformationTreeFunctionNodeManager {
         return functionNode;
     }
 
-    public static String wrapNumericalBinaryFunctionExpr(InformationTreeNode childNode, InformationTreeNode currentNode, boolean returnConstant) {
-        if(childNode instanceof NumericalBinaryOperator && childNode.getClass() != currentNode.getClass()) {
-            return "(" + childNode.getXPathExpression(returnConstant) + ")";
-        }
-        return childNode.getXPathExpression(returnConstant);
-    }
-
     /**
      * To set up the context matching maps for the purpose of quickly looking up for a function node given datatype.
      * Is only guaranteed to give a likely matching function node, the check against actual node is still needed.

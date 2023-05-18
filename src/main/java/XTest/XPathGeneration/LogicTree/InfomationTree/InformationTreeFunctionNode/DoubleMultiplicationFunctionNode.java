@@ -5,15 +5,15 @@ import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.NumericalBinaryOperator;
 
-import static XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNodeManager.wrapNumericalBinaryFunctionExpr;
 import static java.lang.Math.abs;
 
-public class DoubleMultiplicationFunctionNode extends InformationTreeFunctionNode implements NumericalBinaryOperator {
+public class DoubleMultiplicationFunctionNode extends BinaryOperatorFunctionNode {
 
     public DoubleMultiplicationFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.DOUBLE;
+        priorityLevel = 3;
+        functionExpr = "mul";
     }
 
     @Override
@@ -62,21 +62,6 @@ public class DoubleMultiplicationFunctionNode extends InformationTreeFunctionNod
     @Override
     public DoubleMultiplicationFunctionNode newInstance() {
         return new DoubleMultiplicationFunctionNode();
-    }
-
-    @Override
-    public String getCurrentContextFunctionExpr() {
-        String rightChild = wrapNumericalBinaryFunctionExpr(childList.get(1), this, true);
-        return ". mul " + rightChild;
-    }
-
-    @Override
-    public String getXPathExpression(boolean returnConstant) {
-        String leftChild = wrapNumericalBinaryFunctionExpr(childList.get(0), this, returnConstant);
-        String rightChild = wrapNumericalBinaryFunctionExpr(childList.get(1), this, returnConstant);
-        String returnString = leftChild + " mul " + rightChild;
-        cacheXPathExpression(returnString, returnConstant);
-        return returnString;
     }
 
     @Override

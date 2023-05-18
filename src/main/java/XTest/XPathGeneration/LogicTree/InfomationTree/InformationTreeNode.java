@@ -2,10 +2,9 @@ package XTest.XPathGeneration.LogicTree.InfomationTree;
 
 import XTest.GlobalRandom;
 import XTest.PrimitiveDatatype.XMLDatatype;
-import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
-import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeDirectContentFunctionNode.InformationTreeDirectContentFunctionNode;
+import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeNotFunctionNode;
 import XTest.XPathGeneration.LogicTree.LogicTreeNode;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -79,10 +78,6 @@ public abstract class InformationTreeNode extends LogicTreeNode {
 
     public String getCurrentLevelCalculationString() {
         return null;
-    }
-
-    public String wrapXPathExpression(boolean returnConstant) {
-        return getXPathExpression(returnConstant);
     }
 
     /**

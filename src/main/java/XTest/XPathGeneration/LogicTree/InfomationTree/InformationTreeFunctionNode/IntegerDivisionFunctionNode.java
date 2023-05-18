@@ -6,13 +6,12 @@ import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.PrimitiveDatatype.XMLIntegerHandler;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.NumericalBinaryOperator;
 
-import static XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNodeManager.wrapNumericalBinaryFunctionExpr;
-
-public class IntegerDivisionFunctionNode extends InformationTreeFunctionNode implements NumericalBinaryOperator {
+public class IntegerDivisionFunctionNode extends BinaryOperatorFunctionNode {
     public IntegerDivisionFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;
+        functionExpr = "idiv";
+        priorityLevel = 3;
     }
 
     @Override
@@ -45,21 +44,6 @@ public class IntegerDivisionFunctionNode extends InformationTreeFunctionNode imp
     }
 
     @Override
-    public String getCurrentContextFunctionExpr() {
-        String rightChild = wrapNumericalBinaryFunctionExpr(childList.get(1), this, true);
-        return ". idiv " + rightChild;
-    }
-
-    @Override
-    public String getXPathExpression(boolean returnConstant) {
-        String leftChild = wrapNumericalBinaryFunctionExpr(childList.get(0), this, returnConstant);
-        String rightChild = wrapNumericalBinaryFunctionExpr(childList.get(1), this, returnConstant);
-        String returnString = leftChild + " idiv " + rightChild;
-        cacheXPathExpression(returnString, returnConstant);
-        return returnString;
-    }
-
-    @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
         return recorder.xmlDatatype == XMLDatatype.INTEGER;
     }
@@ -68,5 +52,4 @@ public class IntegerDivisionFunctionNode extends InformationTreeFunctionNode imp
     public IntegerDivisionFunctionNode newInstance() {
         return new IntegerDivisionFunctionNode();
     }
-
 }

@@ -4,13 +4,14 @@ import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.NumericalBinaryOperator;
 
 import static java.lang.Math.abs;
 
-public class DoubleSubtractFunctionNode extends InformationTreeFunctionNode implements NumericalBinaryOperator {
+public class DoubleSubtractFunctionNode extends BinaryOperatorFunctionNode {
     public DoubleSubtractFunctionNode() {
         this.datatypeRecorder.xmlDatatype  = XMLDatatype.DOUBLE;
+        functionExpr = "-";
+        priorityLevel = 2;
     }
 
     @Override

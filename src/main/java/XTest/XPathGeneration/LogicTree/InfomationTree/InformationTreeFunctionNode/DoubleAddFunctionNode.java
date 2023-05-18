@@ -4,14 +4,16 @@ import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.NumericalBinaryOperator;
+import XTest.XPathGeneration.LogicTree.LogicTreeNode;
 
 import static XTest.StringUtils.getListString;
 import static java.lang.Math.abs;
 
-public class DoubleAddFunctionNode extends InformationTreeFunctionNode implements NumericalBinaryOperator {
+public class DoubleAddFunctionNode extends BinaryOperatorFunctionNode {
     public DoubleAddFunctionNode() {
         this.datatypeRecorder.xmlDatatype = XMLDatatype.DOUBLE;
+        priorityLevel = 2;
+        functionExpr = "+";
     }
 
     @Override
@@ -60,16 +62,6 @@ public class DoubleAddFunctionNode extends InformationTreeFunctionNode implement
     @Override
     public String getCurrentContextFunctionExpr() {
         return ". + " +
-                childList.get(1).getXPathExpression(true);
+                childList.get(1).getXPathExpression(true, this);
     }
-
-    @Override
-    public String getXPathExpression(boolean returnConstant) {
-        String returnString = getXPathExpressionCheck(returnConstant);
-        if(returnString != null) return returnString;
-        returnString = childList.get(0).getXPathExpression(returnConstant) + " + " +
-                childList.get(1).getXPathExpression(returnConstant);
-        cacheXPathExpression(returnString, returnConstant);
-        return returnString;
-    }
- }
+}

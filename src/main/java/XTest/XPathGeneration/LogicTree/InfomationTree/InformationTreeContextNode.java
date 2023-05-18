@@ -1,6 +1,7 @@
 package XTest.XPathGeneration.LogicTree.InfomationTree;
 
 import XTest.PrimitiveDatatype.XMLDatatype;
+import XTest.XPathGeneration.LogicTree.LogicTreeNode;
 
 public class InformationTreeContextNode extends InformationTreeNode {
     /**
@@ -31,7 +32,7 @@ public class InformationTreeContextNode extends InformationTreeNode {
     }
 
     @Override
-    public String getXPathExpression(boolean returnConstant) {
+    public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode) {
         return XPathExpr;
     }
 }

@@ -4,6 +4,7 @@ import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
+import XTest.XPathGeneration.LogicTree.LogicTreeNode;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
 
@@ -48,7 +49,7 @@ public abstract class InformationTreeFunctionNode extends InformationTreeNode {
      * @return The XPath expression represented by subtree of current information tree node.
      */
     @Override
-    public String getXPathExpression(boolean returnConstant) {
+    public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode) {
         System.out.println("Why" + " " + returnConstant);
         String returnString = getXPathExpressionCheck(returnConstant);
         System.out.println("???? " + returnString);
@@ -90,7 +91,7 @@ public abstract class InformationTreeFunctionNode extends InformationTreeNode {
         String builder = "";
         for(int i = startIndex; i < endIndex; i ++) {
             if(i != startIndex) builder += ", ";
-            builder += childList.get(i).wrapXPathExpression(returnConstant);
+            builder += childList.get(i).getXPathExpression(returnConstant, null);
         }
         return builder;
     }

@@ -44,7 +44,11 @@ public abstract class LogicTreeNode {
      * @param returnConstant Whether to return constant context when approached or always reach the leaf nodes.
      * @return The XPath expression represented by subtree of current information tree node.
      */
-    public abstract String getXPathExpression(boolean returnConstant);
+    public String getXPathExpression(boolean returnConstant) {
+        return getXPathExpression(returnConstant, null);
+    }
+
+    public abstract String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode);
 
 
     @Override
