@@ -43,4 +43,14 @@ public class AttributeFunctionNode extends InformationTreeDirectContentFunctionN
     public AttributeFunctionNode newInstance() {
         return new AttributeFunctionNode();
     }
+
+    public String getXPathExpression(boolean returnConstant) {
+        String expr = getXPathExpressionCheck(returnConstant);
+        if(expr != null) return expr;
+        String childExpr = childList.get(0).getXPathExpression();
+        if(childExpr.equals(".")) {
+            return "@" + functionExpr;
+        }
+        return childExpr + "/@" + functionExpr;
+    }
 }

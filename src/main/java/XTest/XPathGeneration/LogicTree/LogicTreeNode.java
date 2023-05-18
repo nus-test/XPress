@@ -11,10 +11,19 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public abstract class LogicTreeNode {
+    public XMLDatatypeComplexRecorder datatypeRecorder = new XMLDatatypeComplexRecorder();
+
+    /**
+     * If is calculable, contains the real value of evaluated context for the starred node
+     * For a sequence, context contains the length of the sequence
+     * For a node, context refers to the id number of the node
+     */
+    public String context = null;
+
     /**
      * Cached XPathExpr with no constant substitution.
      */
-    protected String XPathExpr = null;
+    public String XPathExpr = null;
     public XMLDatatypeComplexRecorder dataTypeRecorder = new XMLDatatypeComplexRecorder();
     public MainExecutor mainExecutor = null;
     public abstract LogicTreeNode modifyToContainStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException;
@@ -26,7 +35,6 @@ public abstract class LogicTreeNode {
      * root node calling this method should return string "lower-case(@name) = "xx"".
      */
     public String getXPathExpression() {
-        if(XPathExpr != null) return XPathExpr;
         XPathExpr = getXPathExpression(false);
         return XPathExpr;
     }
@@ -36,7 +44,7 @@ public abstract class LogicTreeNode {
      * @param returnConstant Whether to return constant context when approached or always reach the leaf nodes.
      * @return The XPath expression represented by subtree of current information tree node.
      */
-    public String getXPathExpression(boolean returnConstant) { return null; }
+    public abstract String getXPathExpression(boolean returnConstant);
 
 
     @Override

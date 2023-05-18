@@ -48,6 +48,8 @@ public class ImplicitCastFunctionNode extends InformationTreeFunctionNode {
      * @param childNode Given context.
      */
     public void fillContentsSpecificAimedType(InformationTreeNode childNode, XMLDatatype transformedDatatype) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+        if(transformedDatatype == XMLDatatype.NODE)
+            throw new DebugErrorException("Should not cast any data into nodes");
         XMLDatatype originalDatatype = null;
         if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
             originalDatatype = childNode.datatypeRecorder.subDatatype;
@@ -74,6 +76,24 @@ public class ImplicitCastFunctionNode extends InformationTreeFunctionNode {
         }
         childList.add(childNode);
         inheritContextChildInfo(childNode);
+    }
+
+    /**
+     * Implicitly cast the child node into a specific castable type recorder.
+     * @param childNode Given context.
+     */
+    public void fillContentsSpecificAimedType(InformationTreeNode childNode, XMLDatatypeComplexRecorder transformedRecorder) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+        if(transformedRecorder.subDatatype == XMLDatatype.NODE || transformedRecorder.xmlDatatype == XMLDatatype.NODE)
+            throw new DebugErrorException("Should not cast any data into nodes");
+        if(childNode.datatypeRecorder.xmlDatatype != XMLDatatype.SEQUENCE) {
+            if(transformedRecorder.xmlDatatype != XMLDatatype.SEQUENCE)
+                fillContentsSpecificAimedType(childNode, transformedRecorder.xmlDatatype);
+            else {
+                datatypeRecorder = transformedRecorder;
+                context = "1";
+            }
+        }
+        else fillContentsSpecificAimedType(childNode, transformedRecorder.subDatatype);
     }
 
     @Override

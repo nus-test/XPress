@@ -28,4 +28,9 @@ public class XMLDatatypeComplexRecorder {
     }
 
     public XMLDatatypeComplexRecorder() {}
+
+    @Override
+    public String toString() {
+        return xmlDatatype.getValueHandler().officialTypeName + " " + subDatatype.getValueHandler().officialTypeName;
+    }
 }

@@ -8,8 +8,10 @@ import XTest.ReportGeneration.KnownBugs;
 import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XMLGeneration.ContextNode;
+import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeContextNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.BooleanFunctionNode;
+import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.ImplicitCastFunctionNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNodeManager;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 import XTest.XPathGeneration.LogicTree.LogicTreeComparisonNode;
@@ -52,6 +54,9 @@ public class PredicateGeneratorNew {
         for(int i = 0; i < phraseLength; i ++) {
             InformationTreeNode currentRoot = generateInformationTree(XPathPrefix, mixedContent, starredNode);
             rootList.add(currentRoot);
+            System.out.println("--------------------------->>>>>>>>>");
+            System.out.println("Current root: " + currentRoot.getXPathExpression() + " " + currentRoot.getClass());
+            System.out.println("--------------------------->>>>>>>>>");
         }
         while(rootList.size() > 1) {
             int id = GlobalRandom.getInstance().nextInt(rootList.size());
@@ -86,6 +91,11 @@ public class PredicateGeneratorNew {
         InformationTreeContextNode contextNode = new InformationTreeContextNode();
         contextNode.XPathPrefix = XPathPrefix;
         contextNode.setStarredNodeId(starredNode.id);
+        contextNode.mainExecutor = mainExecutor;
+        contextNode.containsContext = true;
+
+        System.out.println("Entering here ===================> Starred node Id: " + starredNode.id);
+
         // Select a sequence
         if(prob < 0.3 && starredNode.childWithLeafList.size() != 0 && !KnownBugs.exist) {
             String pathToLeaf = starredNode.getStrPathToSpecifiedLeafNode();
@@ -95,17 +105,22 @@ public class PredicateGeneratorNew {
                 contextNode.datatypeRecorder.nodeMix = false;
             contextNode.setXPath(pathToLeaf);
             contextNode.setSelfContextFlag(false);
+            System.out.println("Selected sequence: ");
+            System.out.println(pathToLeaf);
         } else {
             // Select current node
             contextNode.datatypeRecorder.xmlDatatype = XMLDatatype.NODE;
             contextNode.datatypeRecorder.nodeMix = mixedContent;
             contextNode.setSelfContextFlag(true);
+            contextNode.setXPath(".");
+            contextNode.context = Integer.toString(starredNode.id);
+            System.out.println("Selected node");
         }
         contextNode.calculateInfo();
 
         // Build information tree from context node
         int levelLimit = GlobalRandom.getInstance().nextInt(5);
-        if(contextNode.selfContext == true) levelLimit += 1;
+        if(contextNode.selfContext) levelLimit += 1;
         InformationTreeNode root = buildBooleanInformationTree(contextNode, levelLimit);
         return root;
     }
@@ -142,12 +157,23 @@ public class PredicateGeneratorNew {
 
         // Update information tree node in to a new root
         InformationTreeNode newRoot;
-
-        XMLDatatypeComplexRecorder recorder = InformationTreeFunctionNodeManager.getInstance()
-                .getRandomTargetedDatatypeRecorder(informationTreeNode.datatypeRecorder);
+        System.out.println("+++++++++ Build Information Tree");
+        double prob = GlobalRandom.getInstance().nextDouble();
+        if(prob < 0.4) {
+            XMLDatatypeComplexRecorder recorder = InformationTreeFunctionNodeManager.getInstance()
+                    .getRandomTargetedDatatypeRecorder(informationTreeNode.datatypeRecorder);
+            ImplicitCastFunctionNode castedInformationTreeNode = new ImplicitCastFunctionNode();
+            castedInformationTreeNode.fillContentsSpecificAimedType(informationTreeNode, recorder);
+            informationTreeNode = castedInformationTreeNode;
+            System.out.println("Casted to datatype of : " + recorder);
+        }
         newRoot = InformationTreeFunctionNodeManager.getInstance()
-                .getRandomMatchingFunctionNodeWithContentAttached(informationTreeNode, recorder);
+                .getRandomMatchingFunctionNodeWithContentAttached(informationTreeNode, informationTreeNode.datatypeRecorder);
+        System.out.println("Matched with function node " + newRoot.getClass());
         newRoot.calculateInfo();
+        System.out.println("current root XPath expr state: " + newRoot.XPathExpr);
+        if(newRoot.datatypeRecorder.xmlDatatype != XMLDatatype.SEQUENCE && newRoot.datatypeRecorder.subDatatype != XMLDatatype.NODE)
+            newRoot.containsContextConstant = true;
         return buildInformationTree(newRoot, levelLimit - 1);
     }
 

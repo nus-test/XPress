@@ -13,6 +13,10 @@ import java.sql.SQLException;
 
 public class CastableFunctionNode extends InformationTreeFunctionNode {
     String transformedDatatypeName;
+    public CastableFunctionNode() {
+        datatypeRecorder.xmlDatatype = XMLDatatype.BOOLEAN;
+    }
+
     @Override
     public CastableFunctionNode newInstance() {
         return new CastableFunctionNode();
@@ -24,15 +28,7 @@ public class CastableFunctionNode extends InformationTreeFunctionNode {
      */
     @Override
     public void fillContents(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
-        XMLDatatype originalDatatype = null;
-        if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
-            originalDatatype = childNode.datatypeRecorder.subDatatype;
-        else
-            originalDatatype = childNode.datatypeRecorder.xmlDatatype;
-        XMLDatatype transformedDatatype = XMLDatatype.getRandomCastableIntegratedDatatype(originalDatatype);
-        transformedDatatypeName = transformedDatatype.getValueHandler().officialTypeName;
-        childList.add(childNode);
-        inheritContextChildInfo(childNode);
+        fillContentsRandom(childNode);
     }
 
     /**
@@ -54,6 +50,11 @@ public class CastableFunctionNode extends InformationTreeFunctionNode {
 
     public String getCurrentContextFunctionExpr() {
         return ". castable as " + transformedDatatypeName;
+    }
+
+    @Override
+    public String getCurrentLevelCalculationString() {
+        return "//*[@id=\"" + childList.get(0).context + "\"] castable as " + transformedDatatypeName;
     }
 
     @Override

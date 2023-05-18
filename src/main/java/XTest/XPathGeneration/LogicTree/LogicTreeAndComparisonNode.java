@@ -9,6 +9,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class LogicTreeAndComparisonNode extends LogicTreeComparisonNode {
+    LogicTreeAndComparisonNode() {
+        funcExpr = "and";
+    }
+
     @Override
     public LogicTreeComparisonNode modifyToContainStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
         childList.set(0, childList.get(0).modifyToContainStarredNode(starredNodeId));

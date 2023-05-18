@@ -1,21 +1,16 @@
 package XTest.PrimitiveDatatype;
 
 import XTest.DatabaseExecutor.MainExecutor;
+import XTest.DefaultListHashMap;
 import XTest.GlobalRandom;
 import XTest.GlobalSettings;
+import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import com.ibm.icu.impl.Pair;
 import net.sf.saxon.s9api.SaxonApiException;
-import org.apache.xpath.operations.Bool;
 import org.xmldb.api.base.XMLDBException;
 
-import javax.xml.transform.Source;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -45,6 +40,7 @@ public enum XMLDatatype {
      * Check if 'A castable as B' is true or false.
      */
     static Map<Pair<XMLDatatype, XMLDatatype>, Boolean> castableMap = new HashMap<>();
+    static DefaultListHashMap<XMLDatatype, XMLDatatype> castableCandidateMap = new DefaultListHashMap<>();
     static Boolean castableMapSet = false;
 
     private XMLDatatype(int id, ValueHandler valueHandler) {
@@ -130,8 +126,11 @@ public enum XMLDatatype {
      * @return Random integrated datatype which "datatype" is castable as, no requirements on "datatype":
      * could be non-integrated.
      */
-    public static XMLDatatype getRandomCastableIntegratedDatatype(XMLDatatype datatype) {
-        return null;
+    public static XMLDatatype getRandomCastableIntegratedDatatype(XMLDatatype datatype) throws DebugErrorException {
+        if(castableCandidateMap.get(datatype).isEmpty()) {
+            throw new DebugErrorException("Non-castable data type");
+        }
+        return GlobalRandom.getInstance().getRandomFromList(castableCandidateMap.get(datatype));
     }
 
     public static void getCastable(MainExecutor mainExecutor) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
@@ -139,7 +138,10 @@ public enum XMLDatatype {
             if(xmlDatatype.getValueHandler() instanceof XMLSimple) {
                 for(XMLDatatype xmlDatatype2 : XMLDatatype.values()) {
                     if(xmlDatatype2.getValueHandler() instanceof XMLSimple) {
-                        checkCastable(mainExecutor, xmlDatatype, xmlDatatype2);
+                        boolean castable = checkCastable(mainExecutor, xmlDatatype, xmlDatatype2);
+                        if(castable) {
+                            castableCandidateMap.get(xmlDatatype).add(xmlDatatype2);
+                        }
                     }
                 }
             }

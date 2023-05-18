@@ -49,16 +49,21 @@ public abstract class InformationTreeFunctionNode extends InformationTreeNode {
      */
     @Override
     public String getXPathExpression(boolean returnConstant) {
+        System.out.println("Why" + " " + returnConstant);
         String returnString = getXPathExpressionCheck(returnConstant);
+        System.out.println("???? " + returnString);
         if(returnString != null) return returnString;
         returnString = getDefaultFunctionXPathExpression(returnConstant);
+        String test = XPathExpr;
         cacheXPathExpression(returnString, returnConstant);
+        System.out.println("()()() " + returnConstant + " " + returnString + " " + test + " " + XPathExpr);
         return returnString;
     }
 
     public String getDefaultFunctionXPathExpression(boolean returnConstant) {
         String builder = functionExpr + "(";
         builder += getParametersXPathExpression(returnConstant, 0);
+        builder += ")";
         return builder;
     }
 
@@ -85,7 +90,7 @@ public abstract class InformationTreeFunctionNode extends InformationTreeNode {
         String builder = "";
         for(int i = startIndex; i < endIndex; i ++) {
             if(i != startIndex) builder += ", ";
-            builder += childList.get(i).getXPathExpression(returnConstant);
+            builder += childList.get(i).wrapXPathExpression(returnConstant);
         }
         return builder;
     }

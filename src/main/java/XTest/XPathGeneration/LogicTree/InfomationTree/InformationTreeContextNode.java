@@ -10,7 +10,7 @@ public class InformationTreeContextNode extends InformationTreeNode {
     public String XPathPrefix;
 
     // For context node, XPathExpr refers to the sub selection XPath expression.
-    // If referring to current node, should be ignored. Or returned as .
+    // If referring to current node, should be node selection expression.
     public void setXPath(String XPath) {
         this.XPathExpr = XPath;
     }
@@ -28,5 +28,10 @@ public class InformationTreeContextNode extends InformationTreeNode {
         if(dataTypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
             return "//*[@id=\"" + starredNodeId + "\"]/" + XPathExpr + "";
         return null;
+    }
+
+    @Override
+    public String getXPathExpression(boolean returnConstant) {
+        return XPathExpr;
     }
 }

@@ -10,6 +10,7 @@ import java.util.List;
 public abstract class LogicTreeComparisonNode extends LogicTreeNode {
     List<LogicTreeNode> childList = new ArrayList<>();
     static List<LogicTreeComparisonNode> candidateList = new ArrayList<>();
+    String funcExpr;
 
     {
         dataTypeRecorder.xmlDatatype = XMLDatatype.BOOLEAN;
@@ -27,5 +28,18 @@ public abstract class LogicTreeComparisonNode extends LogicTreeNode {
     public void fillContents(LogicTreeNode nodeA, LogicTreeNode nodeB) {
         childList.add(nodeA);
         childList.add(nodeB);
+    }
+
+    public static String wrapComparisonExpr(LogicTreeNode node, boolean returnConstant) {
+        if(node instanceof LogicTreeComparisonNode)
+            return "(" + node.getXPathExpression(returnConstant) + ")";
+        return node.getXPathExpression(returnConstant);
+    }
+
+    @Override
+    public String getXPathExpression(boolean returnConstant) {
+        if(returnConstant && context != null) return context;
+        return wrapComparisonExpr(childList.get(0), returnConstant)
+                + funcExpr + wrapComparisonExpr(childList.get(1), returnConstant);
     }
 }

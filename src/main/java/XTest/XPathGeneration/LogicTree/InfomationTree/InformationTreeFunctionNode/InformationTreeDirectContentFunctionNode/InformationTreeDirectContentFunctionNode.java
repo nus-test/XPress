@@ -29,6 +29,16 @@ public abstract class InformationTreeDirectContentFunctionNode extends Informati
         return checkResult;
     }
 
+    public String getXPathExpression(boolean returnConstant) {
+        String expr = getXPathExpressionCheck(returnConstant);
+        if(expr != null) return expr;
+        String childExpr = childList.get(0).getXPathExpression();
+        if(childExpr.equals(".")) {
+            return functionExpr;
+        }
+        return childExpr + "/" + functionExpr;
+    }
+
     /**
      * 
      * @return XPath expression string for calculating the result of current information tree. If results in single value should evaluate

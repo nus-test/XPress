@@ -10,6 +10,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class LogicTreeOrComparisonNode extends LogicTreeComparisonNode{
+    LogicTreeOrComparisonNode() {
+        funcExpr = "or";
+    }
+
     @Override
     public LogicTreeNode modifyToContainStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
         int id = GlobalRandom.getInstance().nextInt(2);
