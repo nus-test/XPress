@@ -8,11 +8,9 @@ import XTest.ReportGeneration.KnownBugs;
 import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XMLGeneration.ContextNode;
-import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeContextNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.BooleanFunctionNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.ImplicitCastFunctionNode;
-import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNodeManager;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 import XTest.XPathGeneration.LogicTree.LogicTreeComparisonNode;
@@ -176,7 +174,7 @@ public class PredicateGeneratorNew {
         newRoot.calculateInfo();
         System.out.println("current root XPath expr state: " + newRoot.XPathExpr);
         if(newRoot.datatypeRecorder.xmlDatatype != XMLDatatype.SEQUENCE && newRoot.datatypeRecorder.subDatatype != XMLDatatype.NODE)
-            newRoot.containsContextConstant = true;
+            newRoot.constantExpr = true;
         return buildInformationTree(newRoot, levelLimit - 1);
     }
 

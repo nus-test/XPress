@@ -34,7 +34,7 @@ public abstract class InformationTreeNode extends LogicTreeNode {
      * If within subtree there is no context node or an ancestor node of the context node is
      * with calculated context value is set to true.
      */
-    public boolean containsContextConstant = false;
+    public boolean constantExpr = false;
 
     /**
      * Starred node id which is recorded in the unique context node.
@@ -47,6 +47,10 @@ public abstract class InformationTreeNode extends LogicTreeNode {
     public boolean selfContext = true;
 
     public List<InformationTreeNode> childList = new ArrayList<>();
+
+    InformationTreeNode() {
+        contextInfo = new InformationTreeContextInfo();
+    }
 
     public String getXPathExpressionCheck(boolean returnConstant) {
         System.out.println("XPathExpr: " + XPathExpr);
@@ -66,7 +70,7 @@ public abstract class InformationTreeNode extends LogicTreeNode {
      */
     public String getCalculationString() throws DebugErrorException {
         String calculationString = "";
-        if(containsContextConstant) calculationString = getXPathExpression(true);
+        if(constantExpr) calculationString = getXPathExpression(true);
         else if(!selfContext) {
             calculationString = "//*[id = \"" + starredNodeId + "\"]/" + getXPathExpression(true);
         } else if(childList.get(0).datatypeRecorder.xmlDatatype == XMLDatatype.NODE)
@@ -116,7 +120,7 @@ public abstract class InformationTreeNode extends LogicTreeNode {
      */
     public void inheritContextChildInfo(InformationTreeNode childNode) {
         this.containsContext = childNode.containsContext;
-        this.containsContextConstant = childNode.containsContextConstant;
+        this.constantExpr = childNode.constantExpr;
         this.selfContext = childNode.selfContext;
         this.starredNodeId = childNode.starredNodeId;
         this.mainExecutor = childNode.mainExecutor;

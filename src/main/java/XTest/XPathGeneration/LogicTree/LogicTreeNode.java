@@ -1,7 +1,6 @@
 package XTest.XPathGeneration.LogicTree;
 
 import XTest.DatabaseExecutor.MainExecutor;
-import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -11,6 +10,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public abstract class LogicTreeNode {
+    public LogicTreeContextInfo contextInfo = new LogicTreeContextInfo();
     public XMLDatatypeComplexRecorder datatypeRecorder = new XMLDatatypeComplexRecorder();
     /**
      * Record down the XPathPrefix to produce node candidates before applying current information tree selection.
@@ -86,4 +86,16 @@ public abstract class LogicTreeNode {
         String XPathExpr = getXPathExpression();
         this.XPathExpr = XPathExpr;
     }
+
+    /**
+     * Every ancestor in the information tree of the unique context node should contain the necessary information
+     * about the unique context node.
+     * @param childNode
+     */
+    public void inheritContextChildInfo(LogicTreeNode childNode) {
+        this.mainExecutor = childNode.mainExecutor;
+        this.XPathPrefix = childNode.XPathPrefix;
+        contextInfo = new LogicTreeContextInfo(childNode);
+    }
+
 }
