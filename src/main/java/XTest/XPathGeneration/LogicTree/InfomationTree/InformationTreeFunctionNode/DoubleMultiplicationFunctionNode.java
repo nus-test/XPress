@@ -18,7 +18,7 @@ public class DoubleMultiplicationFunctionNode extends BinaryOperatorFunctionNode
 
     @Override
     public void fillContents(InformationTreeNode childNode) {
-        if(childNode.context == null) {
+        if(!childNode.checkCalculableContext()) {
             fillContentsRandom(childNode);
             return;
         }

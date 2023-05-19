@@ -14,7 +14,7 @@ public class EndsWithFunctionNode extends InformationTreeFunctionNode {
 
     @Override
     public void fillContents(InformationTreeNode childNode) {
-        if(childList.get(0).context == null) {
+        if(!childNode.checkCalculableContext()) {
             fillContentsRandom(childNode);
             return;
         }

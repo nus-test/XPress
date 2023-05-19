@@ -16,7 +16,7 @@ public class SubstringFunctionNode extends InformationTreeFunctionNode {
 
     @Override
     public void fillContents(InformationTreeNode childNode) {
-        if(childNode.context == null) {
+        if(!childNode.checkCalculableContext()) {
             fillContentsRandom(childNode);
             return;
         }

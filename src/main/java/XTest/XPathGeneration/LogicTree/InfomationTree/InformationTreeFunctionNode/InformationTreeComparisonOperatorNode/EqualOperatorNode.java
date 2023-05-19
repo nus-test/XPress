@@ -15,7 +15,7 @@ public class EqualOperatorNode extends InformationTreeComparisonOperatorNode {
     }
 
     @Override
-    public InformationTreeFunctionNode newInstance() {
+    public EqualOperatorNode newInstance() {
         return new EqualOperatorNode();
     }
 
