@@ -6,6 +6,10 @@ import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNod
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class GreaterThanOperatorNode extends InformationTreeComparisonOperatorNode {
+    GreaterThanOperatorNode() {
+        functionExpr = ">=";
+    }
+
     @Override
     public InformationTreeComparisonOperatorNode modifyToContainStarredNode(int starredNodeId) {
         InformationTreeComparisonOperatorNode newRoot = new LessOrEqualOperatorNode();
@@ -20,17 +24,11 @@ public class GreaterThanOperatorNode extends InformationTreeComparisonOperatorNo
 
     @Override
     public void fillContents(InformationTreeNode childNode) {
+        if (!childNode.checkCalculableContext()) {
+            fillContentsRandom(childNode);
+            return;
+        }
 
-    }
-
-    @Override
-    public void fillContentsRandom(InformationTreeNode childNode) {
-
-    }
-
-    @Override
-    public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
-        return null;
     }
 
 }

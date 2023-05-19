@@ -2,11 +2,16 @@ package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNo
 
 import XTest.DatabaseExecutor.MainExecutor;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
+import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 import org.apache.tools.ant.taskdefs.condition.Not;
 
 public class EqualOperatorNode extends InformationTreeComparisonOperatorNode {
+    EqualOperatorNode() {
+        functionExpr = "=";
+    }
+
     @Override
     public InformationTreeComparisonOperatorNode modifyToContainStarredNode(int starredNodeId) {
         InformationTreeComparisonOperatorNode newRoot = new NotEqualOperatorNode();
@@ -21,16 +26,12 @@ public class EqualOperatorNode extends InformationTreeComparisonOperatorNode {
 
     @Override
     public void fillContents(InformationTreeNode childNode) {
-
-    }
-
-    @Override
-    public void fillContentsRandom(InformationTreeNode childNode) {
-
-    }
-
-    @Override
-    public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
-        return null;
+        if (!childNode.checkCalculableContext()) {
+            fillContentsRandom(childNode);
+            return;
+        }
+        childList.add(childNode);
+        inheritContextChildInfo(childNode);
+        childList.add(new InformationTreeConstantNode(childNode.dataTypeRecorder.xmlDatatype, childNode.context));
     }
 }

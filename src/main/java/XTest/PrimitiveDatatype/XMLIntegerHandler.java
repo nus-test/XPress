@@ -3,6 +3,7 @@ package XTest.PrimitiveDatatype;
 import XTest.CommonUtils;
 import XTest.DataCheckUtils;
 import XTest.GlobalRandom;
+import org.basex.query.value.item.Int;
 
 public class XMLIntegerHandler extends PooledValueHandler implements XMLComparable, XMLNumeric, XMLSimple, XMLAtomic {
 
@@ -86,5 +87,35 @@ public class XMLIntegerHandler extends PooledValueHandler implements XMLComparab
         resultNum = resultNum * ((int) Math.pow(10, e));
         resultNum *= sign;
         return resultNum;
+    }
+
+    @Override
+    public String getDefiniteGreater(String baseValue) {
+        Integer value = parseInt(baseValue);
+        if(value == Integer.MAX_VALUE) return baseValue;
+        Integer valueAdd;
+        if(value < 0)
+            valueAdd = GlobalRandom.getInstance().nextInt(Integer.MAX_VALUE);
+        else
+            valueAdd = GlobalRandom.getInstance().nextInt(Integer.MAX_VALUE - value);
+        return Integer.toString(value + valueAdd);
+    }
+
+    @Override
+    public String getDefiniteLess(String baseValue) {
+        Integer value = parseInt(baseValue);
+        if(value == Integer.MIN_VALUE) return baseValue;
+        Integer valueMinus;
+        if(value > 0)
+            valueMinus = GlobalRandom.getInstance().nextInt(-(Integer.MIN_VALUE + 10));
+        else valueMinus = GlobalRandom.getInstance().nextInt(value - Integer.MIN_VALUE);
+        return Integer.toString(value - valueMinus);
+    }
+
+    @Override
+    public XMLComparedResult compare(String baseValue, String compareValue) {
+        Integer value1 = parseInt(baseValue);
+        Integer value2 = parseInt(compareValue);
+        return compareT(value1, value2);
     }
 }
