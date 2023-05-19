@@ -1,6 +1,8 @@
 package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeComparisonOperatorNode;
 
 import XTest.DatabaseExecutor.MainExecutor;
+import XTest.PrimitiveDatatype.XMLComparable;
+import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNode;
@@ -32,6 +34,14 @@ public class EqualOperatorNode extends InformationTreeComparisonOperatorNode {
         }
         childList.add(childNode);
         inheritContextChildInfo(childNode);
-        childList.add(new InformationTreeConstantNode(childNode.dataTypeRecorder.xmlDatatype, childNode.context));
+        String value = childNode.dataTypeRecorder.xmlDatatype.getValueHandler().getEqual(childNode.context);
+        childList.add(new InformationTreeConstantNode(childNode.datatypeRecorder.xmlDatatype, value));
+    }
+
+    @Override
+    public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
+        return childNode.datatypeRecorder.xmlDatatype != XMLDatatype.SEQUENCE &&
+                childNode.datatypeRecorder.xmlDatatype != XMLDatatype.NODE &&
+                childNode.datatypeRecorder.xmlDatatype != XMLDatatype.MIXED;
     }
 }

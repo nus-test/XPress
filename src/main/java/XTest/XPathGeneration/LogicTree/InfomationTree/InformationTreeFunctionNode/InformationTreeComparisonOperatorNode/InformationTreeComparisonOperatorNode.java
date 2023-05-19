@@ -1,5 +1,6 @@
 package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeComparisonOperatorNode;
 
+import XTest.PrimitiveDatatype.XMLComparable;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
@@ -36,6 +37,6 @@ public abstract class InformationTreeComparisonOperatorNode extends InformationT
             childNode.datatypeRecorder.xmlDatatype == XMLDatatype.NODE ||
             childNode.datatypeRecorder.xmlDatatype == XMLDatatype.MIXED)
             return false;
-        return true;
+        return childNode.datatypeRecorder.xmlDatatype.getValueHandler() instanceof XMLComparable;
     }
 }

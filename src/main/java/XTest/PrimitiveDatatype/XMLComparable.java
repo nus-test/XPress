@@ -117,13 +117,4 @@ public interface XMLComparable {
         if(prob < 0.2) return baseValue;
         return getLess(baseValue);
     }
-
-    /**
-     *
-     * @param baseValue
-     * @return Same string as baseValue.
-     */
-    default String getEqual(String baseValue) {
-        return baseValue;
-    }
 }

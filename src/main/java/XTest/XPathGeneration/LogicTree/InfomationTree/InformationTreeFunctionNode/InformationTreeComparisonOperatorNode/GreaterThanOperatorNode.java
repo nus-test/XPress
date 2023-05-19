@@ -1,13 +1,15 @@
 package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeComparisonOperatorNode;
 
 import XTest.DatabaseExecutor.MainExecutor;
+import XTest.PrimitiveDatatype.XMLComparable;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
+import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class GreaterThanOperatorNode extends InformationTreeComparisonOperatorNode {
     GreaterThanOperatorNode() {
-        functionExpr = ">=";
+        functionExpr = ">";
     }
 
     @Override
@@ -18,7 +20,7 @@ public class GreaterThanOperatorNode extends InformationTreeComparisonOperatorNo
     }
 
     @Override
-    public InformationTreeFunctionNode newInstance() {
+    public GreaterThanOperatorNode newInstance() {
         return new GreaterThanOperatorNode();
     }
 
@@ -28,7 +30,9 @@ public class GreaterThanOperatorNode extends InformationTreeComparisonOperatorNo
             fillContentsRandom(childNode);
             return;
         }
-
+        childList.add(childNode);
+        inheritContextChildInfo(childNode);
+        String value = ((XMLComparable) childNode.dataTypeRecorder.xmlDatatype.getValueHandler()).getLessOrEqual(childNode.context);
+        childList.add(new InformationTreeConstantNode(childNode.datatypeRecorder.xmlDatatype, value));
     }
-
 }
