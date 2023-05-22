@@ -1,6 +1,7 @@
 package XTest.XPathGeneration.LogicTree;
 
 import XTest.DatabaseExecutor.MainExecutor;
+import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
@@ -14,7 +15,7 @@ public class LogicTreeAndComparisonNode extends LogicTreeComparisonNode {
     }
 
     @Override
-    public LogicTreeComparisonNode modifyToContainStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
+    public LogicTreeComparisonNode modifyToContainStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         childList.set(0, childList.get(0).modifyToContainStarredNode(starredNodeId));
         childList.set(1, childList.get(1).modifyToContainStarredNode(starredNodeId));
         return this;

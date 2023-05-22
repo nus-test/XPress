@@ -30,12 +30,12 @@ public class InformationTreeMapNode extends InformationTreeFunctionNode {
     }
 
     @Override
-    public void fillContents(InformationTreeNode childNode) {
+    public void fillContentParameters(InformationTreeNode childNode) {
 
     }
 
     @Override
-    public void fillContentsRandom(InformationTreeNode childNode) {
+    public void fillContentParametersRandom(InformationTreeNode childNode) {
 
     }
 

@@ -4,7 +4,6 @@ import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
-import XTest.XPathGeneration.LogicTree.LogicTreeNode;
 
 import static XTest.StringUtils.getListString;
 import static java.lang.Math.abs;
@@ -22,12 +21,7 @@ public class DoubleAddFunctionNode extends BinaryOperatorFunctionNode {
     }
 
     @Override
-    public void fillContents(InformationTreeNode childNode) {
-        if(!childNode.checkCalculableContext()) {
-            fillContentsRandom(childNode);
-            return;
-        }
-        childList.add(childNode);
+    public void fillContentParameters(InformationTreeNode childNode) {
         double currentValue = Double.parseDouble(childNode.context);
         String value = XMLDatatype.DOUBLE.getValueHandler().getValue(false);
         double addValue = Double.parseDouble(value);
@@ -43,12 +37,10 @@ public class DoubleAddFunctionNode extends BinaryOperatorFunctionNode {
             }
         }
         childList.add(new InformationTreeConstantNode(XMLDatatype.DOUBLE, value));
-        inheritContextChildInfo(childNode);
     }
 
     @Override
-    public void fillContentsRandom(InformationTreeNode childNode) {
-        childList.add(childNode);
+    public void fillContentParametersRandom(InformationTreeNode childNode) {
         // TODO: Control interval of randomly generated value to avoid overflow if necessary
         String value = XMLDatatype.DOUBLE.getValueHandler().getValue(false);
         childList.add(new InformationTreeConstantNode(XMLDatatype.DOUBLE, value));

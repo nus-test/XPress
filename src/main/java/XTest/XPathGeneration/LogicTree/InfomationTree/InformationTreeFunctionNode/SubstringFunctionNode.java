@@ -15,22 +15,20 @@ public class SubstringFunctionNode extends InformationTreeFunctionNode {
     }
 
     @Override
-    public void fillContents(InformationTreeNode childNode) {
+    public void fillContentParameters(InformationTreeNode childNode) {
         if(!childNode.checkCalculableContext()) {
-            fillContentsRandom(childNode);
+            fillContentParametersRandom(childNode);
             return;
         }
         fillContentsWithGivenLength(childNode, childNode.context.length());
     }
 
     @Override
-    public void fillContentsRandom(InformationTreeNode childNode) {
+    public void fillContentParametersRandom(InformationTreeNode childNode) {
         fillContentsWithGivenLength(childNode,20);
     }
 
     private void fillContentsWithGivenLength(InformationTreeNode childNode, int length) {
-        childList.add(childNode);
-        inheritContextChildInfo(childNode);
         double prob = GlobalRandom.getInstance().nextDouble();
         Pair interval = GlobalRandom.getInstance().nextInterval(length);
         InformationTreeConstantNode constantNodeStart = new InformationTreeConstantNode

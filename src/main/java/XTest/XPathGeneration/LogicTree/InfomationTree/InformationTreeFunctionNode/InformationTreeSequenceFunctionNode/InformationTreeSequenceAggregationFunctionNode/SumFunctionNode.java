@@ -17,8 +17,7 @@ public class SumFunctionNode extends InformationTreeSequenceAggregationFunctionN
     }
 
     @Override
-    public void fillContentsRandom(InformationTreeNode childNode) {
-        childList.add(childNode);
+    public void fillContentParametersRandom(InformationTreeNode childNode) {
         if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
             datatypeRecorder.xmlDatatype = childNode.datatypeRecorder.subDatatype;
         else datatypeRecorder.xmlDatatype = childNode.datatypeRecorder.xmlDatatype;

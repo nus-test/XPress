@@ -13,16 +13,9 @@ public class SubstringBeforeFunctionNode extends InformationTreeFunctionNode {
     }
 
     @Override
-    public void fillContents(InformationTreeNode childNode) {
-        if(!childNode.checkCalculableContext()) {
-            fillContentsRandom(childNode);
-            return;
-        }
-        childList.add(childNode);
-        inheritContextChildInfo(childNode);
+    public void fillContentParameters(InformationTreeNode childNode) {
         String subString = GlobalRandom.getInstance().nextSubstring(childList.get(0).context);
         double prob = GlobalRandom.getInstance().nextDouble();
-
         if(prob < 0.1)
             subString = "";
         else if(prob < 0.2)
@@ -31,9 +24,7 @@ public class SubstringBeforeFunctionNode extends InformationTreeFunctionNode {
     }
 
     @Override
-    public void fillContentsRandom(InformationTreeNode childNode) {
-        childList.add(childNode);
-        inheritContextChildInfo(childNode);
+    public void fillContentParametersRandom(InformationTreeNode childNode) {
         String subString = XMLDatatype.STRING.getValueHandler().getValue(false);
         double prob = GlobalRandom.getInstance().nextDouble();
         if(prob < 0.1)

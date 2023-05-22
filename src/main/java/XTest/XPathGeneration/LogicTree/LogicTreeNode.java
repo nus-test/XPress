@@ -2,6 +2,7 @@ package XTest.XPathGeneration.LogicTree;
 
 import XTest.DatabaseExecutor.MainExecutor;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
+import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
@@ -25,7 +26,7 @@ public abstract class LogicTreeNode {
      */
     public String XPathExpr = null;
     public XMLDatatypeComplexRecorder dataTypeRecorder = new XMLDatatypeComplexRecorder();
-    public abstract LogicTreeNode modifyToContainStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException;
+    public abstract LogicTreeNode modifyToContainStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException;
 
     /**
      *

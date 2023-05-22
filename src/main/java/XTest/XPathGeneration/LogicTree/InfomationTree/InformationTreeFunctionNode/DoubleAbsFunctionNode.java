@@ -16,17 +16,6 @@ public class DoubleAbsFunctionNode extends InformationTreeFunctionNode {
     }
 
     @Override
-    public void fillContents(InformationTreeNode childNode) {
-        fillContentsRandom(childNode);
-    }
-
-    @Override
-    public void fillContentsRandom(InformationTreeNode childNode) {
-        childList.add(childNode);
-        inheritContextChildInfo(childNode);
-    }
-
-    @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
         return recorder.xmlDatatype == XMLDatatype.DOUBLE;
     }

@@ -13,22 +13,16 @@ public class StartsWithFunctionNode extends InformationTreeFunctionNode {
     }
 
     @Override
-    public void fillContents(InformationTreeNode childNode) {
-        if(!childNode.checkCalculableContext()) {
-            fillContentsRandom(childNode);
-            return;
-        }
+    public void fillContentParameters(InformationTreeNode childNode) {
         fillContentsWithGivenContext(childNode, childNode.context);
     }
 
     @Override
-    public void fillContentsRandom(InformationTreeNode childNode) {
+    public void fillContentParametersRandom(InformationTreeNode childNode) {
         fillContentsWithGivenContext(childNode, XMLDatatype.STRING.getValueHandler().getValue(false));
     }
 
     private void fillContentsWithGivenContext(InformationTreeNode childNode, String str) {
-        childList.add(childNode);
-        inheritContextChildInfo(childNode);
         double prob = GlobalRandom.getInstance().nextDouble();
         int endIndex = GlobalRandom.getInstance().nextInt(str.length()) + 1;
         String endStr = str.substring(0, endIndex);

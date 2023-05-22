@@ -17,17 +17,15 @@ public class ConcatFunctionNode extends InformationTreeFunctionNode {
     }
 
     @Override
-    public void fillContents(InformationTreeNode childNode) {
-        fillContentsRandom(childNode);
+    public void fillContentParameters(InformationTreeNode childNode) {
+        fillContentParametersRandom(childNode);
     }
 
     @Override
-    public void fillContentsRandom(InformationTreeNode childNode) {
-        childList.add(childNode);
+    public void fillContentParametersRandom(InformationTreeNode childNode) {
         String randomString = XMLDatatype.STRING.getValueHandler().getValue(false);
         InformationTreeConstantNode constantNode = new InformationTreeConstantNode(XMLDatatype.STRING, randomString);
         childList.add(constantNode);
-        inheritContextChildInfo(childNode);
     }
 
     @Override

@@ -17,12 +17,7 @@ public class DoubleMultiplicationFunctionNode extends BinaryOperatorFunctionNode
     }
 
     @Override
-    public void fillContents(InformationTreeNode childNode) {
-        if(!childNode.checkCalculableContext()) {
-            fillContentsRandom(childNode);
-            return;
-        }
-        childList.add(childNode);
+    public void fillContentParameters(InformationTreeNode childNode) {
         double currentValue = Double.parseDouble(childNode.context);
         double multiplicationValue;
         if(abs(currentValue) > 10000) {
@@ -36,12 +31,10 @@ public class DoubleMultiplicationFunctionNode extends BinaryOperatorFunctionNode
             multiplicationValue = pre + last;
         }
         childList.add(new InformationTreeConstantNode(XMLDatatype.DOUBLE, Double.toString(multiplicationValue)));
-        inheritContextChildInfo(childNode);
     }
 
     @Override
-    public void fillContentsRandom(InformationTreeNode childNode) {
-        childList.add(childNode);
+    public void fillContentParametersRandom(InformationTreeNode childNode) {
         double prob = GlobalRandom.getInstance().nextDouble();
         double multiplicationValue;
         if(prob < 0.6) {

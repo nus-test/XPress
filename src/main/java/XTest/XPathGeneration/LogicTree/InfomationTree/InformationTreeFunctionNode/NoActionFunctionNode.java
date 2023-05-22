@@ -6,13 +6,12 @@ import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 public class NoActionFunctionNode extends InformationTreeFunctionNode {
 
     @Override
-    public void fillContents(InformationTreeNode childNode) {
-        fillContentsRandom(childNode);
+    public void fillContentParameters(InformationTreeNode childNode) {
+        fillContentParametersRandom(childNode);
     }
 
     @Override
-    public void fillContentsRandom(InformationTreeNode childNode) {
-        childList.add(childNode);
+    public void fillContentParametersRandom(InformationTreeNode childNode) {
         datatypeRecorder = new XMLDatatypeComplexRecorder(childNode.datatypeRecorder);
     }
 

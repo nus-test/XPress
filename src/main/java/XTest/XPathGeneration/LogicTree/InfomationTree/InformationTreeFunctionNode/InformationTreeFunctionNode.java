@@ -21,18 +21,53 @@ public abstract class InformationTreeFunctionNode extends InformationTreeNode {
 
     /**
      * Fill the content parameters of current function node with given child node as context.
+     * Only to fill in the content parameters and other process such as for inheritance is not needed.
+     * Default: has no parameters and output datatype is pre-set.
      * Is implemented with the best effort to fit parameters which is considered reasonable and if is boolean valued
      * to be evaluated true for given context.
      * @param childNode Given context.
      */
-    abstract public void fillContents(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException;
+    public void fillContentParameters(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    }
+
+    /**
+     * Fill the content parameters of current function node with given child node as context.
+     * Only to fill in the content parameters and other process such as for inheritance is not needed.
+     * Default: has no parameters and output datatype is pre-set.
+     * The given context is either not evaluable or sequence, fill the remaining contents randomly.
+     * @param childNode Given context.
+     */
+    public void fillContentParametersRandom(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    }
+
+    /**
+     * Fill the content parameters of current function node with given child node as context.
+     * Is implemented with the best effort to fit parameters which is considered reasonable and if is boolean valued
+     * to be evaluated true for given context.
+     * @param childNode Given context.
+     */
+    public void fillContents(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+        childList.add(childNode);
+        inheritContextChildInfo(childNode);
+        if(!childNode.checkCalculableContext())
+            fillContentParametersRandom(childNode);
+        else fillContentParameters(childNode);
+        calculateInfo();
+    }
 
     /**
      * Fill the content parameters of current function node with given child node as context.
      * The given context is either not evaluable or sequence, fill the remaining contents randomly.
      * @param childNode Given context.
      */
-    abstract public void fillContentsRandom(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException;
+    public void fillContentsRandom(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+        childList.add(childNode);
+        inheritContextChildInfo(childNode);
+        fillContentParametersRandom(childNode);
+        calculateInfo();
+    }
+
+
     /**
      *
      * @return String expression of simplified function with current context.

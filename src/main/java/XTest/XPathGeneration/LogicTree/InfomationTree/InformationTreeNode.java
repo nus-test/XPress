@@ -108,11 +108,11 @@ public abstract class InformationTreeNode extends LogicTreeNode {
     }
 
     @Override
-    public InformationTreeNode modifyToContainStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
+    public InformationTreeNode modifyToContainStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         boolean contains = checkIfContainsStarredNode(starredNodeId);
         if(contains) return this;
         NotFunctionNode newRoot = new NotFunctionNode();
-        newRoot.fillContents(this);
+        newRoot.fillContentParameters(this);
         return newRoot;
     }
 
@@ -141,6 +141,14 @@ public abstract class InformationTreeNode extends LogicTreeNode {
                         randomId + "]/@id");
             }
         }
+        setCalculableContextFlag();
+    }
+
+    public void setCalculableContextFlag() {
+        boolean flag = true;
+        if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) flag = false;
+        if(datatypeRecorder.subDatatype == XMLDatatype.NODE) flag = false;
+        getContextInfo().constantExpr = flag;
     }
 
     public Boolean checkCalculableContext() {

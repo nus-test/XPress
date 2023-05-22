@@ -5,7 +5,7 @@ import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
-import XTest.XPathGeneration.LogicTree.LogicTreeNode;
+
 import static java.lang.Math.abs;
 
 public class DoubleDivisionFunctionNode extends BinaryOperatorFunctionNode {
@@ -16,32 +16,24 @@ public class DoubleDivisionFunctionNode extends BinaryOperatorFunctionNode {
     }
 
     @Override
-    public void fillContents(InformationTreeNode childNode) {
-        if(!childNode.checkCalculableContext()) {
-            fillContentsRandom(childNode);
-            return;
-        }
+    public void fillContentParameters(InformationTreeNode childNode) {
         double currentValue = Double.parseDouble(childNode.context);
         if(abs(currentValue) > 10) {
-            fillContentsRandom(childNode);
+            fillContentParametersRandom(childNode);
             return;
         }
         double divisionValue = GlobalRandom.getInstance().nextDouble() + 0.5;
         if(divisionValue > 1.2) divisionValue = 1;
-        childList.add(childNode);
-        inheritContextChildInfo(childNode);
         String divisionValueStr = Double.toString(divisionValue);
         childList.add(new InformationTreeConstantNode(XMLDatatype.DOUBLE, divisionValueStr));
     }
 
     @Override
-    public void fillContentsRandom(InformationTreeNode childNode) {
+    public void fillContentParametersRandom(InformationTreeNode childNode) {
         Integer pre = GlobalRandom.getInstance().nextInt(10);
         Integer last = GlobalRandom.getInstance().nextInt(10);
         if(last == 0) last = 1;
         double divisionValue = Double.parseDouble(pre + "." + last);
-        childList.add(childNode);
-        inheritContextChildInfo(childNode);
         String divisionValueStr = Double.toString(divisionValue);
         childList.add(new InformationTreeConstantNode(XMLDatatype.DOUBLE, divisionValueStr));
     }

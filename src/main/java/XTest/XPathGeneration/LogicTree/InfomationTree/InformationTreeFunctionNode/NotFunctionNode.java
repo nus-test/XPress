@@ -15,16 +15,6 @@ public class NotFunctionNode extends InformationTreeFunctionNode {
     }
 
     @Override
-    public void fillContents(InformationTreeNode childNode) {
-        fillContentsRandom(childNode);
-    }
-
-    @Override
-    public void fillContentsRandom(InformationTreeNode childNode) {
-        childList.add(childNode);
-    }
-
-    @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
         return recorder.xmlDatatype == XMLDatatype.BOOLEAN;
     }

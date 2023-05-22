@@ -31,8 +31,8 @@ public class CastableFunctionNode extends BinaryOperatorFunctionNode {
      * @param childNode Given context.
      */
     @Override
-    public void fillContents(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
-        fillContentsRandom(childNode);
+    public void fillContentParameters(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+        fillContentParametersRandom(childNode);
     }
 
     /**
@@ -40,11 +40,9 @@ public class CastableFunctionNode extends BinaryOperatorFunctionNode {
      * @param childNode Given context.
      */
     @Override
-    public void fillContentsRandom(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    public void fillContentParametersRandom(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         XMLDatatype transformedDatatype = XMLDatatype.getRandomDataType();
         transformedDatatypeName = transformedDatatype.getValueHandler().officialTypeName;
-        childList.add(childNode);
-        inheritContextChildInfo(childNode);
     }
 
     @Override

@@ -3,9 +3,16 @@ package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNo
 import XTest.PrimitiveDatatype.XMLComparable;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
+import XTest.TestException.DebugErrorException;
+import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
+import net.sf.saxon.s9api.SaxonApiException;
+import org.xmldb.api.base.XMLDBException;
+
+import java.io.IOException;
+import java.sql.SQLException;
 
 public abstract class InformationTreeComparisonOperatorNode extends InformationTreeFunctionNode {
     InformationTreeComparisonOperatorNode() {
@@ -13,20 +20,25 @@ public abstract class InformationTreeComparisonOperatorNode extends InformationT
     }
 
     @Override
-    public abstract InformationTreeComparisonOperatorNode modifyToContainStarredNode(int starredNodeId);
+    public abstract InformationTreeComparisonOperatorNode modifyToContainStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException;
 
-    void transferInfo(InformationTreeComparisonOperatorNode prevNode) {
+    /**
+     * To transfer all information of the previous node to current node (change only the comparison operator
+     * node type.) Also new result is calculated.
+     * @param prevNode
+     */
+    void transferInfo(InformationTreeComparisonOperatorNode prevNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         // TODO: Check if there is more information necessary to transfer
-        this.childList = prevNode.childList;
-        this.datatypeRecorder = prevNode.datatypeRecorder;
-        getContextInfo().constantExpr = prevNode.getContextInfo().constantExpr;
+        childList = prevNode.childList;
+        datatypeRecorder = prevNode.datatypeRecorder;
+        setContextInfo(prevNode.getContextInfo());
+        calculateInfo();
+        setCalculableContextFlag();
         cacheXPathExpression();
     }
 
     @Override
-    public void fillContentsRandom(InformationTreeNode childNode) {
-        childList.add(childNode);
-        inheritContextChildInfo(childNode);
+    public void fillContentParametersRandom(InformationTreeNode childNode) {
         childList.add(new InformationTreeConstantNode(childNode.dataTypeRecorder.xmlDatatype,
                 childNode.datatypeRecorder.xmlDatatype.getValueHandler().getValue()));
     }

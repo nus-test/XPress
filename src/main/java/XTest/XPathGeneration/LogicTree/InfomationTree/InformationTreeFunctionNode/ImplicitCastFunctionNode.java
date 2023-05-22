@@ -25,8 +25,8 @@ public class ImplicitCastFunctionNode extends InformationTreeFunctionNode {
      * @param childNode Given context.
      */
     @Override
-    public void fillContents(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
-        fillContentsRandom(childNode);
+    public void fillContentParameters(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+        fillContentParametersRandom(childNode);
     }
 
     /**
@@ -34,7 +34,7 @@ public class ImplicitCastFunctionNode extends InformationTreeFunctionNode {
      * @param childNode Given context.
      */
     @Override
-    public void fillContentsRandom(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    public void fillContentParametersRandom(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         XMLDatatype originalDatatype = null;
         if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
             originalDatatype = childNode.datatypeRecorder.subDatatype;
@@ -78,8 +78,6 @@ public class ImplicitCastFunctionNode extends InformationTreeFunctionNode {
             else XPathExpr = "boolean(" + originalContext + ")";
             context = contextInfo.mainExecutor.executeSingleProcessor(XPathExpr, GlobalSettings.defaultDBName);
         }
-        childList.add(childNode);
-        inheritContextChildInfo(childNode);
     }
 
     /**

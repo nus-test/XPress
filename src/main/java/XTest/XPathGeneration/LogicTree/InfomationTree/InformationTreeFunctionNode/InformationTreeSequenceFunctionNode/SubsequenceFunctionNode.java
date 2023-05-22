@@ -17,7 +17,7 @@ public class SubsequenceFunctionNode extends InformationTreeSequenceFunctionNode
     }
 
     @Override
-    public void fillContents(InformationTreeNode childNode) {
+    public void fillContentParameters(InformationTreeNode childNode) {
         int originalSequenceLength;
         if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
             originalSequenceLength = Integer.parseInt(childNode.context);
@@ -26,7 +26,7 @@ public class SubsequenceFunctionNode extends InformationTreeSequenceFunctionNode
     }
 
     @Override
-    public void fillContentsRandom(InformationTreeNode childNode) {
+    public void fillContentParametersRandom(InformationTreeNode childNode) {
         fillContentsWithSequenceLength(childNode, GlobalRandom.getInstance().nextInt(100) + 1);
     }
 

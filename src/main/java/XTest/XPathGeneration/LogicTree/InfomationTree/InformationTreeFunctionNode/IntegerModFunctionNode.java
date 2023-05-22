@@ -15,19 +15,17 @@ public class IntegerModFunctionNode extends BinaryOperatorFunctionNode {
     }
 
     @Override
-    public void fillContents(InformationTreeNode childNode) {
-        fillContentsRandom(childNode);
+    public void fillContentParameters(InformationTreeNode childNode) {
+        fillContentParametersRandom(childNode);
     }
 
     @Override
-    public void fillContentsRandom(InformationTreeNode childNode) {
+    public void fillContentParametersRandom(InformationTreeNode childNode) {
         String value = null;
         value = ((XMLIntegerHandler) XMLDatatype.INTEGER.getValueHandler()).
                 getRandomValueBounded(Integer.MAX_VALUE / 2) + 1;
         double prob = GlobalRandom.getInstance().nextDouble();
         if(prob < 0.5) value = "-" + value;
-        childList.add(childNode);
-        inheritContextChildInfo(childNode);
         childList.add(new InformationTreeConstantNode(XMLDatatype.INTEGER, value));
     }
 

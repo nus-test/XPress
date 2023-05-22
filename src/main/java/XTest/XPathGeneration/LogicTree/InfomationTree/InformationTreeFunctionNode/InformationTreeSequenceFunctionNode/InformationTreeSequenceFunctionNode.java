@@ -11,13 +11,13 @@ public abstract class InformationTreeSequenceFunctionNode extends InformationTre
     }
 
     @Override
-    public void fillContents(InformationTreeNode childNode) {
-        fillContentsRandom(childNode);
+    public void fillContentParameters(InformationTreeNode childNode) {
+        fillContentParametersRandom(childNode);
     }
 
     @Override
-    public void fillContentsRandom(InformationTreeNode childNode) {
-        childList.add(childNode);
+    public void fillContentParametersRandom(InformationTreeNode childNode) {
+
     }
 
     @Override

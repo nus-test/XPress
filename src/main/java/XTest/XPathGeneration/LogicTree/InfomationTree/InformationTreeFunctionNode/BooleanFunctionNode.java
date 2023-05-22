@@ -23,17 +23,6 @@ public class BooleanFunctionNode extends InformationTreeFunctionNode {
     }
 
     @Override
-    public void fillContents(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
-        fillContentsRandom(childNode);
-    }
-
-    @Override
-    public void fillContentsRandom(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
-        inheritContextChildInfo(childNode);
-        childList.add(childNode);
-    }
-
-    @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
         if(recorder.xmlDatatype == XMLDatatype.SEQUENCE) {
             return recorder.subDatatype == XMLDatatype.NODE;

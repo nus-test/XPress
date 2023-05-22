@@ -15,11 +15,7 @@ public class IntegerAddFunctionNode extends BinaryOperatorFunctionNode {
     }
 
     @Override
-    public void fillContents(InformationTreeNode childNode) {
-        if(!childNode.checkCalculableContext()) {
-            fillContentsRandom(childNode);
-            return;
-        }
+    public void fillContentParameters(InformationTreeNode childNode) {
         String value;
         Integer inputValue = Integer.parseInt(childNode.context);
         if(inputValue < 0) {
@@ -30,18 +26,15 @@ public class IntegerAddFunctionNode extends BinaryOperatorFunctionNode {
             value = ((XMLIntegerHandler) XMLDatatype.INTEGER.getValueHandler()).
                     getRandomValueBounded(Integer.MAX_VALUE - inputValue);
         }
-        childList.add(childNode);
         childList.add(new InformationTreeConstantNode(XMLDatatype.INTEGER, value));
     }
 
     @Override
-    public void fillContentsRandom(InformationTreeNode childNode) {
+    public void fillContentParametersRandom(InformationTreeNode childNode) {
         String value;
         value = ((XMLIntegerHandler) XMLDatatype.INTEGER.getValueHandler()).
                     getRandomValueBounded(Integer.MIN_VALUE, Integer.MAX_VALUE);
-        childList.add(childNode);
         childList.add(new InformationTreeConstantNode(XMLDatatype.INTEGER, value));
-        inheritContextChildInfo(childNode);
     }
 
     @Override

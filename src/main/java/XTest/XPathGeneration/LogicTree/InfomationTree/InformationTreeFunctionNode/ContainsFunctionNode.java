@@ -19,12 +19,7 @@ public class ContainsFunctionNode extends InformationTreeFunctionNode {
     }
 
     @Override
-    public void fillContents(InformationTreeNode childNode) {
-        if(childNode.context == null) {
-            fillContentsRandom(childNode);
-            return;
-        }
-        childList.add(childNode);
+    public void fillContentParameters(InformationTreeNode childNode) {
         String childString = childList.get(0).context;
         Pair subStringInterval = GlobalRandom.getInstance().nextInterval(childString.length());
         int l = subStringInterval.x, r = subStringInterval.y;
@@ -36,18 +31,15 @@ public class ContainsFunctionNode extends InformationTreeFunctionNode {
         InformationTreeConstantNode constantNode = new InformationTreeConstantNode
                 (XMLDatatype.STRING, subString);
         childList.add(constantNode);
-        inheritContextChildInfo(childNode);
     }
 
     @Override
-    public void fillContentsRandom(InformationTreeNode childNode) {
-        childList.add(childNode);
+    public void fillContentParametersRandom(InformationTreeNode childNode) {
         String subString;
         subString = XMLDatatype.STRING.getValueHandler().getValue();
         InformationTreeConstantNode constantNode = new InformationTreeConstantNode
                 (XMLDatatype.STRING, subString);
         childList.add(constantNode);
-        inheritContextChildInfo(childNode);
     }
 
     @Override
