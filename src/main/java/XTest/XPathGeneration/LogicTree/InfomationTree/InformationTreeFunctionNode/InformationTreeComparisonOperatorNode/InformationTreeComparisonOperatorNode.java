@@ -19,7 +19,7 @@ public abstract class InformationTreeComparisonOperatorNode extends InformationT
         // TODO: Check if there is more information necessary to transfer
         this.childList = prevNode.childList;
         this.datatypeRecorder = prevNode.datatypeRecorder;
-        this.constantExpr = prevNode.constantExpr;
+        getContextInfo().constantExpr = prevNode.getContextInfo().constantExpr;
         cacheXPathExpression();
     }
 

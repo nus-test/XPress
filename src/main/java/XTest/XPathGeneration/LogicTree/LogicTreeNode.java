@@ -12,11 +12,6 @@ import java.sql.SQLException;
 public abstract class LogicTreeNode {
     public LogicTreeContextInfo contextInfo = new LogicTreeContextInfo();
     public XMLDatatypeComplexRecorder datatypeRecorder = new XMLDatatypeComplexRecorder();
-    /**
-     * Record down the XPathPrefix to produce node candidates before applying current information tree selection.
-     * e.g. /A1/B1, /A1/(B1, C1)
-     */
-    public String XPathPrefix;
 
     /**
      * If is calculable, contains the real value of evaluated context for the starred node
@@ -30,7 +25,6 @@ public abstract class LogicTreeNode {
      */
     public String XPathExpr = null;
     public XMLDatatypeComplexRecorder dataTypeRecorder = new XMLDatatypeComplexRecorder();
-    public MainExecutor mainExecutor = null;
     public abstract LogicTreeNode modifyToContainStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException;
 
     /**
@@ -93,9 +87,10 @@ public abstract class LogicTreeNode {
      * @param childNode
      */
     public void inheritContextChildInfo(LogicTreeNode childNode) {
-        this.mainExecutor = childNode.mainExecutor;
-        this.XPathPrefix = childNode.XPathPrefix;
         contextInfo = new LogicTreeContextInfo(childNode);
     }
 
+    public LogicTreeContextInfo getContextInfo() {
+        return contextInfo;
+    }
 }

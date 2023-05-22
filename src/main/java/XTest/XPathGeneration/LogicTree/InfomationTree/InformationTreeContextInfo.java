@@ -1,5 +1,6 @@
 package XTest.XPathGeneration.LogicTree.InfomationTree;
 
+import XTest.DatabaseExecutor.MainExecutor;
 import XTest.XPathGeneration.LogicTree.LogicTreeContextInfo;
 
 public class InformationTreeContextInfo extends LogicTreeContextInfo {
@@ -28,12 +29,21 @@ public class InformationTreeContextInfo extends LogicTreeContextInfo {
 
     public InformationTreeContextInfo() {}
 
+    public InformationTreeContextInfo(MainExecutor mainExecutor, String XPathPrefix, int starredNodeId,
+                                      boolean containsContext, boolean constantExpr, boolean selfContext) {
+        super(mainExecutor, XPathPrefix);
+        this.starredNodeId = starredNodeId;
+        this.containsContext = containsContext;
+        this.constantExpr = constantExpr;
+        this.selfContext = selfContext;
+    }
+
     public InformationTreeContextInfo(InformationTreeContextInfo infoNode) {
         inheritInfo(infoNode);
     }
 
     public InformationTreeContextInfo(InformationTreeNode informationTreeNode) {
-        inheritInfo(informationTreeNode.contextInfo);
+        inheritInfo(informationTreeNode.getContextInfo());
     }
 
     public void inheritInfo(InformationTreeContextInfo infoNode) {

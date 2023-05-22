@@ -3,14 +3,20 @@ package XTest.XPathGeneration.LogicTree;
 import XTest.DatabaseExecutor.MainExecutor;
 
 public class LogicTreeContextInfo {
+
     public MainExecutor mainExecutor;
-    public String XPathExpr;
+
+    /**
+     * Record down the XPathPrefix to produce node candidates before applying current information tree selection.
+     * e.g. /A1/B1, /A1/(B1, C1)
+     */
+    public String XPathPrefix;
 
     public LogicTreeContextInfo() {}
 
     public LogicTreeContextInfo(MainExecutor mainExecutor, String XPathExpr) {
         this.mainExecutor = mainExecutor;
-        this.XPathExpr = XPathExpr;
+        this.XPathPrefix = XPathExpr;
     }
 
     public LogicTreeContextInfo(LogicTreeContextInfo infoNode) {
@@ -23,6 +29,6 @@ public class LogicTreeContextInfo {
 
     public void inheritInfo(LogicTreeContextInfo infoNode) {
         mainExecutor = infoNode.mainExecutor;
-        XPathExpr = infoNode.XPathExpr;
+        XPathPrefix = infoNode.XPathPrefix;
     }
 }

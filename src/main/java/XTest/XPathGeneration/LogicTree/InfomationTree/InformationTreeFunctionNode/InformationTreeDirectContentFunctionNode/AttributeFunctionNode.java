@@ -28,7 +28,7 @@ public class AttributeFunctionNode extends InformationTreeDirectContentFunctionN
             nodeId = Integer.parseInt(childNode.supplementaryContext);
         }
         AttributeNode attributeNode = GlobalRandom.getInstance().getRandomFromList(
-                mainExecutor.contextNodeMap.get(nodeId).attributeList);
+                contextInfo.mainExecutor.contextNodeMap.get(nodeId).attributeList);
         functionExpr = attributeNode.tagName;
         if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.NODE) {
             datatypeRecorder.xmlDatatype = attributeNode.dataType;

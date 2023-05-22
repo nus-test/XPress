@@ -12,7 +12,7 @@ public class PositionFunctionNode extends InformationTreeDirectContentFunctionNo
     public String getCurrentLevelCalculationString() {
         if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
             return getSequenceCalculationString();
-        return "index-of(" + XPathPrefix + "[" + childList.get(0).getXPathExpression(false)
+        return "index-of(" + contextInfo.XPathPrefix + "[" + childList.get(0).getXPathExpression(false)
                 + "], //*[id=\"" + childList.get(0).context + "\"])";
     }
 

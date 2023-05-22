@@ -57,7 +57,7 @@ public class ImplicitCastFunctionNode extends InformationTreeFunctionNode {
         else
             originalDatatype = childNode.datatypeRecorder.xmlDatatype;
 
-        if(!XMLDatatype.checkCastable(mainExecutor, originalDatatype, transformedDatatype)) {
+        if(!XMLDatatype.checkCastable(contextInfo.mainExecutor, originalDatatype, transformedDatatype)) {
             throw new DebugErrorException("Error: Implicit cast specific transformed datatype is not castable from original datatype.");
         }
 
@@ -76,7 +76,7 @@ public class ImplicitCastFunctionNode extends InformationTreeFunctionNode {
             if(transformedDatatype != XMLDatatype.BOOLEAN)
                 XPathExpr = originalContext + " cast as " + transformedDatatype.getValueHandler().officialTypeName;
             else XPathExpr = "boolean(" + originalContext + ")";
-            context = mainExecutor.executeSingleProcessor(XPathExpr, GlobalSettings.defaultDBName);
+            context = contextInfo.mainExecutor.executeSingleProcessor(XPathExpr, GlobalSettings.defaultDBName);
         }
         childList.add(childNode);
         inheritContextChildInfo(childNode);

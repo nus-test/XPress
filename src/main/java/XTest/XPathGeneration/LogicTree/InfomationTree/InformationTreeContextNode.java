@@ -1,5 +1,6 @@
 package XTest.XPathGeneration.LogicTree.InfomationTree;
 
+import XTest.DatabaseExecutor.MainExecutor;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.XPathGeneration.LogicTree.LogicTreeNode;
 
@@ -12,22 +13,25 @@ public class InformationTreeContextNode extends InformationTreeNode {
     }
 
     public void setSelfContextFlag(boolean selfContextFlag) {
-        this.selfContext = selfContextFlag;
+        getContextInfo().selfContext = selfContextFlag;
     }
 
     public void setStarredNodeId(int starredNodeId) {
-        this.starredNodeId = starredNodeId;
+        getContextInfo().starredNodeId = starredNodeId;
     }
 
     @Override
     public String getCalculationString() {
         if(dataTypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
-            return "//*[@id=\"" + starredNodeId + "\"]/" + XPathExpr + "";
+            return "//*[@id=\"" + getContextInfo().starredNodeId + "\"]/" + XPathExpr + "";
         return null;
     }
 
     @Override
     public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode) {
         return XPathExpr;
+    }
+
+    public InformationTreeContextNode() {
     }
 }

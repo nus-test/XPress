@@ -18,7 +18,7 @@ public class TextFunctionNode extends InformationTreeDirectContentFunctionNode {
             // Else is applied to a sequence of nodes
             nodeId = Integer.parseInt(childNode.supplementaryContext);
         }
-        ContextNode contextNode = mainExecutor.contextNodeMap.get(nodeId);
+        ContextNode contextNode = contextInfo.mainExecutor.contextNodeMap.get(nodeId);
         if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.NODE) {
             datatypeRecorder.xmlDatatype = contextNode.dataType;
         }

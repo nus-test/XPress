@@ -89,11 +89,7 @@ public class PredicateGeneratorNew {
         double prob = GlobalRandom.getInstance().nextDouble();
 
         InformationTreeContextNode contextNode = new InformationTreeContextNode();
-        contextNode.XPathPrefix = XPathPrefix;
-        contextNode.setStarredNodeId(starredNode.id);
-        contextNode.mainExecutor = mainExecutor;
-        contextNode.containsContext = true;
-
+        boolean selfContextFlag, containsContextFlag = true, constantExprFlag = false;
         System.out.println("Entering here ===================> Starred node Id: " + starredNode.id);
 
         // Select a sequence
@@ -104,23 +100,25 @@ public class PredicateGeneratorNew {
             if(!pathToLeaf.endsWith("*"))
                 contextNode.datatypeRecorder.nodeMix = false;
             contextNode.setXPath(pathToLeaf);
-            contextNode.setSelfContextFlag(false);
+            selfContextFlag = false;
             System.out.println("Selected sequence: ");
             System.out.println(pathToLeaf);
         } else {
             // Select current node
             contextNode.datatypeRecorder.xmlDatatype = XMLDatatype.NODE;
             contextNode.datatypeRecorder.nodeMix = mixedContent;
-            contextNode.setSelfContextFlag(true);
+            selfContextFlag = true;
             contextNode.setXPath(".");
             contextNode.context = Integer.toString(starredNode.id);
             System.out.println("Selected node");
         }
+        contextNode.setContextInfo(mainExecutor, XPathPrefix, starredNode.id, containsContextFlag,
+                constantExprFlag, selfContextFlag);
         contextNode.calculateInfo();
         // Build information tree from context node
         int levelLimit = GlobalRandom.getInstance().nextInt(5);
-        if(contextNode.selfContext) levelLimit += 1;
-        System.out.println("|||||||||||||||||||||||||||||||||||" + contextNode.XPathPrefix);
+        if(contextNode.getContextInfo().selfContext) levelLimit += 1;
+        System.out.println("|||||||||||||||||||||||||||||||||||" + contextNode.getContextInfo().XPathPrefix + " " + contextNode.getContextInfo().containsContext);
         InformationTreeNode root = buildBooleanInformationTree(contextNode, levelLimit);
         return root;
     }
@@ -133,7 +131,7 @@ public class PredicateGeneratorNew {
      * @return The root node of the generated information tree.
      */
     public InformationTreeNode buildBooleanInformationTree(InformationTreeNode informationTreeNode, int levelLimit) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
-        System.out.println("What " + informationTreeNode.XPathPrefix);
+        System.out.println("What " + informationTreeNode.getContextInfo().XPathPrefix);
         InformationTreeNode root = buildInformationTree(informationTreeNode, levelLimit);
         double prob = GlobalRandom.getInstance().nextDouble();
         InformationTreeNode newRoot = null;
@@ -158,7 +156,8 @@ public class PredicateGeneratorNew {
 
         // Update information tree node in to a new root
         InformationTreeNode newRoot;
-        System.out.println("+++++++++ Build Information Tree " + informationTreeNode.XPathPrefix);
+        System.out.println("+++++++++ Build Information Tree " + informationTreeNode.getContextInfo().XPathPrefix + " "
+            + informationTreeNode.getContextInfo().containsContext);
         double prob = GlobalRandom.getInstance().nextDouble();
         if(prob < 0.4) {
             XMLDatatypeComplexRecorder recorder = InformationTreeFunctionNodeManager.getInstance()
@@ -170,11 +169,11 @@ public class PredicateGeneratorNew {
         }
         newRoot = InformationTreeFunctionNodeManager.getInstance()
                 .getRandomMatchingFunctionNodeWithContentAttached(informationTreeNode, informationTreeNode.datatypeRecorder);
-        System.out.println("Matched with function node " + newRoot.getClass() + " " + informationTreeNode.XPathPrefix);
+        System.out.println("Matched with function node " + newRoot.getClass() + " " + informationTreeNode.getContextInfo().XPathPrefix);
         newRoot.calculateInfo();
         System.out.println("current root XPath expr state: " + newRoot.XPathExpr);
         if(newRoot.datatypeRecorder.xmlDatatype != XMLDatatype.SEQUENCE && newRoot.datatypeRecorder.subDatatype != XMLDatatype.NODE)
-            newRoot.constantExpr = true;
+            newRoot.getContextInfo().constantExpr = true;
         return buildInformationTree(newRoot, levelLimit - 1);
     }
 
