@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class ImplicitCastFunctionNode extends InformationTreeFunctionNode {
+    XMLDatatype internalDatatype;
 
     @Override
     public ImplicitCastFunctionNode newInstance() {
@@ -35,13 +36,16 @@ public class ImplicitCastFunctionNode extends InformationTreeFunctionNode {
      */
     @Override
     public void fillContentParametersRandom(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
-        XMLDatatype originalDatatype = null;
-        if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
-            originalDatatype = childNode.datatypeRecorder.subDatatype;
-        else
-            originalDatatype = childNode.datatypeRecorder.xmlDatatype;
-        XMLDatatype transformedDatatype = XMLDatatype.getRandomCastableIntegratedDatatype(originalDatatype);
-        fillContentsSpecificAimedType(childNode, transformedDatatype);
+        if(internalDatatype == null) {
+            XMLDatatype originalDatatype = null;
+            if (childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
+                originalDatatype = childNode.datatypeRecorder.subDatatype;
+            else
+                originalDatatype = childNode.datatypeRecorder.xmlDatatype;
+            XMLDatatype transformedDatatype = XMLDatatype.getRandomCastableIntegratedDatatype(originalDatatype);
+            internalDatatype = transformedDatatype;
+        }
+        fillContentParametersSpecificAimedType(childNode);
     }
 
     /**
@@ -49,35 +53,8 @@ public class ImplicitCastFunctionNode extends InformationTreeFunctionNode {
      * @param childNode Given context.
      */
     public void fillContentsSpecificAimedType(InformationTreeNode childNode, XMLDatatype transformedDatatype) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
-        if(transformedDatatype == XMLDatatype.NODE)
-            throw new DebugErrorException("Should not cast any data into nodes");
-        XMLDatatype originalDatatype = null;
-        if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
-            originalDatatype = childNode.datatypeRecorder.subDatatype;
-        else
-            originalDatatype = childNode.datatypeRecorder.xmlDatatype;
-
-        if(!XMLDatatype.checkCastable(contextInfo.mainExecutor, originalDatatype, transformedDatatype)) {
-            throw new DebugErrorException("Error: Implicit cast specific transformed datatype is not castable from original datatype.");
-        }
-
-        datatypeRecorder = new XMLDatatypeComplexRecorder(childNode.datatypeRecorder);
-        if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) {
-            context = childNode.context;
-            datatypeRecorder.subDatatype = transformedDatatype;
-        }
-        else {
-            datatypeRecorder.xmlDatatype = transformedDatatype;
-            String originalContext = childNode.context;
-            if(originalDatatype == XMLDatatype.NODE) {
-                originalContext = "//*[@id=\"" + originalContext + "\"]";
-            }
-            String XPathExpr;
-            if(transformedDatatype != XMLDatatype.BOOLEAN)
-                XPathExpr = originalContext + " cast as " + transformedDatatype.getValueHandler().officialTypeName;
-            else XPathExpr = "boolean(" + originalContext + ")";
-            context = contextInfo.mainExecutor.executeSingleProcessor(XPathExpr, GlobalSettings.defaultDBName);
-        }
+        internalDatatype = transformedDatatype;
+        fillContentsRandom(childNode);
     }
 
     /**
@@ -88,14 +65,56 @@ public class ImplicitCastFunctionNode extends InformationTreeFunctionNode {
         if(transformedRecorder.subDatatype == XMLDatatype.NODE || transformedRecorder.xmlDatatype == XMLDatatype.NODE)
             throw new DebugErrorException("Should not cast any data into nodes");
         if(childNode.datatypeRecorder.xmlDatatype != XMLDatatype.SEQUENCE) {
-            if(transformedRecorder.xmlDatatype != XMLDatatype.SEQUENCE)
-                fillContentsSpecificAimedType(childNode, transformedRecorder.xmlDatatype);
+            if(transformedRecorder.xmlDatatype != XMLDatatype.SEQUENCE) {
+                internalDatatype = transformedRecorder.xmlDatatype;
+                fillContentsRandom(childNode);
+            }
             else {
                 datatypeRecorder = transformedRecorder;
                 context = "1";
             }
         }
-        else fillContentsSpecificAimedType(childNode, transformedRecorder.subDatatype);
+        else {
+            internalDatatype = transformedRecorder.subDatatype;
+            fillContentsRandom(childNode);
+        }
+    }
+
+    /**
+     * Implicitly cast the child node into a specific castable type.
+     * @param childNode Given context.
+     */
+    public void fillContentParametersSpecificAimedType(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+        if(internalDatatype == XMLDatatype.NODE)
+            throw new DebugErrorException("Should not cast any data into nodes");
+        XMLDatatype originalDatatype = null;
+        if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
+            originalDatatype = childNode.datatypeRecorder.subDatatype;
+        else
+            originalDatatype = childNode.datatypeRecorder.xmlDatatype;
+
+        if(!XMLDatatype.checkCastable(contextInfo.mainExecutor, originalDatatype, internalDatatype)) {
+            throw new DebugErrorException("Error: Implicit cast specific transformed datatype is not castable from original datatype.");
+        }
+
+        datatypeRecorder = new XMLDatatypeComplexRecorder(childNode.datatypeRecorder);
+        if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) {
+            context = childNode.context;
+            datatypeRecorder.subDatatype = internalDatatype;
+        }
+        else {
+            datatypeRecorder.xmlDatatype = internalDatatype;
+            String originalContext = childNode.context;
+            if(originalDatatype == XMLDatatype.NODE) {
+                originalContext = "//*[@id=\"" + originalContext + "\"]";
+            }
+            String XPathExpr;
+            if(internalDatatype != XMLDatatype.BOOLEAN)
+                XPathExpr = originalContext + " cast as " + internalDatatype.getValueHandler().officialTypeName;
+            else XPathExpr = "boolean(" + originalContext + ")";
+            context = contextInfo.mainExecutor.executeSingleProcessor(XPathExpr, GlobalSettings.defaultDBName);
+        }
+        internalDatatype = null;
     }
 
     @Override
