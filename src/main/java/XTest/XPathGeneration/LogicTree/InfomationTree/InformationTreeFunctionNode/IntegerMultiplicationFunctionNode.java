@@ -10,7 +10,7 @@ import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 public class IntegerMultiplicationFunctionNode extends BinaryOperatorFunctionNode {
     public IntegerMultiplicationFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;
-        functionExpr = "mul";
+        functionExpr = "*";
         priorityLevel = 3;
     }
 

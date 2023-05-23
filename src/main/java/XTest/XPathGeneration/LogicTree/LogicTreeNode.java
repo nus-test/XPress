@@ -25,7 +25,6 @@ public abstract class LogicTreeNode {
      * Cached XPathExpr with no constant substitution.
      */
     public String XPathExpr = null;
-    public XMLDatatypeComplexRecorder dataTypeRecorder = new XMLDatatypeComplexRecorder();
     public abstract LogicTreeNode modifyToContainStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException;
 
     /**

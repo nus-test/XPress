@@ -22,7 +22,7 @@ public class InformationTreeContextNode extends InformationTreeNode {
 
     @Override
     public String getCalculationString() {
-        if(dataTypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
+        if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
             return "//*[@id=\"" + getContextInfo().starredNodeId + "\"]/" + XPathExpr + "";
         return null;
     }

@@ -8,7 +8,7 @@ public class GlobalRandom {
     Random random;
     private GlobalRandom() {
         random = new Random();
-        random.setSeed(17320017);
+        random.setSeed(235412);
     }
 
     public static GlobalRandom getInstance() {
@@ -47,6 +47,7 @@ public class GlobalRandom {
     }
 
     public String nextSubstring(String str) {
+        if(str.length() == 0) return "";
         Pair subStringInterval = GlobalRandom.getInstance().nextInterval(str.length());
         int l = subStringInterval.x, r = subStringInterval.y;
         String subString;

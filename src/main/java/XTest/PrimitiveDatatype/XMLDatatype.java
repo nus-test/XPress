@@ -95,7 +95,7 @@ public enum XMLDatatype {
             answer = castableMap.get(pair);
         }
         else {
-            if(to == NODE)
+            if(to == NODE || (from == NODE && to != STRING))
                 answer = false;
             else {
                 answer = true;

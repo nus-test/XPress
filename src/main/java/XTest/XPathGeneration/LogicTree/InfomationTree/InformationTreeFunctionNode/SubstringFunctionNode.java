@@ -42,6 +42,7 @@ public class SubstringFunctionNode extends InformationTreeFunctionNode {
 
     private void fillContentParametersWithGivenLength(InformationTreeNode childNode) {
         double prob = GlobalRandom.getInstance().nextDouble();
+        if(internalLength == 0) internalLength = 20;
         Pair interval = GlobalRandom.getInstance().nextInterval(internalLength);
         InformationTreeConstantNode constantNodeStart = new InformationTreeConstantNode
                 (XMLDatatype.INTEGER, Integer.toString(interval.x));

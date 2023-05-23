@@ -21,6 +21,10 @@ public class ContainsFunctionNode extends InformationTreeFunctionNode {
     @Override
     protected void fillContentParameters(InformationTreeNode childNode) {
         String childString = childList.get(0).context;
+        if(childString.length() == 0) {
+            fillContentParametersRandom(childNode);
+            return;
+        }
         Pair subStringInterval = GlobalRandom.getInstance().nextInterval(childString.length());
         int l = subStringInterval.x, r = subStringInterval.y;
         String subString;

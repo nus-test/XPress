@@ -13,7 +13,7 @@ public class DoubleMultiplicationFunctionNode extends BinaryOperatorFunctionNode
     public DoubleMultiplicationFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.DOUBLE;
         priorityLevel = 3;
-        functionExpr = "mul";
+        functionExpr = "*";
     }
 
     @Override

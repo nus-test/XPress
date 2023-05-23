@@ -108,7 +108,6 @@ public class InformationTreeFunctionNodeManager {
      */
     public InformationTreeFunctionNode getRandomMatchingFunctionNode(XMLDatatypeComplexRecorder datatypeRecorder) {
         InformationTreeFunctionNode functionNode;
-        System.out.println("******" + datatypeRecorder.xmlDatatype);
         if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) {
             functionNode = GlobalRandom.getInstance().getRandomFromList(
                     sequenceRoughContextMatchingMap.get(datatypeRecorder.subDatatype)).newInstance();
@@ -152,7 +151,7 @@ public class InformationTreeFunctionNodeManager {
                 for(InformationTreeFunctionNode functionNode : registeredFunctionList) {
                     // For single node check
                     recorder.xmlDatatype = xmlDatatype;
-                    dummyNode.dataTypeRecorder = recorder;
+                    dummyNode.datatypeRecorder = recorder;
                     if(functionNode.checkContextAcceptability(dummyNode, recorder)) {
                         simpleRoughContextMatchingMap.get(xmlDatatype).add(functionNode);
                     }

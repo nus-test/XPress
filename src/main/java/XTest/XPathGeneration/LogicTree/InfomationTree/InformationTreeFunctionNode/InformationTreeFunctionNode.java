@@ -85,14 +85,11 @@ public abstract class InformationTreeFunctionNode extends InformationTreeNode {
      */
     @Override
     public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode) {
-        System.out.println("Why" + " " + returnConstant);
         String returnString = getXPathExpressionCheck(returnConstant);
-        System.out.println("???? " + returnString);
         if(returnString != null) return returnString;
         returnString = getDefaultFunctionXPathExpression(returnConstant);
         String test = XPathExpr;
         cacheXPathExpression(returnString, returnConstant);
-        System.out.println("()()() " + returnConstant + " " + returnString + " " + test + " " + XPathExpr);
         return returnString;
     }
 

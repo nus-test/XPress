@@ -30,7 +30,7 @@ public class GreaterThanOperatorNode extends InformationTreeComparisonOperatorNo
 
     @Override
     protected void fillContentParameters(InformationTreeNode childNode) {
-        String value = ((XMLComparable) childNode.dataTypeRecorder.xmlDatatype.getValueHandler()).getLessOrEqual(childNode.context);
+        String value = ((XMLComparable) childNode.datatypeRecorder.xmlDatatype.getValueHandler()).getLessOrEqual(childNode.context);
         childList.add(new InformationTreeConstantNode(childNode.datatypeRecorder.xmlDatatype, value));
     }
 }

@@ -18,7 +18,8 @@ public abstract class BinaryOperatorFunctionNode extends InformationTreeFunction
         returnString = childList.get(0).getXPathExpression(returnConstant, this) + " " + functionExpr + " " +
                 childList.get(1).getXPathExpression(returnConstant, this);
         if(parentNode != null) {
-            if(parentNode instanceof CastableFunctionNode ||
+            if(parentNode instanceof CastFunctionNode ||
+                    parentNode instanceof CastableFunctionNode ||
                     parentNode instanceof LogicTreeComparisonNode ||
                     (parentNode instanceof BinaryOperatorFunctionNode
                             && ((BinaryOperatorFunctionNode) parentNode).priorityLevel > priorityLevel))

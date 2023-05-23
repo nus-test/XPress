@@ -13,12 +13,19 @@ import org.xmldb.api.base.XMLDBException;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class ImplicitCastFunctionNode extends InformationTreeFunctionNode {
+public class CastFunctionNode extends BinaryOperatorFunctionNode {
     XMLDatatype internalDatatype;
+    XMLDatatype internalSupplementaryDatatype;
+    XMLDatatype originalDatatype;
+    XMLDatatype castedDatatype;
+
+    public CastFunctionNode() {
+        priorityLevel = 1;
+    }
 
     @Override
-    public ImplicitCastFunctionNode newInstance() {
-        return new ImplicitCastFunctionNode();
+    public CastFunctionNode newInstance() {
+        return new CastFunctionNode();
     }
 
     /**
@@ -70,8 +77,7 @@ public class ImplicitCastFunctionNode extends InformationTreeFunctionNode {
                 fillContentsRandom(childNode);
             }
             else {
-                datatypeRecorder = transformedRecorder;
-                context = "1";
+                throw new DebugErrorException("Should not need to cast single node into sequence through cast");
             }
         }
         else {
@@ -87,17 +93,18 @@ public class ImplicitCastFunctionNode extends InformationTreeFunctionNode {
     protected void fillContentParametersSpecificAimedType(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         if(internalDatatype == XMLDatatype.NODE)
             throw new DebugErrorException("Should not cast any data into nodes");
-        XMLDatatype originalDatatype = null;
         if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
             originalDatatype = childNode.datatypeRecorder.subDatatype;
         else
             originalDatatype = childNode.datatypeRecorder.xmlDatatype;
 
         if(!XMLDatatype.checkCastable(contextInfo.mainExecutor, originalDatatype, internalDatatype)) {
-            throw new DebugErrorException("Error: Implicit cast specific transformed datatype is not castable from original datatype.");
+            System.out.println("??????" + originalDatatype + " " + internalDatatype);
+            throw new DebugErrorException("Error: Cast specific transformed datatype is not castable from original datatype.");
         }
 
         datatypeRecorder = new XMLDatatypeComplexRecorder(childNode.datatypeRecorder);
+        castedDatatype = internalDatatype;
         if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) {
             context = childNode.context;
             datatypeRecorder.subDatatype = internalDatatype;
@@ -108,12 +115,25 @@ public class ImplicitCastFunctionNode extends InformationTreeFunctionNode {
             if(originalDatatype == XMLDatatype.NODE) {
                 originalContext = "//*[@id=\"" + originalContext + "\"]";
             }
+            else {
+                originalContext = XMLDatatype.wrapExpression(originalContext, originalDatatype);
+            }
             String XPathExpr;
             if(internalDatatype != XMLDatatype.BOOLEAN)
                 XPathExpr = originalContext + " cast as " + internalDatatype.getValueHandler().officialTypeName;
             else XPathExpr = "boolean(" + originalContext + ")";
+            if(originalContext.equals("()")) {
+                System.out.println("$$$$$$$$$$$$$$$$$$$");
+                System.out.println(originalDatatype);
+                System.out.println(childNode.getXPathExpression(false));
+                System.out.println(childNode.getXPathExpression(true));
+                System.out.println(childNode.getContextInfo().starredNodeId);
+                System.out.println(childNode.getCalculationString());
+                System.out.println("??????????" + childNode.context);
+            }
             context = contextInfo.mainExecutor.executeSingleProcessor(XPathExpr, GlobalSettings.defaultDBName);
         }
+        castedDatatype = internalDatatype;
         internalDatatype = null;
     }
 
@@ -131,7 +151,10 @@ public class ImplicitCastFunctionNode extends InformationTreeFunctionNode {
     public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode) {
         String returnString = getXPathExpressionCheck(returnConstant);
         if(returnString != null) return returnString;
-        returnString = childList.get(0).getXPathExpression(returnConstant, parentNode);
+        if(originalDatatype != XMLDatatype.NODE) {
+            returnString = "(" + childList.get(0).getXPathExpression(returnConstant, this) + " cast as " + castedDatatype.getValueHandler().officialTypeName + ")";
+        }
+        else returnString = childList.get(0).getXPathExpression(returnConstant, parentNode);
         cacheXPathExpression(returnString, returnConstant);
         return returnString;
     }

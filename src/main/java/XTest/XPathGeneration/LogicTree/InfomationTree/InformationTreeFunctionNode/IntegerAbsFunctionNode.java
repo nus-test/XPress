@@ -16,16 +16,6 @@ public class IntegerAbsFunctionNode extends InformationTreeFunctionNode {
     }
 
     @Override
-    protected void fillContentParameters(InformationTreeNode childNode) {
-        fillContentParametersRandom(childNode);
-    }
-    @Override
-    protected void fillContentParametersRandom(InformationTreeNode childNode) {
-        childList.add(childNode);
-        inheritContextChildInfo(childNode);
-    }
-
-    @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
         return recorder.xmlDatatype == XMLDatatype.INTEGER;
     }

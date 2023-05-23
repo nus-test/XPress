@@ -13,7 +13,7 @@ public abstract class LogicTreeComparisonNode extends LogicTreeNode {
     String funcExpr;
 
     {
-        dataTypeRecorder.xmlDatatype = XMLDatatype.BOOLEAN;
+        datatypeRecorder.xmlDatatype = XMLDatatype.BOOLEAN;
     }
 
     static {

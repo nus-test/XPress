@@ -42,6 +42,9 @@ public class EndsWithFunctionNode extends InformationTreeFunctionNode {
 
     private void fillContentParametersWithGivenContext(InformationTreeNode childNode) {
         double prob = GlobalRandom.getInstance().nextDouble();
+        while(internalStr.length() == 0) {
+            internalStr = XMLDatatype.STRING.getValueHandler().getValue(false);
+        }
         int startIndex = GlobalRandom.getInstance().nextInt(internalStr.length());
         String endStr = internalStr.substring(startIndex);
         if(prob < 0.2) {

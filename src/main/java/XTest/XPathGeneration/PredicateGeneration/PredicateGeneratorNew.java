@@ -9,9 +9,7 @@ import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XMLGeneration.ContextNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeContextNode;
-import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.BooleanFunctionNode;
-import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.ImplicitCastFunctionNode;
-import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNodeManager;
+import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.*;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 import XTest.XPathGeneration.LogicTree.LogicTreeComparisonNode;
 import XTest.XPathGeneration.LogicTree.LogicTreeNode;
@@ -53,9 +51,6 @@ public class PredicateGeneratorNew {
         for(int i = 0; i < phraseLength; i ++) {
             InformationTreeNode currentRoot = generateInformationTree(XPathPrefix, mixedContent, starredNode);
             rootList.add(currentRoot);
-            System.out.println("--------------------------->>>>>>>>>");
-            System.out.println("Current root: " + currentRoot.getXPathExpression() + " " + currentRoot.getClass());
-            System.out.println("--------------------------->>>>>>>>>");
         }
         while(rootList.size() > 1) {
             int id = GlobalRandom.getInstance().nextInt(rootList.size());
@@ -72,13 +67,12 @@ public class PredicateGeneratorNew {
         LogicTreeNode root = rootList.get(0);
         root = root.modifyToContainStarredNode(starredNode.id);
         String XPathExpression = XPathPrefix + "[" + root.getXPathExpression() + "]";
-        System.out.println("final generated: " + XPathExpression);
         List<ContextNode> selectedList = mainExecutor.executeSingleProcessorGetNodeList(XPathExpression);
         return new XPathResultListPair("[" + root.getXPathExpression() + "]", selectedList);
     }
 
     /**
-     * Generate a information tree which root node could be evaluated as boolean type.
+     * Generate an information tree which root node could be evaluated as boolean type.
      * @param XPathPrefix The prefix current candidate node set is selected by.
      * @param mixedContent If set to true, the nodes selected by XPathPrefix has different text types.
      * @param starredNode The starred node in current candidate node set which is required to be in the answer set.
@@ -90,7 +84,6 @@ public class PredicateGeneratorNew {
 
         InformationTreeContextNode contextNode = new InformationTreeContextNode();
         boolean selfContextFlag, containsContextFlag = true, constantExprFlag = false;
-        System.out.println("Entering here ===================> Starred node Id: " + starredNode.id);
 
         // Select a sequence
         if(prob < 0.3 && starredNode.childWithLeafList.size() != 0 && !KnownBugs.exist) {
@@ -100,16 +93,12 @@ public class PredicateGeneratorNew {
                 contextNode.datatypeRecorder.nodeMix = false;
             contextNode.setXPath(pathToLeaf);
             selfContextFlag = false;
-            System.out.println("Selected sequence: ");
-            System.out.println(pathToLeaf);
         } else {
             // Select current node
-            contextNode.datatypeRecorder.xmlDatatype = XMLDatatype.NODE;
-            contextNode.datatypeRecorder.nodeMix = mixedContent;
+            contextNode.datatypeRecorder.setData(XMLDatatype.NODE, null, mixedContent);
             selfContextFlag = true;
             contextNode.setXPath(".");
             contextNode.context = Integer.toString(starredNode.id);
-            System.out.println("Selected node");
         }
         contextNode.setContextInfo(mainExecutor, XPathPrefix, starredNode.id, containsContextFlag,
                 constantExprFlag, selfContextFlag);
@@ -117,7 +106,6 @@ public class PredicateGeneratorNew {
         // Build information tree from context node
         int levelLimit = GlobalRandom.getInstance().nextInt(5);
         if(contextNode.getContextInfo().selfContext) levelLimit += 1;
-        System.out.println("|||||||||||||||||||||||||||||||||||" + contextNode.getContextInfo().XPathPrefix + " " + contextNode.getContextInfo().containsContext);
         InformationTreeNode root = buildBooleanInformationTree(contextNode, levelLimit);
         return root;
     }
@@ -130,7 +118,6 @@ public class PredicateGeneratorNew {
      * @return The root node of the generated information tree.
      */
     public InformationTreeNode buildBooleanInformationTree(InformationTreeNode informationTreeNode, int levelLimit) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
-        System.out.println("What " + informationTreeNode.getContextInfo().XPathPrefix);
         InformationTreeNode root = buildInformationTree(informationTreeNode, levelLimit);
         double prob = GlobalRandom.getInstance().nextDouble();
         InformationTreeNode newRoot = null;
@@ -139,6 +126,11 @@ public class PredicateGeneratorNew {
         }
         if(newRoot == null) {
             newRoot = aimedBooleanInformationTreeBuild(root);
+        }
+        if(newRoot.datatypeRecorder.xmlDatatype != XMLDatatype.BOOLEAN) {
+            InformationTreeFunctionNode booleanRoot = new BooleanFunctionNode();
+            booleanRoot.fillContents(newRoot);
+            newRoot = booleanRoot;
         }
         return newRoot;
     }
@@ -155,21 +147,24 @@ public class PredicateGeneratorNew {
 
         // Update information tree node in to a new root
         InformationTreeNode newRoot;
-        System.out.println("+++++++++ Build Information Tree " + informationTreeNode.getContextInfo().XPathPrefix + " "
-            + informationTreeNode.getContextInfo().containsContext);
         double prob = GlobalRandom.getInstance().nextDouble();
-        if(prob < 0.4) {
+        if(informationTreeNode.getXPathExpression(true).equals("()")) {
+            System.out.println("Info!!!!!!!!!");
+            System.out.println(informationTreeNode.getClass() + " " + informationTreeNode.datatypeRecorder.xmlDatatype);
+            System.out.println(informationTreeNode.getContextInfo().selfContext + " " + informationTreeNode.getXPathExpression(true));
+            System.out.println(informationTreeNode.getCalculationString());
+        }
+        if(prob < 0.4 && (informationTreeNode.datatypeRecorder.xmlDatatype != XMLDatatype.SEQUENCE ||
+                Integer.parseInt(informationTreeNode.context) != 0)) {
             XMLDatatypeComplexRecorder recorder = InformationTreeFunctionNodeManager.getInstance()
                     .getRandomTargetedDatatypeRecorder(informationTreeNode.datatypeRecorder);
-            ImplicitCastFunctionNode castedInformationTreeNode = new ImplicitCastFunctionNode();
+            CastFunctionNode castedInformationTreeNode = new CastFunctionNode();
             castedInformationTreeNode.fillContentsSpecificAimedType(informationTreeNode, recorder);
             informationTreeNode = castedInformationTreeNode;
-            System.out.println("Casted to datatype of : " + recorder);
         }
         newRoot = InformationTreeFunctionNodeManager.getInstance()
                 .getRandomMatchingFunctionNodeWithContentAttached(informationTreeNode, informationTreeNode.datatypeRecorder);
-        System.out.println("Matched with function node " + newRoot.getClass() + " " + informationTreeNode.getContextInfo().XPathPrefix);
-        System.out.println("current root XPath expr state: " + newRoot.XPathExpr);
+
         return buildInformationTree(newRoot, levelLimit - 1);
     }
 
@@ -202,8 +197,8 @@ public class PredicateGeneratorNew {
     public InformationTreeNode aimedBooleanInformationTreeBuild(InformationTreeNode informationTreeNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         if(new BooleanFunctionNode().checkContextAcceptability(informationTreeNode)) {
             if(informationTreeNode.datatypeRecorder.xmlDatatype != XMLDatatype.BOOLEAN) {
-                ImplicitCastFunctionNode newRoot = new ImplicitCastFunctionNode();
-                newRoot.fillContentsSpecificAimedType(informationTreeNode, XMLDatatype.BOOLEAN);
+                BooleanFunctionNode newRoot = new BooleanFunctionNode();
+                newRoot.fillContentsRandom(informationTreeNode);
                 informationTreeNode = newRoot;
             }
             return informationTreeNode;

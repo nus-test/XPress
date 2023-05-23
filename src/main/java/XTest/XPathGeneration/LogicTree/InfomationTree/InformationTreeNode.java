@@ -55,10 +55,8 @@ public abstract class InformationTreeNode extends LogicTreeNode {
     }
 
     public String getXPathExpressionCheck(boolean returnConstant) {
-        System.out.println("XPathExpr: " + XPathExpr + " " + getContextInfo().containsContext);
         if(!getContextInfo().containsContext && checkCalculableContext())
             return XMLDatatype.wrapExpression(context, datatypeRecorder.xmlDatatype);
-        System.out.println("Visited");
         if(returnConstant && checkCalculableContext())
             return XMLDatatype.wrapExpression(context, datatypeRecorder.xmlDatatype);
         if(!returnConstant && XPathExpr != null)
@@ -75,7 +73,7 @@ public abstract class InformationTreeNode extends LogicTreeNode {
         String calculationString = "";
         if(getContextInfo().constantExpr) calculationString = getXPathExpression(true);
         else if(!getContextInfo().selfContext) {
-            calculationString = "//*[id = \"" + getContextInfo().starredNodeId + "\"]/" + getXPathExpression(true);
+            calculationString = "//*[@id=\"" + getContextInfo().starredNodeId + "\"]/" + getXPathExpression(true);
         } else if(childList.get(0).datatypeRecorder.xmlDatatype == XMLDatatype.NODE)
             calculationString = getCurrentLevelCalculationString();
         else calculationString = getXPathExpression(true);
@@ -101,9 +99,6 @@ public abstract class InformationTreeNode extends LogicTreeNode {
     public boolean checkIfContainsStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
         String expr = getXPathExpression();
         List<Integer> resultList = contextInfo.mainExecutor.executeSingleProcessorGetIdList(contextInfo.XPathPrefix + "[" + expr + "]");
-        System.out.println("*************** Check if contains " + starredNodeId);
-        System.out.println("XPath expression: " + contextInfo.XPathPrefix + "[" + expr + "]");
-        System.out.println(resultList);
         return resultList.contains(starredNodeId);
     }
 
@@ -123,12 +118,10 @@ public abstract class InformationTreeNode extends LogicTreeNode {
      */
     public void inheritContextChildInfo(InformationTreeNode childNode) {
         contextInfo = new InformationTreeContextInfo(childNode);
-        System.out.println("inherited: " + childNode.getContextInfo().containsContext + " " + getContextInfo().containsContext);
     }
 
     public void calculateInfo() throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         String calculationString = getCalculationString();
-        System.out.println("-------------> calculate info: " + calculationString);
         if(calculationString != null) {
             if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) {
                 context = contextInfo.mainExecutor.executeSingleProcessor("count(" + calculationString + ")");

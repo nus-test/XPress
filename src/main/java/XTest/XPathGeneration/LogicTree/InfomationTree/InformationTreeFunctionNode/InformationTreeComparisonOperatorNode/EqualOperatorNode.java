@@ -31,7 +31,7 @@ public class EqualOperatorNode extends InformationTreeComparisonOperatorNode {
 
     @Override
     protected void fillContentParameters(InformationTreeNode childNode) {
-        String value = childNode.dataTypeRecorder.xmlDatatype.getValueHandler().getEqual(childNode.context);
+        String value = childNode.datatypeRecorder.xmlDatatype.getValueHandler().getEqual(childNode.context);
         childList.add(new InformationTreeConstantNode(childNode.datatypeRecorder.xmlDatatype, value));
     }
 

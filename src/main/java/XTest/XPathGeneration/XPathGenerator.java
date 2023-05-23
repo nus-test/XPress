@@ -83,6 +83,10 @@ public class XPathGenerator {
             currentBuildPair.contextNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
         } else {
             int length = GlobalRandom.getInstance().nextInt(5) + 1;
+            if(starterBuildPair.contextNodeList.size() == 0) {
+                System.out.println("________________________________________");
+                System.out.println(starterBuildPair.XPath);
+            }
             PredicateTreeConstantNode directSequence = sequenceGenerator.generateNodeSequenceFromContext(length, starterBuildPair.contextNodeList);
             currentBuildPair.XPath += "/" + directSequence.dataContent;
             nodeIdList = mainExecutor.executeAndCompare(currentBuildPair.XPath);

@@ -37,6 +37,9 @@ public class StartsWithFunctionNode extends InformationTreeFunctionNode {
 
     protected void fillContentParametersWithGivenContext(InformationTreeNode childNode) {
         double prob = GlobalRandom.getInstance().nextDouble();
+        while(internalStr.length() == 0) {
+            internalStr = XMLDatatype.STRING.getValueHandler().getValue(false);
+        }
         int endIndex = GlobalRandom.getInstance().nextInt(internalStr.length()) + 1;
         String endStr = internalStr.substring(0, endIndex);
         if(prob < 0.2) {
