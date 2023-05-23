@@ -16,7 +16,7 @@ public class DoubleDivisionFunctionNode extends BinaryOperatorFunctionNode {
     }
 
     @Override
-    public void fillContentParameters(InformationTreeNode childNode) {
+    protected void fillContentParameters(InformationTreeNode childNode) {
         double currentValue = Double.parseDouble(childNode.context);
         if(abs(currentValue) > 10) {
             fillContentParametersRandom(childNode);
@@ -29,7 +29,7 @@ public class DoubleDivisionFunctionNode extends BinaryOperatorFunctionNode {
     }
 
     @Override
-    public void fillContentParametersRandom(InformationTreeNode childNode) {
+    protected void fillContentParametersRandom(InformationTreeNode childNode) {
         Integer pre = GlobalRandom.getInstance().nextInt(10);
         Integer last = GlobalRandom.getInstance().nextInt(10);
         if(last == 0) last = 1;

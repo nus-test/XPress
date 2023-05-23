@@ -95,8 +95,7 @@ public class PredicateGeneratorNew {
         // Select a sequence
         if(prob < 0.3 && starredNode.childWithLeafList.size() != 0 && !KnownBugs.exist) {
             String pathToLeaf = starredNode.getStrPathToSpecifiedLeafNode();
-            contextNode.datatypeRecorder.xmlDatatype = XMLDatatype.SEQUENCE;
-            contextNode.datatypeRecorder.subDatatype = XMLDatatype.NODE;
+            contextNode.datatypeRecorder.setData(XMLDatatype.SEQUENCE, XMLDatatype.NODE, true);
             if(!pathToLeaf.endsWith("*"))
                 contextNode.datatypeRecorder.nodeMix = false;
             contextNode.setXPath(pathToLeaf);
@@ -170,10 +169,7 @@ public class PredicateGeneratorNew {
         newRoot = InformationTreeFunctionNodeManager.getInstance()
                 .getRandomMatchingFunctionNodeWithContentAttached(informationTreeNode, informationTreeNode.datatypeRecorder);
         System.out.println("Matched with function node " + newRoot.getClass() + " " + informationTreeNode.getContextInfo().XPathPrefix);
-        newRoot.calculateInfo();
         System.out.println("current root XPath expr state: " + newRoot.XPathExpr);
-        if(newRoot.datatypeRecorder.xmlDatatype != XMLDatatype.SEQUENCE && newRoot.datatypeRecorder.subDatatype != XMLDatatype.NODE)
-            newRoot.getContextInfo().constantExpr = true;
         return buildInformationTree(newRoot, levelLimit - 1);
     }
 
@@ -208,7 +204,6 @@ public class PredicateGeneratorNew {
             if(informationTreeNode.datatypeRecorder.xmlDatatype != XMLDatatype.BOOLEAN) {
                 ImplicitCastFunctionNode newRoot = new ImplicitCastFunctionNode();
                 newRoot.fillContentsSpecificAimedType(informationTreeNode, XMLDatatype.BOOLEAN);
-                newRoot.calculateInfo();
                 informationTreeNode = newRoot;
             }
             return informationTreeNode;

@@ -15,7 +15,7 @@ public class DistinctValuesFunctionNode extends InformationTreeSequenceFunctionN
     }
 
     @Override
-    public void fillContentParametersRandom(InformationTreeNode childNode) {
+    protected void fillContentParametersRandom(InformationTreeNode childNode) {
         datatypeRecorder.xmlDatatype = XMLDatatype.SEQUENCE;
         if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) {
             datatypeRecorder.subDatatype = childNode.datatypeRecorder.subDatatype;

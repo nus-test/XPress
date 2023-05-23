@@ -158,8 +158,7 @@ public class InformationTreeFunctionNodeManager {
                     }
 
                     // For sequence check
-                    recorder.xmlDatatype = XMLDatatype.SEQUENCE;
-                    recorder.subDatatype = xmlDatatype;
+                    recorder.setData(XMLDatatype.SEQUENCE, xmlDatatype, true);
                     dummyNode.datatypeRecorder = recorder;
                     if(functionNode.checkContextAcceptability(dummyNode, recorder)) {
                         sequenceRoughContextMatchingMap.get(xmlDatatype).add(functionNode);

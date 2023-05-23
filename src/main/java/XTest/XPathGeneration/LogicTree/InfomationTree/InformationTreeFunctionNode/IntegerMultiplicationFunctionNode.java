@@ -15,7 +15,7 @@ public class IntegerMultiplicationFunctionNode extends BinaryOperatorFunctionNod
     }
 
     @Override
-    public void fillContentParameters(InformationTreeNode childNode) {
+    protected void fillContentParameters(InformationTreeNode childNode) {
         String value;
         Integer inputValue = Math.abs(Integer.parseInt(childNode.context));
         if(inputValue == 0) {
@@ -31,7 +31,7 @@ public class IntegerMultiplicationFunctionNode extends BinaryOperatorFunctionNod
         childList.add(new InformationTreeConstantNode(XMLDatatype.INTEGER, value));
     }
     @Override
-    public void fillContentParametersRandom(InformationTreeNode childNode) {
+    protected void fillContentParametersRandom(InformationTreeNode childNode) {
         String value = Integer.toString(GlobalRandom.getInstance().nextInt(1000));
         childList.add(new InformationTreeConstantNode(XMLDatatype.INTEGER, value));
     }

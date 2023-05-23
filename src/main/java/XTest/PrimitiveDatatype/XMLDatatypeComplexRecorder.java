@@ -22,15 +22,26 @@ public class XMLDatatypeComplexRecorder {
     }
 
     public XMLDatatypeComplexRecorder(XMLDatatypeComplexRecorder prevRecorder) {
-        this.xmlDatatype = prevRecorder.xmlDatatype;
-        this.subDatatype = prevRecorder.subDatatype;
-        this.nodeMix = prevRecorder.nodeMix;
+        setData(prevRecorder.xmlDatatype, prevRecorder.subDatatype, prevRecorder.nodeMix);
     }
 
     public XMLDatatypeComplexRecorder() {}
 
+    public XMLDatatypeComplexRecorder(XMLDatatype xmlDatatype, XMLDatatype subDatatype, boolean nodeMix) {
+        setData(xmlDatatype, subDatatype, nodeMix);
+    }
+
+    public void setData(XMLDatatype xmlDatatype, XMLDatatype subDatatype, boolean nodeMix) {
+        this.xmlDatatype = xmlDatatype;
+        this.subDatatype = subDatatype;
+        this.nodeMix = nodeMix;
+    }
+
     @Override
     public String toString() {
+        if(subDatatype == null) {
+            return xmlDatatype.getValueHandler().officialTypeName;
+        }
         return xmlDatatype.getValueHandler().officialTypeName + " " + subDatatype.getValueHandler().officialTypeName;
     }
 }

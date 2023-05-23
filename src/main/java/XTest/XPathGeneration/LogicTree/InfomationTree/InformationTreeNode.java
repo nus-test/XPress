@@ -112,7 +112,7 @@ public abstract class InformationTreeNode extends LogicTreeNode {
         boolean contains = checkIfContainsStarredNode(starredNodeId);
         if(contains) return this;
         NotFunctionNode newRoot = new NotFunctionNode();
-        newRoot.fillContentParameters(this);
+        newRoot.fillContents(this);
         return newRoot;
     }
 

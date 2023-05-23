@@ -21,7 +21,7 @@ public class LastFunctionNode extends InformationTreeDirectContentFunctionNode {
     }
 
     @Override
-    public void fillContentParametersRandom(InformationTreeNode childNode) {
+    protected void fillContentParametersRandom(InformationTreeNode childNode) {
         childList.add(childNode);
         if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.NODE) {
             datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;

@@ -26,7 +26,7 @@ public class ImplicitCastFunctionNode extends InformationTreeFunctionNode {
      * @param childNode Given context.
      */
     @Override
-    public void fillContentParameters(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    protected void fillContentParameters(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         fillContentParametersRandom(childNode);
     }
 
@@ -35,7 +35,7 @@ public class ImplicitCastFunctionNode extends InformationTreeFunctionNode {
      * @param childNode Given context.
      */
     @Override
-    public void fillContentParametersRandom(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    protected void fillContentParametersRandom(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         if(internalDatatype == null) {
             XMLDatatype originalDatatype = null;
             if (childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
@@ -84,7 +84,7 @@ public class ImplicitCastFunctionNode extends InformationTreeFunctionNode {
      * Implicitly cast the child node into a specific castable type.
      * @param childNode Given context.
      */
-    public void fillContentParametersSpecificAimedType(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    protected void fillContentParametersSpecificAimedType(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         if(internalDatatype == XMLDatatype.NODE)
             throw new DebugErrorException("Should not cast any data into nodes");
         XMLDatatype originalDatatype = null;

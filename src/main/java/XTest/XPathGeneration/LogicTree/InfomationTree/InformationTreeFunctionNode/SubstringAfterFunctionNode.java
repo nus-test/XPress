@@ -13,7 +13,7 @@ public class SubstringAfterFunctionNode extends InformationTreeFunctionNode {
     }
 
     @Override
-    public void fillContentParameters(InformationTreeNode childNode) {
+    protected void fillContentParameters(InformationTreeNode childNode) {
         String subString = GlobalRandom.getInstance().nextSubstring(childList.get(0).context);
         double prob = GlobalRandom.getInstance().nextDouble();
         if(prob < 0.1)
@@ -24,7 +24,7 @@ public class SubstringAfterFunctionNode extends InformationTreeFunctionNode {
     }
 
     @Override
-    public void fillContentParametersRandom(InformationTreeNode childNode) {
+    protected void fillContentParametersRandom(InformationTreeNode childNode) {
         String subString = XMLDatatype.STRING.getValueHandler().getValue(false);
         double prob = GlobalRandom.getInstance().nextDouble();
         if(prob < 0.1)

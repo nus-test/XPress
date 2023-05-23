@@ -15,7 +15,7 @@ public class IntegerDivisionFunctionNode extends BinaryOperatorFunctionNode {
     }
 
     @Override
-    public void fillContentParameters(InformationTreeNode childNode) {
+    protected void fillContentParameters(InformationTreeNode childNode) {
         double prob = GlobalRandom.getInstance().nextDouble();
         String value = null;
         if(prob < 0.7 && Integer.parseInt(childNode.context) >= 2)
@@ -30,7 +30,7 @@ public class IntegerDivisionFunctionNode extends BinaryOperatorFunctionNode {
     }
 
     @Override
-    public void fillContentParametersRandom(InformationTreeNode childNode) {
+    protected void fillContentParametersRandom(InformationTreeNode childNode) {
         String value = XMLDatatype.INTEGER.getValueHandler().getValue(false);
         childList.add(new InformationTreeConstantNode(XMLDatatype.INTEGER, value));
     }

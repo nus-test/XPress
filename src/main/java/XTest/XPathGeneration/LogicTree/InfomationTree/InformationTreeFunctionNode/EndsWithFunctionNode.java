@@ -22,20 +22,20 @@ public class EndsWithFunctionNode extends InformationTreeFunctionNode {
     }
 
     @Override
-    public void fillContentParameters(InformationTreeNode childNode) {
+    protected void fillContentParameters(InformationTreeNode childNode) {
         internalStr = childNode.context;
         fillContentParametersWithGivenContext(childNode);
     }
 
     @Override
-    public void fillContentParametersRandom(InformationTreeNode childNode) {
+    protected void fillContentParametersRandom(InformationTreeNode childNode) {
         if(internalStr == null) {
             internalStr = XMLDatatype.STRING.getValueHandler().getValue(false);
         }
         fillContentParametersWithGivenContext(childNode);
     }
 
-    private void fillContentsWithGivenContext(InformationTreeNode childNode, String str) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    public void fillContentsWithGivenContext(InformationTreeNode childNode, String str) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         internalStr = str;
         fillContentsRandom(childNode);
     }

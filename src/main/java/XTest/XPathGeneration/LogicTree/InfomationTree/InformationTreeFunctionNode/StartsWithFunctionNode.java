@@ -22,20 +22,20 @@ public class StartsWithFunctionNode extends InformationTreeFunctionNode {
     }
 
     @Override
-    public void fillContentParameters(InformationTreeNode childNode) {
+    protected void fillContentParameters(InformationTreeNode childNode) {
         internalStr = childNode.context;
         fillContentParametersWithGivenContext(childNode);
     }
 
     @Override
-    public void fillContentParametersRandom(InformationTreeNode childNode) {
+    protected void fillContentParametersRandom(InformationTreeNode childNode) {
         if(internalStr == null) {
             internalStr = XMLDatatype.STRING.getValueHandler().getValue(false);
         }
         fillContentParametersWithGivenContext(childNode);
     }
 
-    private void fillContentParametersWithGivenContext(InformationTreeNode childNode) {
+    protected void fillContentParametersWithGivenContext(InformationTreeNode childNode) {
         double prob = GlobalRandom.getInstance().nextDouble();
         int endIndex = GlobalRandom.getInstance().nextInt(internalStr.length()) + 1;
         String endStr = internalStr.substring(0, endIndex);

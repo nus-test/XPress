@@ -9,7 +9,7 @@ public class HasChildrenFunctionNode extends InformationTreeDirectContentFunctio
     }
 
     @Override
-    public void fillContentParametersRandom(InformationTreeNode childNode) {
+    protected void fillContentParametersRandom(InformationTreeNode childNode) {
         childList.add(childNode);
         if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.NODE) {
             datatypeRecorder.xmlDatatype = XMLDatatype.BOOLEAN;

@@ -38,7 +38,7 @@ public abstract class InformationTreeComparisonOperatorNode extends InformationT
     }
 
     @Override
-    public void fillContentParametersRandom(InformationTreeNode childNode) {
+    protected void fillContentParametersRandom(InformationTreeNode childNode) {
         childList.add(new InformationTreeConstantNode(childNode.dataTypeRecorder.xmlDatatype,
                 childNode.datatypeRecorder.xmlDatatype.getValueHandler().getValue()));
     }

@@ -17,7 +17,7 @@ public class AttributeFunctionNode extends InformationTreeDirectContentFunctionN
     }
 
     @Override
-    public void fillContentParametersRandom(InformationTreeNode childNode) {
+    protected void fillContentParametersRandom(InformationTreeNode childNode) {
         childList.add(childNode);
         int nodeId;
         if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.NODE) {

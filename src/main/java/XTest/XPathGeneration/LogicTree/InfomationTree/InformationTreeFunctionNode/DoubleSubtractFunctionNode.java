@@ -15,7 +15,7 @@ public class DoubleSubtractFunctionNode extends BinaryOperatorFunctionNode {
     }
 
     @Override
-    public void fillContentParameters(InformationTreeNode childNode) {
+    protected void fillContentParameters(InformationTreeNode childNode) {
         String value = XMLDatatype.DOUBLE.getValueHandler().getValue(false);
         double currentValue;
         currentValue = Double.parseDouble(childNode.context);
@@ -35,7 +35,7 @@ public class DoubleSubtractFunctionNode extends BinaryOperatorFunctionNode {
     }
 
     @Override
-    public void fillContentParametersRandom(InformationTreeNode childNode) {
+    protected void fillContentParametersRandom(InformationTreeNode childNode) {
         // TODO: Control interval of randomly generated value to avoid overflow if necessary
         String value = XMLDatatype.DOUBLE.getValueHandler().getValue(false);
         childList.add(new InformationTreeConstantNode(XMLDatatype.DOUBLE, value));

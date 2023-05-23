@@ -23,7 +23,7 @@ public class SubstringFunctionNode extends InformationTreeFunctionNode {
     }
 
     @Override
-    public void fillContentParameters(InformationTreeNode childNode) {
+    protected void fillContentParameters(InformationTreeNode childNode) {
         if(!childNode.checkCalculableContext()) {
             fillContentParametersRandom(childNode);
             return;
@@ -33,7 +33,7 @@ public class SubstringFunctionNode extends InformationTreeFunctionNode {
     }
 
     @Override
-    public void fillContentParametersRandom(InformationTreeNode childNode) {
+    protected void fillContentParametersRandom(InformationTreeNode childNode) {
         if(internalLength == null) {
             internalLength = 20;
         }
@@ -53,7 +53,7 @@ public class SubstringFunctionNode extends InformationTreeFunctionNode {
         internalLength = null;
     }
 
-    private void fillContentsWithGivenLength(InformationTreeNode childNode, int length) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    public void fillContentsWithGivenLength(InformationTreeNode childNode, int length) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         internalLength = length;
         fillContentsRandom(childNode);
     }

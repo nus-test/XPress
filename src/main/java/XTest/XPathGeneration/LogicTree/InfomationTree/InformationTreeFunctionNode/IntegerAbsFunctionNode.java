@@ -16,11 +16,11 @@ public class IntegerAbsFunctionNode extends InformationTreeFunctionNode {
     }
 
     @Override
-    public void fillContentParameters(InformationTreeNode childNode) {
+    protected void fillContentParameters(InformationTreeNode childNode) {
         fillContentParametersRandom(childNode);
     }
     @Override
-    public void fillContentParametersRandom(InformationTreeNode childNode) {
+    protected void fillContentParametersRandom(InformationTreeNode childNode) {
         childList.add(childNode);
         inheritContextChildInfo(childNode);
     }
