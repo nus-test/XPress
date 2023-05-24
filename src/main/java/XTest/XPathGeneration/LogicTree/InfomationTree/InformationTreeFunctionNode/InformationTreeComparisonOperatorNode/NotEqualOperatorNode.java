@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class NotEqualOperatorNode extends InformationTreeComparisonOperatorNode {
-    NotEqualOperatorNode() {
+    public NotEqualOperatorNode() {
         functionExpr = "!=";
     }
 
@@ -21,6 +21,7 @@ public class NotEqualOperatorNode extends InformationTreeComparisonOperatorNode 
     public InformationTreeComparisonOperatorNode modifyToContainStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         InformationTreeComparisonOperatorNode newRoot = new EqualOperatorNode();
         newRoot.transferInfo(this);
+        System.out.println("modified to contain starred node!!!!!");
         return newRoot;
     }
 

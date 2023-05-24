@@ -7,6 +7,7 @@ import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 public class NotFunctionNode extends InformationTreeFunctionNode {
     public NotFunctionNode() {
         functionExpr = "not";
+        datatypeRecorder.xmlDatatype = XMLDatatype.BOOLEAN;
     }
 
     @Override

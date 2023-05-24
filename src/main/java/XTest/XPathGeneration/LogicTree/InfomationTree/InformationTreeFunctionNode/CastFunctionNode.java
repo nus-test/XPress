@@ -19,10 +19,6 @@ public class CastFunctionNode extends BinaryOperatorFunctionNode {
     XMLDatatype originalDatatype;
     XMLDatatype castedDatatype;
 
-    public CastFunctionNode() {
-        priorityLevel = 1;
-    }
-
     @Override
     public CastFunctionNode newInstance() {
         return new CastFunctionNode();

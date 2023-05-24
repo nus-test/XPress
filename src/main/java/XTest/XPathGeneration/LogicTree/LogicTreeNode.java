@@ -9,6 +9,7 @@ import org.xmldb.api.base.XMLDBException;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 public abstract class LogicTreeNode {
     public LogicTreeContextInfo contextInfo = new LogicTreeContextInfo();
@@ -26,6 +27,19 @@ public abstract class LogicTreeNode {
      */
     public String XPathExpr = null;
     public abstract LogicTreeNode modifyToContainStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException;
+
+    public LogicTreeNode modifyToContainStarredNodeWithCheck(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+        boolean contains = checkIfContainsStarredNode(starredNodeId);
+        if(contains) return this;
+        return modifyToContainStarredNode(starredNodeId);
+    }
+
+    public boolean checkIfContainsStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
+        String expr = getXPathExpression();
+        List<Integer> resultList = contextInfo.mainExecutor.executeSingleProcessorGetIdList(contextInfo.XPathPrefix + "[" + expr + "]");
+        return resultList.contains(starredNodeId);
+    }
+
 
     /**
      *

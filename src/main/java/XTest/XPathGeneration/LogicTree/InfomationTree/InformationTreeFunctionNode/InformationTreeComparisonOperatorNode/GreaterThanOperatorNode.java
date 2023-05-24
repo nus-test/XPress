@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class GreaterThanOperatorNode extends InformationTreeComparisonOperatorNode {
-    GreaterThanOperatorNode() {
+    public GreaterThanOperatorNode() {
         functionExpr = ">";
     }
 

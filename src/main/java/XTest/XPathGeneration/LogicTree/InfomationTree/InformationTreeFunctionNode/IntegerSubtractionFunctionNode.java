@@ -6,7 +6,7 @@ import XTest.PrimitiveDatatype.XMLIntegerHandler;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
-public class IntegerSubtractionFunctionNode extends BinaryOperatorFunctionNode {
+public class IntegerSubtractionFunctionNode extends BinaryNumericalOperatorFunctionNode {
 
     public IntegerSubtractionFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;

@@ -7,7 +7,7 @@ import XTest.PrimitiveDatatype.XMLIntegerHandler;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
-public class IntegerDivisionFunctionNode extends BinaryOperatorFunctionNode {
+public class IntegerDivisionFunctionNode extends BinaryNumericalOperatorFunctionNode {
     public IntegerDivisionFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;
         functionExpr = "idiv";

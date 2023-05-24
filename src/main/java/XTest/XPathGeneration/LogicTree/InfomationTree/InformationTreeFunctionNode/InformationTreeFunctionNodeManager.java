@@ -8,6 +8,7 @@ import XTest.PrimitiveDatatype.XMLSimple;
 import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
+import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeComparisonOperatorNode.*;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
@@ -59,6 +60,7 @@ public class InformationTreeFunctionNodeManager {
         registeredFunctionList.add(new MinutesFromDurationFunctionNode());
         registeredFunctionList.add(new MonthsFromDurationFunctionNode());
         registeredFunctionList.add(new NormalizeSpaceFunctionNode());
+        registeredFunctionList.add(new NotFunctionNode());
         registeredFunctionList.add(new SecondsFromDurationFunctionNode());
         registeredFunctionList.add(new StartsWithFunctionNode());
         registeredFunctionList.add(new StringLengthFunctionNode());
@@ -68,6 +70,14 @@ public class InformationTreeFunctionNodeManager {
         registeredFunctionList.add(new TranslateFunctionNode());
         registeredFunctionList.add(new UpperCaseFunctionNode());
         registeredFunctionList.add(new YearsFromDurationFunctionNode());
+
+        registeredFunctionList.add(new EqualOperatorNode());
+        registeredFunctionList.add(new GreaterOrEqualOperatorNode());
+        registeredFunctionList.add(new GreaterThanOperatorNode());
+        registeredFunctionList.add(new LessOrEqualOperatorNode());
+        registeredFunctionList.add(new LessThanOperatorNode());
+        registeredFunctionList.add(new NotEqualOperatorNode());
+
     }
 
     /**

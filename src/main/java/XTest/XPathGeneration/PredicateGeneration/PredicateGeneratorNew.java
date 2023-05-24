@@ -4,6 +4,7 @@ import XTest.DatabaseExecutor.MainExecutor;
 import XTest.GlobalRandom;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
+import XTest.PrimitiveDatatype.XMLNumeric;
 import XTest.ReportGeneration.KnownBugs;
 import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
@@ -65,7 +66,7 @@ public class PredicateGeneratorNew {
             rootList.add(newRoot);
         }
         LogicTreeNode root = rootList.get(0);
-        root = root.modifyToContainStarredNode(starredNode.id);
+        root = root.modifyToContainStarredNodeWithCheck(starredNode.id);
         String XPathExpression = XPathPrefix + "[" + root.getXPathExpression() + "]";
         List<ContextNode> selectedList = mainExecutor.executeSingleProcessorGetNodeList(XPathExpression);
         return new XPathResultListPair("[" + root.getXPathExpression() + "]", selectedList);
@@ -148,12 +149,6 @@ public class PredicateGeneratorNew {
         // Update information tree node in to a new root
         InformationTreeNode newRoot;
         double prob = GlobalRandom.getInstance().nextDouble();
-        if(informationTreeNode.getXPathExpression(true).equals("()")) {
-            System.out.println("Info!!!!!!!!!");
-            System.out.println(informationTreeNode.getClass() + " " + informationTreeNode.datatypeRecorder.xmlDatatype);
-            System.out.println(informationTreeNode.getContextInfo().selfContext + " " + informationTreeNode.getXPathExpression(true));
-            System.out.println(informationTreeNode.getCalculationString());
-        }
         if(prob < 0.4 && (informationTreeNode.datatypeRecorder.xmlDatatype != XMLDatatype.SEQUENCE ||
                 Integer.parseInt(informationTreeNode.context) != 0)) {
             XMLDatatypeComplexRecorder recorder = InformationTreeFunctionNodeManager.getInstance()
@@ -196,7 +191,7 @@ public class PredicateGeneratorNew {
      */
     public InformationTreeNode aimedBooleanInformationTreeBuild(InformationTreeNode informationTreeNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         if(new BooleanFunctionNode().checkContextAcceptability(informationTreeNode)) {
-            if(informationTreeNode.datatypeRecorder.xmlDatatype != XMLDatatype.BOOLEAN) {
+            if(informationTreeNode.datatypeRecorder.xmlDatatype.getValueHandler() instanceof XMLNumeric) {
                 BooleanFunctionNode newRoot = new BooleanFunctionNode();
                 newRoot.fillContentsRandom(informationTreeNode);
                 informationTreeNode = newRoot;

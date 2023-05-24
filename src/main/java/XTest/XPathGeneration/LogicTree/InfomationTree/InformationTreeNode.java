@@ -96,16 +96,8 @@ public abstract class InformationTreeNode extends LogicTreeNode {
         return checkIfContainsStarredNode(getContextInfo().starredNodeId);
     }
 
-    public boolean checkIfContainsStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
-        String expr = getXPathExpression();
-        List<Integer> resultList = contextInfo.mainExecutor.executeSingleProcessorGetIdList(contextInfo.XPathPrefix + "[" + expr + "]");
-        return resultList.contains(starredNodeId);
-    }
-
     @Override
     public InformationTreeNode modifyToContainStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
-        boolean contains = checkIfContainsStarredNode(starredNodeId);
-        if(contains) return this;
         NotFunctionNode newRoot = new NotFunctionNode();
         newRoot.fillContents(this);
         return newRoot;

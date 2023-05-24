@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class EqualOperatorNode extends InformationTreeComparisonOperatorNode {
-    EqualOperatorNode() {
+    public EqualOperatorNode() {
         functionExpr = "=";
     }
 

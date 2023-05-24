@@ -6,6 +6,7 @@ import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
+import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.BinaryOperatorFunctionNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -14,7 +15,7 @@ import org.xmldb.api.base.XMLDBException;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public abstract class InformationTreeComparisonOperatorNode extends InformationTreeFunctionNode {
+public abstract class InformationTreeComparisonOperatorNode extends BinaryOperatorFunctionNode {
     InformationTreeComparisonOperatorNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.BOOLEAN;
     }
@@ -34,7 +35,6 @@ public abstract class InformationTreeComparisonOperatorNode extends InformationT
         setContextInfo(prevNode.getContextInfo());
         calculateInfo();
         setCalculableContextFlag();
-        cacheXPathExpression();
     }
 
     @Override

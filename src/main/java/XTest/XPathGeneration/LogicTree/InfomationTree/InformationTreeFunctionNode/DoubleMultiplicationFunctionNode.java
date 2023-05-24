@@ -8,7 +8,7 @@ import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 import static java.lang.Math.abs;
 
-public class DoubleMultiplicationFunctionNode extends BinaryOperatorFunctionNode {
+public class DoubleMultiplicationFunctionNode extends BinaryNumericalOperatorFunctionNode {
 
     public DoubleMultiplicationFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.DOUBLE;

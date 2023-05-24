@@ -17,7 +17,6 @@ public class CastableFunctionNode extends BinaryOperatorFunctionNode {
     String transformedDatatypeName;
     public CastableFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.BOOLEAN;
-        priorityLevel = 1;
         functionExpr = "castable as";
     }
 

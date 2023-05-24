@@ -7,7 +7,7 @@ import XTest.PrimitiveDatatype.XMLIntegerHandler;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
-public class IntegerMultiplicationFunctionNode extends BinaryOperatorFunctionNode {
+public class IntegerMultiplicationFunctionNode extends BinaryNumericalOperatorFunctionNode {
     public IntegerMultiplicationFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;
         functionExpr = "*";

@@ -3,8 +3,13 @@ package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNo
 import XTest.XPathGeneration.LogicTree.LogicTreeComparisonNode;
 import XTest.XPathGeneration.LogicTree.LogicTreeNode;
 
-public abstract class BinaryOperatorFunctionNode extends InformationTreeFunctionNode {
-
+public abstract class BinaryNumericalOperatorFunctionNode extends BinaryOperatorFunctionNode {
+    /**
+     * Integer which represents the priority level of the binary operator. Higher value has higher priority.
+     * If parent operator node has higher priority level than child node, child node XPath expression has to be
+     * wrapped by parentheses.
+     */
+    int priorityLevel;
     @Override
     public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode) {
         String returnString = getXPathExpressionCheck(returnConstant);
@@ -12,16 +17,11 @@ public abstract class BinaryOperatorFunctionNode extends InformationTreeFunction
         returnString = childList.get(0).getXPathExpression(returnConstant, this) + " " + functionExpr + " " +
                 childList.get(1).getXPathExpression(returnConstant, this);
         if(parentNode != null) {
-            if(parentNode instanceof BinaryOperatorFunctionNode)
+            if(!(parentNode instanceof BinaryNumericalOperatorFunctionNode &&
+                    ((BinaryNumericalOperatorFunctionNode) parentNode).priorityLevel > priorityLevel))
                 returnString = "(" + returnString + ")";
         }
         cacheXPathExpression(returnString, returnConstant);
         return returnString;
-    }
-
-    @Override
-    public String getCurrentContextFunctionExpr() {
-        String rightChild = childList.get(1).getXPathExpression(false, this);
-        return ". " + functionExpr + " " + rightChild;
     }
 }
