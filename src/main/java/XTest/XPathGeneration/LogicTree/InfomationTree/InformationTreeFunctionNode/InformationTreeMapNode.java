@@ -1,13 +1,15 @@
 package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode;
 
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
+import XTest.TestException.DebugErrorException;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
+import XTest.XPathGeneration.LogicTree.LogicTreeNode;
 
 public class InformationTreeMapNode extends InformationTreeFunctionNode {
 
     @Override
-    public String getXPathExpression(boolean returnConstant) {
+    public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode, boolean calculateString) throws DebugErrorException {
         // TODO: Check the first child type and decide whether needs to be wrapped by "()"
 
         String builder = childList.get(0).getXPathExpression(returnConstant) + "! ";

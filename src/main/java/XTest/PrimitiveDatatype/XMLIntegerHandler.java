@@ -106,7 +106,7 @@ public class XMLIntegerHandler extends PooledValueHandler implements XMLComparab
         Integer value = parseInt(baseValue);
         if(value == Integer.MIN_VALUE) return baseValue;
         Integer valueMinus;
-        if(value > 0)
+        if(value >= 0)
             valueMinus = GlobalRandom.getInstance().nextInt(-(Integer.MIN_VALUE + 10));
         else valueMinus = GlobalRandom.getInstance().nextInt(value - Integer.MIN_VALUE);
         return Integer.toString(value - valueMinus);

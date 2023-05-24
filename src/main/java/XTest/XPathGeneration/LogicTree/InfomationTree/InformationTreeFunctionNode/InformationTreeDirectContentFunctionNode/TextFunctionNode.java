@@ -6,10 +6,12 @@ import XTest.XMLGeneration.ContextNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
 public class TextFunctionNode extends InformationTreeDirectContentFunctionNode {
+    public TextFunctionNode() {
+        functionExpr = "text";
+    }
 
     @Override
     protected void fillContentParametersRandom(InformationTreeNode childNode) {
-        childList.add(childNode);
         int nodeId;
         if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.NODE) {
             nodeId = Integer.parseInt(childNode.context);
@@ -31,11 +33,12 @@ public class TextFunctionNode extends InformationTreeDirectContentFunctionNode {
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
         Boolean checkResult = recorder.xmlDatatype == XMLDatatype.NODE;
-        if(!checkResult) {
-            if(recorder.xmlDatatype == XMLDatatype.SEQUENCE && recorder.subDatatype == XMLDatatype.NODE
-                && recorder.nodeMix == false)
-                checkResult = true;
-        }
+        if(!recorder.nodeMix) {
+            if (!checkResult) {
+                if (recorder.xmlDatatype == XMLDatatype.SEQUENCE && recorder.subDatatype == XMLDatatype.NODE)
+                    checkResult = true;
+            }
+        } else checkResult = false;
         return checkResult;
     }
 

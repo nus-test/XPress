@@ -9,6 +9,7 @@ import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeComparisonOperatorNode.*;
+import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeDirectContentFunctionNode.*;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
@@ -78,6 +79,13 @@ public class InformationTreeFunctionNodeManager {
         registeredFunctionList.add(new LessThanOperatorNode());
         registeredFunctionList.add(new NotEqualOperatorNode());
 
+        registeredFunctionList.add(new AttributeFunctionNode());
+        registeredFunctionList.add(new HasChildrenFunctionNode());
+        registeredFunctionList.add(new LastFunctionNode());
+        registeredFunctionList.add(new LocalNameFunctionNode());
+        registeredFunctionList.add(new NameFunctionNode());
+        registeredFunctionList.add(new PositionFunctionNode());
+        registeredFunctionList.add(new TextFunctionNode());
     }
 
     /**

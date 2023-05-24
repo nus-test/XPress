@@ -2,6 +2,7 @@ package XTest.XPathGeneration.LogicTree.InfomationTree;
 
 import XTest.DatabaseExecutor.MainExecutor;
 import XTest.PrimitiveDatatype.XMLDatatype;
+import XTest.TestException.DebugErrorException;
 import XTest.XPathGeneration.LogicTree.LogicTreeNode;
 
 public class InformationTreeContextNode extends InformationTreeNode {
@@ -21,14 +22,17 @@ public class InformationTreeContextNode extends InformationTreeNode {
     }
 
     @Override
-    public String getCalculationString() {
+    public String getCalculationString(LogicTreeNode parentNode, boolean checkImpact) {
+        String calculationStr = "//*[@id=\"" + getContextInfo().starredNodeId + "\"]";
         if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
-            return "//*[@id=\"" + getContextInfo().starredNodeId + "\"]/" + XPathExpr + "";
-        return null;
+            calculationStr += "/" + XPathExpr;
+        return calculationStr;
     }
 
     @Override
-    public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode) {
+    public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode, boolean calculateString) throws DebugErrorException {
+        if(calculateString)
+            return getCalculationString(parentNode, false);
         return XPathExpr;
     }
 

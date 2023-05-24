@@ -3,6 +3,7 @@ package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNo
 import XTest.GlobalRandom;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
+import XTest.TestException.DebugErrorException;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
@@ -44,7 +45,7 @@ public class DoubleDivisionFunctionNode extends BinaryNumericalOperatorFunctionN
     }
 
     @Override
-    public String getCurrentContextFunctionExpr() {
+    public String getCurrentContextFunctionExpr() throws DebugErrorException {
         String rightChild = childList.get(1).getXPathExpression(false, this);
         return ". div " + rightChild;
     }

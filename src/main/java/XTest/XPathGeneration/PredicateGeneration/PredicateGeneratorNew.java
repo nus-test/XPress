@@ -11,6 +11,7 @@ import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XMLGeneration.ContextNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeContextNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.*;
+import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeDirectContentFunctionNode.AttributeFunctionNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 import XTest.XPathGeneration.LogicTree.LogicTreeComparisonNode;
 import XTest.XPathGeneration.LogicTree.LogicTreeNode;
@@ -149,14 +150,16 @@ public class PredicateGeneratorNew {
         // Update information tree node in to a new root
         InformationTreeNode newRoot;
         double prob = GlobalRandom.getInstance().nextDouble();
-        if(prob < 0.4 && (informationTreeNode.datatypeRecorder.xmlDatatype != XMLDatatype.SEQUENCE ||
-                Integer.parseInt(informationTreeNode.context) != 0)) {
-            XMLDatatypeComplexRecorder recorder = InformationTreeFunctionNodeManager.getInstance()
-                    .getRandomTargetedDatatypeRecorder(informationTreeNode.datatypeRecorder);
-            CastFunctionNode castedInformationTreeNode = new CastFunctionNode();
-            castedInformationTreeNode.fillContentsSpecificAimedType(informationTreeNode, recorder);
-            informationTreeNode = castedInformationTreeNode;
-        }
+        // TODO: could loosen the constraint hear for attribute node cast through record of nodeMix?
+//        if(prob < 0.4 && (informationTreeNode.datatypeRecorder.xmlDatatype != XMLDatatype.SEQUENCE ||
+//                Integer.parseInt(informationTreeNode.context) != 0)
+//            && !(informationTreeNode instanceof AttributeFunctionNode)) {
+//            XMLDatatypeComplexRecorder recorder = InformationTreeFunctionNodeManager.getInstance()
+//                    .getRandomTargetedDatatypeRecorder(informationTreeNode.datatypeRecorder);
+//            CastFunctionNode castedInformationTreeNode = new CastFunctionNode();
+//            castedInformationTreeNode.fillContentsSpecificAimedType(informationTreeNode, recorder);
+//            informationTreeNode = castedInformationTreeNode;
+//        }
         newRoot = InformationTreeFunctionNodeManager.getInstance()
                 .getRandomMatchingFunctionNodeWithContentAttached(informationTreeNode, informationTreeNode.datatypeRecorder);
 

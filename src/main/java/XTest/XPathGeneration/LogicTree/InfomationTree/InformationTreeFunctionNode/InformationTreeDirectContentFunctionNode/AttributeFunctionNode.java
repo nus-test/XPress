@@ -2,23 +2,25 @@ package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNo
 
 import XTest.GlobalRandom;
 import XTest.PrimitiveDatatype.XMLDatatype;
+import XTest.TestException.DebugErrorException;
 import XTest.XMLGeneration.AttributeNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
+import XTest.XPathGeneration.LogicTree.LogicTreeNode;
 
 public class AttributeFunctionNode extends InformationTreeDirectContentFunctionNode {
 
     @Override
-    public String getCurrentLevelCalculationString() {
-        if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
-            return getSequenceCalculationString();
-        String calculationStr = getXPathExpression(false) + "[@id=\"" + childList.get(0).context + "\"]";
-        calculationStr += "/@" + functionExpr;
+    public String getCalculationString(LogicTreeNode parentNode, boolean checkImpact) throws DebugErrorException {
+        String calculationStr = childList.get(0).getCalculationString(parentNode, false)
+                + "/@" + functionExpr;
+        if(datatypeRecorder.xmlDatatype != XMLDatatype.SEQUENCE) {
+            calculationStr = "(" + calculationStr + " cast as " + datatypeRecorder.xmlDatatype.getValueHandler().officialTypeName + ")";
+        }
         return calculationStr;
     }
 
     @Override
     protected void fillContentParametersRandom(InformationTreeNode childNode) {
-        childList.add(childNode);
         int nodeId;
         if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.NODE) {
             nodeId = Integer.parseInt(childNode.context);
@@ -44,8 +46,9 @@ public class AttributeFunctionNode extends InformationTreeDirectContentFunctionN
         return new AttributeFunctionNode();
     }
 
-    public String getXPathExpression(boolean returnConstant) {
-        String expr = getXPathExpressionCheck(returnConstant);
+    @Override
+    public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode, boolean calculateString) throws DebugErrorException {
+        String expr = getXPathExpressionCheck(returnConstant, parentNode, calculateString);
         if(expr != null) return expr;
         String childExpr = childList.get(0).getXPathExpression();
         if(childExpr.equals(".")) {

@@ -21,7 +21,6 @@ public class NotEqualOperatorNode extends InformationTreeComparisonOperatorNode 
     public InformationTreeComparisonOperatorNode modifyToContainStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         InformationTreeComparisonOperatorNode newRoot = new EqualOperatorNode();
         newRoot.transferInfo(this);
-        System.out.println("modified to contain starred node!!!!!");
         return newRoot;
     }
 

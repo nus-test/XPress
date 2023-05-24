@@ -50,10 +50,4 @@ public class DoubleAddFunctionNode extends BinaryNumericalOperatorFunctionNode {
     public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
         return recorder.xmlDatatype == XMLDatatype.DOUBLE;
     }
-
-    @Override
-    public String getCurrentContextFunctionExpr() {
-        return ". + " +
-                childList.get(1).getXPathExpression(true, this);
-    }
 }

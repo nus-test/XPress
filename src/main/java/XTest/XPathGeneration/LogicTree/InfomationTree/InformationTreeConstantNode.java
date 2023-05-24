@@ -1,6 +1,7 @@
 package XTest.XPathGeneration.LogicTree.InfomationTree;
 
 import XTest.PrimitiveDatatype.XMLDatatype;
+import XTest.TestException.DebugErrorException;
 import XTest.XPathGeneration.LogicTree.LogicTreeNode;
 
 public class InformationTreeConstantNode extends InformationTreeNode {
@@ -35,7 +36,8 @@ public class InformationTreeConstantNode extends InformationTreeNode {
      * @param returnConstant Whether to return constant context when approached or always reach the leaf nodes.
      * @return
      */
-    public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode) {
+    @Override
+    public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode, boolean calculateString) throws DebugErrorException {
         return XMLDatatype.wrapExpression(context, this.datatypeRecorder.xmlDatatype);
     }
 }

@@ -3,6 +3,7 @@ package XTest.XPathGeneration.LogicTree;
 import XTest.DatabaseExecutor.MainExecutor;
 import XTest.GlobalRandom;
 import XTest.PrimitiveDatatype.XMLDatatype;
+import XTest.TestException.DebugErrorException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,13 +33,18 @@ public abstract class LogicTreeComparisonNode extends LogicTreeNode {
     }
 
     @Override
-    public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode) {
+    public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode, boolean calculateString) throws DebugErrorException {
         if(returnConstant && context != null) return context;
-        String returnString = childList.get(0).getXPathExpression(returnConstant, this)
-                + funcExpr + childList.get(1).getXPathExpression(returnConstant, this);
+        String returnString = childList.get(0).getXPathExpression(returnConstant, this, calculateString)
+                + funcExpr + childList.get(1).getXPathExpression(returnConstant, this, calculateString);
         if(parentNode instanceof LogicTreeComparisonNode) {
             returnString = "(" + returnString + ")";
         }
         return returnString;
+    }
+
+    @Override
+    public List<LogicTreeNode> getChildList() {
+        return childList;
     }
 }

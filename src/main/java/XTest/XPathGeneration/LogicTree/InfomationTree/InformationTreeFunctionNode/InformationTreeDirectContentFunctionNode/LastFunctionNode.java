@@ -1,7 +1,9 @@
 package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeDirectContentFunctionNode;
 
 import XTest.PrimitiveDatatype.XMLDatatype;
+import XTest.TestException.DebugErrorException;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
+import XTest.XPathGeneration.LogicTree.LogicTreeNode;
 
 public class LastFunctionNode extends InformationTreeDirectContentFunctionNode {
     public LastFunctionNode() {
@@ -9,10 +11,8 @@ public class LastFunctionNode extends InformationTreeDirectContentFunctionNode {
     }
 
     @Override
-    public String getCurrentLevelCalculationString() {
-        if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
-            return getSequenceCalculationString();
-        return "count(" + XPathExpr + "[" + childList.get(0).getXPathExpression(false) + "])";
+    public String getCalculationString(LogicTreeNode parentNode, boolean checkImpact) throws DebugErrorException {
+        return "count(" + childList.get(0).getCalculationString(parentNode, false) + ")";
     }
 
     @Override

@@ -54,18 +54,14 @@ public class CastableFunctionNode extends BinaryOperatorFunctionNode {
     }
 
     @Override
-    public String getCurrentLevelCalculationString() {
-        return "//*[@id=\"" + childList.get(0).context + "\"] castable as " + transformedDatatypeName;
-    }
-
-    @Override
-    public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode) {
-        String returnString = getXPathExpressionCheck(returnConstant);
+    public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode, boolean calculateString) throws DebugErrorException {
+        String returnString = getXPathExpressionCheck(returnConstant, parentNode, calculateString);
         if(returnString != null) return returnString;
-        returnString = childList.get(0).getXPathExpression(returnConstant, this) + " castable as " + transformedDatatypeName;
+        returnString = childList.get(0).getXPathExpression(returnConstant, this, calculateString) + " castable as " +
+                transformedDatatypeName;
         if(parentNode instanceof BinaryOperatorFunctionNode || parentNode instanceof LogicTreeComparisonNode)
             returnString = "(" + returnString + ")";
-        cacheXPathExpression(returnString, returnConstant);
+        cacheXPathExpression(returnString, returnConstant, calculateString);
         return returnString;
     }
 }

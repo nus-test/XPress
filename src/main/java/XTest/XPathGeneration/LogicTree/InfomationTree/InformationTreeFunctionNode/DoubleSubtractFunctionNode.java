@@ -47,14 +47,6 @@ public class DoubleSubtractFunctionNode extends BinaryNumericalOperatorFunctionN
     }
 
     @Override
-    public String getXPathExpression(boolean returnConstant) {
-        String returnString = getXPathExpressionCheck(returnConstant);
-        if(returnString != null) return returnString;
-        return childList.get(0).getXPathExpression(returnConstant) + " - " +
-                childList.get(1).getXPathExpression(returnConstant);
-    }
-
-    @Override
     public DoubleSubtractFunctionNode newInstance() {
         return new DoubleSubtractFunctionNode();
     }

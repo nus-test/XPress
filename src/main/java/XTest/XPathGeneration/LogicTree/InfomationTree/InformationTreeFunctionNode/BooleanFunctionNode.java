@@ -2,6 +2,7 @@ package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNo
 
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
+import XTest.PrimitiveDatatype.XMLDurationHandler;
 import XTest.PrimitiveDatatype.XMLSimple;
 import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
@@ -27,6 +28,7 @@ public class BooleanFunctionNode extends InformationTreeFunctionNode {
         if(recorder.xmlDatatype == XMLDatatype.SEQUENCE) {
             return recorder.subDatatype == XMLDatatype.NODE;
         }
+        if(recorder.xmlDatatype.getValueHandler() instanceof XMLDurationHandler) return false;
         if(recorder.xmlDatatype.getValueHandler() instanceof XMLSimple) return true;
         return false;
     }

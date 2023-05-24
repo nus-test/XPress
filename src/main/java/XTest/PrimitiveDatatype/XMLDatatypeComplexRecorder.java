@@ -13,7 +13,7 @@ public class XMLDatatypeComplexRecorder {
 
     /**
      * Only for check usage with a list of nodes. Evaluates to false only if all nodes in sequence (not only for starred node)
-     * is ensured has the same dataType.
+     * is ensured has the same dataType. (Also applies when type is single node(Refers to the original context)).
      */
     public boolean nodeMix = true;
 

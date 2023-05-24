@@ -34,7 +34,7 @@ public abstract class LogicTreeNode {
         return modifyToContainStarredNode(starredNodeId);
     }
 
-    public boolean checkIfContainsStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
+    public boolean checkIfContainsStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         String expr = getXPathExpression();
         List<Integer> resultList = contextInfo.mainExecutor.executeSingleProcessorGetIdList(contextInfo.XPathPrefix + "[" + expr + "]");
         return resultList.contains(starredNodeId);
@@ -47,52 +47,63 @@ public abstract class LogicTreeNode {
      * e.g. for current XPath expression /A with a generated tree to express lower-case(@name) = "xx",
      * root node calling this method should return string "lower-case(@name) = "xx"".
      */
-    public String getXPathExpression() {
+    public final String getXPathExpression() throws DebugErrorException {
         XPathExpr = getXPathExpression(false);
         return XPathExpr;
     }
+
+    public final String getCalculationString() throws DebugErrorException {
+        return getCalculationString(null, false);
+    }
+
+    /**
+     *
+     * @return The calculation string which could compute the correct result for the starred node of
+     * current information tree. If current node has no impact on the
+     * difference between XPath expression and calculation string returns null(default);
+     */
+    public final String getCalculationString(LogicTreeNode parentNode) throws DebugErrorException {
+        return getCalculationString(parentNode, false);
+    }
+
+    /**
+     *
+     * @param checkImpact When set to true is called from getXPathExpression, else is not.
+     * @return When checkImpact is set to false is the calculation string which could compute the correct result for the starred node of
+     * current information tree. When checkImpact is set to true might return null if current node has no direct impact
+     * on difference between XPath expression and calculation string.
+     * @throws DebugErrorException
+     */
+    public String getCalculationString(LogicTreeNode parentNode, boolean checkImpact) throws DebugErrorException {
+        if(!checkImpact) {
+            return getXPathExpression(true, parentNode, true);
+        }
+        return null;
+    }
+
 
     /**
      *
      * @param returnConstant Whether to return constant context when approached or always reach the leaf nodes.
      * @return The XPath expression represented by subtree of current information tree node.
      */
-    public String getXPathExpression(boolean returnConstant) {
-        return getXPathExpression(returnConstant, null);
+    public final String getXPathExpression(boolean returnConstant) throws DebugErrorException {
+        return getXPathExpression(returnConstant, null, false);
     }
 
-    public abstract String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode);
-
-
-    @Override
-    public String toString() {
-        return getXPathExpression();
+    public final String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode) throws DebugErrorException {
+        return getXPathExpression(returnConstant, parentNode, false);
     }
+
+    public abstract String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode, boolean calculateString) throws DebugErrorException;
 
     /**
      * Cache the XPath expression calculated for current subtree if no constant replacement.
      * @param XPathExpr Calculated XPath expression
      * @param returnConstant XPath expression calculated w/o constant replacement
      */
-    protected void cacheXPathExpression(String XPathExpr, boolean returnConstant) {
-        if(!returnConstant) this.XPathExpr = XPathExpr;
-    }
-
-    /**
-     * Calculate and cache the XPath expression calculated for current subtree if no constant replacement.
-     * @param returnConstant
-     */
-    public void cacheXPathExpression(boolean returnConstant) {
-        String XPathExpr = getXPathExpression();
-        if(!returnConstant) this.XPathExpr = XPathExpr;
-    }
-
-    /**
-     * Calculate and cache the XPath expression calculated for current subtree with no constant replacement.
-     */
-    public void cacheXPathExpression() {
-        String XPathExpr = getXPathExpression();
-        this.XPathExpr = XPathExpr;
+    protected void cacheXPathExpression(String XPathExpr, boolean returnConstant, boolean calculateString) {
+        if(!calculateString && !returnConstant) this.XPathExpr = XPathExpr;
     }
 
     /**
@@ -107,4 +118,12 @@ public abstract class LogicTreeNode {
     public LogicTreeContextInfo getContextInfo() {
         return contextInfo;
     }
+
+    public String getChildCalculationString() throws DebugErrorException {
+        if(getChildList().size() != 0)
+            return getChildList().get(0).getCalculationString();
+        return contextInfo.XPathPrefix;
+    }
+
+    public abstract <T extends LogicTreeNode> List<T> getChildList();
 }

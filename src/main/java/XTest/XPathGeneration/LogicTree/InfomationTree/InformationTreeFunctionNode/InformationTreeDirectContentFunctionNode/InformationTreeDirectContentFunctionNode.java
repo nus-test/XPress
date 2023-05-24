@@ -30,30 +30,13 @@ public abstract class InformationTreeDirectContentFunctionNode extends Informati
         return checkResult;
     }
 
-    public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode) {
-        String expr = getXPathExpressionCheck(returnConstant);
+    public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode, boolean calculateString) throws DebugErrorException {
+        String expr = getXPathExpressionCheck(returnConstant, parentNode, calculateString);
         if(expr != null) return expr;
-        String childExpr = childList.get(0).getXPathExpression(returnConstant);
+        String childExpr = childList.get(0).getXPathExpression(returnConstant, parentNode, calculateString);
         if(childExpr.equals(".")) {
-            return functionExpr;
+            return functionExpr + "()";
         }
-        return childExpr + "/" + functionExpr;
-    }
-
-    /**
-     * 
-     * @return XPath expression string for calculating the result of current information tree. If results in single value should evaluate
-     * to single value, if is a sequence should give XPath expression of sequence.
-     */
-    public String getCurrentLevelCalculationString() {
-        if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
-            return getSequenceCalculationString();
-        String calculationStr = getXPathExpression(false) + "[@id=\"" + childList.get(0).context + "\"]";
-        calculationStr += "/" + functionExpr + "()";
-        return calculationStr;
-    }
-
-    public String getSequenceCalculationString() {
-        return getXPathExpression(true);
+        return childExpr + "/" + functionExpr + "()";
     }
 }

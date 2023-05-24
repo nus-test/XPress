@@ -135,23 +135,24 @@ public class CastFunctionNode extends BinaryOperatorFunctionNode {
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
-        return true;
+        return recorder.xmlDatatype != XMLDatatype.SEQUENCE;
     }
 
-    public String getCurrentContextFunctionExpr() {
+    public String getCurrentContextFunctionExpr() throws DebugErrorException {
         // TODO: In fact this function should never be called? Not very sure though...
         return ((InformationTreeFunctionNode) childList.get(0)).getCurrentContextFunctionExpr();
     }
 
     @Override
-    public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode) {
-        String returnString = getXPathExpressionCheck(returnConstant);
+    public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode, boolean calculateString) throws DebugErrorException {
+        String returnString = getXPathExpressionCheck(returnConstant, parentNode, calculateString);
         if(returnString != null) return returnString;
-        if(originalDatatype != XMLDatatype.NODE) {
-            returnString = "(" + childList.get(0).getXPathExpression(returnConstant, this) + " cast as " + castedDatatype.getValueHandler().officialTypeName + ")";
+        if(childList.get(0).datatypeRecorder.xmlDatatype != XMLDatatype.SEQUENCE && (originalDatatype != XMLDatatype.NODE || calculateString)) {
+            returnString = "(" + childList.get(0).getXPathExpression(returnConstant, this, calculateString)
+                    + " cast as " + castedDatatype.getValueHandler().officialTypeName + ")";
         }
-        else returnString = childList.get(0).getXPathExpression(returnConstant, parentNode);
-        cacheXPathExpression(returnString, returnConstant);
+        else returnString = childList.get(0).getXPathExpression(returnConstant, parentNode, calculateString);
+        cacheXPathExpression(returnString, returnConstant, calculateString);
         return returnString;
     }
 }

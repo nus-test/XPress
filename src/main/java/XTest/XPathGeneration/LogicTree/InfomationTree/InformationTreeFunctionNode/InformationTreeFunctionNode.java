@@ -74,8 +74,8 @@ public abstract class InformationTreeFunctionNode extends InformationTreeNode {
      * e.g. upper-case("a") -> upper-case(.), current context represented by '.'.
      * Default for function with pattern "function(., param_a, param_b)"
      */
-    public String getCurrentContextFunctionExpr() {
-        return functionExpr + "(., " + getParametersXPathExpression(true, 1) + ")";
+    public String getCurrentContextFunctionExpr() throws DebugErrorException {
+        return functionExpr + "(., " + getParametersXPathExpression(true, 1, false) + ")";
     }
 
     /**
@@ -84,18 +84,17 @@ public abstract class InformationTreeFunctionNode extends InformationTreeNode {
      * @return The XPath expression represented by subtree of current information tree node.
      */
     @Override
-    public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode) {
-        String returnString = getXPathExpressionCheck(returnConstant);
+    public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode, boolean calculateString) throws DebugErrorException {
+        String returnString = getXPathExpressionCheck(returnConstant, parentNode, calculateString);
         if(returnString != null) return returnString;
-        returnString = getDefaultFunctionXPathExpression(returnConstant);
-        String test = XPathExpr;
-        cacheXPathExpression(returnString, returnConstant);
+        returnString = getDefaultFunctionXPathExpression(returnConstant, calculateString);
+        cacheXPathExpression(returnString, returnConstant, calculateString);
         return returnString;
     }
 
-    public String getDefaultFunctionXPathExpression(boolean returnConstant) {
+    public String getDefaultFunctionXPathExpression(boolean returnConstant, boolean calculateString) throws DebugErrorException {
         String builder = functionExpr + "(";
-        builder += getParametersXPathExpression(returnConstant, 0);
+        builder += getParametersXPathExpression(returnConstant, 0, calculateString);
         builder += ")";
         return builder;
     }
@@ -107,8 +106,8 @@ public abstract class InformationTreeFunctionNode extends InformationTreeNode {
      * @return XPath expression of parameters in childList with start index separated by ',',
      * end index default set to list size.
      */
-    public String getParametersXPathExpression(boolean returnConstant, int startIndex) {
-        return getParametersXPathExpression(returnConstant, startIndex, childList.size());
+    public String getParametersXPathExpression(boolean returnConstant, int startIndex, boolean calculateString) throws DebugErrorException {
+        return getParametersXPathExpression(returnConstant, startIndex, childList.size(), calculateString);
     }
 
     /**
@@ -119,11 +118,11 @@ public abstract class InformationTreeFunctionNode extends InformationTreeNode {
      * @return XPath expression of parameters in childList with start index and end index separated by ','
      * (end index exclusive).
      */
-    public String getParametersXPathExpression(boolean returnConstant, int startIndex, int endIndex) {
+    public String getParametersXPathExpression(boolean returnConstant, int startIndex, int endIndex, boolean calculateString) throws DebugErrorException {
         String builder = "";
         for(int i = startIndex; i < endIndex; i ++) {
             if(i != startIndex) builder += ", ";
-            builder += childList.get(i).getXPathExpression(returnConstant, null);
+            builder += childList.get(i).getXPathExpression(returnConstant, null, calculateString);
         }
         return builder;
     }

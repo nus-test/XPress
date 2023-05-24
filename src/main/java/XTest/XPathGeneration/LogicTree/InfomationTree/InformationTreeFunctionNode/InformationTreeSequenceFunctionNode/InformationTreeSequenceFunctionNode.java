@@ -17,7 +17,7 @@ public abstract class InformationTreeSequenceFunctionNode extends InformationTre
 
     @Override
     protected void fillContentParametersRandom(InformationTreeNode childNode) {
-
+        datatypeRecorder = new XMLDatatypeComplexRecorder(childNode.datatypeRecorder);
     }
 
     @Override
