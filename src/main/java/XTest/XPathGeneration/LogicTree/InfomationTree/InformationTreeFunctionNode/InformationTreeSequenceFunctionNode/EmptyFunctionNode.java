@@ -1,12 +1,11 @@
 package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeSequenceFunctionNode;
 
 import XTest.PrimitiveDatatype.XMLDatatype;
-import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
-public class ExistsFunctionNode extends InformationTreeSequenceFunctionNode {
-    public ExistsFunctionNode() {
-        functionExpr = "exists";
+public class EmptyFunctionNode extends InformationTreeSequenceFunctionNode {
+    public EmptyFunctionNode() {
+        functionExpr = "empty";
         datatypeRecorder.xmlDatatype = XMLDatatype.BOOLEAN;
     }
 
@@ -15,7 +14,7 @@ public class ExistsFunctionNode extends InformationTreeSequenceFunctionNode {
     }
 
     @Override
-    public ExistsFunctionNode newInstance() {
-        return new ExistsFunctionNode();
+    public EmptyFunctionNode newInstance() {
+        return new EmptyFunctionNode();
     }
 }

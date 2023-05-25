@@ -5,7 +5,7 @@ import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.PrimitiveDatatype.XMLNumeric;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
-public class MaxFunctionNode extends InformationTreeSequenceAggregationFunctionNode {
+public class MaxFunctionNode extends InformationTreeSequenceNumericalAggregationFunctionNode {
     public MaxFunctionNode() {
         functionExpr = "max";
     }
@@ -17,7 +17,7 @@ public class MaxFunctionNode extends InformationTreeSequenceAggregationFunctionN
     }
 
     @Override
-    public void fillContentParametersRandom(InformationTreeNode childNode) {
+    protected void fillContentParametersRandom(InformationTreeNode childNode) {
         if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
             datatypeRecorder.xmlDatatype = childNode.datatypeRecorder.subDatatype;
         else datatypeRecorder.xmlDatatype = childNode.datatypeRecorder.xmlDatatype;

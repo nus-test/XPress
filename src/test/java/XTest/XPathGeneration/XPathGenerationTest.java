@@ -78,7 +78,7 @@ public class XPathGenerationTest {
         try {
             mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
             mainExecutor.setExtraLeafNodeContext(xmlDocumentGenerator.generateExtraLeafNodes(20));
-            for(int i = 0; i < 200; i ++)
+            for(int i = 0; i < 300; i ++)
                 XPath.add(XPathGenerator.getXPath(4));
             for(String XPathStr: XPath) {
                 System.out.println("Generated XPath: ------------------------------");

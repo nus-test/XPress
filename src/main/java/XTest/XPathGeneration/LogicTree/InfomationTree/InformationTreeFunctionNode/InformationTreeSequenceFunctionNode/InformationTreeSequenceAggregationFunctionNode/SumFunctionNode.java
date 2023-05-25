@@ -6,7 +6,7 @@ import XTest.PrimitiveDatatype.XMLNumeric;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
-public class SumFunctionNode extends InformationTreeSequenceAggregationFunctionNode {
+public class SumFunctionNode extends InformationTreeSequenceNumericalAggregationFunctionNode {
     public SumFunctionNode() {
         functionExpr = "sum";
     }
@@ -14,13 +14,6 @@ public class SumFunctionNode extends InformationTreeSequenceAggregationFunctionN
     @Override
     public SumFunctionNode newInstance() {
         return new SumFunctionNode();
-    }
-
-    @Override
-    public void fillContentParametersRandom(InformationTreeNode childNode) {
-        if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
-            datatypeRecorder.xmlDatatype = childNode.datatypeRecorder.subDatatype;
-        else datatypeRecorder.xmlDatatype = childNode.datatypeRecorder.xmlDatatype;
     }
 
     @Override

@@ -12,7 +12,10 @@ public class PositionFunctionNode extends InformationTreeDirectContentFunctionNo
 
     @Override
     public String getCalculationString(LogicTreeNode parentNode, boolean checkImpact) throws DebugErrorException {
-        return "index-of(" + childList.get(0).getCalculationString(parentNode, false) + ", //*[@id=\"" + childList.get(0).context + "\"])";
+        if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) {
+            return super.getCalculationString(parentNode, checkImpact);
+        }
+        return "index-of((" + childList.get(0).getContextCalculationString() + ")/@id, \"" + childList.get(0).context + "\")";
     }
 
     @Override

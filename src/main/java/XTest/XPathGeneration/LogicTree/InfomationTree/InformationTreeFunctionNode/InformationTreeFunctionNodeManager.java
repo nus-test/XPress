@@ -10,7 +10,10 @@ import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeComparisonOperatorNode.*;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeDirectContentFunctionNode.*;
+import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeSequenceFunctionNode.*;
+import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeSequenceFunctionNode.InformationTreeSequenceAggregationFunctionNode.*;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
+import net.sf.saxon.functions.Sum;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
 
@@ -86,6 +89,21 @@ public class InformationTreeFunctionNodeManager {
         registeredFunctionList.add(new NameFunctionNode());
         registeredFunctionList.add(new PositionFunctionNode());
         registeredFunctionList.add(new TextFunctionNode());
+
+        registeredFunctionList.add(new DistinctValuesFunctionNode());
+        registeredFunctionList.add(new EmptyFunctionNode());
+        registeredFunctionList.add(new ExistsFunctionNode());
+        registeredFunctionList.add(new HeadFunctionNode());
+        registeredFunctionList.add(new ReverseFunctionNode());
+        registeredFunctionList.add(new SortFunctionNode());
+        registeredFunctionList.add(new SubsequenceFunctionNode());
+        registeredFunctionList.add(new TailFunctionNode());
+
+        registeredFunctionList.add(new AverageFunctionNode());
+        registeredFunctionList.add(new CountFunctionNode());
+        registeredFunctionList.add(new MaxFunctionNode());
+        registeredFunctionList.add(new MinFunctionNode());
+        registeredFunctionList.add(new SumFunctionNode());
     }
 
     /**

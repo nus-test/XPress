@@ -37,11 +37,8 @@ public class XMLDatatypeComplexRecorder {
         this.nodeMix = nodeMix;
     }
 
-    @Override
-    public String toString() {
-        if(subDatatype == null) {
-            return xmlDatatype.getValueHandler().officialTypeName;
-        }
-        return xmlDatatype.getValueHandler().officialTypeName + " " + subDatatype.getValueHandler().officialTypeName;
+    public XMLDatatype getActualDatatype() {
+        if(xmlDatatype == XMLDatatype.SEQUENCE) return subDatatype;
+        return xmlDatatype;
     }
 }

@@ -18,11 +18,6 @@ public abstract class BinaryOperatorFunctionNode extends InformationTreeFunction
             if(parentNode instanceof BinaryOperatorFunctionNode)
                 returnString = "(" + returnString + ")";
         }
-        if(this instanceof CastableFunctionNode) {
-            System.out.println("^^^^^^^^^^^^^^^^^" + returnString);
-            if(parentNode != null)
-                System.out.println("what: " + parentNode.getClass());
-        }
         cacheXPathExpression(returnString, returnConstant, calculateString);
         return returnString;
     }

@@ -6,7 +6,7 @@ import XTest.PrimitiveDatatype.XMLNumeric;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeFunctionNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
-public class MinFunctionNode extends InformationTreeSequenceAggregationFunctionNode {
+public class MinFunctionNode extends InformationTreeSequenceNumericalAggregationFunctionNode {
     public MinFunctionNode() {
         functionExpr = "min";
     }
@@ -17,7 +17,7 @@ public class MinFunctionNode extends InformationTreeSequenceAggregationFunctionN
     }
 
     @Override
-    public void fillContentParametersRandom(InformationTreeNode childNode) {
+    protected void fillContentParametersRandom(InformationTreeNode childNode) {
         if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
             datatypeRecorder.xmlDatatype = childNode.datatypeRecorder.subDatatype;
         else datatypeRecorder.xmlDatatype = childNode.datatypeRecorder.xmlDatatype;

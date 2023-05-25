@@ -12,6 +12,9 @@ public class LastFunctionNode extends InformationTreeDirectContentFunctionNode {
 
     @Override
     public String getCalculationString(LogicTreeNode parentNode, boolean checkImpact) throws DebugErrorException {
+        if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) {
+            return super.getCalculationString(parentNode, checkImpact);
+        }
         return "count(" + childList.get(0).getCalculationString(parentNode, false) + ")";
     }
 

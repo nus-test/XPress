@@ -1,6 +1,5 @@
 package XTest.XPathGeneration.LogicTree;
 
-import XTest.DatabaseExecutor.MainExecutor;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
@@ -117,12 +116,6 @@ public abstract class LogicTreeNode {
 
     public LogicTreeContextInfo getContextInfo() {
         return contextInfo;
-    }
-
-    public String getChildCalculationString() throws DebugErrorException {
-        if(getChildList().size() != 0)
-            return getChildList().get(0).getCalculationString();
-        return contextInfo.XPathPrefix;
     }
 
     public abstract <T extends LogicTreeNode> List<T> getChildList();

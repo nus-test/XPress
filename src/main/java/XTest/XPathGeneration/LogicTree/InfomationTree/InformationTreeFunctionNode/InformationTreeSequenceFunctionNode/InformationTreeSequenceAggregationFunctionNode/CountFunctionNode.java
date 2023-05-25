@@ -8,6 +8,7 @@ public class CountFunctionNode extends InformationTreeSequenceAggregationFunctio
         datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;
     }
 
+
     @Override
     public CountFunctionNode newInstance() {
         return new CountFunctionNode();

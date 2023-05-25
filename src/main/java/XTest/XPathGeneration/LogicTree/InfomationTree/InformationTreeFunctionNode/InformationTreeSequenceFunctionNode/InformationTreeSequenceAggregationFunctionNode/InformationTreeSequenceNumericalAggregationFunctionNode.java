@@ -2,18 +2,19 @@ package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNo
 
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
-import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeSequenceFunctionNode.InformationTreeSequenceFunctionNode;
+import XTest.PrimitiveDatatype.XMLNumeric;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
-public abstract class InformationTreeSequenceAggregationFunctionNode extends InformationTreeSequenceFunctionNode {
+public abstract class InformationTreeSequenceNumericalAggregationFunctionNode extends InformationTreeSequenceAggregationFunctionNode {
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
-        if(recorder.xmlDatatype == XMLDatatype.SEQUENCE && recorder.subDatatype == XMLDatatype.MIXED)
+        if(!super.checkContextAcceptability(childNode, recorder))
             return false;
-        return true;
+        return recorder.getActualDatatype().getValueHandler() instanceof XMLNumeric;
     }
 
     @Override
     protected void fillContentParametersRandom(InformationTreeNode childNode) {
+        datatypeRecorder.xmlDatatype = childNode.datatypeRecorder.getActualDatatype();
     }
 }

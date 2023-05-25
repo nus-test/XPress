@@ -5,6 +5,7 @@ import XTest.GlobalRandom;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
+import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeSequenceFunctionNode.SubsequenceFunctionNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.NotFunctionNode;
 import XTest.XPathGeneration.LogicTree.LogicTreeNode;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -106,9 +107,11 @@ public abstract class InformationTreeNode extends LogicTreeNode {
             else context = contextInfo.mainExecutor.executeSingleProcessor(calculationString);
             if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE && datatypeRecorder.subDatatype == XMLDatatype.NODE) {
                 Integer size = Integer.parseInt(context);
-                Integer randomId = GlobalRandom.getInstance().nextInt(size) + 1;
-                supplementaryContext = contextInfo.mainExecutor.executeSingleProcessor(calculationString + '[' +
-                        randomId + "]/@id cast as xs:integer");
+                if(size != 0) {
+                    Integer randomId = GlobalRandom.getInstance().nextInt(size) + 1;
+                    supplementaryContext = contextInfo.mainExecutor.executeSingleProcessor(calculationString + '[' +
+                            randomId + "]/@id cast as xs:integer");
+                }
             }
         }
         setCalculableContextFlag();
@@ -125,6 +128,21 @@ public abstract class InformationTreeNode extends LogicTreeNode {
         if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) return false;
         if(datatypeRecorder.xmlDatatype == XMLDatatype.NODE) return false;
         return context != null;
+    }
+
+    /**
+     *
+     * @return Calculation XPathExpression which executed produces the node set that current node belongs to after last selection.
+     * Should only be called on tree nodes which have XMLDatatype NODE(single node).
+     * @throws DebugErrorException
+     */
+    public String getContextCalculationString() throws DebugErrorException {
+        if(getChildList().size() != 0)
+            return getChildList().get(0).getCalculationString();
+        // Else: this is leaf context node
+        // Case 1: self context - return XPathPrefix
+        // Case 2: is not self context - not useful any way
+        return contextInfo.XPathPrefix;
     }
 
     @Override

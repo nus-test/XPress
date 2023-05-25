@@ -3,6 +3,7 @@ package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNo
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.PrimitiveDatatype.XMLIntegerHandler;
+import XTest.TestException.DebugErrorException;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeNode;
 
@@ -17,6 +18,15 @@ public class IntegerAddFunctionNode extends BinaryNumericalOperatorFunctionNode 
     @Override
     protected void fillContentParameters(InformationTreeNode childNode) {
         String value;
+        if(childNode.context.equals("")) {
+            try {
+                System.out.println("hihihaha" + childNode.getClass());
+                System.out.println(childNode.getCalculationString());
+                System.out.println(childNode.getXPathExpression());
+            } catch (DebugErrorException e) {
+                throw new RuntimeException(e);
+            }
+        }
         Integer inputValue = Integer.parseInt(childNode.context);
         if(inputValue < 0) {
             value = ((XMLIntegerHandler) XMLDatatype.INTEGER.getValueHandler()).
