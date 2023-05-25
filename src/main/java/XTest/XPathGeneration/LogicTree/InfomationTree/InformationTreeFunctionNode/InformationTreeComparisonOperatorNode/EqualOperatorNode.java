@@ -37,6 +37,8 @@ public class EqualOperatorNode extends InformationTreeComparisonOperatorNode {
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
+        if(recorder.getActualDatatype() == XMLDatatype.DOUBLE)
+            return false;
         return childNode.datatypeRecorder.xmlDatatype != XMLDatatype.SEQUENCE &&
                 childNode.datatypeRecorder.xmlDatatype != XMLDatatype.NODE &&
                 childNode.datatypeRecorder.xmlDatatype != XMLDatatype.MIXED;

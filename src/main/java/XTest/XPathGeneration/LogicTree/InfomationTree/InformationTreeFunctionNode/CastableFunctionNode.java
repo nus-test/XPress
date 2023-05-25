@@ -46,7 +46,7 @@ public class CastableFunctionNode extends BinaryOperatorFunctionNode {
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
-        return true;
+        return recorder.getActualDatatype() != XMLDatatype.NODE;
     }
 
     public String getCurrentContextFunctionExpr() {

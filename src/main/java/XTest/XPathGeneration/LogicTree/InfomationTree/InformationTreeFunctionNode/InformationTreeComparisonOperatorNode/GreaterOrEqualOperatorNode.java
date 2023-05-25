@@ -1,6 +1,8 @@
 package XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeFunctionNode.InformationTreeComparisonOperatorNode;
 
 import XTest.PrimitiveDatatype.XMLComparable;
+import XTest.PrimitiveDatatype.XMLDatatype;
+import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeConstantNode;
@@ -32,5 +34,13 @@ public class GreaterOrEqualOperatorNode extends InformationTreeComparisonOperato
     protected void fillContentParameters(InformationTreeNode childNode) {
         String value = ((XMLComparable) childNode.datatypeRecorder.xmlDatatype.getValueHandler()).getLess(childNode.context);
         childList.add(new InformationTreeConstantNode(childNode.datatypeRecorder.xmlDatatype, value));
+    }
+
+    @Override
+    public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
+        boolean result = super.checkContextAcceptability(childNode, recorder);
+        if(result) {
+            return recorder.getActualDatatype() != XMLDatatype.DOUBLE;
+        } else return false;
     }
 }

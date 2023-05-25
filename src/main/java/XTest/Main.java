@@ -1,6 +1,7 @@
 package XTest;
 
 import XTest.DatabaseExecutor.*;
+import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.ReportGeneration.ReportManager;
 import XTest.TestException.MismatchingResultException;
 import XTest.TestException.UnexpectedExceptionThrownException;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, SaxonApiException {
+    public static void main(String[] args) throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, SaxonApiException, UnexpectedExceptionThrownException {
         ReportManager reportManager = new ReportManager("C:\\app\\log\\log.txt");
         MainExecutor mainExecutor = new MainExecutor(reportManager);
 
@@ -31,7 +32,9 @@ public class Main {
 //        dbExecuterList.add(OracleExecutor.getInstance());
         for(DatabaseExecutor dbExecutor: dbExecuterList)
             dbExecutor.registerDatabase(mainExecutor);
-        int round = 1;
+        XMLDatatype.getCastable(mainExecutor);
+
+        int round = 20;
         XMLDocumentGenerator xmlDocumentGenerator;
         if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3)
             xmlDocumentGenerator = new XMLDocumentGenerator();

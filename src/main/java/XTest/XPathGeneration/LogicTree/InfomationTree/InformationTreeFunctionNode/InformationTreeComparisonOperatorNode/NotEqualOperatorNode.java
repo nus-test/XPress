@@ -34,8 +34,11 @@ public class NotEqualOperatorNode extends InformationTreeComparisonOperatorNode 
         String value = childNode.datatypeRecorder.xmlDatatype.getValueHandler().getNotEqual(childNode.context);
         childList.add(new InformationTreeConstantNode(childNode.datatypeRecorder.xmlDatatype, value));
     }
+
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
+        if(recorder.getActualDatatype() == XMLDatatype.DOUBLE)
+            return false;
         return childNode.datatypeRecorder.xmlDatatype != XMLDatatype.SEQUENCE &&
                 childNode.datatypeRecorder.xmlDatatype != XMLDatatype.NODE &&
                 childNode.datatypeRecorder.xmlDatatype != XMLDatatype.MIXED;
