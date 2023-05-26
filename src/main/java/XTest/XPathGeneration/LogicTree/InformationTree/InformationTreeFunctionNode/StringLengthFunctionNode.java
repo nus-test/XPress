@@ -1,0 +1,22 @@
+package XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
+
+import XTest.PrimitiveDatatype.XMLDatatype;
+import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
+import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
+
+public class StringLengthFunctionNode extends InformationTreeFunctionNode {
+    public StringLengthFunctionNode() {
+        datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;
+        functionExpr = "string-length";
+    }
+
+    @Override
+    public StringLengthFunctionNode newInstance() {
+        return new StringLengthFunctionNode();
+    }
+
+    @Override
+    public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
+        return recorder.xmlDatatype == XMLDatatype.STRING;
+    }
+}

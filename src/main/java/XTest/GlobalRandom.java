@@ -5,10 +5,13 @@ import java.util.stream.Collectors;
 
 public class GlobalRandom {
     private static GlobalRandom globalRandom;
-    Random random;
+    public Random random;
     private GlobalRandom() {
         random = new Random();
-        random.setSeed(69935412);
+        long seed = System.currentTimeMillis();
+        seed = 1685092948476L;
+        System.out.println("Seed: " + seed);
+        random.setSeed(seed);
     }
 
     public static GlobalRandom getInstance() {

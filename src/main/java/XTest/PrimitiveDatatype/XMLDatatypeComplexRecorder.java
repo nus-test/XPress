@@ -4,12 +4,12 @@ public class XMLDatatypeComplexRecorder {
     /**
      * Datatype of result of the current information tree node
      */
-    public XMLDatatype xmlDatatype;
+    public XMLDatatype xmlDatatype = null;
 
     /**
      * If tree node represents a sequence, denotes the datatype of the elements in sequence
      */
-    public XMLDatatype subDatatype;
+    public XMLDatatype subDatatype = null;
 
     /**
      * Only for check usage with a list of nodes. Evaluates to false only if all nodes in sequence (not only for starred node)

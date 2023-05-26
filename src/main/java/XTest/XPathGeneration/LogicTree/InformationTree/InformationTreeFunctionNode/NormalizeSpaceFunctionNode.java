@@ -1,0 +1,22 @@
+package XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
+
+import XTest.PrimitiveDatatype.XMLDatatype;
+import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
+import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
+
+public class NormalizeSpaceFunctionNode extends InformationTreeFunctionNode {
+    public NormalizeSpaceFunctionNode() {
+        datatypeRecorder.xmlDatatype = XMLDatatype.STRING;
+        functionExpr = "normalize-space";
+    }
+
+    @Override
+    public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
+        return recorder.xmlDatatype == XMLDatatype.STRING;
+    }
+
+    @Override
+    public NormalizeSpaceFunctionNode newInstance() {
+        return new NormalizeSpaceFunctionNode();
+    }
+}

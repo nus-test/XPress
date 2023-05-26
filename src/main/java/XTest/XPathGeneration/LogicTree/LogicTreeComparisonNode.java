@@ -34,7 +34,7 @@ public abstract class LogicTreeComparisonNode extends LogicTreeNode {
 
     @Override
     public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode, boolean calculateString) throws DebugErrorException {
-        if(returnConstant && context != null) return context;
+        if(returnConstant && getContext().context != null) return getContext().context;
         String returnString = childList.get(0).getXPathExpression(returnConstant, this, calculateString)
                 + funcExpr + childList.get(1).getXPathExpression(returnConstant, this, calculateString);
         if(parentNode instanceof LogicTreeComparisonNode) {

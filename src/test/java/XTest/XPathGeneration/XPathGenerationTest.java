@@ -32,7 +32,7 @@ public class XPathGenerationTest {
 
         List<DatabaseExecutor> dbExecuterList = new ArrayList<>();
 
-        dbExecuterList.add(BaseXExecutor.getInstance());
+       // dbExecuterList.add(BaseXExecutor.getInstance());
        // dbExecuterList.add(ExistExecutor.getInstance());
         dbExecuterList.add(SaxonExecutor.getInstance());
       //  dbExecuterList.add(OracleExecutor.getInstance());
@@ -62,7 +62,7 @@ public class XPathGenerationTest {
     @Test
     void newXPathGeneratorTest() throws SQLException, UnsupportedContextSetUpException, XMLDBException, IOException, SaxonApiException, MismatchingResultException, UnexpectedExceptionThrownException, InstantiationException, IllegalAccessException, DebugErrorException {
         XMLDocumentGenerator xmlDocumentGenerator = new XMLDocumentGenerator();
-        XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(15);
+        XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(20);
         System.out.println(xmlContext.getXmlContent());
         MainExecutor mainExecutor = new MainExecutor();
 

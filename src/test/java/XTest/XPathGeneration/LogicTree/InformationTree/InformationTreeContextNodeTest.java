@@ -1,7 +1,6 @@
 package XTest.XPathGeneration.LogicTree.InformationTree;
 
 import XTest.PrimitiveDatatype.XMLDatatype;
-import XTest.XPathGeneration.LogicTree.InfomationTree.InformationTreeContextNode;
 import org.junit.jupiter.api.Test;
 
 public class InformationTreeContextNodeTest {
