@@ -14,6 +14,7 @@ import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNo
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
 
+import javax.xml.xpath.XPath;
 import java.io.IOException;
 import java.sql.SQLException;
 

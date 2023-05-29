@@ -38,13 +38,13 @@ public class TextFunctionNode extends InformationTreeDirectContentFunctionNode {
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
-        Boolean checkResult = recorder.xmlDatatype == XMLDatatype.NODE;
-        if(!recorder.nodeMix) {
-            if (!checkResult) {
-                if (recorder.xmlDatatype == XMLDatatype.SEQUENCE && recorder.subDatatype == XMLDatatype.NODE)
-                    checkResult = true;
-            }
-        } else checkResult = false;
+        Boolean checkResult = (recorder.xmlDatatype == XMLDatatype.NODE && !recorder.nodeMix);
+        if (!checkResult) {
+            if (recorder.xmlDatatype == XMLDatatype.SEQUENCE &&
+                    recorder.subDatatype == XMLDatatype.NODE &&
+                    (!recorder.nodeMix))
+                checkResult = true;
+        }
         return checkResult;
     }
 
