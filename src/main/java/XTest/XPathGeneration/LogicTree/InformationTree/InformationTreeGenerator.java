@@ -98,6 +98,17 @@ public class InformationTreeGenerator {
      * @return The root node of the generated information tree.
      */
     public InformationTreeNode buildInformationTree(InformationTreeNode informationTreeNode, int levelLimit) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+        return buildInformationTree(informationTreeNode, levelLimit, false, true);
+    }
+
+    /**
+     * Build an information tree starting from informationTreeNode to grow upwards, with tree height limited to levelLimit.
+     * The evaluation of the resulting information tree could result in any type.
+     * @param informationTreeNode Starting node to build the information tree. Tree will be constructed upwards.
+     * @param levelLimit Limitation of generated tree height.
+     * @return The root node of the generated information tree.
+     */
+    public InformationTreeNode buildInformationTree(InformationTreeNode informationTreeNode, int levelLimit, Boolean random, Boolean calculate) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         if(levelLimit == 0)  return informationTreeNode;
 
         // Update information tree node in to a new root
@@ -114,9 +125,10 @@ public class InformationTreeGenerator {
 //            informationTreeNode = castedInformationTreeNode;
 //        }
         newRoot = InformationTreeFunctionNodeManager.getInstance()
-                .getRandomMatchingFunctionNodeWithContentAttached(informationTreeNode, informationTreeNode.datatypeRecorder);
+                        .getRandomMatchingFunctionNodeWithContentAttached(
+                                informationTreeNode, informationTreeNode.datatypeRecorder, random, calculate);
 
-        return buildInformationTree(newRoot, levelLimit - 1);
+        return buildInformationTree(newRoot, levelLimit - 1, random, calculate);
     }
 
     /**

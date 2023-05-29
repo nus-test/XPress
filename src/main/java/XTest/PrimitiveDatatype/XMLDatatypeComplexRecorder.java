@@ -31,6 +31,10 @@ public class XMLDatatypeComplexRecorder {
         setData(xmlDatatype, subDatatype, nodeMix);
     }
 
+    public void setData(XMLDatatype xmlDatatype) {
+        this.xmlDatatype = xmlDatatype;
+    }
+
     public void setData(XMLDatatype xmlDatatype, XMLDatatype subDatatype, boolean nodeMix) {
         this.xmlDatatype = xmlDatatype;
         this.subDatatype = subDatatype;

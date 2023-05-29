@@ -24,7 +24,7 @@ public class SubstringFunctionNode extends InformationTreeFunctionNode {
 
     @Override
     protected void fillContentParameters(InformationTreeNode childNode) {
-        if(!childNode.checkCalculableContext()) {
+        if(!childNode.checkValidCalculableContext()) {
             fillContentParametersRandom(childNode);
             return;
         }

@@ -11,7 +11,7 @@ public class TextFunctionNode extends InformationTreeDirectContentFunctionNode {
     }
 
     @Override
-    protected void fillContentParametersRandom(InformationTreeNode childNode) {
+    protected void fillContentParameters(InformationTreeNode childNode) {
         int nodeId;
         if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.NODE) {
             nodeId = Integer.parseInt(childNode.getContext().context);
@@ -28,6 +28,12 @@ public class TextFunctionNode extends InformationTreeDirectContentFunctionNode {
             datatypeRecorder.xmlDatatype = XMLDatatype.SEQUENCE;
             datatypeRecorder.subDatatype = contextNode.dataType;
         }
+    }
+
+    @Override
+    protected void fillContentParametersRandom(InformationTreeNode childNode) {
+        datatypeRecorder.xmlDatatype = XMLDatatype.SEQUENCE;
+        datatypeRecorder.subDatatype = XMLDatatype.MIXED;
     }
 
     @Override

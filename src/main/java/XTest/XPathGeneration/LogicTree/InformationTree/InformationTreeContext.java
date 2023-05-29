@@ -8,8 +8,15 @@ public class InformationTreeContext extends LogicTreeContext {
      */
     public String supplementaryContext = null;
 
-    /**
-     * If is sequence type, contains the length of sequence for the starred node
-     */
-    int length;
+    @Override
+    public void setContext(LogicTreeContext context) {
+        super.setContext(context);
+        if(context instanceof InformationTreeContext) {
+            supplementaryContext = ((InformationTreeContext) context).supplementaryContext;
+        }
+    }
+
+    public void setContext(String context) {
+        super.setContext(context);
+    }
 }

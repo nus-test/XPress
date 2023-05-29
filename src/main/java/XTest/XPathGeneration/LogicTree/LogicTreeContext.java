@@ -7,4 +7,14 @@ public class LogicTreeContext {
      * For a node, context refers to the id number of the node
      */
     public String context = null;
+
+
+    public void setContext(LogicTreeContext context) {
+        this.context = context.context;
+    }
+
+    public void setContext(String context) {
+        this.context = context;
+    }
+
 }

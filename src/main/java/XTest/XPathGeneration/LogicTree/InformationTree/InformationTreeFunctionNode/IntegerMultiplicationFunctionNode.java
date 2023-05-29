@@ -24,6 +24,12 @@ public class IntegerMultiplicationFunctionNode extends BinaryNumericalOperatorFu
             System.out.println(childNode.childList.size());
             System.out.println(childNode.getCalculationString());
         }
+        if(childNode.getContext().context.contains("id=")) {
+            System.out.println("##################### Hi Hi Hi");
+            System.out.println(childNode.getXPathExpression());
+            System.out.println(childNode.getCalculationString());
+            System.out.println("_____________________ Li Li Li");
+        }
         Integer inputValue = Math.abs(Integer.parseInt(childNode.getContext().context));
         if(inputValue == 0) {
             value = Integer.toString(GlobalRandom.getInstance().nextInt(1000));

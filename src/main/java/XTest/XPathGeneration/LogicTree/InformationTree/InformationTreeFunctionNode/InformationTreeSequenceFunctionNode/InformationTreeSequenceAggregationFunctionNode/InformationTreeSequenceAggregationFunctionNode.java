@@ -8,8 +8,6 @@ import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 public abstract class InformationTreeSequenceAggregationFunctionNode extends InformationTreeSequenceFunctionNode {
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
-        if(recorder.xmlDatatype == XMLDatatype.SEQUENCE && recorder.subDatatype == XMLDatatype.MIXED)
-            return false;
         return true;
     }
 

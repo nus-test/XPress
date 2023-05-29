@@ -4,8 +4,10 @@ import XTest.GlobalRandom;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.TestException.DebugErrorException;
 import XTest.XMLGeneration.AttributeNode;
+import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeContextNode;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 import XTest.XPathGeneration.LogicTree.LogicTreeNode;
+import org.basex.core.cmd.Run;
 
 public class AttributeFunctionNode extends InformationTreeDirectContentFunctionNode {
 
@@ -20,7 +22,7 @@ public class AttributeFunctionNode extends InformationTreeDirectContentFunctionN
     }
 
     @Override
-    protected void fillContentParametersRandom(InformationTreeNode childNode) {
+    protected void fillContentParameters(InformationTreeNode childNode) {
         int nodeId;
         if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.NODE) {
             nodeId = Integer.parseInt(childNode.getContext().context);
@@ -29,6 +31,16 @@ public class AttributeFunctionNode extends InformationTreeDirectContentFunctionN
             // Else is applied to a sequence of nodes
             nodeId = Integer.parseInt(childNode.getContext().supplementaryContext);
         }
+        fillContentParametersWithNodeID(childNode, nodeId);
+    }
+
+    @Override
+    protected void fillContentParametersRandom(InformationTreeNode childNode) {
+        int nodeId = GlobalRandom.getInstance().nextInt(contextInfo.mainExecutor.maxId);
+        fillContentParametersWithNodeID(childNode, nodeId);
+    }
+
+    private void fillContentParametersWithNodeID(InformationTreeNode childNode, Integer nodeId) {
         AttributeNode attributeNode = GlobalRandom.getInstance().getRandomFromList(
                 contextInfo.mainExecutor.contextNodeMap.get(nodeId).attributeList);
         functionExpr = attributeNode.tagName;

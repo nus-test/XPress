@@ -8,15 +8,11 @@ public abstract class BinaryOperatorFunctionNode extends InformationTreeFunction
     @Override
     public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode, boolean calculateString) throws DebugErrorException {
         String returnString = getXPathExpressionCheck(returnConstant, parentNode, calculateString);
-        if(returnString != null) return returnString;
-        returnString = childList.get(0).getXPathExpression(returnConstant, this) + " " + functionExpr + " " +
-                childList.get(1).getXPathExpression(returnConstant, this);
-        if(parentNode != null) {
-            if(parentNode instanceof BinaryOperatorFunctionNode)
-                returnString = "(" + returnString + ")";
-        }
+        if(returnString != null) return binaryWrap(returnString, parentNode);
+        returnString = childList.get(0).getXPathExpression(returnConstant, this, calculateString) + " " + functionExpr + " " +
+                childList.get(1).getXPathExpression(returnConstant, this, calculateString);
         cacheXPathExpression(returnString, returnConstant, calculateString);
-        return returnString;
+        return binaryWrap(returnString, parentNode);
     }
 
     public String binaryWrap(String resultString, LogicTreeNode parentNode) {

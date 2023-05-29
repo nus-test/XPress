@@ -53,9 +53,9 @@ public abstract class InformationTreeNode extends LogicTreeNode {
     public String getXPathExpressionCheck(boolean returnConstant, LogicTreeNode parentNode, boolean calculateString) throws DebugErrorException {
         if(calculateString)
             return getCalculationString(parentNode, true);
-        if(!getContextInfo().containsContext && checkCalculableContext())
+        if(!getContextInfo().containsContext && checkValidCalculableContext())
             return XMLDatatype.wrapExpression(getContext().context, datatypeRecorder.xmlDatatype);
-        if(returnConstant && checkCalculableContext())
+        if(returnConstant && checkValidCalculableContext())
             return XMLDatatype.wrapExpression(getContext().context, datatypeRecorder.xmlDatatype);
         if(!returnConstant && XPathExpr != null)
             return XPathExpr;
@@ -84,6 +84,22 @@ public abstract class InformationTreeNode extends LogicTreeNode {
 
     public void calculateInfo() throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         String calculationString = getCalculationString();
+        if(calculationString.equals("((sort(sort(head(reverse(sort(reverse(//*[@id=\"8\"]/V1/has-children())))))))[1]) = 1()")) {
+            System.out.println("PPPPPPPPPPPP -------------------");
+            System.out.println(this.getClass());
+            System.out.println(this.datatypeRecorder.getActualDatatype());
+            System.out.println(this.childList.get(1).context.context);
+            System.out.println(this.childList.get(1).datatypeRecorder.xmlDatatype);
+            System.out.println("childList size: " + childList.size());
+            System.out.println(childList.get(0) instanceof InformationTreeContextNode);
+            System.out.println(((InformationTreeContextNode) childList.get(0)).dummyContext);
+            System.out.println(((InformationTreeContextNode) childList.get(0)).context.context);
+            System.out.println(this.childList.get(0).datatypeRecorder.xmlDatatype);
+            System.out.println(((InformationTreeContextNode) childList.get(0)).dummyCalculateString);
+//            System.out.println(((InformationTreeContextNode) childList.get(0)).getCalculationString());
+//            System.out.println(((InformationTreeContextNode) childList.get(0)).checkValidContext());
+            System.out.println("PPPPPPPPPPPP -------------------");
+        }
         if(datatypeRecorder.xmlDatatype == XMLDatatype.NODE) {
             getContext().context = contextInfo.mainExecutor.executeSingleProcessor(calculationString + "/@id cast as xs:integer");
         }
@@ -111,10 +127,22 @@ public abstract class InformationTreeNode extends LogicTreeNode {
         getContextInfo().constantExpr = flag;
     }
 
-    public Boolean checkCalculableContext() {
+    /**
+     * Check if current node has valid context in form of constants;
+     * @return
+     */
+    public Boolean checkValidCalculableContext() {
         if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) return false;
         if(datatypeRecorder.xmlDatatype == XMLDatatype.NODE) return false;
-        return context != null;
+        return getContext().context != null;
+    }
+
+    /**
+     * Check if current node has valid context in any form (Including node ids)
+     * @return
+     */
+    public Boolean checkValidContext() {
+        return getContext().context != null;
     }
 
     /**

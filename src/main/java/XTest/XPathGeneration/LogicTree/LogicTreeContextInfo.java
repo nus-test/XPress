@@ -31,4 +31,9 @@ public class LogicTreeContextInfo {
         mainExecutor = infoNode.mainExecutor;
         XPathPrefix = infoNode.XPathPrefix;
     }
+
+    public void setInfo(MainExecutor mainExecutor, String XPathExpr) {
+        this.mainExecutor = mainExecutor;
+        this.XPathPrefix = XPathExpr;
+    }
 }

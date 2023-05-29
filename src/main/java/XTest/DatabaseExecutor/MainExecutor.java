@@ -17,9 +17,12 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 
+import static java.lang.Math.max;
+
 public class MainExecutor {
 
     String fileAddr = "C:\\app\\log\\autotest.xml";
+    public Integer maxId = 0;
     public Map<Integer, ContextNode> contextNodeMap = new HashMap<>();
     public List<ContextNode> extraLeafNodeList = new ArrayList<>();
     public List<DatabaseExecutor> databaseExecutorList = new ArrayList<>();
@@ -42,6 +45,7 @@ public class MainExecutor {
         for(ContextNode contextNode : contextNodeList) {
             contextNodeMap.put(contextNode.id, contextNode);
             extraLeafNodeList.add(contextNode);
+            maxId = max(contextNode.id, maxId);
         }
     }
 

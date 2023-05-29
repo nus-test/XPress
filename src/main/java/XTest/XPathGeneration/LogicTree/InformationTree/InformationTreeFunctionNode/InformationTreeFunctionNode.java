@@ -47,12 +47,16 @@ public abstract class InformationTreeFunctionNode extends InformationTreeNode {
      * @param childNode Given context.
      */
     public void fillContents(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+        fillContents(childNode, true);
+    }
+
+    public void fillContents(InformationTreeNode childNode, Boolean calculate) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         childList.add(childNode);
         inheritContextChildInfo(childNode);
-        if(!childNode.checkCalculableContext())
+        if(!childNode.checkValidContext())
             fillContentParametersRandom(childNode);
         else fillContentParameters(childNode);
-        calculateInfo();
+        if(calculate) calculateInfo();
     }
 
     /**
@@ -61,14 +65,14 @@ public abstract class InformationTreeFunctionNode extends InformationTreeNode {
      * @param childNode Given context.
      */
     public void fillContentsRandom(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+        fillContentsRandom(childNode, true);
+    }
+
+    public void fillContentsRandom(InformationTreeNode childNode, Boolean calculate) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         childList.add(childNode);
         inheritContextChildInfo(childNode);
         fillContentParametersRandom(childNode);
-        calculateInfo();
-    }
-
-    public void fillContentsWithDummyChildNode(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
-        fillContents(InformationTreeFunctionNodeManager.getInstance().getDummyChildNode(childNode));
+        if(calculate) calculateInfo();
     }
 
     /**

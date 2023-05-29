@@ -6,6 +6,14 @@ import XTest.TestException.DebugErrorException;
 import XTest.XPathGeneration.LogicTree.LogicTreeNode;
 
 public class InformationTreeContextNode extends InformationTreeNode {
+    /**
+     * If set to true, is the dummy context node generated for Map function.
+     */
+    public boolean dummyContext = false;
+    /**
+     * If is a dummy context node, contains the calculateString of the original node.
+     */
+    public String dummyCalculateString = null;
 
     // For context node, XPathExpr refers to the sub selection XPath expression.
     // If referring to current node, should be node selection expression.
@@ -23,6 +31,8 @@ public class InformationTreeContextNode extends InformationTreeNode {
 
     @Override
     public String getCalculationString(LogicTreeNode parentNode, boolean checkImpact) {
+        if(dummyContext)
+            return dummyCalculateString;
         String calculationStr = "//*[@id=\"" + getContextInfo().starredNodeId + "\"]";
         if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
             calculationStr += "/" + XPathExpr;
@@ -37,6 +47,10 @@ public class InformationTreeContextNode extends InformationTreeNode {
     }
 
     public InformationTreeContextNode() {
+    }
+
+    public InformationTreeContextNode(XMLDatatypeComplexRecorder recorder) {
+        this.datatypeRecorder = recorder;
     }
 
     public InformationTreeContextNode(XMLDatatypeComplexRecorder recorder, InformationTreeContext context) {

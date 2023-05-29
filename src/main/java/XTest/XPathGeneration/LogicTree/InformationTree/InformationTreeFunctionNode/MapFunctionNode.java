@@ -1,6 +1,7 @@
 package XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
 
 import XTest.GlobalRandom;
+import XTest.PrimitiveDatatype.XMLAtomic;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.TestException.DebugErrorException;
@@ -14,48 +15,51 @@ import org.xmldb.api.base.XMLDBException;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class InformationTreeMapNode extends BinaryOperatorFunctionNode {
+public class MapFunctionNode extends BinaryOperatorFunctionNode {
 
     @Override
     public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode, boolean calculateString) throws DebugErrorException {
         // TODO: Check the first child type and decide whether needs to be wrapped by "()"
-
-        String builder = childList.get(0).getXPathExpression(returnConstant) + "! ";
+        String returnString = getXPathExpressionCheck(returnConstant, parentNode, calculateString);
+        if(returnString != null) return binaryWrap(returnString, parentNode);
+        returnString = childList.get(0).getXPathExpression(returnConstant, this, calculateString) + " ! ";
         if(childList.size() > 2)
-            builder += "(";
+            returnString += "(";
         boolean start = true;
         for(int i = 1; i < childList.size(); i ++) {
-            if(!start) builder += ",";
-            builder += ((InformationTreeFunctionNode) childList.get(i)).getXPathExpression(false, null, false);
+            if(!start) returnString += ",";
+            returnString += ((InformationTreeNode) childList.get(i)).getXPathExpression(false,
+                    childList.size() > 1 ? null : this, false);
             start = false;
         }
         if(childList.size() > 2)
-            builder += ")";
-        return builder;
+            returnString += ")";
+        cacheXPathExpression(returnString, returnConstant, calculateString);
+        return binaryWrap(returnString, parentNode, calculateString);
+    }
+
+    public String binaryWrap(String resultString, LogicTreeNode parentNode, boolean calculateString) {
+        if(calculateString && datatypeRecorder.xmlDatatype.getValueHandler() instanceof XMLAtomic)
+            return "((" + resultString + ") cast as " + datatypeRecorder.xmlDatatype.getValueHandler().officialTypeName + ")";
+        if(parentNode != null) {
+            return super.binaryWrap(resultString, parentNode);
+        }
+        return resultString;
     }
 
     @Override
-    public InformationTreeMapNode newInstance() {
-        return new InformationTreeMapNode();
+    public MapFunctionNode newInstance() {
+        return new MapFunctionNode();
     }
 
     @Override
     public void fillContentParameters(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
-        InformationTreeNode dummyChildNode = InformationTreeFunctionNodeManager.getInstance().getDummyChildNode(childNode);
-        Integer functionCnt = fillContentParameterFunctions(childNode);
-        for(int i = 1; i <= functionCnt; i ++) {
-            ((InformationTreeFunctionNode) childList.get(i)).fillContents(dummyChildNode);
-        }
-        inferResultRecorder(functionCnt);
+        fillContentParametersRandom(childNode);
     }
 
     @Override
     public void fillContentParametersRandom(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
-        InformationTreeNode dummyChildNode = InformationTreeFunctionNodeManager.getInstance().getDummyChildNode(childNode);
         Integer functionCnt = fillContentParameterFunctions(childNode);
-        for(int i = 1; i <= functionCnt; i ++) {
-            ((InformationTreeFunctionNode) childList.get(i)).fillContentsRandom(dummyChildNode);
-        }
         inferResultRecorder(functionCnt);
     }
 
@@ -71,8 +75,10 @@ public class InformationTreeMapNode extends BinaryOperatorFunctionNode {
                 functionCnt = GlobalRandom.getInstance().nextInt(3) + 1;
             }
         }
+        InformationTreeNode dummyChildNode = InformationTreeFunctionNodeManager.getInstance().getMapDummyChildNode(childNode);
         for(int i = 0; i < functionCnt; i ++) {
-            InformationTreeNode treeNode = informationTreeGenerator.buildInformationTree(childNode, GlobalRandom.getInstance().nextInt(3));
+            InformationTreeNode treeNode = informationTreeGenerator.buildInformationTree(dummyChildNode,
+                    GlobalRandom.getInstance().nextInt(3));
             childList.add(treeNode);
         }
         return functionCnt;
@@ -80,27 +86,32 @@ public class InformationTreeMapNode extends BinaryOperatorFunctionNode {
 
     private void inferResultRecorder(Integer functionCnt) {
         XMLDatatypeComplexRecorder recorder = new XMLDatatypeComplexRecorder();
-        if(functionCnt > 1) {
+        if(functionCnt > 1 || childList.get(0).datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) {
             recorder.xmlDatatype = XMLDatatype.SEQUENCE;
         }
         XMLDatatype actualType = null;
         for(int i = 1; i <= functionCnt; i ++) {
-            if(((InformationTreeFunctionNode) childList.get(i)).datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
+            if(((InformationTreeNode) childList.get(i)).datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
                 recorder.xmlDatatype = XMLDatatype.SEQUENCE;
             if(actualType != XMLDatatype.MIXED) {
                 if (actualType == null) {
-                    actualType = ((InformationTreeFunctionNode) childList.get(i)).datatypeRecorder.getActualDatatype();
-                } else if (actualType != ((InformationTreeFunctionNode) childList.get(i)).datatypeRecorder.getActualDatatype())
+                    actualType = ((InformationTreeNode) childList.get(i)).datatypeRecorder.getActualDatatype();
+                } else if (actualType != ((InformationTreeNode) childList.get(i)).datatypeRecorder.getActualDatatype())
                     actualType = XMLDatatype.MIXED;
             }
         }
         if(recorder.xmlDatatype == XMLDatatype.SEQUENCE)
             recorder.subDatatype = actualType;
         else recorder.xmlDatatype = actualType;
+        this.datatypeRecorder = recorder;
     }
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
+        if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) {
+            return childNode.datatypeRecorder.subDatatype != XMLDatatype.MIXED &&
+                    (childNode.datatypeRecorder.subDatatype != XMLDatatype.NODE || !childNode.datatypeRecorder.nodeMix);
+        }
         return true;
     }
 }

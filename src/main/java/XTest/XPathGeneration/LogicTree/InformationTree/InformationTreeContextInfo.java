@@ -31,7 +31,12 @@ public class InformationTreeContextInfo extends LogicTreeContextInfo {
 
     public InformationTreeContextInfo(MainExecutor mainExecutor, String XPathPrefix, int starredNodeId,
                                       boolean containsContext, boolean constantExpr, boolean selfContext) {
-        super(mainExecutor, XPathPrefix);
+        setInfo(mainExecutor, XPathPrefix, starredNodeId, containsContext, constantExpr, selfContext);
+    }
+
+    public void setInfo(MainExecutor mainExecutor, String XPathPrefix, int starredNodeId,
+                                      boolean containsContext, boolean constantExpr, boolean selfContext) {
+        super.setInfo(mainExecutor, XPathPrefix);
         this.starredNodeId = starredNodeId;
         this.containsContext = containsContext;
         this.constantExpr = constantExpr;

@@ -104,6 +104,8 @@ public class InformationTreeFunctionNodeManager {
         registeredFunctionList.add(new MaxFunctionNode());
         registeredFunctionList.add(new MinFunctionNode());
         registeredFunctionList.add(new SumFunctionNode());
+
+        registeredFunctionList.add(new MapFunctionNode());
     }
 
     /**
@@ -144,12 +146,11 @@ public class InformationTreeFunctionNodeManager {
      */
     public InformationTreeFunctionNode getRandomMatchingFunctionNode(XMLDatatypeComplexRecorder datatypeRecorder) {
         InformationTreeFunctionNode functionNode;
-        if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) {
+        if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
             functionNode = GlobalRandom.getInstance().getRandomFromList(
-                    sequenceRoughContextMatchingMap.get(datatypeRecorder.subDatatype)).newInstance();
-        }
+                sequenceRoughContextMatchingMap.get(datatypeRecorder.getActualDatatype())).newInstance();
         else functionNode = GlobalRandom.getInstance().getRandomFromList(
-                simpleRoughContextMatchingMap.get(datatypeRecorder.xmlDatatype)).newInstance();
+                simpleRoughContextMatchingMap.get(datatypeRecorder.getActualDatatype())).newInstance();
         return functionNode;
     }
 
@@ -159,15 +160,32 @@ public class InformationTreeFunctionNodeManager {
      * @param datatypeRecorder
      * @return A random new information tree function node which could accept the current data type recorded
      * with given "datatypeRecorder". The tree node is attached to the function node as the first child with
-     * other contents also filled.
+     * other contents also filled (non-randomly).
      */
     public InformationTreeFunctionNode getRandomMatchingFunctionNodeWithContentAttached(InformationTreeNode treeNode, XMLDatatypeComplexRecorder datatypeRecorder) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+        return getRandomMatchingFunctionNodeWithContentAttached(treeNode, datatypeRecorder, false, true);
+    }
+
+    /**
+     *
+     * @param treeNode
+     * @param datatypeRecorder
+     * @param random If set to true all contents are filled randomly
+     * @return A random new information tree function node which could accept the current data type recorded
+     * with given "datatypeRecorder". The tree node is attached to the function node as the first child with
+     * other contents also filled.
+     */
+    public InformationTreeFunctionNode getRandomMatchingFunctionNodeWithContentAttached(
+            InformationTreeNode treeNode,
+            XMLDatatypeComplexRecorder datatypeRecorder,
+            Boolean random, Boolean calculate) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         InformationTreeFunctionNode functionNode = null;
         boolean flag = false;
         while(!flag) {
             functionNode = getRandomMatchingFunctionNode(datatypeRecorder);
             if(functionNode.checkContextAcceptability(treeNode)) {
-                functionNode.fillContents(treeNode);
+                if(!random) functionNode.fillContents(treeNode, calculate);
+                else functionNode.fillContentsRandom(treeNode, calculate);
                 flag = true;
             }
         }
@@ -182,30 +200,53 @@ public class InformationTreeFunctionNodeManager {
         InformationTreeNode dummyNode = new InformationTreeConstantNode();
         dummyNode.getContext().context = "10";
         XMLDatatypeComplexRecorder recorder = new XMLDatatypeComplexRecorder();
-        for(XMLDatatype xmlDatatype: XMLDatatype.values()) {
-            if(xmlDatatype.getValueHandler() instanceof XMLSimple) {
-                for(InformationTreeFunctionNode functionNode : registeredFunctionList) {
-                    // For single node check
-                    recorder.xmlDatatype = xmlDatatype;
-                    dummyNode.datatypeRecorder = recorder;
-                    if(functionNode.checkContextAcceptability(dummyNode, recorder)) {
-                        simpleRoughContextMatchingMap.get(xmlDatatype).add(functionNode);
-                    }
+        for(InformationTreeFunctionNode functionNode : registeredFunctionList) {
+            for(XMLDatatype xmlDatatype: XMLDatatype.values()) {
+                if(xmlDatatype.getValueHandler() instanceof XMLSimple) {
+                        // For single node check
+                        dummyNode.datatypeRecorder.setData(xmlDatatype);
+                        if(functionNode.checkContextAcceptability(dummyNode)) {
+                            simpleRoughContextMatchingMap.get(xmlDatatype).add(functionNode);
+                        }
 
-                    // For sequence check
-                    recorder.setData(XMLDatatype.SEQUENCE, xmlDatatype, true);
-                    dummyNode.datatypeRecorder = recorder;
-                    if(functionNode.checkContextAcceptability(dummyNode, recorder)) {
-                        sequenceRoughContextMatchingMap.get(xmlDatatype).add(functionNode);
+                        // For sequence check
+                        dummyNode.datatypeRecorder.setData(XMLDatatype.SEQUENCE, xmlDatatype, true);
+                        if(functionNode.checkContextAcceptability(dummyNode)) {
+                            sequenceRoughContextMatchingMap.get(xmlDatatype).add(functionNode);
+                        }
                     }
                 }
+            dummyNode.datatypeRecorder.setData(XMLDatatype.SEQUENCE, XMLDatatype.MIXED, true);
+            if(functionNode.checkContextAcceptability(dummyNode)) {
+                sequenceRoughContextMatchingMap.get(XMLDatatype.MIXED).add(functionNode);
             }
         }
+        //throw new RuntimeException();
     }
 
-    public InformationTreeNode getDummyChildNode(InformationTreeNode node) {
-        InformationTreeNode dummyChildNode = new InformationTreeContextNode(node.datatypeRecorder, node.getContext());
+    public InformationTreeNode getMapDummyChildNode(InformationTreeNode node) throws DebugErrorException, SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
+        InformationTreeContextNode dummyChildNode = new InformationTreeContextNode();
         dummyChildNode.XPathExpr = ".";
+        dummyChildNode.inheritContextChildInfo(node);
+        dummyChildNode.dummyContext = true;
+        if(node.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) {
+            int id = GlobalRandom.getInstance().nextInt(Integer.parseInt(node.getContext().context)) + 1;
+            String calString = "((" + node.getCalculationString() + ")[" + id + "])";
+            dummyChildNode.datatypeRecorder = new XMLDatatypeComplexRecorder(node.datatypeRecorder.getActualDatatype());
+            if(node.datatypeRecorder.subDatatype == XMLDatatype.NODE) {
+                calString = "(" + calString + "/@id cast as xs:integer)";
+            } else {
+                calString = "(" + calString + " cast as " + node.datatypeRecorder.subDatatype.getValueHandler().officialTypeName + ")";
+            }
+            dummyChildNode.getContext().setContext(
+                    dummyChildNode.getContextInfo().mainExecutor.executeSingleProcessor(calString));
+            dummyChildNode.dummyCalculateString = calString;
+        }
+        else {
+            dummyChildNode.datatypeRecorder = new XMLDatatypeComplexRecorder(node.datatypeRecorder);
+            dummyChildNode.getContext().setContext(node.context);
+            dummyChildNode.dummyCalculateString = "(" + node.getCalculationString() + ")";
+        }
         return dummyChildNode;
     }
 }
