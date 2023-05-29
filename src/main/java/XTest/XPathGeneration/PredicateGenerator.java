@@ -1,20 +1,14 @@
-package XTest.XPathGeneration.PredicateGeneration;
+package XTest.XPathGeneration;
 
 import XTest.DatabaseExecutor.MainExecutor;
 import XTest.GlobalRandom;
-import XTest.PrimitiveDatatype.XMLDatatype;
-import XTest.PrimitiveDatatype.XMLNumeric;
-import XTest.ReportGeneration.KnownBugs;
 import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XMLGeneration.ContextNode;
-import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeContextNode;
-import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.*;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeGenerator;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 import XTest.XPathGeneration.LogicTree.LogicTreeComparisonNode;
 import XTest.XPathGeneration.LogicTree.LogicTreeNode;
-import XTest.XPathGeneration.XPathResultListPair;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
 
@@ -23,10 +17,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PredicateGeneratorNew {
+public class PredicateGenerator {
     MainExecutor mainExecutor;
 
-    public PredicateGeneratorNew(MainExecutor mainExecutor){
+    public PredicateGenerator(MainExecutor mainExecutor){
         this.mainExecutor = mainExecutor;
     }
 

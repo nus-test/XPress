@@ -5,7 +5,6 @@ import XTest.GlobalRandom;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.XMLGeneration.ContextNode;
 import XTest.XMLGeneration.XMLDocumentGenerator;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeConstantNode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -44,31 +43,27 @@ public class SequenceGeneratorTest {
 
     @Test
     void generateNodeSequenceFromContext() {
-        PredicateTreeConstantNode predicateTreeConstantNode = sequenceGenerator.generateNodeSequenceFromContext(5, currentContextNodeList);
-        System.out.println(predicateTreeConstantNode.dataContent);
+        String nodeSequence = sequenceGenerator.generateNodeSequenceFromContext(5, currentContextNodeList);
+        System.out.println(nodeSequence);
     }
 
     @Test
     void generateStringSequence() {
-        PredicateTreeConstantNode predicateTreeConstantNode = sequenceGenerator.generateConstantSequence(5, XMLDatatype.STRING);
-        System.out.println(predicateTreeConstantNode.dataContent);
+        System.out.println(sequenceGenerator.generateConstantSequence(5, XMLDatatype.STRING));
     }
 
     @Test
     void generateIntegerSequence() {
-        PredicateTreeConstantNode predicateTreeConstantNode = sequenceGenerator.generateConstantSequence(5, XMLDatatype.INTEGER);
-        System.out.println(predicateTreeConstantNode.dataContent);
+        System.out.println(sequenceGenerator.generateConstantSequence(5, XMLDatatype.INTEGER));
     }
 
     @Test
     void generateDoubleSequence() {
-        PredicateTreeConstantNode predicateTreeConstantNode = sequenceGenerator.generateConstantSequence(5, XMLDatatype.DOUBLE);
-        System.out.println(predicateTreeConstantNode.dataContent);
+        System.out.println(sequenceGenerator.generateConstantSequence(5, XMLDatatype.DOUBLE));
     }
 
     @Test
     void generateBooleanSequence() {
-        PredicateTreeConstantNode predicateTreeConstantNode = sequenceGenerator.generateConstantSequence(5, XMLDatatype.BOOLEAN);
-        System.out.println(predicateTreeConstantNode.dataContent);
+        System.out.println(sequenceGenerator.generateConstantSequence(5, XMLDatatype.BOOLEAN));
     }
 }

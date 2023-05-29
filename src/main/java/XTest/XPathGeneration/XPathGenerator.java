@@ -3,14 +3,10 @@ package XTest.XPathGeneration;
 import XTest.DatabaseExecutor.MainExecutor;
 import XTest.GlobalRandom;
 import XTest.GlobalSettings;
-import XTest.ReportGeneration.KnownBugs;
 import XTest.TestException.DebugErrorException;
 import XTest.TestException.MismatchingResultException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XMLGeneration.ContextNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateGenerator;
-import XTest.XPathGeneration.PredicateGeneration.PredicateGeneratorNew;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeConstantNode;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
 
@@ -23,10 +19,10 @@ public class XPathGenerator {
     MainExecutor mainExecutor;
     SequenceGenerator sequenceGenerator;
     PrefixQualifier prefixQualifier = new PrefixQualifier();
-    PredicateGeneratorNew predicateGenerator;
+    PredicateGenerator predicateGenerator;
     public XPathGenerator(MainExecutor mainExecutor) {
         this.mainExecutor = mainExecutor;
-        predicateGenerator = new PredicateGeneratorNew(mainExecutor);
+        predicateGenerator = new PredicateGenerator(mainExecutor);
         sequenceGenerator = new SequenceGenerator(mainExecutor);
     }
 
@@ -83,12 +79,7 @@ public class XPathGenerator {
             currentBuildPair.contextNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
         } else {
             int length = GlobalRandom.getInstance().nextInt(5) + 1;
-            if(starterBuildPair.contextNodeList.size() == 0) {
-                System.out.println("________________________________________");
-                System.out.println(starterBuildPair.XPath);
-            }
-            PredicateTreeConstantNode directSequence = sequenceGenerator.generateNodeSequenceFromContext(length, starterBuildPair.contextNodeList);
-            currentBuildPair.XPath += "/" + directSequence.dataContent;
+            currentBuildPair.XPath += "/" + sequenceGenerator.generateNodeSequenceFromContext(length, starterBuildPair.contextNodeList);
             nodeIdList = mainExecutor.executeAndCompare(currentBuildPair.XPath);
             currentBuildPair.contextNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
         }

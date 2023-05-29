@@ -6,11 +6,6 @@ import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.XMLGeneration.AttributeNode;
 import XTest.XMLGeneration.ContextNode;
 import XTest.XMLGeneration.XMLWriter;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeConstantNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.PredicateTreeContextNodeFunctionNode.AttributeFunctionNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.PredicateTreeContextNodeFunctionNode.PredicateTreeContextNodeFunctionNode;
-import XTest.XPathGeneration.PredicateGeneration.PredicateTreeFunctionNode.PredicateTreeContextNodeFunctionNode.TextFunctionNode;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +20,7 @@ public class SequenceGenerator {
         this.mainExecutor = mainExecutor;
     }
 
-    public PredicateTreeConstantNode generateNodeSequenceFromContext(int length, List<ContextNode> currentNodeList) {;
+    public String generateNodeSequenceFromContext(int length, List<ContextNode> currentNodeList) {;
         String stringBuild = "(";
         boolean start = true;
         Map<String, Boolean> checkMap = new HashMap<>();
@@ -42,25 +37,10 @@ public class SequenceGenerator {
             start = false;
         }
         stringBuild += ")";
-        return new PredicateTreeConstantNode(XMLDatatype.SEQUENCE, XMLDatatype.NODE,
-                stringBuild, stringBuild);
+        return stringBuild;
     }
-    
-    public PredicateTreeConstantNode generateSequenceFromContext(int length, XMLDatatype xmlDatatype, List<ContextNode> currentNodeList) {
-        String stringBuild = "(";
-        boolean start = true;
-        for(int i = 0; i < length; i ++) {
-            String element = generateSingleElementExprFromContext(xmlDatatype, currentNodeList);
-            if(!start) stringBuild += ",";
-            stringBuild += element;
-            start = false;
-        }
-        stringBuild += ")";
-        return new PredicateTreeConstantNode(XMLDatatype.SEQUENCE, xmlDatatype,
-                stringBuild, stringBuild);
-    }
-    
-    public PredicateTreeConstantNode generateConstantSequence(int length, XMLDatatype xmlDatatype) {
+
+    public String generateConstantSequence(int length, XMLDatatype xmlDatatype) {
         String stringBuild = "(";
         boolean start = true;
         for(int i = 0; i < length; i ++) {
@@ -70,11 +50,10 @@ public class SequenceGenerator {
             start = false;
         }
         stringBuild += ")";
-        return new PredicateTreeConstantNode(XMLDatatype.SEQUENCE, xmlDatatype,
-                stringBuild, stringBuild);
+        return stringBuild;
     }
     
-    public PredicateTreeConstantNode generateConstantNodeSequence(int length) {
+    public String generateConstantNodeSequence(int length) {
         String stringBuild = "(";
         boolean start = true;
         for(int i = 0; i < length; i ++) {
@@ -84,8 +63,7 @@ public class SequenceGenerator {
             start = false;
         }
         stringBuild += ")";
-        return new PredicateTreeConstantNode(XMLDatatype.SEQUENCE, XMLDatatype.NODE,
-                stringBuild, stringBuild);
+        return stringBuild;
     }
 
     String generateSingleNodeExprFromContext(List<ContextNode> currentNodeList) {
@@ -100,30 +78,6 @@ public class SequenceGenerator {
     String generateSingleConstantNodeExpr() {
         return XMLWriter.writeContext(new String(),
                 GlobalRandom.getInstance().getRandomFromList(mainExecutor.extraLeafNodeList));
-    }
-    
-    String generateSingleElementExprFromContext(XMLDatatype xmlDatatype, List<ContextNode> currentNodeList) {
-        int trial = 3;
-        List<PredicateTreeContextNodeFunctionNode> candidateList = new ArrayList<>();
-        for(int i = 0; i < trial; i ++) {
-            ContextNode contextNode = GlobalRandom.getInstance().getRandomFromList(currentNodeList);
-            if(contextNode.dataType == xmlDatatype)
-                candidateList.add(new TextFunctionNode(contextNode));
-            for(AttributeNode attributeNode : contextNode.attributeList)
-                if(contextNode.dataType == xmlDatatype)
-                    candidateList.add(new AttributeFunctionNode(attributeNode));
-            if(!candidateList.isEmpty())
-                break;
-        }
-        for(PredicateTreeContextNodeFunctionNode functionNode : PredicateTreeContextNodeFunctionNode.outputDataTypeMap.get(xmlDatatype)) {
-            candidateList.add(functionNode.newInstance());
-        }
-        if(!candidateList.isEmpty()) {
-            PredicateTreeContextNodeFunctionNode node =
-                    GlobalRandom.getInstance().getRandomFromList(candidateList);
-            return node.XPathExpr;
-        }
-        return generateSingleElementExpr(xmlDatatype);
     }
 
     String generateSingleElementExpr(XMLDatatype xmlDatatype) {
