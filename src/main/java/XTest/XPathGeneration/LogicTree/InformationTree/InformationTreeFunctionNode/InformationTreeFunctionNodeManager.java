@@ -2,6 +2,7 @@ package XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionN
 
 import XTest.DefaultListHashMap;
 import XTest.GlobalRandom;
+import XTest.GlobalSettings;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.PrimitiveDatatype.XMLSimple;
@@ -41,82 +42,21 @@ public class InformationTreeFunctionNodeManager {
     }
 
     private InformationTreeFunctionNodeManager() {
-        registeredFunctionList.add(new BooleanFunctionNode());
-        registeredFunctionList.add(new CastableFunctionNode());
-        registeredFunctionList.add(new ConcatFunctionNode());
-        registeredFunctionList.add(new ContainsFunctionNode());
-        registeredFunctionList.add(new DaysFromDurationFunctionNode());
-        registeredFunctionList.add(new DoubleAbsFunctionNode());
-        registeredFunctionList.add(new DoubleAddFunctionNode());
-        registeredFunctionList.add(new DoubleCeilingFunctionNode());
-        registeredFunctionList.add(new DoubleDivisionFunctionNode());
-        registeredFunctionList.add(new DoubleFloorFunctionNode());
-        registeredFunctionList.add(new DoubleMultiplicationFunctionNode());
-        registeredFunctionList.add(new DoubleRoundFunctionNode());
-        registeredFunctionList.add(new DoubleRoundHalfToEvenFunctionNode());
-        registeredFunctionList.add(new DoubleSubtractFunctionNode());
-        registeredFunctionList.add(new EndsWithFunctionNode());
-        registeredFunctionList.add(new HoursFromDurationFunctionNode());
-        registeredFunctionList.add(new IntegerAbsFunctionNode());
-        registeredFunctionList.add(new IntegerAddFunctionNode());
-        registeredFunctionList.add(new IntegerDivisionFunctionNode());
-        registeredFunctionList.add(new IntegerModFunctionNode());
-        registeredFunctionList.add(new IntegerMultiplicationFunctionNode());
-        registeredFunctionList.add(new IntegerSubtractionFunctionNode());
-        registeredFunctionList.add(new LowerCaseFunctionNode());
-        registeredFunctionList.add(new MinutesFromDurationFunctionNode());
-        registeredFunctionList.add(new MonthsFromDurationFunctionNode());
-        registeredFunctionList.add(new NormalizeSpaceFunctionNode());
-        registeredFunctionList.add(new NotFunctionNode());
-        registeredFunctionList.add(new SecondsFromDurationFunctionNode());
-        registeredFunctionList.add(new StartsWithFunctionNode());
-        registeredFunctionList.add(new StringLengthFunctionNode());
-        registeredFunctionList.add(new SubstringAfterFunctionNode());
-        registeredFunctionList.add(new SubstringBeforeFunctionNode());
-        registeredFunctionList.add(new SubstringFunctionNode());
-        registeredFunctionList.add(new TranslateFunctionNode());
-        registeredFunctionList.add(new UpperCaseFunctionNode());
-        registeredFunctionList.add(new YearsFromDurationFunctionNode());
-
-        registeredFunctionList.add(new EqualOperatorNode());
-        registeredFunctionList.add(new GreaterOrEqualOperatorNode());
-        registeredFunctionList.add(new GreaterThanOperatorNode());
-        registeredFunctionList.add(new LessOrEqualOperatorNode());
-        registeredFunctionList.add(new LessThanOperatorNode());
-        registeredFunctionList.add(new NotEqualOperatorNode());
-
-        registeredFunctionList.add(new AttributeFunctionNode());
-        registeredFunctionList.add(new HasChildrenFunctionNode());
-        registeredFunctionList.add(new LastFunctionNode());
-        registeredFunctionList.add(new LocalNameFunctionNode());
-        registeredFunctionList.add(new NameFunctionNode());
-        registeredFunctionList.add(new PositionFunctionNode());
-        registeredFunctionList.add(new TextFunctionNode());
-
-        registeredFunctionList.add(new DistinctValuesFunctionNode());
-        registeredFunctionList.add(new EmptyFunctionNode());
-        registeredFunctionList.add(new ExistsFunctionNode());
-        registeredFunctionList.add(new HeadFunctionNode());
-        registeredFunctionList.add(new ReverseFunctionNode());
-        registeredFunctionList.add(new SortFunctionNode());
-        registeredFunctionList.add(new SubsequenceFunctionNode());
-        registeredFunctionList.add(new TailFunctionNode());
-
-        registeredFunctionList.add(new AverageFunctionNode());
-        registeredFunctionList.add(new CountFunctionNode());
-        registeredFunctionList.add(new MaxFunctionNode());
-        registeredFunctionList.add(new MinFunctionNode());
-        registeredFunctionList.add(new SumFunctionNode());
-
-        registeredFunctionList.add(new MapFunctionNode());
         ClassPathScanningCandidateComponentProvider scanner =
                 new ClassPathScanningCandidateComponentProvider(true);
 
-        scanner.addIncludeFilter(new AnnotationTypeFilter(FunctionV3.class));
+        scanner.addIncludeFilter(new AnnotationTypeFilter(FunctionV1.class));
+        if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3)
+            scanner.addIncludeFilter(new AnnotationTypeFilter(FunctionV3.class));
 
         for (BeanDefinition bd : scanner.findCandidateComponents(
                 "XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode")) {
-            System.out.println(bd.getBeanClassName());
+            try {
+                registeredFunctionList.add(Class.forName(bd.getBeanClassName()).
+                        asSubclass(InformationTreeFunctionNode.class).newInstance());
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
