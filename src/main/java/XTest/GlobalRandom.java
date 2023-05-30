@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 public class GlobalRandom {
     private static GlobalRandom globalRandom;
     public Random random;
+
     private GlobalRandom() {
         random = new Random();
         long seed = System.currentTimeMillis();

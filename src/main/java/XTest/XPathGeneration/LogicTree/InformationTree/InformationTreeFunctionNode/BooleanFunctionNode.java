@@ -6,6 +6,7 @@ import XTest.PrimitiveDatatype.XMLDurationHandler;
 import XTest.PrimitiveDatatype.XMLSimple;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
+@FunctionV1
 public class BooleanFunctionNode extends InformationTreeFunctionNode {
     public BooleanFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.BOOLEAN;

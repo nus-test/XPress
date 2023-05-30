@@ -5,8 +5,10 @@ import XTest.Pair;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
+import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.FunctionV1;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
+@FunctionV1
 public class SubsequenceFunctionNode extends InformationTreeSequenceFunctionNode {
     public SubsequenceFunctionNode() {
         functionExpr = "subsequence";

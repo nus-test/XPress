@@ -8,6 +8,7 @@ import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 import static XTest.StringUtils.getListString;
 import static java.lang.Math.abs;
 
+@FunctionV1
 public class DoubleAddFunctionNode extends BinaryNumericalOperatorFunctionNode {
     public DoubleAddFunctionNode() {
         this.datatypeRecorder.xmlDatatype = XMLDatatype.DOUBLE;

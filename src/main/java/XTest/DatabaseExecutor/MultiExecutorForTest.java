@@ -28,15 +28,16 @@ public class MultiExecutorForTest {
     public static void main(String[] args) throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, SaxonApiException, UnexpectedExceptionThrownException, UnsupportedContextSetUpException {
         MainExecutor mainExecutor = new MainExecutor(null);
 
-        List<DatabaseExecutor> dbExecuterList = new ArrayList<>();
+        List<DatabaseExecutor> dbExecutorList = new ArrayList<>();
 
-        dbExecuterList.add(SaxonExecutor.getInstance());
-        //dbExecuterList.add(BaseXExecutor.getInstance());
-        //dbExecuterList.add(ExistExecutor.getInstance());
-        //dbExecuterList.add(OracleExecutor.getInstance());
-        //dbExecuterList.add(LibXML2Executor.getInstance());
-        //dbExecuterList.add(MySQLExecutor.getInstance());
-        for(DatabaseExecutor dbExecutor: dbExecuterList)
+        dbExecutorList.add(SaxonExecutor.getInstance());
+        //dbExecutorList.add(BaseXExecutor.getInstance());
+        //dbExecutorList.add(ExistExecutor.getInstance());
+        //dbExecutorList.add(OracleExecutor.getInstance());
+
+        dbExecutorList.add(LibXML2Executor.getInstance());
+        //dbExecutorList.add(MySQLExecutor.getInstance());
+        for(DatabaseExecutor dbExecutor: dbExecutorList)
             dbExecutor.registerDatabase(mainExecutor);
 
         String xmlDataString =
@@ -51,7 +52,7 @@ public class MultiExecutorForTest {
 
         try {
             mainExecutor.setXPathGenerationContext(xmlDataString);
-            for (DatabaseExecutor databaseExecutor : dbExecuterList) {
+            for (DatabaseExecutor databaseExecutor : dbExecutorList) {
                 System.out.println("------------------------------ " + databaseExecutor.dbName + " ------------------------");
                 System.out.println(mainExecutor.executeSingleProcessor(xquery, databaseExecutor));
                 System.out.println(mainExecutor.executeSingleProcessorGetIdList(xquery, databaseExecutor));

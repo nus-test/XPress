@@ -15,6 +15,9 @@ import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNo
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeSequenceFunctionNode.InformationTreeSequenceAggregationFunctionNode.*;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 import net.sf.saxon.s9api.SaxonApiException;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.xmldb.api.base.XMLDBException;
 
 import java.io.IOException;
@@ -106,6 +109,15 @@ public class InformationTreeFunctionNodeManager {
         registeredFunctionList.add(new SumFunctionNode());
 
         registeredFunctionList.add(new MapFunctionNode());
+        ClassPathScanningCandidateComponentProvider scanner =
+                new ClassPathScanningCandidateComponentProvider(true);
+
+        scanner.addIncludeFilter(new AnnotationTypeFilter(FunctionV3.class));
+
+        for (BeanDefinition bd : scanner.findCandidateComponents(
+                "XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode")) {
+            System.out.println(bd.getBeanClassName());
+        }
     }
 
     /**

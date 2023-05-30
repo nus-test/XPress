@@ -1,8 +1,10 @@
 package XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeSequenceFunctionNode.InformationTreeSequenceAggregationFunctionNode;
 
 import XTest.PrimitiveDatatype.XMLDatatype;
+import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.FunctionV3;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
+@FunctionV3
 public class AverageFunctionNode extends InformationTreeSequenceNumericalAggregationFunctionNode {
     public AverageFunctionNode() {
         functionExpr = "avg";

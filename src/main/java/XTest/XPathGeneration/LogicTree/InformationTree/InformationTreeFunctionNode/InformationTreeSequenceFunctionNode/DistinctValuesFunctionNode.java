@@ -3,9 +3,11 @@ package XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionN
 import XTest.PrimitiveDatatype.XMLAtomic;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
+import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.FunctionV3;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
 // TODO: Should only accept atomic types (could be with implicit cast) and would also result in list of atomic types.
+@FunctionV3
 public class DistinctValuesFunctionNode extends InformationTreeSequenceFunctionNode {
     public DistinctValuesFunctionNode() {
         functionExpr = "distinct-values";

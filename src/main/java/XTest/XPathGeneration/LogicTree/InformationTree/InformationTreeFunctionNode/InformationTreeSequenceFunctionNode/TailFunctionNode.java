@@ -2,8 +2,10 @@ package XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionN
 
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
+import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.FunctionV3;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
+@FunctionV3
 public class TailFunctionNode extends InformationTreeSequenceFunctionNode {
     public TailFunctionNode() {
         functionExpr = "tail";

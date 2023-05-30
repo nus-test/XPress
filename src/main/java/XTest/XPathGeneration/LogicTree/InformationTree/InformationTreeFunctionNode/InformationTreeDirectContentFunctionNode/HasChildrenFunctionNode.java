@@ -1,8 +1,11 @@
 package XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeDirectContentFunctionNode;
 
 import XTest.PrimitiveDatatype.XMLDatatype;
+import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.FunctionV1;
+import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.FunctionV3;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
+@FunctionV3
 public class HasChildrenFunctionNode extends InformationTreeDirectContentFunctionNode {
     public HasChildrenFunctionNode() {
         functionExpr = "has-children";

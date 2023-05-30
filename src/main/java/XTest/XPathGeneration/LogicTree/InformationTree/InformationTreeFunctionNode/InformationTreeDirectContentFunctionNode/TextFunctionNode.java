@@ -3,8 +3,10 @@ package XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionN
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XMLGeneration.ContextNode;
+import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.FunctionV1;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
+@FunctionV1
 public class TextFunctionNode extends InformationTreeDirectContentFunctionNode {
     public TextFunctionNode() {
         functionExpr = "text";

@@ -6,6 +6,7 @@ import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
+import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.FunctionV1;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
@@ -13,6 +14,7 @@ import org.xmldb.api.base.XMLDBException;
 import java.io.IOException;
 import java.sql.SQLException;
 
+@FunctionV1
 public class LessOrEqualOperatorNode extends InformationTreeComparisonOperatorNode {
     public LessOrEqualOperatorNode() {
         functionExpr = "<=";

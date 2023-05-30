@@ -5,6 +5,7 @@ import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
+import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.FunctionV1;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
@@ -12,6 +13,7 @@ import org.xmldb.api.base.XMLDBException;
 import java.io.IOException;
 import java.sql.SQLException;
 
+@FunctionV1
 public class EqualOperatorNode extends InformationTreeComparisonOperatorNode {
     public EqualOperatorNode() {
         functionExpr = "=";
@@ -32,15 +34,6 @@ public class EqualOperatorNode extends InformationTreeComparisonOperatorNode {
     @Override
     protected void fillContentParameters(InformationTreeNode childNode) {
         String value = childNode.datatypeRecorder.xmlDatatype.getValueHandler().getEqual(childNode.getContext().context);
-        if(childNode.getContext().context.equals("q1=\"true\"")) {
-            System.out.println("bububububbubububbbbub");
-            try {
-                System.out.println(childNode.getCalculationString());
-            } catch (DebugErrorException e) {
-                throw new RuntimeException(e);
-            }
-            System.out.println("bububububbubububbbbub");
-        }
         childList.add(new InformationTreeConstantNode(childNode.datatypeRecorder.xmlDatatype, value));
     }
 

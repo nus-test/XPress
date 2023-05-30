@@ -11,6 +11,7 @@ public class GlobalSettings {
     public static XPathVersion xPathVersion = XPathVersion.VERSION_3;
 
     public static String defaultDBName = "Saxon";
+    public static Boolean debugOutput = false;
 
     private GlobalSettings(){};
 

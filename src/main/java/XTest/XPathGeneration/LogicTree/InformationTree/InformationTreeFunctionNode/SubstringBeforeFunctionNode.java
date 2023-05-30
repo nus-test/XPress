@@ -6,6 +6,7 @@ import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
+@FunctionV1
 public class SubstringBeforeFunctionNode extends InformationTreeFunctionNode {
     public SubstringBeforeFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.STRING;

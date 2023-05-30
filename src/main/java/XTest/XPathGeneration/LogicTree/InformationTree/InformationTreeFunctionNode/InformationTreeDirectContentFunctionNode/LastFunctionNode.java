@@ -2,9 +2,11 @@ package XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionN
 
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.TestException.DebugErrorException;
+import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.FunctionV1;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 import XTest.XPathGeneration.LogicTree.LogicTreeNode;
 
+@FunctionV1
 public class LastFunctionNode extends InformationTreeDirectContentFunctionNode {
     public LastFunctionNode() {
         functionExpr = "last";

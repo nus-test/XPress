@@ -7,6 +7,7 @@ import XTest.TestException.DebugErrorException;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
+@FunctionV1
 public class IntegerSubtractionFunctionNode extends BinaryNumericalOperatorFunctionNode {
 
     public IntegerSubtractionFunctionNode() {

@@ -25,7 +25,7 @@ public class Main {
 
         List<DatabaseExecutor> dbExecuterList = new ArrayList<>();
 
-    //    dbExecuterList.add(BaseXExecutor.getInstance());
+        dbExecuterList.add(BaseXExecutor.getInstance());
      //   dbExecuterList.add(ExistExecutor.getInstance());
         dbExecuterList.add(SaxonExecutor.getInstance());
    //     dbExecuterList.add(LibXML2Executor.getInstance());
@@ -34,7 +34,7 @@ public class Main {
             dbExecutor.registerDatabase(mainExecutor);
         XMLDatatype.getCastable(mainExecutor);
 
-        int round = 20;
+        int round = 1;
         XMLDocumentGenerator xmlDocumentGenerator;
         if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3)
             xmlDocumentGenerator = new XMLDocumentGenerator();
@@ -44,15 +44,18 @@ public class Main {
         try {
             for (int i = 0; i < round; i++) {
                 xmlDocumentGenerator.clearContext();
-                XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(120);
-                mainExecutor.setExtraLeafNodeContext(xmlDocumentGenerator.generateExtraLeafNodes(20));
+                XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(40);
+                mainExecutor.setExtraLeafNodeContext(xmlDocumentGenerator.generateExtraLeafNodes(15));
                 XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
                 System.out.println("------------------ " + i);
                 System.out.println(xmlContext.getXmlContent());
                 try {
-                    int xpathCnt = 100;
+                    int xpathCnt = 40;
                     mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
                     for (int j = 0; j < xpathCnt; j++) {
+                        if(j == 39) {
+                            GlobalSettings.debugOutput = true;
+                        }
                         String XPath = "";
                         try {
                             XPath = XPathGenerator.getXPath(GlobalRandom.getInstance().nextInt(3) + 2);

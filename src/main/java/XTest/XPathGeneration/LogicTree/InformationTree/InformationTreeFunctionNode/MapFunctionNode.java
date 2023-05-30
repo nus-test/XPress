@@ -1,6 +1,7 @@
 package XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
 
 import XTest.GlobalRandom;
+import XTest.GlobalSettings;
 import XTest.PrimitiveDatatype.XMLAtomic;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
@@ -15,6 +16,7 @@ import org.xmldb.api.base.XMLDBException;
 import java.io.IOException;
 import java.sql.SQLException;
 
+@FunctionV3
 public class MapFunctionNode extends BinaryOperatorFunctionNode {
 
     @Override
@@ -29,11 +31,16 @@ public class MapFunctionNode extends BinaryOperatorFunctionNode {
         for(int i = 1; i < childList.size(); i ++) {
             if(!start) returnString += ",";
             returnString += ((InformationTreeNode) childList.get(i)).getXPathExpression(false,
-                    childList.size() > 1 ? null : this, false);
+                    childList.size() > 2 ? null : this, false);
             start = false;
         }
         if(childList.size() > 2)
             returnString += ")";
+        if(GlobalSettings.debugOutput) {
+            System.out.println("######################");
+            System.out.println(returnString);
+            System.out.println("######################");
+        }
         cacheXPathExpression(returnString, returnConstant, calculateString);
         return binaryWrap(returnString, parentNode, calculateString);
     }

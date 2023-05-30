@@ -2,8 +2,10 @@ package XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionN
 
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.PrimitiveDatatype.XMLSimple;
+import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.FunctionV3;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
+@FunctionV3
 public class SortFunctionNode extends InformationTreeSequenceFunctionNode {
 
     public SortFunctionNode() {

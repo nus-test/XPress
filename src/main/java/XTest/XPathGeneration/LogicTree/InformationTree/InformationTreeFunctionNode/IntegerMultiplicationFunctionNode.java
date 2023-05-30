@@ -8,6 +8,7 @@ import XTest.TestException.DebugErrorException;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
+@FunctionV1
 public class IntegerMultiplicationFunctionNode extends BinaryNumericalOperatorFunctionNode {
     public IntegerMultiplicationFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;

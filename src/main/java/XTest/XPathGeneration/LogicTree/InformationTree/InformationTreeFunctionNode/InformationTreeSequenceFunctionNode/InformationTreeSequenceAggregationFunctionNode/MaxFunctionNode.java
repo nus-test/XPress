@@ -3,8 +3,10 @@ package XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionN
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.PrimitiveDatatype.XMLNumeric;
+import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.FunctionV3;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
+@FunctionV3
 public class MaxFunctionNode extends InformationTreeSequenceNumericalAggregationFunctionNode {
     public MaxFunctionNode() {
         functionExpr = "max";

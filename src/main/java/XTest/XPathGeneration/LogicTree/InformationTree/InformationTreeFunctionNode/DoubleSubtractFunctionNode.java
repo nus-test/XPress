@@ -7,6 +7,7 @@ import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
 import static java.lang.Math.abs;
 
+@FunctionV1
 public class DoubleSubtractFunctionNode extends BinaryNumericalOperatorFunctionNode {
     public DoubleSubtractFunctionNode() {
         this.datatypeRecorder.xmlDatatype  = XMLDatatype.DOUBLE;

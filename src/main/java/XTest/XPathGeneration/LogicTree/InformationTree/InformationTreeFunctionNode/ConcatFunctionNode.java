@@ -5,6 +5,7 @@ import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
+@FunctionV1
 public class ConcatFunctionNode extends InformationTreeFunctionNode {
     public ConcatFunctionNode() {
         this.datatypeRecorder.xmlDatatype = XMLDatatype.STRING;

@@ -13,6 +13,7 @@ import org.xmldb.api.base.XMLDBException;
 import java.io.IOException;
 import java.sql.SQLException;
 
+@FunctionV1
 public class StartsWithFunctionNode extends InformationTreeFunctionNode {
     String internalStr = null;
 

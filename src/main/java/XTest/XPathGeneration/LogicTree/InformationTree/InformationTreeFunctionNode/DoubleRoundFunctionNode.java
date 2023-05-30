@@ -4,6 +4,7 @@ import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
+@FunctionV1
 public class DoubleRoundFunctionNode extends InformationTreeFunctionNode {
     public DoubleRoundFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.DOUBLE;

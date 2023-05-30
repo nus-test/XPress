@@ -4,6 +4,7 @@ import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
+@FunctionV3
 public class IntegerAbsFunctionNode extends InformationTreeFunctionNode {
     public IntegerAbsFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;

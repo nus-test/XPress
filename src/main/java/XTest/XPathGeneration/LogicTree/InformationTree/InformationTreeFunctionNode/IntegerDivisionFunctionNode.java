@@ -8,6 +8,7 @@ import XTest.TestException.DebugErrorException;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
+@FunctionV3
 public class IntegerDivisionFunctionNode extends BinaryNumericalOperatorFunctionNode {
     public IntegerDivisionFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;
