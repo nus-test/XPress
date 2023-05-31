@@ -8,6 +8,7 @@ import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
 @FunctionV1
 public class SubstringBeforeFunctionNode extends InformationTreeFunctionNode {
+    private String internalStr = null;
     public SubstringBeforeFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.STRING;
         functionExpr = "substring-before";
@@ -16,21 +17,23 @@ public class SubstringBeforeFunctionNode extends InformationTreeFunctionNode {
     @Override
     protected void fillContentParameters(InformationTreeNode childNode) {
         String subString = GlobalRandom.getInstance().nextSubstring(childList.get(0).getContext().context);
-        double prob = GlobalRandom.getInstance().nextDouble();
-        if(prob < 0.1)
-            subString = "";
-        else if(prob < 0.2)
-            subString = XMLDatatype.STRING.getValueHandler().mutateValue(subString);
-        childList.add(new InformationTreeConstantNode(XMLDatatype.STRING, subString));
+        internalStr = subString;
+        fillContentParametersWithStr(childNode);
     }
 
     @Override
     protected void fillContentParametersRandom(InformationTreeNode childNode) {
         String subString = XMLDatatype.STRING.getValueHandler().getValue(false);
+        internalStr = subString;
+        fillContentParametersWithStr(childNode);
+    }
+
+    private void fillContentParametersWithStr(InformationTreeNode childNode) {
         double prob = GlobalRandom.getInstance().nextDouble();
         if(prob < 0.1)
-            subString = "";
-        childList.add(new InformationTreeConstantNode(XMLDatatype.STRING, subString));
+            internalStr = "";
+        childList.add(new InformationTreeConstantNode(XMLDatatype.STRING, internalStr));
+        internalStr = null;
     }
 
     @Override
