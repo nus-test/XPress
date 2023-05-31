@@ -39,10 +39,10 @@ public class GreaterOrEqualOperatorNode extends InformationTreeComparisonOperato
     }
 
     @Override
-    public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
-        boolean result = super.checkContextAcceptability(childNode, recorder);
+    public Boolean checkContextAcceptability(InformationTreeNode childNode) {
+        boolean result = super.checkContextAcceptability(childNode);
         if(result) {
-            return recorder.getActualDatatype() != XMLDatatype.DOUBLE;
+            return childNode.datatypeRecorder.getActualDatatype() != XMLDatatype.DOUBLE;
         } else return false;
     }
 }

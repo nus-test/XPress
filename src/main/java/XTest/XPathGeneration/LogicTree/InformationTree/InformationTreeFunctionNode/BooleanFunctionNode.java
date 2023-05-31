@@ -18,12 +18,12 @@ public class BooleanFunctionNode extends InformationTreeFunctionNode {
     }
 
     @Override
-    public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
-        if(recorder.xmlDatatype == XMLDatatype.SEQUENCE) {
-            return recorder.subDatatype == XMLDatatype.NODE;
+    public Boolean checkContextAcceptability(InformationTreeNode childNode) {
+        if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) {
+            return childNode.datatypeRecorder.subDatatype == XMLDatatype.NODE;
         }
-        if(recorder.xmlDatatype.getValueHandler() instanceof XMLDurationHandler) return false;
-        if(recorder.xmlDatatype.getValueHandler() instanceof XMLSimple) return true;
+        if(childNode.datatypeRecorder.xmlDatatype.getValueHandler() instanceof XMLDurationHandler) return false;
+        if(childNode.datatypeRecorder.xmlDatatype.getValueHandler() instanceof XMLSimple) return true;
         return false;
     }
 }

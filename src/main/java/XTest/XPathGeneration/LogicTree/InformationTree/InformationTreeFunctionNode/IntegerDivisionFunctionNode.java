@@ -38,8 +38,8 @@ public class IntegerDivisionFunctionNode extends BinaryNumericalOperatorFunction
     }
 
     @Override
-    public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
-        return recorder.xmlDatatype == XMLDatatype.INTEGER;
+    public Boolean checkContextAcceptability(InformationTreeNode childNode) {
+        return childNode.datatypeRecorder.xmlDatatype == XMLDatatype.INTEGER;
     }
 
     @Override

@@ -30,7 +30,7 @@ public class ConcatFunctionNode extends InformationTreeFunctionNode {
     }
 
     @Override
-    public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
-        return recorder.xmlDatatype == XMLDatatype.STRING;
+    public Boolean checkContextAcceptability(InformationTreeNode childNode) {
+        return childNode.datatypeRecorder.xmlDatatype == XMLDatatype.STRING;
     }
 }

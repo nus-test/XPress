@@ -114,7 +114,7 @@ public class MapFunctionNode extends BinaryOperatorFunctionNode {
     }
 
     @Override
-    public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
+    public Boolean checkContextAcceptability(InformationTreeNode childNode) {
         if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) {
             return childNode.datatypeRecorder.subDatatype != XMLDatatype.MIXED &&
                     (childNode.datatypeRecorder.subDatatype != XMLDatatype.NODE || !childNode.datatypeRecorder.nodeMix);

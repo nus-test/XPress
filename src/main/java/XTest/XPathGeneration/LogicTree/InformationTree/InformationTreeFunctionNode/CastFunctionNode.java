@@ -124,8 +124,8 @@ public class CastFunctionNode extends BinaryOperatorFunctionNode {
     }
 
     @Override
-    public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
-        return recorder.xmlDatatype != XMLDatatype.SEQUENCE;
+    public Boolean checkContextAcceptability(InformationTreeNode childNode) {
+        return childNode.datatypeRecorder.xmlDatatype != XMLDatatype.SEQUENCE;
     }
 
     @Override

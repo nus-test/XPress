@@ -17,7 +17,7 @@ public class DoubleRoundFunctionNode extends InformationTreeFunctionNode {
     }
 
     @Override
-    public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
-        return recorder.xmlDatatype == XMLDatatype.DOUBLE;
+    public Boolean checkContextAcceptability(InformationTreeNode childNode) {
+        return childNode.datatypeRecorder.xmlDatatype == XMLDatatype.DOUBLE;
     }
 }

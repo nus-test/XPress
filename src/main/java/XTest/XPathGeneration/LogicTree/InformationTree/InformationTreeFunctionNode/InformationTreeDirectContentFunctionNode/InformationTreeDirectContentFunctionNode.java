@@ -21,10 +21,10 @@ public abstract class InformationTreeDirectContentFunctionNode extends Informati
     }
 
     @Override
-    public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
-        Boolean checkResult = recorder.xmlDatatype == XMLDatatype.NODE;
+    public Boolean checkContextAcceptability(InformationTreeNode childNode) {
+        Boolean checkResult = childNode.datatypeRecorder.xmlDatatype == XMLDatatype.NODE;
         if(!checkResult) {
-            if(recorder.xmlDatatype == XMLDatatype.SEQUENCE && recorder.subDatatype == XMLDatatype.NODE &&
+            if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE && childNode.datatypeRecorder.subDatatype == XMLDatatype.NODE &&
             Integer.parseInt(childNode.getContext().context) != 0)
                 checkResult = true;
         }

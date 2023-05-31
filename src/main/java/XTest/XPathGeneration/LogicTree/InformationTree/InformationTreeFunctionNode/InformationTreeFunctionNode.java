@@ -124,9 +124,5 @@ public abstract class InformationTreeFunctionNode extends InformationTreeNode {
         return builder;
     }
 
-    public Boolean checkContextAcceptability(InformationTreeNode childNode) {
-        return checkContextAcceptability(childNode, childNode.datatypeRecorder);
-    }
-
-    abstract public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder);
+    abstract public Boolean checkContextAcceptability(InformationTreeNode childNode);
 }

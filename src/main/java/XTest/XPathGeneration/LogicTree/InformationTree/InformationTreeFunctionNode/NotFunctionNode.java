@@ -17,8 +17,8 @@ public class NotFunctionNode extends InformationTreeFunctionNode {
     }
 
     @Override
-    public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
-        return recorder.xmlDatatype == XMLDatatype.BOOLEAN;
+    public Boolean checkContextAcceptability(InformationTreeNode childNode) {
+        return childNode.datatypeRecorder.xmlDatatype == XMLDatatype.BOOLEAN;
     }
 
 }

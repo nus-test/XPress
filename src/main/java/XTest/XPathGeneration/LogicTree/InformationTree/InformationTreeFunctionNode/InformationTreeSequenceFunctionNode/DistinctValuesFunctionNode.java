@@ -25,7 +25,7 @@ public class DistinctValuesFunctionNode extends InformationTreeSequenceFunctionN
     }
 
     @Override
-    public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
-        return recorder.getActualDatatype().getValueHandler() instanceof XMLAtomic;
+    public Boolean checkContextAcceptability(InformationTreeNode childNode) {
+        return childNode.datatypeRecorder.getActualDatatype().getValueHandler() instanceof XMLAtomic;
     }
 }

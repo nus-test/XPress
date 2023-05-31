@@ -43,7 +43,7 @@ public abstract class InformationTreeComparisonOperatorNode extends BinaryOperat
     }
 
     @Override
-    public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
+    public Boolean checkContextAcceptability(InformationTreeNode childNode) {
         if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE ||
             childNode.datatypeRecorder.xmlDatatype == XMLDatatype.NODE ||
             childNode.datatypeRecorder.xmlDatatype == XMLDatatype.MIXED)

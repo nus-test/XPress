@@ -18,7 +18,7 @@ public class SortFunctionNode extends InformationTreeSequenceFunctionNode {
     }
 
     @Override
-    public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
-        return recorder.getActualDatatype().getValueHandler() instanceof XMLSimple;
+    public Boolean checkContextAcceptability(InformationTreeNode childNode) {
+        return childNode.datatypeRecorder.getActualDatatype().getValueHandler() instanceof XMLSimple;
     }
 }

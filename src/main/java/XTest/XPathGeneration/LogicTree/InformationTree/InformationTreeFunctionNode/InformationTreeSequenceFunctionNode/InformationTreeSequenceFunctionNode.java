@@ -21,7 +21,7 @@ public abstract class InformationTreeSequenceFunctionNode extends InformationTre
     }
 
     @Override
-    public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
+    public Boolean checkContextAcceptability(InformationTreeNode childNode) {
         return true;
     }
 }

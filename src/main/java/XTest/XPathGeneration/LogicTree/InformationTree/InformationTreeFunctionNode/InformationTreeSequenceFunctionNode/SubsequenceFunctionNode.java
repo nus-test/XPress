@@ -47,9 +47,4 @@ public class SubsequenceFunctionNode extends InformationTreeSequenceFunctionNode
                 && childNode.datatypeRecorder.nodeMix;
         datatypeRecorder = new XMLDatatypeComplexRecorder(XMLDatatype.SEQUENCE, childNode.datatypeRecorder.getActualDatatype(), nodeMix);
     }
-
-    @Override
-    public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
-        return true;
-    }
 }

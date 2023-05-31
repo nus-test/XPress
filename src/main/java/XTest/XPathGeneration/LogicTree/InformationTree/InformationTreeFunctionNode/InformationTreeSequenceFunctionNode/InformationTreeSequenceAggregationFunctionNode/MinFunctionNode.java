@@ -23,13 +23,4 @@ public class MinFunctionNode extends InformationTreeSequenceNumericalAggregation
             datatypeRecorder.xmlDatatype = childNode.datatypeRecorder.subDatatype;
         else datatypeRecorder.xmlDatatype = childNode.datatypeRecorder.xmlDatatype;
     }
-
-    @Override
-    public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
-        XMLDatatype datatype;
-        if(recorder.xmlDatatype == XMLDatatype.SEQUENCE)
-            datatype = recorder.subDatatype;
-        else datatype = recorder.xmlDatatype;
-        return datatype.getValueHandler() instanceof XMLNumeric;
-    }
 }

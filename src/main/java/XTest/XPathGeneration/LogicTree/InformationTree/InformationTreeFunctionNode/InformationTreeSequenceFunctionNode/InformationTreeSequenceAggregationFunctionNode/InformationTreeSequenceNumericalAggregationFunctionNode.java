@@ -6,10 +6,8 @@ import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
 public abstract class InformationTreeSequenceNumericalAggregationFunctionNode extends InformationTreeSequenceAggregationFunctionNode {
     @Override
-    public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
-        if(!super.checkContextAcceptability(childNode, recorder))
-            return false;
-        return recorder.getActualDatatype().getValueHandler() instanceof XMLNumeric;
+    public Boolean checkContextAcceptability(InformationTreeNode childNode) {
+        return childNode.datatypeRecorder.getActualDatatype().getValueHandler() instanceof XMLNumeric;
     }
 
     @Override

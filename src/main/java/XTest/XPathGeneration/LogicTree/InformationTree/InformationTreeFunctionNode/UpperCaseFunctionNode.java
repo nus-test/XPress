@@ -11,8 +11,8 @@ public class UpperCaseFunctionNode extends InformationTreeFunctionNode {
         functionExpr = "upper-case";
     }
     @Override
-    public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
-        return recorder.xmlDatatype == XMLDatatype.STRING;
+    public Boolean checkContextAcceptability(InformationTreeNode childNode) {
+        return childNode.datatypeRecorder.xmlDatatype == XMLDatatype.STRING;
     }
     @Override
     public UpperCaseFunctionNode newInstance() {

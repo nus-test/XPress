@@ -12,8 +12,8 @@ public class MinutesFromDurationFunctionNode extends InformationTreeFunctionNode
     }
 
     @Override
-    public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
-        return recorder.xmlDatatype == XMLDatatype.DURATION;
+    public Boolean checkContextAcceptability(InformationTreeNode childNode) {
+        return childNode.datatypeRecorder.xmlDatatype == XMLDatatype.DURATION;
     }
 
     @Override

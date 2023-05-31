@@ -46,8 +46,8 @@ public class CastableFunctionNode extends BinaryOperatorFunctionNode {
     }
 
     @Override
-    public Boolean checkContextAcceptability(InformationTreeNode childNode, XMLDatatypeComplexRecorder recorder) {
-        return recorder.getActualDatatype() != XMLDatatype.NODE;
+    public Boolean checkContextAcceptability(InformationTreeNode childNode) {
+        return childNode.datatypeRecorder.getActualDatatype() != XMLDatatype.NODE;
     }
     @Override
     public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode, boolean calculateString) throws DebugErrorException {
