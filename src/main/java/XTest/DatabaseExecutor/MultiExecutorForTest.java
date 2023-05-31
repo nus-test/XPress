@@ -31,11 +31,11 @@ public class MultiExecutorForTest {
         List<DatabaseExecutor> dbExecutorList = new ArrayList<>();
 
         dbExecutorList.add(SaxonExecutor.getInstance());
-        //dbExecutorList.add(BaseXExecutor.getInstance());
+        dbExecutorList.add(BaseXExecutor.getInstance());
         //dbExecutorList.add(ExistExecutor.getInstance());
         //dbExecutorList.add(OracleExecutor.getInstance());
 
-        dbExecutorList.add(LibXML2Executor.getInstance());
+        //dbExecutorList.add(LibXML2Executor.getInstance());
         //dbExecutorList.add(MySQLExecutor.getInstance());
         for(DatabaseExecutor dbExecutor: dbExecutorList)
             dbExecutor.registerDatabase(mainExecutor);

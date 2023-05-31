@@ -1,7 +1,6 @@
 package XTest.PrimitiveDatatype;
 
 import XTest.GlobalRandom;
-import org.basex.query.value.item.Int;
 
 import java.util.Arrays;
 import java.util.List;

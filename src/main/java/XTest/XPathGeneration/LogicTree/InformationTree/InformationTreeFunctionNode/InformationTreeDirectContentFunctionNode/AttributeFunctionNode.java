@@ -8,7 +8,6 @@ import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeContextNod
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.FunctionV1;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 import XTest.XPathGeneration.LogicTree.LogicTreeNode;
-import org.basex.core.cmd.Run;
 @FunctionV1
 public class AttributeFunctionNode extends InformationTreeDirectContentFunctionNode {
 

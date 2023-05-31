@@ -3,7 +3,6 @@ package XTest.PrimitiveDatatype;
 import XTest.CommonUtils;
 import XTest.DataCheckUtils;
 import XTest.GlobalRandom;
-import org.basex.query.value.item.Int;
 
 public class XMLIntegerHandler extends PooledValueHandler implements XMLComparable, XMLNumeric, XMLSimple, XMLAtomic {
 
