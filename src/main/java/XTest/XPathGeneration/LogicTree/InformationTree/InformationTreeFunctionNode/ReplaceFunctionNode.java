@@ -39,11 +39,11 @@ public class ReplaceFunctionNode extends InformationTreeFunctionNode {
 
     private void fillContentParametersWithStr(InformationTreeNode childNode) {
         if(internalStr.length() == 0) internalStr = "a";
-        childList.add(new InformationTreeConstantNode(XMLDatatype.STRING, internalStr));
+        childList.add(new InformationTreeConstantNode(XMLDatatype.STRING, internalStr.replaceAll("[{}]", "e")));
         double prob = GlobalRandom.getInstance().nextDouble();
         if(prob < 0.6) {
             childList.add(new InformationTreeConstantNode(XMLDatatype.STRING,
-                    XMLDatatype.STRING.getValueHandler().getValue(false)));
+                    XMLDatatype.STRING.getValueHandler().getValue(false).replaceAll("[${}]", "c")));
         } else {
             if(prob < 0.9) childList.add(new InformationTreeConstantNode(XMLDatatype.STRING, "$1"));
             else {

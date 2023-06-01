@@ -30,8 +30,10 @@ public class MultiExecutorForTest {
 
         List<DatabaseExecutor> dbExecutorList = new ArrayList<>();
 
-        dbExecutorList.add(SaxonExecutor.getInstance());
+
         dbExecutorList.add(BaseXExecutor.getInstance());
+        dbExecutorList.add(SaxonExecutor.getInstance());
+
         //dbExecutorList.add(ExistExecutor.getInstance());
         //dbExecutorList.add(OracleExecutor.getInstance());
 

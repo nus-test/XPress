@@ -9,7 +9,8 @@ public class XMLStringHandler extends PooledValueHandler implements XMLComparabl
     int valuePoolIdCnt = 0;
     Set<String> valuePool = new HashSet<>();
     Map<Integer, String> valuePoolLookUpMap = new HashMap<>();
-    static int minLength = 0, maxLength = 10;
+    static int minLength = 0, maxLength = 20;
+    boolean spaceFlipFlop = false;
 
     XMLStringHandler() {
         officialTypeName = "xs:string";
@@ -40,7 +41,7 @@ public class XMLStringHandler extends PooledValueHandler implements XMLComparabl
                     else if (index == value.length() - 1)
                         value = value.substring(0, index) + getRandomCharacter();
                     else
-                        value = value.substring(0, index) + getRandomCharacter() + value.substring(index);
+                        value = value.substring(0, index) + getRandomCharacterWithSpace() + value.substring(index);
                 }
                 else value = getRandomCharacter().toString();
             }
@@ -57,10 +58,25 @@ public class XMLStringHandler extends PooledValueHandler implements XMLComparabl
     public String getRandomValue(int valueLength) {
         StringBuilder stringBuilder = new StringBuilder();
         for(int i = 0; i < valueLength; i ++) {
-            stringBuilder.append(getRandomCharacter());
+            if(i == 0 || i == valueLength - 1)
+                stringBuilder.append(getRandomCharacter());
+            else stringBuilder.append(getRandomCharacterWithSpace());
         }
         String generatedString = stringBuilder.toString();
+        if(valueLength > 5 && GlobalRandom.getInstance().nextDouble() < 0.2) {
+            int index = GlobalRandom.getInstance().nextInt(generatedString.length() - 1) + 1;
+            generatedString = generatedString.substring(0, index) + ' ' + generatedString.substring(index);
+        }
         return generatedString;
+    }
+
+    Character getRandomCharacterWithSpace() {
+        double prob = GlobalRandom.getInstance().nextDouble();
+        if(prob < (spaceFlipFlop ? 0.3: 0.1)) {
+            spaceFlipFlop = !spaceFlipFlop;
+            return ' ';
+        }
+        return getRandomCharacter();
     }
 
     Character getRandomCharacter() {
