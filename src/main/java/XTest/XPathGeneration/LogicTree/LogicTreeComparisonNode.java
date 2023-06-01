@@ -22,6 +22,9 @@ public abstract class LogicTreeComparisonNode extends LogicTreeNode {
         candidateList.add(new LogicTreeOrComparisonNode());
     }
 
+    @Override
+    abstract public LogicTreeComparisonNode newInstance();
+
     public static LogicTreeComparisonNode getRandomCandidate() {
         return GlobalRandom.getInstance().getRandomFromList(candidateList);
     }
@@ -29,14 +32,14 @@ public abstract class LogicTreeComparisonNode extends LogicTreeNode {
     public void fillContents(LogicTreeNode nodeA, LogicTreeNode nodeB) {
         childList.add(nodeA);
         childList.add(nodeB);
-        contextInfo.XPathPrefix = nodeA.contextInfo.XPathPrefix;
+        contextInfo = new LogicTreeContextInfo(nodeA.contextInfo);
     }
 
     @Override
     public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode, boolean calculateString) throws DebugErrorException {
         if(returnConstant && getContext().context != null) return getContext().context;
         String returnString = childList.get(0).getXPathExpression(returnConstant, this, calculateString)
-                + funcExpr + childList.get(1).getXPathExpression(returnConstant, this, calculateString);
+                + " " + funcExpr + " " + childList.get(1).getXPathExpression(returnConstant, this, calculateString);
         if(parentNode instanceof LogicTreeComparisonNode) {
             returnString = "(" + returnString + ")";
         }

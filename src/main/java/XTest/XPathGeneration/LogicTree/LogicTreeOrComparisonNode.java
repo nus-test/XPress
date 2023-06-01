@@ -16,9 +16,14 @@ public class LogicTreeOrComparisonNode extends LogicTreeComparisonNode{
     }
 
     @Override
+    public LogicTreeOrComparisonNode newInstance() {
+        return new LogicTreeOrComparisonNode();
+    }
+
+    @Override
     public LogicTreeNode modifyToContainStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         int id = GlobalRandom.getInstance().nextInt(2);
-        childList.set(id, childList.get(id).modifyToContainStarredNode(starredNodeId));
+        childList.set(id, childList.get(id).modifyToContainStarredNodeWithCheck(starredNodeId));
         return this;
     }
 }

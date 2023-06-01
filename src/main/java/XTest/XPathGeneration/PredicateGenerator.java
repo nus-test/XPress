@@ -40,7 +40,6 @@ public class PredicateGenerator {
      */
     public XPathResultListPair generatePredicate(String XPathPrefix, int maxPhraseLength,
                                                  boolean mixedContent, ContextNode starredNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
-        String currentNodeIdentifier = "[@id=\"" + starredNode.id + "\"]";
         List<LogicTreeNode> rootList = new ArrayList<>();
         int phraseLength = GlobalRandom.getInstance().nextInt(maxPhraseLength) + 1;
         InformationTreeGenerator informationTreeGenerator = new InformationTreeGenerator(mainExecutor);
@@ -54,9 +53,10 @@ public class PredicateGenerator {
             while(id2 == id) {
                 id2 = GlobalRandom.getInstance().nextInt(rootList.size());
             }
-            LogicTreeComparisonNode newRoot = LogicTreeComparisonNode.getRandomCandidate();
+            LogicTreeComparisonNode newRoot = LogicTreeComparisonNode.getRandomCandidate().newInstance();
             newRoot.fillContents(rootList.get(id), rootList.get(id2));
             rootList.remove(id);
+            if(id < id2) id2 -= 1;
             rootList.remove(id2);
             rootList.add(newRoot);
         }

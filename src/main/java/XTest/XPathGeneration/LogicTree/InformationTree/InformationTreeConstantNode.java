@@ -41,6 +41,11 @@ public class InformationTreeConstantNode extends InformationTreeNode {
         getContext().context = context;
     }
 
+    @Override
+    public InformationTreeConstantNode newInstance() {
+        return new InformationTreeConstantNode();
+    }
+
     /**
      * Get XPath expression of current context. e.g. for boolean value "false" -> "false()"
      * @param returnConstant Whether to return constant context when approached or always reach the leaf nodes.

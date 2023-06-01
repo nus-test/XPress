@@ -7,6 +7,7 @@ import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
+import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeDirectContentFunctionNode.AttributeFunctionNode;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeGenerator;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 import XTest.XPathGeneration.LogicTree.LogicTreeNode;
@@ -18,6 +19,7 @@ import java.sql.SQLException;
 
 @FunctionV3
 public class MapFunctionNode extends BinaryOperatorFunctionNode {
+    public boolean mixAttrFlag = false;
 
     @Override
     public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode, boolean calculateString) throws DebugErrorException {
@@ -30,17 +32,12 @@ public class MapFunctionNode extends BinaryOperatorFunctionNode {
         boolean start = true;
         for(int i = 1; i < childList.size(); i ++) {
             if(!start) returnString += ",";
-            returnString += ((InformationTreeNode) childList.get(i)).getXPathExpression(false,
+            returnString += childList.get(i).getXPathExpression(false,
                     childList.size() > 2 ? null : this, false);
             start = false;
         }
         if(childList.size() > 2)
             returnString += ")";
-        if(GlobalSettings.debugOutput) {
-            System.out.println("######################");
-            System.out.println(returnString);
-            System.out.println("######################");
-        }
         cacheXPathExpression(returnString, returnConstant, calculateString);
         return binaryWrap(returnString, parentNode, calculateString);
     }
@@ -83,11 +80,16 @@ public class MapFunctionNode extends BinaryOperatorFunctionNode {
             }
         }
         InformationTreeNode dummyChildNode = InformationTreeFunctionNodeManager.getInstance().getMapDummyChildNode(childNode);
+        int cnt = 0;
         for(int i = 0; i < functionCnt; i ++) {
             InformationTreeNode treeNode = informationTreeGenerator.buildInformationTree(dummyChildNode,
                     GlobalRandom.getInstance().nextInt(3));
             childList.add(treeNode);
+            if(treeNode instanceof AttributeFunctionNode) {
+                cnt ++;
+            }
         }
+        if(cnt < functionCnt) mixAttrFlag = true;
         return functionCnt;
     }
 

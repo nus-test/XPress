@@ -1,7 +1,9 @@
 package XTest.DatabaseExecutor;
 
+import XTest.CommonUtils;
 import XTest.GlobalSettings;
 import XTest.TestException.UnsupportedContextSetUpException;
+import com.ibm.icu.impl.Pair;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.exist.xmldb.EXistResource;
 import org.xmldb.api.DatabaseManager;
@@ -16,17 +18,38 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.List;
 
 public class ExistExecutor extends DatabaseExecutor {
     static ExistExecutor existExecutor;
     final String driver = "org.exist.xmldb.DatabaseImpl";
     private static String URI = "xmldb:exist://localhost:8089/exist/xmlrpc";
+    static String configDir = "/db/system/config";
     static String rootDir = "/db";
-    private static String collName = "test";
+    private String collName = "/test";
+    String indexSetupTempStorageFileAddr = "C:\\app\\log\\autotest.xml";
+
+    String configPrefix = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+            "<collection xmlns=\"http://exist-db.org/collection-config/1.0\">\n" +
+            "    <triggers>\n" +
+            "        <trigger class=\"org.exist.extensions.exquery.restxq.impl.RestXqTrigger\"/>\n" +
+            "    </triggers>";
+    String configSuffix = "</collection>";
+
     Collection collection;
     XMLResource resource;
     XQueryService xqs;
-    private ExistExecutor() throws XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+    public ExistExecutor(String collName, String dbName) throws XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        this.collName = collName;
+        init();
+        this.dbName = dbName;
+    }
+
+    public ExistExecutor() throws XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        init();
+    }
+
+    public void init() throws ClassNotFoundException, XMLDBException, InstantiationException, IllegalAccessException {
         dbName = "Exist";
         // initialize database driver
         Class cl = Class.forName(driver);
@@ -35,6 +58,7 @@ public class ExistExecutor extends DatabaseExecutor {
         dbXPathVersion = GlobalSettings.XPathVersion.VERSION_3;
         DatabaseManager.registerDatabase(database);
     }
+
 
     static public ExistExecutor getInstance() throws XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         if(existExecutor == null)
@@ -53,9 +77,16 @@ public class ExistExecutor extends DatabaseExecutor {
 
     @Override
     public void setContextByFileLow(String fileAddr) throws IOException, XMLDBException {
-        collection = DatabaseManager.getCollection(URI + rootDir + "/" + collName);
+        setContextByFileLow(collName, fileAddr, true, "autotest.xml");
+    }
+
+    public void setContextByFileLow(String collName, String fileAddr, boolean createResource, String resourceName) throws IOException, XMLDBException {
+        collection = DatabaseManager.getCollection(URI + rootDir + collName);
         collection.setProperty(OutputKeys.INDENT, "no");
-        resource = (XMLResource) collection.createResource("autotest.xml", XMLResource.RESOURCE_TYPE);
+        if(createResource)
+            resource = (XMLResource) collection.createResource(resourceName, XMLResource.RESOURCE_TYPE);
+        else
+            resource = (XMLResource) collection.getResource(resourceName);
         File f = new File(fileAddr);
         resource.setContent(f);
         collection.storeResource(resource);
@@ -71,6 +102,33 @@ public class ExistExecutor extends DatabaseExecutor {
     @Override
     public void clearCurrentContext() throws XMLDBException {
         collection.removeResource(resource);
+    }
+
+    public void setRangeIndex(List<Pair<String, String>> contextItems) throws IOException, XMLDBException {
+        String indexSetupPrefix = "<index xmlns:mods=\"http://www.loc.gov/mods/v3\">\n";
+        String indexSetupSuffix = "</index>";
+        String indexSetup = indexSetupPrefix + getRangeIndexConfigString(contextItems) + indexSetupSuffix;
+        CommonUtils.writeContextToFile(indexSetup, indexSetupTempStorageFileAddr);
+        setContextByFileLow(configDir + rootDir + collName, indexSetupTempStorageFileAddr, false, null);
+    }
+
+    public String getRangeIndexConfigString(List<Pair<String, String>> contextItems) {
+        String rangeIndexSetupPrefix = "<range>\n";
+        String rangeIndexSetupSuffix = "</range>\n";
+        String indexSetup = configPrefix + rangeIndexSetupPrefix;
+        for(Pair pair: contextItems) {
+            String tag = "<create ";
+            tag += "qname=\"" + pair.first + "\"";
+            tag += "type=\"" + pair.second + "\"";
+            tag += "\\>\n";
+            indexSetup += tag;
+        }
+        indexSetup += rangeIndexSetupSuffix + configSuffix;
+        return indexSetup;
+    }
+
+    public String getNGramIndexConfigString() {
+        return null;
     }
 
     @Override

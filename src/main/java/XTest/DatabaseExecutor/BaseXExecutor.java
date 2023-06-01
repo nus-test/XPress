@@ -62,7 +62,6 @@ public class BaseXExecutor extends DatabaseExecutor {
 
     @Override
     public String execute(String Xquery) throws IOException {
-        if(GlobalSettings.debugOutput) System.out.println("BaseX: " + Xquery);
         return BaseXSession.execute("xquery " + Xquery);
     }
 

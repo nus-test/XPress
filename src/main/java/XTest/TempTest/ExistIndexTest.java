@@ -1,44 +1,28 @@
-package XTest.DatabaseExecutor;
+package XTest.TempTest;
 
 import XTest.CommonUtils;
 import XTest.DatabaseExecutor.*;
-import XTest.ReportGeneration.ReportManager;
-import XTest.TempTest.MultiTester;
-import XTest.TempTest.MySQLSimple;
-import XTest.TestException.MismatchingResultException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.TestException.UnsupportedContextSetUpException;
-import XTest.XMLGeneration.XMLContext;
-import XTest.XMLGeneration.XMLDocumentGenerator;
-import XTest.XPathGeneration.XPathGenerator;
-import net.sf.saxon.s9api.SaxonApiException;
-import org.xmldb.api.base.XMLDBException;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MultiExecutorForTest {
-
+public class ExistIndexTest {
     static String xmlFile = "test1.xml";
     static String xqueryFile = "xquery.txt";
-    public static void main(String[] args) throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, SaxonApiException, UnexpectedExceptionThrownException, UnsupportedContextSetUpException {
+    public static void main(String args[]) throws Exception {
+        ExistExecutor existExecutor = new ExistExecutor();
+        ExistExecutor existIndexExecutor = new ExistExecutor("test-index", "Exist-index");
         MainExecutor mainExecutor = new MainExecutor(null);
 
         List<DatabaseExecutor> dbExecutorList = new ArrayList<>();
 
+        dbExecutorList.add(existExecutor);
+        dbExecutorList.add(existIndexExecutor);
 
-        dbExecutorList.add(BaseXExecutor.getInstance());
-        dbExecutorList.add(SaxonExecutor.getInstance());
-
-        dbExecutorList.add(ExistExecutor.getInstance());
-        //dbExecutorList.add(OracleExecutor.getInstance());
-
-        //dbExecutorList.add(LibXML2Executor.getInstance());
-        //dbExecutorList.add(MySQLExecutor.getInstance());
         for(DatabaseExecutor dbExecutor: dbExecutorList)
             dbExecutor.registerDatabase(mainExecutor);
 
@@ -59,7 +43,7 @@ public class MultiExecutorForTest {
                 System.out.println(mainExecutor.executeSingleProcessor(xquery, databaseExecutor));
                 System.out.println(mainExecutor.executeSingleProcessorGetIdList(xquery, databaseExecutor));
             }
-        } catch (Exception e) {
+        } catch (Exception | UnsupportedContextSetUpException e) {
             if(e instanceof UnexpectedExceptionThrownException)
                 System.out.println(((UnexpectedExceptionThrownException) e).originalException);
             System.out.println(e);
@@ -67,6 +51,5 @@ public class MultiExecutorForTest {
         finally {
             mainExecutor.close();
         }
-
     }
 }

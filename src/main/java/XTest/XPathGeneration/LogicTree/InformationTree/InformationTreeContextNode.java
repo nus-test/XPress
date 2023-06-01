@@ -30,6 +30,11 @@ public class InformationTreeContextNode extends InformationTreeNode {
     }
 
     @Override
+    public InformationTreeContextNode newInstance() {
+        return new InformationTreeContextNode();
+    }
+
+    @Override
     public String getCalculationString(LogicTreeNode parentNode, boolean checkImpact) {
         if(dummyContext)
             return dummyCalculateString;

@@ -3,6 +3,7 @@ package XTest.XPathGeneration;
 import XTest.DatabaseExecutor.MainExecutor;
 import XTest.GlobalRandom;
 import XTest.GlobalSettings;
+import XTest.ReportGeneration.KnownBugs;
 import XTest.TestException.DebugErrorException;
 import XTest.TestException.MismatchingResultException;
 import XTest.TestException.UnexpectedExceptionThrownException;
@@ -69,7 +70,8 @@ public class XPathGenerator {
             prob = GlobalRandom.getInstance().nextDouble();
             randomNode = GlobalRandom.getInstance().getRandomFromList(currentBuildPair.contextNodeList);
             double prob2 = GlobalRandom.getInstance().nextDouble();
-            if (prob2 < 0.6 && GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3)
+            // TODO: this is for Saxon bug
+            if (prob2 < -1 && GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3)
                 currentBuildPair.XPath += "*";
             else {
                 currentBuildPair.XPath += randomNode.tagName;
@@ -79,13 +81,14 @@ public class XPathGenerator {
             currentBuildPair.contextNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
         } else {
             int length = GlobalRandom.getInstance().nextInt(5) + 1;
+          //  System.out.println("#####" + currentBuildPair.XPath);
             currentBuildPair.XPath += "/" + sequenceGenerator.generateNodeSequenceFromContext(length, starterBuildPair.contextNodeList);
             nodeIdList = mainExecutor.executeAndCompare(currentBuildPair.XPath);
             currentBuildPair.contextNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
         }
-//        if(prob < 0.15 && (!KnownBugs.exist)) {
-//            currentBuildPair = indexSearchAttempt(currentBuildPair);
-//        }
+        if(prob < 0.15 && (!KnownBugs.exist)) {
+            currentBuildPair = indexSearchAttempt(currentBuildPair);
+        }
         prob = GlobalRandom.getInstance().nextDouble();
 
         // Debug: currently make sure that predicate is generated.
@@ -98,9 +101,10 @@ public class XPathGenerator {
 //            currentBuildPair.XPath += predicateContext.predicate;
 //            currentBuildPair.contextNodeList = predicateContext.executionResult;
 //        }
+       // System.out.println("********************** " + currentBuildPair.XPath);
         if(prob < 0.6) {
             randomNode = GlobalRandom.getInstance().getRandomFromList(currentBuildPair.contextNodeList);
-            XPathResultListPair predicateContext = predicateGenerator.generatePredicate(currentBuildPair.XPath, 1, !allowTextContentFlag, randomNode);
+            XPathResultListPair predicateContext = predicateGenerator.generatePredicate(currentBuildPair.XPath, 4, !allowTextContentFlag, randomNode);
             currentBuildPair.XPath += predicateContext.XPath;
             currentBuildPair.contextNodeList = predicateContext.contextNodeList;
         }

@@ -4,6 +4,7 @@ import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
+import XTest.XPathGeneration.LogicTree.LogicTreeComparisonNode;
 import XTest.XPathGeneration.LogicTree.LogicTreeNode;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
@@ -16,7 +17,7 @@ import static XTest.StringUtils.getListString;
 public abstract class InformationTreeFunctionNode extends InformationTreeNode {
     public String functionExpr;
 
-
+    @Override
     abstract public InformationTreeFunctionNode newInstance();
 
     /**

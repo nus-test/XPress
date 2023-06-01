@@ -3,7 +3,9 @@ package XTest.XPathGeneration.LogicTree;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
+import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeFunctionNode;
 import net.sf.saxon.s9api.SaxonApiException;
+import org.bouncycastle.jcajce.provider.asymmetric.rsa.RSAUtil;
 import org.xmldb.api.base.XMLDBException;
 
 import java.io.IOException;
@@ -20,6 +22,8 @@ public abstract class LogicTreeNode {
         return context;
     }
 
+    abstract public LogicTreeNode newInstance();
+
     /**
      * Cached XPathExpr with no constant substitution.
      */
@@ -34,6 +38,7 @@ public abstract class LogicTreeNode {
 
     public boolean checkIfContainsStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         String expr = getXPathExpression();
+        //System.out.println("execute: " + contextInfo.XPathPrefix + "[" + expr + "]");
         List<Integer> resultList = contextInfo.mainExecutor.executeSingleProcessorGetIdList(contextInfo.XPathPrefix + "[" + expr + "]");
         return resultList.contains(starredNodeId);
     }

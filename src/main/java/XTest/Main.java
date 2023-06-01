@@ -34,7 +34,7 @@ public class Main {
             dbExecutor.registerDatabase(mainExecutor);
         XMLDatatype.getCastable(mainExecutor);
 
-        int round = 1;
+        int round = 100;
         XMLDocumentGenerator xmlDocumentGenerator;
         if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3)
             xmlDocumentGenerator = new XMLDocumentGenerator();
@@ -44,13 +44,13 @@ public class Main {
         try {
             for (int i = 0; i < round; i++) {
                 xmlDocumentGenerator.clearContext();
-                XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(40);
+                XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(50);
                 mainExecutor.setExtraLeafNodeContext(xmlDocumentGenerator.generateExtraLeafNodes(15));
                 XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
                 System.out.println("------------------ " + i);
                 System.out.println(xmlContext.getXmlContent());
                 try {
-                    int xpathCnt = 40;
+                    int xpathCnt = 200;
                     mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
                     for (int j = 0; j < xpathCnt; j++) {
                         if(j == 39) {
@@ -58,7 +58,7 @@ public class Main {
                         }
                         String XPath = "";
                         try {
-                            XPath = XPathGenerator.getXPath(GlobalRandom.getInstance().nextInt(3) + 2);
+                            XPath = XPathGenerator.getXPath(GlobalRandom.getInstance().nextInt(5) + 2);
                         } catch (MismatchingResultException | UnexpectedExceptionThrownException e) {
                             XPath = e.toString();
                             if(e instanceof UnexpectedExceptionThrownException)

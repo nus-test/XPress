@@ -48,25 +48,25 @@
         <dependency>
             <groupId>saxon</groupId>
             <artifactId>saxonhe</artifactId>
-            <version>12</version>
+            <version>12.2</version>
             <scope>system</scope>
-            <systemPath>C:/Users/workshop/Desktop/Mine/Repos/jar/SaxonHE12-0J/saxon-he-12.0.jar</systemPath>
+            <systemPath>C:/Users/workshop/Desktop/Mine/Repos/Saxon/SaxonHE12-2J/saxon-he-12.2.jar</systemPath>
         </dependency>
 
         <dependency>
             <groupId>saxon</groupId>
             <artifactId>saxonhe-xqj</artifactId>
-            <version>12</version>
+            <version>12.2</version>
             <scope>system</scope>
-            <systemPath>C:/Users/workshop/Desktop/Mine/Repos/jar/SaxonHE12-0J/saxon-he-xqj-12.0.jar</systemPath>
+            <systemPath>C:/Users/workshop/Desktop/Mine/Repos/Saxon/SaxonHE12-2J/saxon-he-xqj-12.2.jar</systemPath>
         </dependency>
 
         <dependency>
             <groupId>saxon</groupId>
             <artifactId>saxonhe-test</artifactId>
-            <version>12</version>
+            <version>12.2</version>
             <scope>system</scope>
-            <systemPath>C:/Users/workshop/Desktop/Mine/Repos/jar/SaxonHE12-0J/saxon-he-test-12.0.jar</systemPath>
+            <systemPath>C:/Users/workshop/Desktop/Mine/Repos/Saxon/SaxonHE12-2J/saxon-he-test-12.2.jar</systemPath>
         </dependency>
 
         <dependency>

@@ -58,10 +58,7 @@ public class MainExecutor {
     }
 
     public void writeContextToFile(String xmlDataContent) throws IOException {
-        FileWriter writer =
-                new FileWriter(fileAddr);
-        writer.write(xmlDataContent);
-        writer.close();
+        CommonUtils.writeContextToFile(xmlDataContent, fileAddr);
     }
 
     void getContextNodeMap(ContextNode currentNode) {

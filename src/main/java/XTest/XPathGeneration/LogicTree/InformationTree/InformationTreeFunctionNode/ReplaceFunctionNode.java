@@ -14,7 +14,7 @@ import org.xmldb.api.base.XMLDBException;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@FunctionV3
+//@FunctionV3
 public class ReplaceFunctionNode extends InformationTreeFunctionNode {
     private String internalStr = null;
 
@@ -39,11 +39,12 @@ public class ReplaceFunctionNode extends InformationTreeFunctionNode {
 
     private void fillContentParametersWithStr(InformationTreeNode childNode) {
         if(internalStr.length() == 0) internalStr = "a";
-        childList.add(new InformationTreeConstantNode(XMLDatatype.STRING, internalStr.replaceAll("[{}]", "e")));
+        childList.add(new InformationTreeConstantNode(XMLDatatype.STRING, internalStr.replaceAll("[{}()*.]", "e").replace('\\', 'q')));
         double prob = GlobalRandom.getInstance().nextDouble();
         if(prob < 0.6) {
             childList.add(new InformationTreeConstantNode(XMLDatatype.STRING,
-                    XMLDatatype.STRING.getValueHandler().getValue(false).replaceAll("[${}]", "c")));
+                    XMLDatatype.STRING.getValueHandler().getValue(false).replaceAll("[${}()*.]", "c")
+                            .replace('\\', 'z')));
         } else {
             if(prob < 0.9) childList.add(new InformationTreeConstantNode(XMLDatatype.STRING, "$1"));
             else {

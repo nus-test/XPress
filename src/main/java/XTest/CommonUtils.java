@@ -1,13 +1,18 @@
 package XTest;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class CommonUtils {
+    public static void writeContextToFile(String xmlDataContent, String fileAddr) throws IOException {
+        FileWriter writer =
+                new FileWriter(fileAddr);
+        writer.write(xmlDataContent);
+        writer.close();
+    }
+
     public static String readInputStream(InputStream inputStream) {
         String text = new BufferedReader(
                 new InputStreamReader(inputStream, StandardCharsets.UTF_8))
