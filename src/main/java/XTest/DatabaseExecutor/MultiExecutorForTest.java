@@ -34,7 +34,7 @@ public class MultiExecutorForTest {
         dbExecutorList.add(BaseXExecutor.getInstance());
         dbExecutorList.add(SaxonExecutor.getInstance());
 
-        dbExecutorList.add(ExistExecutor.getInstance());
+       // dbExecutorList.add(ExistExecutor.getInstance());
         //dbExecutorList.add(OracleExecutor.getInstance());
 
         //dbExecutorList.add(LibXML2Executor.getInstance());

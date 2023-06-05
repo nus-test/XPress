@@ -24,7 +24,9 @@ public class ContainsTokenFunctionNode extends InformationTreeFunctionNode {
     @Override
     protected void fillContentParameters(InformationTreeNode childNode) {
         List<String> subStringList = Arrays.stream(childList.get(0).getContext().context.split("\\s+")).toList();
-        childList.add(new InformationTreeConstantNode(XMLDatatype.STRING, GlobalRandom.getInstance().getRandomFromList(subStringList)));
+        if(subStringList.size() == 0)
+            fillContentParametersRandom(childNode);
+        else childList.add(new InformationTreeConstantNode(XMLDatatype.STRING, GlobalRandom.getInstance().getRandomFromList(subStringList)));
     }
 
     @Override

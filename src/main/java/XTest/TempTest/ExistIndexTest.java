@@ -13,6 +13,7 @@ import java.util.List;
 public class ExistIndexTest {
     static String xmlFile = "test1.xml";
     static String xqueryFile = "xquery.txt";
+    static String configFile = "config.xml";
     public static void main(String args[]) throws Exception {
         ExistExecutor existExecutor = new ExistExecutor();
         ExistExecutor existIndexExecutor = new ExistExecutor("test-index", "Exist-index");
@@ -25,6 +26,11 @@ public class ExistIndexTest {
 
         for(DatabaseExecutor dbExecutor: dbExecutorList)
             dbExecutor.registerDatabase(mainExecutor);
+
+        String indexContent =
+                CommonUtils.readInputStream(
+                        new ByteArrayInputStream(MySQLSimple.class.getResourceAsStream("/" + configFile).readAllBytes()));
+        existIndexExecutor.setIndexByContent(indexContent);
 
         String xmlDataString =
                 CommonUtils.readInputStream(

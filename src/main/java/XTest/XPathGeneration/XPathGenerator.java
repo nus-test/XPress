@@ -61,7 +61,7 @@ public class XPathGenerator {
             }
             currentBuildPair.XPath += prefix;
             String tempBuilder = currentBuildPair.XPath + "*";
-            nodeIdList = mainExecutor.executeAndCompare(tempBuilder);
+            nodeIdList = mainExecutor.executeSingleProcessorGetIdList(tempBuilder);
             currentBuildPair.contextNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
             //Unwanted situation!
             if (currentBuildPair.contextNodeList.size() == 0)
@@ -69,27 +69,26 @@ public class XPathGenerator {
 
             prob = GlobalRandom.getInstance().nextDouble();
             randomNode = GlobalRandom.getInstance().getRandomFromList(currentBuildPair.contextNodeList);
-            double prob2 = GlobalRandom.getInstance().nextDouble();
-            // TODO: this is for Saxon bug
-            if (prob2 < -1 && GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3)
+            // TODO: For saxon bug
+            if (prob < -1 && GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3)
                 currentBuildPair.XPath += "*";
             else {
                 currentBuildPair.XPath += randomNode.tagName;
                 allowTextContentFlag = true;
             }
-            nodeIdList = mainExecutor.executeAndCompare(currentBuildPair.XPath);
+            nodeIdList = mainExecutor.executeSingleProcessorGetIdList(currentBuildPair.XPath);
             currentBuildPair.contextNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
         } else {
             int length = GlobalRandom.getInstance().nextInt(5) + 1;
           //  System.out.println("#####" + currentBuildPair.XPath);
             currentBuildPair.XPath += "/" + sequenceGenerator.generateNodeSequenceFromContext(length, starterBuildPair.contextNodeList);
-            nodeIdList = mainExecutor.executeAndCompare(currentBuildPair.XPath);
+            nodeIdList = mainExecutor.executeSingleProcessorGetIdList(currentBuildPair.XPath);
             currentBuildPair.contextNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
         }
-        if(prob < 0.15 && (!KnownBugs.exist)) {
-            currentBuildPair = indexSearchAttempt(currentBuildPair);
-        }
-        prob = GlobalRandom.getInstance().nextDouble();
+//        if(prob < 0.15 && (!KnownBugs.exist)) {
+//            currentBuildPair = indexSearchAttempt(currentBuildPair);
+//        }
+//        prob = GlobalRandom.getInstance().nextDouble();
 
         // Debug: currently make sure that predicate is generated.
         prob = 0.1;

@@ -10,7 +10,7 @@ public class GlobalRandom {
     private GlobalRandom() {
         random = new Random();
         long seed = System.currentTimeMillis();
-        seed = 1685599112150L;
+        //seed = 1685686358759L;
         System.out.println("Seed: " + seed);
         random.setSeed(seed);
     }

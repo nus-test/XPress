@@ -27,7 +27,9 @@ public class ExistExecutor extends DatabaseExecutor {
     static String configDir = "/db/system/config";
     static String rootDir = "/db";
     private String collName = "/test";
-    String indexSetupTempStorageFileAddr = "C:\\app\\log\\autotest.xml";
+    String indexResourceName = "collection.xconf";
+
+    String indexSetupTempStorageFileAddr = "C:\\app\\log\\config.xml";
 
     String configPrefix = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
             "<collection xmlns=\"http://exist-db.org/collection-config/1.0\">\n" +
@@ -36,11 +38,11 @@ public class ExistExecutor extends DatabaseExecutor {
             "    </triggers>";
     String configSuffix = "</collection>";
 
-    Collection collection;
-    XMLResource resource;
+    Collection collection, indexCollection = null;
+    XMLResource resource, indexResource;
     XQueryService xqs;
     public ExistExecutor(String collName, String dbName) throws XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        this.collName = collName;
+        this.collName = "/" + collName;
         init();
         this.dbName = dbName;
     }
@@ -77,16 +79,22 @@ public class ExistExecutor extends DatabaseExecutor {
 
     @Override
     public void setContextByFileLow(String fileAddr) throws IOException, XMLDBException {
-        setContextByFileLow(collName, fileAddr, true, "autotest.xml");
+        setContextByFileLow(rootDir + collName, fileAddr, "autotest.xml");
     }
 
-    public void setContextByFileLow(String collName, String fileAddr, boolean createResource, String resourceName) throws IOException, XMLDBException {
-        collection = DatabaseManager.getCollection(URI + rootDir + collName);
+    public void setIndexContextByFileLow(String collName, String fileAddr, String resourceName) throws IOException, XMLDBException {
+        indexCollection = DatabaseManager.getCollection(URI + collName);
+        indexCollection.setProperty(OutputKeys.INDENT, "no");
+        indexResource = (XMLResource) indexCollection.createResource(resourceName, XMLResource.RESOURCE_TYPE);
+        File f = new File(fileAddr);
+        indexResource.setContent(f);
+        indexCollection.storeResource(indexResource);
+    }
+
+    public void setContextByFileLow(String collName, String fileAddr, String resourceName) throws IOException, XMLDBException {
+        collection = DatabaseManager.getCollection(URI + collName);
         collection.setProperty(OutputKeys.INDENT, "no");
-        if(createResource)
-            resource = (XMLResource) collection.createResource(resourceName, XMLResource.RESOURCE_TYPE);
-        else
-            resource = (XMLResource) collection.getResource(resourceName);
+        resource = (XMLResource) collection.createResource(resourceName, XMLResource.RESOURCE_TYPE);
         File f = new File(fileAddr);
         resource.setContent(f);
         collection.storeResource(resource);
@@ -102,33 +110,59 @@ public class ExistExecutor extends DatabaseExecutor {
     @Override
     public void clearCurrentContext() throws XMLDBException {
         collection.removeResource(resource);
+        if(indexCollection != null && indexResource != null) {
+            System.out.println("Remove index ....");
+            indexCollection.removeResource(indexResource);
+            indexResource = null;
+        }
     }
 
-    public void setRangeIndex(List<Pair<String, String>> contextItems) throws IOException, XMLDBException {
-        String indexSetupPrefix = "<index xmlns:mods=\"http://www.loc.gov/mods/v3\">\n";
-        String indexSetupSuffix = "</index>";
-        String indexSetup = indexSetupPrefix + getRangeIndexConfigString(contextItems) + indexSetupSuffix;
+    public void setIndexByFile(String fileAddr) throws XMLDBException, IOException {
+        setIndexContextByFileLow(configDir + rootDir + collName, fileAddr, indexResourceName);
+    }
+
+    public void setIndexByContent(String indexSetup) throws XMLDBException, IOException {
         CommonUtils.writeContextToFile(indexSetup, indexSetupTempStorageFileAddr);
-        setContextByFileLow(configDir + rootDir + collName, indexSetupTempStorageFileAddr, false, null);
+        System.out.println("Set index ....");
+        setIndexContextByFileLow(configDir + rootDir + collName,
+                indexSetupTempStorageFileAddr, indexResourceName);
+    }
+
+    public void setIndex(List<Pair<String, String>> rangeIndexContextItems,
+        List<String> nGramContextNames) throws IOException, XMLDBException {
+        String indexSetupPrefix = configPrefix + "\n<index>\n";
+        String indexSetupSuffix = "</index>\n" + configSuffix;
+        String indexSetup = indexSetupPrefix;
+        if(rangeIndexContextItems != null)
+            indexSetup += getRangeIndexConfigString(rangeIndexContextItems);
+        if(nGramContextNames != null)
+            indexSetup += getNGramIndexConfigString(nGramContextNames);
+        indexSetup += indexSetupSuffix;
+        setIndexByContent(indexSetup);
     }
 
     public String getRangeIndexConfigString(List<Pair<String, String>> contextItems) {
         String rangeIndexSetupPrefix = "<range>\n";
         String rangeIndexSetupSuffix = "</range>\n";
-        String indexSetup = configPrefix + rangeIndexSetupPrefix;
+        String indexSetup = rangeIndexSetupPrefix;
         for(Pair pair: contextItems) {
-            String tag = "<create ";
-            tag += "qname=\"" + pair.first + "\"";
-            tag += "type=\"" + pair.second + "\"";
-            tag += "\\>\n";
+            String tag = "<create";
+            tag += " qname=\"" + pair.first + "\"";
+            tag += " type=\"" + pair.second + "\"";
+            tag += "/>\n";
             indexSetup += tag;
         }
-        indexSetup += rangeIndexSetupSuffix + configSuffix;
+        indexSetup += rangeIndexSetupSuffix;
         return indexSetup;
     }
 
-    public String getNGramIndexConfigString() {
-        return null;
+    public String getNGramIndexConfigString(List<String> contextNames) {
+        String indexSetup = "";
+        for(String contextName: contextNames) {
+            String tag = "<ngram qname=\"" + contextName + "\"/>";
+            indexSetup += tag;
+        }
+        return indexSetup;
     }
 
     @Override
@@ -157,5 +191,9 @@ public class ExistExecutor extends DatabaseExecutor {
     @Override
     public void close() throws XMLDBException {
         collection.close();
+        if(indexCollection != null) {
+            indexCollection.close();
+            indexCollection = null;
+        }
     }
 }

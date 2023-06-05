@@ -23,6 +23,16 @@ public class SortFunctionNode extends InformationTreeSequenceFunctionNode {
         if(childNode instanceof MapFunctionNode)
             if(((MapFunctionNode) childNode).mixAttrFlag)
                 return false;
-        return childNode.datatypeRecorder.getActualDatatype().getValueHandler() instanceof XMLSimple;
+        if(!(childNode.datatypeRecorder.getActualDatatype().getValueHandler() instanceof XMLSimple))
+            return false;
+        try {
+            childNode.contextInfo.mainExecutor.setReportLock();
+            childNode.contextInfo.mainExecutor.executeSingleProcessor("sort(" + childNode.getCalculationString() + ")");
+        } catch (Exception e) {
+            if(childNode.contextInfo.mainExecutor != null)
+                childNode.contextInfo.mainExecutor.unlockReportLock();
+            return false;
+        }
+        return true;
     }
 }

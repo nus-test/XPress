@@ -1,14 +1,18 @@
 package XTest.DatabaseExecutor;
 
 import XTest.CommonUtils;
+import XTest.GlobalRandom;
 import XTest.GlobalSettings;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.ReportGeneration.ReportManager;
 import XTest.TestException.MismatchingResultException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.TestException.UnsupportedContextSetUpException;
+import XTest.XMLGeneration.AttributeNode;
 import XTest.XMLGeneration.ContextNode;
+import com.ibm.icu.impl.Pair;
 import net.sf.saxon.s9api.SaxonApiException;
+import org.apache.xpath.operations.Bool;
 import org.xmldb.api.base.XMLDBException;
 
 import javax.naming.Context;
@@ -29,6 +33,7 @@ public class MainExecutor {
     public Map<String, DatabaseExecutor> databaseExecutorNameMap = new HashMap<>();
     public String currentContext;
     ReportManager reportManager = null;
+    boolean reportLock = false;
 
     public MainExecutor() {}
     public MainExecutor(ReportManager reportManager) {
@@ -63,8 +68,38 @@ public class MainExecutor {
 
     void getContextNodeMap(ContextNode currentNode) {
         contextNodeMap.put(currentNode.id, currentNode);
+        maxId = max(maxId, currentNode.id);
         for(ContextNode childNode : currentNode.childList)
             getContextNodeMap(childNode);
+    }
+
+    public List<Pair<String, String>> getRandomTagNameTypePair(int length) {
+        Set<String> nameSet = new HashSet<>();
+        List<Pair<String, String>> randomList = new ArrayList<>();
+        int cnt = 0, failures = 0;
+        while(cnt < length) {
+            int id = GlobalRandom.getInstance().nextInt(maxId - 1) + 1;
+            ContextNode node = contextNodeMap.get(id);
+            double prob = GlobalRandom.getInstance().nextDouble();
+            if(prob < 0.6 && !nameSet.contains(node.tagName)) {
+                nameSet.add(node.tagName);
+                randomList.add(Pair.of(node.tagName, node.dataType.getValueHandler().officialTypeName));
+                failures = 0;
+                cnt ++;
+            }
+            else {
+                AttributeNode attributeNode = GlobalRandom.getInstance().getRandomFromList(node.attributeList);
+                if(!nameSet.contains(attributeNode.tagName)) {
+                    nameSet.add(attributeNode.tagName);
+                    randomList.add(Pair.of(attributeNode.tagName, attributeNode.dataType.getValueHandler().officialTypeName));
+                    failures = 0;
+                    cnt ++;
+                }
+                else failures += 1;
+            }
+            if(failures >= 3) break;
+        }
+        return randomList;
     }
 
     public void registerDatabase(DatabaseExecutor databaseExecutor) {
@@ -76,7 +111,11 @@ public class MainExecutor {
         databaseExecutorList.add(databaseExecutor);
     }
 
-    public List<Integer> executeAndCompare(String XPath) throws SQLException, XMLDBException, IOException, SaxonApiException, MismatchingResultException, UnexpectedExceptionThrownException {
+    public List<Integer> executeAndCompare(String XPath) throws SQLException, XMLDBException, MismatchingResultException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
+        return executeAndCompare(XPath, false);
+    }
+
+    public List<Integer> executeAndCompare(String XPath, boolean ignoreException) throws SQLException, XMLDBException, IOException, SaxonApiException, MismatchingResultException, UnexpectedExceptionThrownException {
         List<Integer> nodeIdResultSet = null;
         String lastDBName = null;
         //System.out.println(XPath);
@@ -84,11 +123,14 @@ public class MainExecutor {
             if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3 &&
                     databaseExecutor.dbXPathVersion != GlobalSettings.xPathVersion)
                 continue;
+            if(!databaseExecutor.compareFlag)
+                continue;
             List<Integer> currentNodeIdResultSet = null;
             try{
                 currentNodeIdResultSet = executeSingleProcessorGetIdList(XPath, databaseExecutor);  
                 currentNodeIdResultSet.sort(Integer::compareTo);
             }catch(Exception e) {
+                if(ignoreException) return null;
                 System.out.println("Unknown exception thrown!");
                 throw new UnexpectedExceptionThrownException(e);
             }
@@ -161,7 +203,7 @@ public class MainExecutor {
             resultList = databaseExecutor.executeGetNodeIdList(XPath);
         } catch (Exception e) {
             if(reportManager != null) {
-                if(databaseExecutor.dbName == null || databaseExecutor.dbName != "Exist")
+                if(databaseExecutor.dbName != null && !databaseExecutor.dbName.equals("Exist"))
                     reportManager.reportUnexpectedException(this, XPath, e);
             }
             else {
@@ -184,14 +226,22 @@ public class MainExecutor {
         return executeSingleProcessor(XPath, databaseExecutor);
     }
 
+    public void setReportLock() {
+       reportLock = true;
+    }
+
+    public void unlockReportLock() {
+        reportLock = false;
+    }
+
     public String executeSingleProcessor(String XPath, DatabaseExecutor databaseExecutor) throws SQLException, XMLDBException, IOException, SaxonApiException, UnexpectedExceptionThrownException {
         //System.out.println("Execute: " + XPath);
         String result = null;
         try {
             result = databaseExecutor.execute(XPath);
         } catch(Exception e) {
-            if(reportManager != null) {
-                if(databaseExecutor.dbName == null || databaseExecutor.dbName != "Exist")
+            if(reportManager != null && !reportLock) {
+                if(databaseExecutor.dbName != null && !databaseExecutor.dbName.equals("Exist"))
                     reportManager.reportUnexpectedException(this, XPath, e);
             }
             else {
@@ -203,11 +253,6 @@ public class MainExecutor {
             throw new UnexpectedExceptionThrownException(e);
         }
         return result;
-    }
-
-    public List<ContextNode> executeGetNodeList(String XPath) throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, UnexpectedExceptionThrownException {
-        List<Integer> nodeIdResultSet = executeAndCompare(XPath);
-        return getNodeListFromIdList(nodeIdResultSet);
     }
 
     public List<ContextNode> getNodeListFromIdList(List<Integer> idList) {

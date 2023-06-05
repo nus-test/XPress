@@ -10,6 +10,7 @@ import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.TestException.UnsupportedContextSetUpException;
 import XTest.XMLGeneration.XMLContext;
 import XTest.XMLGeneration.XMLDocumentGenerator;
+import com.ibm.icu.impl.Pair;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.junit.jupiter.api.Test;
 import org.xmldb.api.base.XMLDBException;
@@ -60,7 +61,7 @@ public class XPathGenerationTest {
     }
 
     @Test
-    void newXPathGeneratorTest() throws SQLException, UnsupportedContextSetUpException, XMLDBException, IOException, SaxonApiException, MismatchingResultException, UnexpectedExceptionThrownException, InstantiationException, IllegalAccessException, DebugErrorException {
+    void newXPathGeneratorTest() throws SQLException, UnsupportedContextSetUpException, XMLDBException, IOException, SaxonApiException, MismatchingResultException, UnexpectedExceptionThrownException, InstantiationException, IllegalAccessException, DebugErrorException, ClassNotFoundException {
         XMLDocumentGenerator xmlDocumentGenerator = new XMLDocumentGenerator();
         XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(20);
         System.out.println(xmlContext.getXmlContent());
@@ -69,6 +70,10 @@ public class XPathGenerationTest {
         List<DatabaseExecutor> dbExecuterList = new ArrayList<>();
 
         dbExecuterList.add(SaxonExecutor.getInstance());
+        SaxonExecutor.getInstance().compareFlag = false;
+        dbExecuterList.add(new ExistExecutor());
+        //dbExecuterList.add(new ExistExecutor("test-index", "Exist-index"));
+
         for(DatabaseExecutor dbExecutor: dbExecuterList)
             dbExecutor.registerDatabase(mainExecutor);
         XMLDatatype.getCastable(mainExecutor);
@@ -85,6 +90,45 @@ public class XPathGenerationTest {
                 System.out.println(XPathStr);
                 System.out.println("Execution Result: =============================");
                 System.out.println(mainExecutor.executeAndCompare(XPathStr));
+            }
+        } finally {
+            mainExecutor.close();
+        }
+    }
+
+    @Test
+    void ExistIndexTest() throws SQLException, UnsupportedContextSetUpException, XMLDBException, IOException, SaxonApiException, MismatchingResultException, UnexpectedExceptionThrownException, InstantiationException, IllegalAccessException, DebugErrorException, ClassNotFoundException {
+        XMLDocumentGenerator xmlDocumentGenerator = new XMLDocumentGenerator();
+        XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(20);
+        System.out.println(xmlContext.getXmlContent());
+        MainExecutor mainExecutor = new MainExecutor();
+
+        List<DatabaseExecutor> dbExecuterList = new ArrayList<>();
+
+        dbExecuterList.add(SaxonExecutor.getInstance());
+        SaxonExecutor.getInstance().compareFlag = false;
+        dbExecuterList.add(new ExistExecutor());
+        ExistExecutor existIndexExecutor = new ExistExecutor("test-index", "Exist-index");
+        dbExecuterList.add(existIndexExecutor);
+
+        for(DatabaseExecutor dbExecutor: dbExecuterList)
+            dbExecutor.registerDatabase(mainExecutor);
+        XMLDatatype.getCastable(mainExecutor);
+
+        XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
+        List<String> XPath = new ArrayList<>();
+        try {
+            mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
+            mainExecutor.setExtraLeafNodeContext(xmlDocumentGenerator.generateExtraLeafNodes(20));
+            List<Pair<String, String>> indexList = mainExecutor.getRandomTagNameTypePair(GlobalRandom.getInstance().nextInt(5) + 1);
+            existIndexExecutor.setIndex(indexList, null);
+            for(int i = 0; i < 300; i ++)
+                XPath.add(XPathGenerator.getXPath(4));
+            for(String XPathStr: XPath) {
+                System.out.println("Generated XPath: ------------------------------");
+                System.out.println(XPathStr);
+                System.out.println("Execution Result: =============================");
+                System.out.println(mainExecutor.executeAndCompare(XPathStr, true));
             }
         } finally {
             mainExecutor.close();

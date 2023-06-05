@@ -15,6 +15,7 @@ import java.util.*;
 public abstract class DatabaseExecutor {
     public String dbName;
     boolean clearFlag = false;
+    public boolean compareFlag = true;
     String currentContext = null;
 
     GlobalSettings.XPathVersion dbXPathVersion;

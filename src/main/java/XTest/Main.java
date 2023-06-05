@@ -10,6 +10,7 @@ import XTest.XMLGeneration.XMLContext;
 import XTest.XMLGeneration.XMLDocumentGenerator;
 import XTest.XMLGeneration.XMLStructuredDocumentGenerator;
 import XTest.XPathGeneration.XPathGenerator;
+import com.ibm.icu.impl.Pair;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
 
@@ -26,15 +27,20 @@ public class Main {
         List<DatabaseExecutor> dbExecuterList = new ArrayList<>();
 
         dbExecuterList.add(BaseXExecutor.getInstance());
-     //   dbExecuterList.add(ExistExecutor.getInstance());
         dbExecuterList.add(SaxonExecutor.getInstance());
+//        SaxonExecutor.getInstance().compareFlag = false;
+//        dbExecuterList.add(new ExistExecutor());
+//        ExistExecutor existIndexExecutor = new ExistExecutor("test-index", "Exist-index");
+//        dbExecuterList.add(existIndexExecutor);
+
+
    //     dbExecuterList.add(LibXML2Executor.getInstance());
 //        dbExecuterList.add(OracleExecutor.getInstance());
         for(DatabaseExecutor dbExecutor: dbExecuterList)
             dbExecutor.registerDatabase(mainExecutor);
         XMLDatatype.getCastable(mainExecutor);
 
-        int round = 100;
+        int round = 500;
         XMLDocumentGenerator xmlDocumentGenerator;
         if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3)
             xmlDocumentGenerator = new XMLDocumentGenerator();
@@ -46,16 +52,19 @@ public class Main {
                 xmlDocumentGenerator.clearContext();
                 XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(50);
                 mainExecutor.setExtraLeafNodeContext(xmlDocumentGenerator.generateExtraLeafNodes(15));
+                mainExecutor.maxId = 0;
                 XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
                 System.out.println("------------------ " + i);
                 System.out.println(xmlContext.getXmlContent());
                 try {
                     int xpathCnt = 200;
                     mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
+                    List<Pair<String, String>> indexList = mainExecutor.getRandomTagNameTypePair(GlobalRandom.getInstance().nextInt(5) + 1);
+                    //existIndexExecutor.setIndex(indexList, null);
                     for (int j = 0; j < xpathCnt; j++) {
-                        if(j == 39) {
-                            GlobalSettings.debugOutput = true;
-                        }
+//                        if(j == 39) {
+//                            GlobalSettings.debugOutput = true;
+//                        }
                         String XPath = "";
                         try {
                             XPath = XPathGenerator.getXPath(GlobalRandom.getInstance().nextInt(5) + 2);

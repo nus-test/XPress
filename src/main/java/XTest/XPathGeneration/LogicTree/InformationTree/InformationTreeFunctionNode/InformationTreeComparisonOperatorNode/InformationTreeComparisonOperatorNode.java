@@ -24,11 +24,11 @@ public abstract class InformationTreeComparisonOperatorNode extends BinaryOperat
 
     /**
      * To transfer all information of the previous node to current node (change only the comparison operator
-     * node type.) Also new result is calculated.
+     * node type.) Also, new result is calculated.
      * @param prevNode
      */
     void transferInfo(InformationTreeComparisonOperatorNode prevNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
-        // TODO: Check if there is more information necessary to transfer
+        //TODO: Check if there is more information necessary to transfer
         childList = prevNode.childList;
         datatypeRecorder = prevNode.datatypeRecorder;
         setContextInfo(prevNode.getContextInfo());

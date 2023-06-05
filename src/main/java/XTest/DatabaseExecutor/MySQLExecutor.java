@@ -18,9 +18,8 @@ public class MySQLExecutor extends DatabaseExecutor {
     Connection connection;
     String xmlDataContent;
 
-    private MySQLExecutor() throws SQLException, ClassNotFoundException {
+    private MySQLExecutor() throws SQLException {
         dbName = "MySQL";
-        Class.forName("com.mysql.cj.jdbc.Driver");
         connection = DriverManager.getConnection(
                 "jdbc:mysql://localhost:3306/test?useTimezone=true&serverTimezone=UTC",
                 "root", "shuxin");

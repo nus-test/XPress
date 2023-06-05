@@ -13,27 +13,26 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
 
-public class OracleExecutor extends DatabaseExecutor {
-    static OracleExecutor oracleExecutor;
-    String url = "jdbc:oracle:thin:@localhost:1521/XE";
-    String username = "test";
+public class PgExecutor extends DatabaseExecutor{
+    static PgExecutor pgExecutor;
+    String url = "jdbc:postgresql://localhost:5432/test";
+    String username = "postgres";
     String password = "shuxin";
     Connection connection;
     Statement statement;
-    String createSQL = "create table test of xmltype";
-    String dropSQL = "drop table test";
+    String xmlDataContent;
 
-    private OracleExecutor() throws SQLException {
-        dbName = "Oracle";
+    private PgExecutor() throws SQLException {
+        dbName = "PostgreSQL";
         connection = DriverManager.getConnection(url, username, password);
         statement = connection.createStatement();
         dbXPathVersion = GlobalSettings.XPathVersion.VERSION_1;
     }
 
-    static public OracleExecutor getInstance() throws SQLException, ClassNotFoundException {
-        if(oracleExecutor == null)
-            oracleExecutor = new OracleExecutor();
-        return oracleExecutor;
+    static public PgExecutor getInstance() throws SQLException, ClassNotFoundException {
+        if(pgExecutor == null)
+            pgExecutor = new PgExecutor();
+        return pgExecutor;
     }
 
     @Override
@@ -53,27 +52,28 @@ public class OracleExecutor extends DatabaseExecutor {
 
     @Override
     public void setContextByContentLow(String content) throws SQLException {
-        statement.execute(createSQL);
-        String insertSQL = "insert into test values (XMLType('" + content + "', nls_charset_id('AL32UTF8')))";
-        statement.execute(insertSQL);
+        xmlDataContent = content;
     }
 
     @Override
     public void clearCurrentContext() throws XMLDBException, IOException, SQLException {
-        System.out.println("Dropped Oracle!");
-        statement.execute(dropSQL);
+        xmlDataContent = null;
     }
 
     @Override
     public String execute(String Xquery) throws SQLException {
-        String selectSQL = "select extract(OBJECT_VALUE, '" + Xquery + "') from test";
+        String selectSQL = "select xpath('" + Xquery + "', '" + xmlDataContent + "');";;
         ResultSet resultSet = statement.executeQuery(selectSQL);
         ResultSetMetaData rsmd = resultSet.getMetaData();
         int columnsNumber = rsmd.getColumnCount();
         String result = "";
         while (resultSet.next()) {
             for (int i = 1; i <= columnsNumber; i++) {
-                result += resultSet.getString(i);
+                Array data = resultSet.getArray(i);
+                Object[] data2 = (Object[]) data.getArray();
+                for(Object obj : data2) {
+                    result += obj.toString();
+                }
             }
         }
         resultSet.close();
@@ -85,3 +85,4 @@ public class OracleExecutor extends DatabaseExecutor {
         connection.close();
     }
 }
+
