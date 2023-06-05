@@ -17,6 +17,7 @@ public class IntegerSubtractionFunctionNode extends BinaryNumericalOperatorFunct
     }
     @Override
     protected void fillContentParameters(InformationTreeNode childNode) {
+        if(fillContentParameterBySubRoot(XMLDatatype.INTEGER)) return;
         String value = null;
         Integer inputValue = Integer.parseInt(childNode.getContext().context);
         if(inputValue < 0)

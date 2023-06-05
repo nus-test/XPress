@@ -5,6 +5,7 @@ import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.PrimitiveDatatype.XMLIntegerHandler;
 import XTest.TestException.DebugErrorException;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
+import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeContextNode;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
 @FunctionV1
@@ -18,8 +19,9 @@ public class IntegerAddFunctionNode extends BinaryNumericalOperatorFunctionNode 
 
     @Override
     protected void fillContentParameters(InformationTreeNode childNode) {
+        if(fillContentParameterBySubRoot(XMLDatatype.INTEGER)) return;
         String value;
-        Integer inputValue = Integer.parseInt(childNode.getContext().context);
+        int inputValue = Integer.parseInt(childNode.getContext().context);
         if(inputValue < 0) {
             value = ((XMLIntegerHandler) XMLDatatype.INTEGER.getValueHandler()).
                     getRandomValueBounded(Integer.MIN_VALUE - inputValue, Integer.MAX_VALUE);

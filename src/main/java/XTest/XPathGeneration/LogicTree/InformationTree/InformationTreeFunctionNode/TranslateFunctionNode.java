@@ -13,8 +13,11 @@ public class TranslateFunctionNode extends InformationTreeFunctionNode {
     }
 
     @Override
-    protected void fillContentParameters(InformationTreeNode childNode) {
-        fillContentParametersRandom(childNode);
+    protected void fillContentParameters(InformationTreeNode childNode) {;
+        InformationTreeNode mapNode = InformationTreeFunctionNodeManager.getInstance().getNodeWithSimpleType(XMLDatatype.STRING);
+        InformationTreeNode transNode = InformationTreeFunctionNodeManager.getInstance().getNodeWithSimpleType(XMLDatatype.STRING);
+        childList.add(mapNode);
+        childList.add(transNode);
     }
 
     @Override

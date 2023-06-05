@@ -1,5 +1,6 @@
 package XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
 
+import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
@@ -19,6 +20,15 @@ public abstract class InformationTreeFunctionNode extends InformationTreeNode {
 
     @Override
     abstract public InformationTreeFunctionNode newInstance();
+
+    protected boolean fillContentParameterBySubRoot(XMLDatatype datatype) {
+        InformationTreeNode subRoot = InformationTreeFunctionNodeManager.getInstance().getNodeWithSimpleType(datatype, true);
+        if(subRoot != null) {
+            childList.add(subRoot);
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Fill the content parameters of current function node with given child node as context.

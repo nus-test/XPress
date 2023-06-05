@@ -136,7 +136,7 @@ public class MainExecutor {
             }
             if(nodeIdResultSet != null) {
                 boolean checkResult = CommonUtils.compareList(nodeIdResultSet, currentNodeIdResultSet);
-                if (checkResult == false) {
+                if (!checkResult) {
                     if(reportManager != null) {
                         System.out.println("Inconsistency found!");
                         reportManager.reportPotentialBug(this, XPath);

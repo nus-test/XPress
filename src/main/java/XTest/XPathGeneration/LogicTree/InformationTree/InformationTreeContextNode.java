@@ -15,6 +15,30 @@ public class InformationTreeContextNode extends InformationTreeNode {
      */
     public String dummyCalculateString = null;
 
+    public InformationTreeContextNode() {}
+
+    public InformationTreeContextNode(XMLDatatypeComplexRecorder recorder) {
+        this.datatypeRecorder = recorder;
+    }
+
+    public InformationTreeContextNode(XMLDatatypeComplexRecorder recorder, InformationTreeContext context) {
+        this.datatypeRecorder = recorder;
+        this.context = context;
+    }
+
+    public InformationTreeContextNode(InformationTreeContextNode contextNode) {
+        transfer(contextNode);
+    }
+
+    public void transfer(InformationTreeContextNode contextNode) {
+        dummyContext = contextNode.dummyContext;
+        dummyCalculateString = contextNode.dummyCalculateString;
+        contextInfo = new InformationTreeContextInfo(contextNode.getContextInfo());
+        datatypeRecorder = new XMLDatatypeComplexRecorder(contextNode.datatypeRecorder);
+        context = new InformationTreeContext(contextNode.getContext());
+        XPathExpr = contextNode.XPathExpr;
+    }
+
     // For context node, XPathExpr refers to the sub selection XPath expression.
     // If referring to current node, should be node selection expression.
     public void setXPath(String XPath) {
@@ -49,17 +73,5 @@ public class InformationTreeContextNode extends InformationTreeNode {
         if(calculateString)
             return getCalculationString(parentNode, false);
         return XPathExpr;
-    }
-
-    public InformationTreeContextNode() {
-    }
-
-    public InformationTreeContextNode(XMLDatatypeComplexRecorder recorder) {
-        this.datatypeRecorder = recorder;
-    }
-
-    public InformationTreeContextNode(XMLDatatypeComplexRecorder recorder, InformationTreeContext context) {
-        this.datatypeRecorder = recorder;
-        this.context = context;
     }
 }

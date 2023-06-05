@@ -19,6 +19,7 @@ public class ConcatFunctionNode extends InformationTreeFunctionNode {
 
     @Override
     protected void fillContentParameters(InformationTreeNode childNode) {
+        if(fillContentParameterBySubRoot(XMLDatatype.STRING)) return;
         fillContentParametersRandom(childNode);
     }
 

@@ -82,8 +82,10 @@ public class MapFunctionNode extends BinaryOperatorFunctionNode {
         InformationTreeNode dummyChildNode = InformationTreeFunctionNodeManager.getInstance().getMapDummyChildNode(childNode);
         int cnt = 0;
         for(int i = 0; i < functionCnt; i ++) {
+            InformationTreeFunctionNodeManager.getInstance().setMapLock();
             InformationTreeNode treeNode = informationTreeGenerator.buildInformationTree(dummyChildNode,
                     GlobalRandom.getInstance().nextInt(3));
+            InformationTreeFunctionNodeManager.getInstance().unLockMapLock();
             childList.add(treeNode);
             if(treeNode instanceof AttributeFunctionNode) {
                 cnt ++;

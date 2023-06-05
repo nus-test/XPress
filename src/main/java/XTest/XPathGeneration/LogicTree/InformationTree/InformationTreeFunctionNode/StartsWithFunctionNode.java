@@ -25,6 +25,7 @@ public class StartsWithFunctionNode extends InformationTreeFunctionNode {
     @Override
     protected void fillContentParameters(InformationTreeNode childNode) {
         internalStr = childNode.getContext().context;
+        if(fillContentParameterBySubRoot(XMLDatatype.STRING)) return;
         fillContentParametersWithGivenContext(childNode);
     }
 

@@ -1,9 +1,12 @@
 package XTest.XPathGeneration.LogicTree.InformationTree;
 
 import XTest.DatabaseExecutor.MainExecutor;
+import XTest.DefaultListHashMap;
 import XTest.GlobalRandom;
+import XTest.PrimitiveDatatype.XMLAtomic;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLNumeric;
+import XTest.PrimitiveDatatype.XMLSimple;
 import XTest.ReportGeneration.KnownBugs;
 import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
@@ -17,8 +20,12 @@ import org.xmldb.api.base.XMLDBException;
 import javax.xml.xpath.XPath;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InformationTreeGenerator {
+    public static DefaultListHashMap<XMLDatatype, InformationTreeNode> contextInformationTreeMap = new DefaultListHashMap<>();
+
     MainExecutor mainExecutor;
 
     public InformationTreeGenerator(MainExecutor mainExecutor){
@@ -40,6 +47,7 @@ public class InformationTreeGenerator {
 
         InformationTreeContextNode contextNode = new InformationTreeContextNode();
         boolean selfContextFlag, containsContextFlag = true, constantExprFlag = false;
+        contextInformationTreeMap = new DefaultListHashMap<>();
 
         // Select a sequence
         if(prob < 0.3 && starredNode.childWithLeafList.size() != 0 && !KnownBugs.exist) {
@@ -59,6 +67,20 @@ public class InformationTreeGenerator {
         contextNode.setContextInfo(mainExecutor, XPathPrefix, starredNode.id, containsContextFlag,
                 constantExprFlag, selfContextFlag);
         contextNode.calculateInfo();
+        if(selfContextFlag && GlobalRandom.getInstance().nextDouble() < 0.4) {
+            Integer randomNum = GlobalRandom.getInstance().nextInt(3) + 1;
+            for(int i = 0; i < randomNum; i ++) {
+                 InformationTreeContextNode subContextNode = new InformationTreeContextNode(contextNode);
+                 Integer levelLimit = GlobalRandom.getInstance().nextInt(2) + 1;
+                 if(levelLimit == 3 && GlobalRandom.getInstance().nextDouble() < 0.3) {
+                     levelLimit = 1;
+                 }
+                 InformationTreeNode subRoot = buildInformationTree(subContextNode, levelLimit,false, true, false);
+                 if(subRoot.datatypeRecorder.xmlDatatype.getValueHandler() instanceof XMLAtomic) {
+                     contextInformationTreeMap.get(subRoot.datatypeRecorder.xmlDatatype).add(subRoot);
+                 }
+            }
+        }
         // Build information tree from context node
         int levelLimit = GlobalRandom.getInstance().nextInt(5);
         if(contextNode.getContextInfo().selfContext) levelLimit += 1;
@@ -99,7 +121,7 @@ public class InformationTreeGenerator {
      * @return The root node of the generated information tree.
      */
     public InformationTreeNode buildInformationTree(InformationTreeNode informationTreeNode, int levelLimit) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
-        return buildInformationTree(informationTreeNode, levelLimit, false, true);
+        return buildInformationTree(informationTreeNode, levelLimit, false, true, true);
     }
 
     /**
@@ -109,7 +131,7 @@ public class InformationTreeGenerator {
      * @param levelLimit Limitation of generated tree height.
      * @return The root node of the generated information tree.
      */
-    public InformationTreeNode buildInformationTree(InformationTreeNode informationTreeNode, int levelLimit, Boolean random, Boolean calculate) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    public InformationTreeNode buildInformationTree(InformationTreeNode informationTreeNode, int levelLimit, Boolean random, Boolean calculate, Boolean acceptSequenceOperation) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         if(levelLimit == 0)  return informationTreeNode;
 
         // Update information tree node in to a new root
@@ -127,9 +149,9 @@ public class InformationTreeGenerator {
 //        }
         newRoot = InformationTreeFunctionNodeManager.getInstance()
                         .getRandomMatchingFunctionNodeWithContentAttached(
-                                informationTreeNode, informationTreeNode.datatypeRecorder, random, calculate);
+                                informationTreeNode, informationTreeNode.datatypeRecorder, random, calculate, acceptSequenceOperation);
 
-        return buildInformationTree(newRoot, levelLimit - 1, random, calculate);
+        return buildInformationTree(newRoot, levelLimit - 1, random, calculate, acceptSequenceOperation);
     }
 
     /**

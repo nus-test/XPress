@@ -8,6 +8,12 @@ public class InformationTreeContext extends LogicTreeContext {
      */
     public String supplementaryContext = null;
 
+    public InformationTreeContext() {}
+
+    public InformationTreeContext(LogicTreeContext context) {
+        setContext(context);
+    }
+
     @Override
     public void setContext(LogicTreeContext context) {
         super.setContext(context);

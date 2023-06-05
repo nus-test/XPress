@@ -24,6 +24,7 @@ public class EndsWithFunctionNode extends InformationTreeFunctionNode {
 
     @Override
     protected void fillContentParameters(InformationTreeNode childNode) {
+        if(fillContentParameterBySubRoot(XMLDatatype.STRING)) return;
         internalStr = childNode.getContext().context;
         fillContentParametersWithGivenContext(childNode);
     }

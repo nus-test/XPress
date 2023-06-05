@@ -14,6 +14,7 @@ import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNo
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeDirectContentFunctionNode.*;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeSequenceFunctionNode.*;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeSequenceFunctionNode.InformationTreeSequenceAggregationFunctionNode.*;
+import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeGenerator;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -25,6 +26,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class InformationTreeFunctionNodeManager {
     static InformationTreeFunctionNodeManager INSTANCE;
@@ -32,6 +34,7 @@ public class InformationTreeFunctionNodeManager {
     DefaultListHashMap<XMLDatatype, InformationTreeFunctionNode> simpleRoughContextMatchingMap = new DefaultListHashMap<>();
     DefaultListHashMap<XMLDatatype, InformationTreeFunctionNode> sequenceRoughContextMatchingMap = new DefaultListHashMap<>();
     List<InformationTreeFunctionNode> registeredFunctionList = new ArrayList<>();
+    int mapLock = 0;
 
     public static InformationTreeFunctionNodeManager getInstance() {
         if(INSTANCE == null) {
@@ -39,6 +42,14 @@ public class InformationTreeFunctionNodeManager {
             INSTANCE.setupRoughContextMatchingMap();
         }
         return INSTANCE;
+    }
+
+    public void setMapLock() {
+        mapLock ++;
+    }
+
+    public void unLockMapLock() {
+        mapLock --;
     }
 
     private InformationTreeFunctionNodeManager() {
@@ -74,6 +85,30 @@ public class InformationTreeFunctionNodeManager {
                 flag = true;
         }
         return castableDatatype;
+    }
+
+    public InformationTreeNode getNodeWithSimpleType(XMLDatatype datatype) {
+        return getNodeWithSimpleType(datatype, false);
+    }
+
+    public InformationTreeNode getNodeWithSimpleType(XMLDatatype datatype, boolean onlyRoot) {
+        double prob = GlobalRandom.getInstance().nextDouble();
+        if(prob < 0.3 && mapLock == 0) {
+            int length = InformationTreeGenerator.contextInformationTreeMap.get(datatype).size();
+            if(length != 0) {
+                int id = GlobalRandom.getInstance().nextInt(length);
+                InformationTreeNode treeNode = InformationTreeGenerator.contextInformationTreeMap.get(datatype).get(id);
+                InformationTreeGenerator.contextInformationTreeMap.get(datatype).remove(id);
+//                try {
+//                    System.out.println("Yayyyy" + treeNode.getXPathExpression());
+//                }catch(Exception e) {
+//
+//                }
+                return treeNode;
+            }
+        }
+        if(onlyRoot) return null;
+        return new InformationTreeConstantNode(datatype, datatype.getValueHandler().getValue(false));
     }
 
     /**
@@ -115,7 +150,7 @@ public class InformationTreeFunctionNodeManager {
      * other contents also filled (non-randomly).
      */
     public InformationTreeFunctionNode getRandomMatchingFunctionNodeWithContentAttached(InformationTreeNode treeNode, XMLDatatypeComplexRecorder datatypeRecorder) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
-        return getRandomMatchingFunctionNodeWithContentAttached(treeNode, datatypeRecorder, false, true);
+        return getRandomMatchingFunctionNodeWithContentAttached(treeNode, datatypeRecorder, false, true, true);
     }
 
     /**
@@ -130,12 +165,14 @@ public class InformationTreeFunctionNodeManager {
     public InformationTreeFunctionNode getRandomMatchingFunctionNodeWithContentAttached(
             InformationTreeNode treeNode,
             XMLDatatypeComplexRecorder datatypeRecorder,
-            Boolean random, Boolean calculate) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+            Boolean random, Boolean calculate, Boolean acceptSequenceOperation) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
         InformationTreeFunctionNode functionNode = null;
         boolean flag = false;
         while(!flag) {
             functionNode = getRandomMatchingFunctionNode(datatypeRecorder);
-            if(functionNode.checkContextAcceptability(treeNode)) {
+            if(functionNode.checkContextAcceptability(treeNode) &&
+                    (acceptSequenceOperation ||
+                            (!(functionNode instanceof InformationTreeSequenceFunctionNode) && !(functionNode instanceof MapFunctionNode)))) {
                 if(!random) functionNode.fillContents(treeNode, calculate);
                 else functionNode.fillContentsRandom(treeNode, calculate);
                 flag = true;
