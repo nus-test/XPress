@@ -7,7 +7,7 @@ import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNo
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.FunctionV3;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
-@FunctionV1
+@FunctionV3
 public class SumFunctionNode extends InformationTreeSequenceNumericalAggregationFunctionNode {
     public SumFunctionNode() {
         functionExpr = "sum";

@@ -135,7 +135,7 @@ public class InformationTreeFunctionNodeManager {
         InformationTreeFunctionNode functionNode;
         if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
             functionNode = GlobalRandom.getInstance().getRandomFromList(
-                sequenceRoughContextMatchingMap.get(datatypeRecorder.getActualDatatype())).newInstance();
+                    sequenceRoughContextMatchingMap.get(datatypeRecorder.getActualDatatype())).newInstance();
         else functionNode = GlobalRandom.getInstance().getRandomFromList(
                 simpleRoughContextMatchingMap.get(datatypeRecorder.getActualDatatype())).newInstance();
         return functionNode;
@@ -186,7 +186,7 @@ public class InformationTreeFunctionNodeManager {
      * Is only guaranteed to give a likely matching function node, the check against actual node is still needed.
      */
     public void setupRoughContextMatchingMap() {
-        InformationTreeNode dummyNode = new InformationTreeConstantNode();
+        InformationTreeContextNode dummyNode = new InformationTreeContextNode();
         dummyNode.getContext().context = "10";
         XMLDatatypeComplexRecorder recorder = new XMLDatatypeComplexRecorder();
         for(InformationTreeFunctionNode functionNode : registeredFunctionList) {

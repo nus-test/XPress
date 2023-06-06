@@ -8,7 +8,7 @@ public class GlobalSettings {
         VERSION_3
     }
 
-    public static XPathVersion xPathVersion = XPathVersion.VERSION_3;
+    public static XPathVersion xPathVersion = XPathVersion.VERSION_1;
 
     public static String defaultDBName = "Saxon";
     public static Boolean debugOutput = false;

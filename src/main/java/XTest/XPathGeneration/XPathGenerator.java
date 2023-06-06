@@ -46,7 +46,8 @@ public class XPathGenerator {
         ContextNode randomNode;
 
         double prob = GlobalRandom.getInstance().nextDouble();
-        if(prob < 0.8 || starterBuildPair.XPath.length() == 0 || mainExecutor.extraLeafNodeList == null) {
+        if(prob < 0.8 || GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_1
+            || starterBuildPair.XPath.length() == 0 || mainExecutor.extraLeafNodeList == null) {
             String prefix = GlobalRandom.getInstance().getRandomFromList(availablePrefixes);
             prob = GlobalRandom.getInstance().nextDouble();
             if (prob < 0.5) {

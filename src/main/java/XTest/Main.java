@@ -26,15 +26,17 @@ public class Main {
 
         List<DatabaseExecutor> dbExecuterList = new ArrayList<>();
 
-        dbExecuterList.add(BaseXExecutor.getInstance());
+   //     dbExecuterList.add(BaseXExecutor.getInstance());
         dbExecuterList.add(SaxonExecutor.getInstance());
+        dbExecuterList.add(PgExecutor.getInstance());
+        dbExecuterList.add(LibXML2Executor.getInstance());
 //        SaxonExecutor.getInstance().compareFlag = false;
 //        dbExecuterList.add(new ExistExecutor());
 //        ExistExecutor existIndexExecutor = new ExistExecutor("test-index", "Exist-index");
 //        dbExecuterList.add(existIndexExecutor);
 
 
-   //     dbExecuterList.add(LibXML2Executor.getInstance());
+        dbExecuterList.add(LibXML2Executor.getInstance());
 //        dbExecuterList.add(OracleExecutor.getInstance());
         for(DatabaseExecutor dbExecutor: dbExecuterList)
             dbExecutor.registerDatabase(mainExecutor);
@@ -68,6 +70,7 @@ public class Main {
                         String XPath = "";
                         try {
                             XPath = XPathGenerator.getXPath(GlobalRandom.getInstance().nextInt(5) + 2);
+                            mainExecutor.executeAndCompare(XPath);
                         } catch (MismatchingResultException | UnexpectedExceptionThrownException e) {
                             XPath = e.toString();
                             if(e instanceof UnexpectedExceptionThrownException)

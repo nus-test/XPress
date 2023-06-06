@@ -6,7 +6,7 @@ import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.PrimitiveDatatype.XMLIntegerHandler;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
-@FunctionV1
+@FunctionV3
 public class IntegerModFunctionNode extends BinaryNumericalOperatorFunctionNode {
     public IntegerModFunctionNode() {
         datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;

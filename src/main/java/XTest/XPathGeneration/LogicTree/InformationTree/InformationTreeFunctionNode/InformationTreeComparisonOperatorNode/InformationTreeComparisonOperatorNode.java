@@ -1,5 +1,7 @@
 package XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeComparisonOperatorNode;
 
+import XTest.GlobalRandom;
+import XTest.GlobalSettings;
 import XTest.PrimitiveDatatype.XMLComparable;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
@@ -44,6 +46,9 @@ public abstract class InformationTreeComparisonOperatorNode extends BinaryOperat
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
+        if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_1 && childNode.datatypeRecorder.xmlDatatype == XMLDatatype.STRING) {
+            return false;
+        }
         if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE ||
             childNode.datatypeRecorder.xmlDatatype == XMLDatatype.NODE ||
             childNode.datatypeRecorder.xmlDatatype == XMLDatatype.MIXED)

@@ -1,10 +1,10 @@
 package XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeDirectContentFunctionNode;
 
 import XTest.PrimitiveDatatype.XMLDatatype;
-import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.FunctionV1;
+import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.FunctionV3;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
-@FunctionV1
+@FunctionV3
 public class NameFunctionNode extends InformationTreeDirectContentFunctionNode {
     public NameFunctionNode() {
         functionExpr = "name";
