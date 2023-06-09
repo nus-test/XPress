@@ -10,9 +10,8 @@ import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.TestException.UnsupportedContextSetUpException;
 import XTest.XMLGeneration.AttributeNode;
 import XTest.XMLGeneration.ContextNode;
-import com.ibm.icu.impl.Pair;
+import org.apache.commons.lang3.tuple.Pair;
 import net.sf.saxon.s9api.SaxonApiException;
-import org.apache.xpath.operations.Bool;
 import org.xmldb.api.base.XMLDBException;
 
 import javax.naming.Context;
@@ -120,8 +119,7 @@ public class MainExecutor {
         String lastDBName = null;
         //System.out.println(XPath);
         for(DatabaseExecutor databaseExecutor : databaseExecutorList) {
-            if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3 &&
-                    databaseExecutor.dbXPathVersion != GlobalSettings.xPathVersion)
+            if(databaseExecutor.dbXPathVersion != GlobalSettings.xPathVersion)
                 continue;
             if(!databaseExecutor.compareFlag)
                 continue;

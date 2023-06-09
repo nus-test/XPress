@@ -5,7 +5,6 @@ import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeFunctionNode;
 import net.sf.saxon.s9api.SaxonApiException;
-import org.bouncycastle.jcajce.provider.asymmetric.rsa.RSAUtil;
 import org.xmldb.api.base.XMLDBException;
 
 import java.io.IOException;

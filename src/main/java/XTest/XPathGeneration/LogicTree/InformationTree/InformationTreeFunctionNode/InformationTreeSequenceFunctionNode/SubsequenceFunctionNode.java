@@ -9,7 +9,8 @@ import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNo
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.FunctionV3;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
-@FunctionV3
+// TODO: BaseX bug!
+//@FunctionV3
 public class SubsequenceFunctionNode extends InformationTreeSequenceFunctionNode {
     public SubsequenceFunctionNode() {
         functionExpr = "subsequence";

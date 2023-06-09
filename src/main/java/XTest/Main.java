@@ -10,7 +10,7 @@ import XTest.XMLGeneration.XMLContext;
 import XTest.XMLGeneration.XMLDocumentGenerator;
 import XTest.XMLGeneration.XMLStructuredDocumentGenerator;
 import XTest.XPathGeneration.XPathGenerator;
-import com.ibm.icu.impl.Pair;
+import org.apache.commons.lang3.tuple.Pair;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
 
@@ -26,7 +26,7 @@ public class Main {
 
         List<DatabaseExecutor> dbExecuterList = new ArrayList<>();
 
-   //     dbExecuterList.add(BaseXExecutor.getInstance());
+       // dbExecuterList.add(BaseXExecutor.getInstance());
         dbExecuterList.add(SaxonExecutor.getInstance());
         dbExecuterList.add(PgExecutor.getInstance());
         dbExecuterList.add(LibXML2Executor.getInstance());
@@ -36,7 +36,7 @@ public class Main {
 //        dbExecuterList.add(existIndexExecutor);
 
 
-        dbExecuterList.add(LibXML2Executor.getInstance());
+     //   dbExecuterList.add(LibXML2Executor.getInstance());
 //        dbExecuterList.add(OracleExecutor.getInstance());
         for(DatabaseExecutor dbExecutor: dbExecuterList)
             dbExecutor.registerDatabase(mainExecutor);

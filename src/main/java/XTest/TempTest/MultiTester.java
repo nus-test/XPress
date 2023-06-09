@@ -3,7 +3,8 @@ package XTest.TempTest;
 import XTest.CommonUtils;
 import XTest.DatabaseExecutor.DatabaseExecutor;
 import net.sf.saxon.s9api.*;
-import org.exist.xmldb.EXistResource;
+//TODO:eXist problem
+//import org.exist.xmldb.EXistResource;
 import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.*;
 import org.xmldb.api.modules.XMLResource;
@@ -91,11 +92,12 @@ public class MultiTester {
                         resultString += resultRes.getContent();
                     } finally {
                         //dont forget to cleanup resources
-                        try {
-                            ((EXistResource) resultRes).freeResources();
-                        } catch (XMLDBException xe) {
-                            xe.printStackTrace();
-                        }
+                        //TODO:eXist problem
+//                        try {
+//                            ((EXistResource) resultRes).freeResources();
+//                        } catch (XMLDBException xe) {
+//                            xe.printStackTrace();
+//                        }
                     }
                 }
             }

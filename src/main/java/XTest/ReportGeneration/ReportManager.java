@@ -2,6 +2,7 @@ package XTest.ReportGeneration;
 
 import XTest.DatabaseExecutor.DatabaseExecutor;
 import XTest.DatabaseExecutor.MainExecutor;
+import XTest.GlobalSettings;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -74,6 +75,8 @@ public class ReportManager {
         logToFile("originalxpath:" + XPath + "\n");
         logToFile("executionresults:\n");
         for(DatabaseExecutor databaseExecutor:mainExecutor.databaseExecutorList) {
+            if(databaseExecutor.dbXPathVersion != GlobalSettings.xPathVersion)
+                continue;
             try {
                 List<Integer> resultNodeIntegerList = databaseExecutor.executeGetNodeIdList(XPath);
                 String resultIdStringExpr = "";

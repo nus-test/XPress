@@ -70,7 +70,7 @@ public class XPathGenerator {
 
             prob = GlobalRandom.getInstance().nextDouble();
             randomNode = GlobalRandom.getInstance().getRandomFromList(currentBuildPair.contextNodeList);
-            // TODO: For saxon bug
+            // TODO: Saxon bug
             if (prob < -1 && GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3)
                 currentBuildPair.XPath += "*";
             else {

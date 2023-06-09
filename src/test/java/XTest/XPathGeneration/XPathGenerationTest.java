@@ -10,8 +10,8 @@ import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.TestException.UnsupportedContextSetUpException;
 import XTest.XMLGeneration.XMLContext;
 import XTest.XMLGeneration.XMLDocumentGenerator;
-import com.ibm.icu.impl.Pair;
 import net.sf.saxon.s9api.SaxonApiException;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 import org.xmldb.api.base.XMLDBException;
 

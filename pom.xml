@@ -34,6 +34,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.12.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.6.0</version>
@@ -45,10 +51,18 @@
             <version>5.3.22</version>
         </dependency>
 
+<!--        <dependency>-->
+<!--            <groupId>org.exist-db</groupId>-->
+<!--            <artifactId>exist-core</artifactId>-->
+<!--            <version>6.2.0</version>-->
+<!--        </dependency>-->
+
         <dependency>
-            <groupId>org.exist-db</groupId>
-            <artifactId>exist-core</artifactId>
-            <version>6.2.0</version>
+            <groupId>xmldb</groupId>
+            <artifactId>xmldb-api</artifactId>
+            <version>1.7</version>
+            <scope>system</scope>
+            <systemPath>C:/Users/workshop/Desktop/Mine/Repos/jar/xmldb-api-xmldb-api-1.7/xmldb-api-xmldb-api-1.7-1.7.0.jar</systemPath>
         </dependency>
 
         <dependency>

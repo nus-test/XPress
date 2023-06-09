@@ -3,9 +3,10 @@ package XTest.DatabaseExecutor;
 import XTest.CommonUtils;
 import XTest.GlobalSettings;
 import XTest.TestException.UnsupportedContextSetUpException;
-import com.ibm.icu.impl.Pair;
+import org.apache.commons.lang3.tuple.Pair;
 import net.sf.saxon.s9api.SaxonApiException;
-import org.exist.xmldb.EXistResource;
+//TODO:eXist problem
+//import org.exist.xmldb.EXistResource;
 import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.*;
 import org.xmldb.api.modules.XMLResource;
@@ -147,8 +148,8 @@ public class ExistExecutor extends DatabaseExecutor {
         String indexSetup = rangeIndexSetupPrefix;
         for(Pair pair: contextItems) {
             String tag = "<create";
-            tag += " qname=\"" + pair.first + "\"";
-            tag += " type=\"" + pair.second + "\"";
+            tag += " qname=\"" + pair.getLeft() + "\"";
+            tag += " type=\"" + pair.getRight() + "\"";
             tag += "/>\n";
             indexSetup += tag;
         }
@@ -178,11 +179,12 @@ public class ExistExecutor extends DatabaseExecutor {
                 resultString += resultRes.getContent() + " ";
             } finally {
                 //dont forget to cleanup resources
-                try {
-                    ((EXistResource) resultRes).freeResources();
-                } catch (XMLDBException xe) {
-                    xe.printStackTrace();
-                }
+                //TODO:eXist problem
+//                try {
+//                    ((EXistResource) resultRes).freeResources();
+//                } catch (XMLDBException xe) {
+//                    xe.printStackTrace();
+//                }
             }
         }
         return resultString;

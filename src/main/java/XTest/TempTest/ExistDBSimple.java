@@ -4,7 +4,8 @@ import org.xmldb.api.base.*;
 import org.xmldb.api.modules.*;
 import org.xmldb.api.*;
 import javax.xml.transform.OutputKeys;
-import org.exist.xmldb.EXistResource;
+//TODO:eXist problem
+//import org.exist.xmldb.EXistResource;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -70,8 +71,9 @@ public class ExistDBSimple {
                         resultRes = i.nextResource();
                         System.out.println(resultRes.getContent());
                     } finally {
+                        //TODO:eXist problem
                         //dont forget to cleanup resources
-                        try { ((EXistResource)resultRes).freeResources(); } catch(XMLDBException xe) {xe.printStackTrace();}
+                        //try { ((EXistResource)resultRes).freeResources(); } catch(XMLDBException xe) {xe.printStackTrace();}
                     }
                 }
             }catch(Exception e) {

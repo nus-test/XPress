@@ -18,7 +18,7 @@ public abstract class DatabaseExecutor {
     public boolean compareFlag = true;
     String currentContext = null;
 
-    GlobalSettings.XPathVersion dbXPathVersion;
+    public GlobalSettings.XPathVersion dbXPathVersion;
 
     public void registerDatabase(MainExecutor mainExecutor) {
         mainExecutor.registerDatabase(this, dbName);
