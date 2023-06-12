@@ -70,8 +70,8 @@ public class XPathGenerationTest {
         List<DatabaseExecutor> dbExecuterList = new ArrayList<>();
 
         dbExecuterList.add(SaxonExecutor.getInstance());
-        dbExecuterList.add(LibXML2Executor.getInstance());
-        dbExecuterList.add(PgExecutor.getInstance());
+        //dbExecuterList.add(LibXML2Executor.getInstance());
+        //dbExecuterList.add(PgExecutor.getInstance());
         //SaxonExecutor.getInstance().compareFlag = false;
         //dbExecuterList.add(new ExistExecutor());
         //dbExecuterList.add(new ExistExecutor("test-index", "Exist-index"));

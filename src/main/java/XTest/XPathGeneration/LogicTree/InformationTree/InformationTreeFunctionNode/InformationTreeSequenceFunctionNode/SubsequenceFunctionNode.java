@@ -8,6 +8,7 @@ import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNo
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.FunctionV1;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.FunctionV3;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
+import XTest.XPathGeneration.LogicTree.LogicTreeNode;
 
 // TODO: BaseX bug!
 //@FunctionV3

@@ -4,6 +4,7 @@ import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.TestException.DebugErrorException;
 import XTest.XPathGeneration.LogicTree.LogicTreeNode;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class InformationTreeConstantNode extends InformationTreeNode {
     public InformationTreeConstantNode() {}
@@ -15,17 +16,29 @@ public class InformationTreeConstantNode extends InformationTreeNode {
      */
     public InformationTreeConstantNode(XMLDatatype datatype, String context) {
         this.datatypeRecorder.xmlDatatype = datatype;
-        getContext().context = context;
+        XPathExpr = getContext().context = context;
+    }
+
+    /**
+     * Create new constant node with sequence of given type, context contains length and XPath expression
+     * @param recorder
+     * @param context
+     */
+    public InformationTreeConstantNode(XMLDatatypeComplexRecorder recorder, Pair<Integer, String> context) {
+        this.datatypeRecorder = recorder;
+        getContext().context = Integer.toString(context.getLeft());
+        XPathExpr = context.getRight();
     }
 
     public InformationTreeConstantNode(XMLDatatypeComplexRecorder recorder, String context) {
         this.datatypeRecorder = recorder;
-        getContext().context = context;
+        XPathExpr = getContext().context = context;
     }
 
     public InformationTreeConstantNode(XMLDatatypeComplexRecorder recorder, InformationTreeContext context) {
         this.datatypeRecorder = recorder;
         this.context = context;
+        XPathExpr = context.context;
     }
 
 
@@ -38,7 +51,7 @@ public class InformationTreeConstantNode extends InformationTreeNode {
     public InformationTreeConstantNode(XMLDatatype datatype, XMLDatatype subDatatype, String context) {
         this.datatypeRecorder.xmlDatatype = datatype;
         this.datatypeRecorder.subDatatype = subDatatype;
-        getContext().context = context;
+        XPathExpr = getContext().context = context;
     }
 
     @Override
@@ -53,6 +66,6 @@ public class InformationTreeConstantNode extends InformationTreeNode {
      */
     @Override
     public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode, boolean calculateString) throws DebugErrorException {
-        return XMLDatatype.wrapExpression(getContext().context, this.datatypeRecorder.xmlDatatype);
+        return XMLDatatype.wrapExpression(XPathExpr, this.datatypeRecorder.xmlDatatype);
     }
 }

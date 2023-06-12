@@ -26,10 +26,10 @@ public class Main {
 
         List<DatabaseExecutor> dbExecuterList = new ArrayList<>();
 
-       // dbExecuterList.add(BaseXExecutor.getInstance());
+        dbExecuterList.add(BaseXExecutor.getInstance());
         dbExecuterList.add(SaxonExecutor.getInstance());
-        dbExecuterList.add(PgExecutor.getInstance());
-        dbExecuterList.add(LibXML2Executor.getInstance());
+     //   dbExecuterList.add(PgExecutor.getInstance());
+     //   dbExecuterList.add(LibXML2Executor.getInstance());
 //        SaxonExecutor.getInstance().compareFlag = false;
 //        dbExecuterList.add(new ExistExecutor());
 //        ExistExecutor existIndexExecutor = new ExistExecutor("test-index", "Exist-index");

@@ -3,6 +3,7 @@ package XTest.PrimitiveDatatype;
 import XTest.CommonUtils;
 import XTest.DataCheckUtils;
 import XTest.GlobalRandom;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class XMLIntegerHandler extends PooledValueHandler implements XMLComparable, XMLNumeric, XMLSimple, XMLAtomic {
 
@@ -87,6 +88,17 @@ public class XMLIntegerHandler extends PooledValueHandler implements XMLComparab
         resultNum *= sign;
         return resultNum;
     }
+
+    public Pair<Integer, String> getSequenceValue(XMLDatatype xmlDatatype) {
+        double prob = GlobalRandom.getInstance().nextDouble();
+        if(prob < 0.5) {
+            int l = GlobalRandom.getInstance().nextInt(-1000, 1000);
+            int length = GlobalRandom.getInstance().nextInt(10) + 1;
+            String s = "(" + l + " to " + (l + length) + ")";
+            return Pair.of(length, s);
+        }
+        return super.getSequenceValue(xmlDatatype);
+    };
 
     @Override
     public String getDefiniteGreater(String baseValue) {

@@ -101,8 +101,14 @@ public abstract class InformationTreeNode extends LogicTreeNode {
             }
             else {
                 getContext().context = contextInfo.mainExecutor.executeSingleProcessor(calculationString);
-                if(datatypeRecorder.xmlDatatype == XMLDatatype.INTEGER)
-                    getContext().context = Integer.toString(XMLIntegerHandler.parseInt(getContext().context));
+                try {
+                    if (datatypeRecorder.xmlDatatype == XMLDatatype.INTEGER)
+                        getContext().context = Integer.toString(XMLIntegerHandler.parseInt(getContext().context));
+                } catch (Exception e) {
+                    System.out.println(getContext().context);
+                    System.out.println(calculationString);
+                    throw new RuntimeException();
+                }
             }
             if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE && datatypeRecorder.subDatatype == XMLDatatype.NODE) {
                 Integer size = Integer.parseInt(getContext().context);

@@ -46,24 +46,4 @@ public class SequenceGeneratorTest {
         String nodeSequence = sequenceGenerator.generateNodeSequenceFromContext(5, currentContextNodeList);
         System.out.println(nodeSequence);
     }
-
-    @Test
-    void generateStringSequence() {
-        System.out.println(sequenceGenerator.generateConstantSequence(5, XMLDatatype.STRING));
-    }
-
-    @Test
-    void generateIntegerSequence() {
-        System.out.println(sequenceGenerator.generateConstantSequence(5, XMLDatatype.INTEGER));
-    }
-
-    @Test
-    void generateDoubleSequence() {
-        System.out.println(sequenceGenerator.generateConstantSequence(5, XMLDatatype.DOUBLE));
-    }
-
-    @Test
-    void generateBooleanSequence() {
-        System.out.println(sequenceGenerator.generateConstantSequence(5, XMLDatatype.BOOLEAN));
-    }
 }

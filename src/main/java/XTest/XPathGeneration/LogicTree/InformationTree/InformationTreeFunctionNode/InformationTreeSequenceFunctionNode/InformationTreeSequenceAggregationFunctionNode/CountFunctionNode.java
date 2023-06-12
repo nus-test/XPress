@@ -6,6 +6,7 @@ import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeContextNod
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.FunctionV1;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeDirectContentFunctionNode.InformationTreeDirectContentFunctionNode;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
+import XTest.XPathGeneration.LogicTree.LogicTreeNode;
 
 @FunctionV1
 public class CountFunctionNode extends InformationTreeSequenceAggregationFunctionNode {
@@ -23,7 +24,6 @@ public class CountFunctionNode extends InformationTreeSequenceAggregationFunctio
         }
         return result;
     }
-
 
 
     @Override

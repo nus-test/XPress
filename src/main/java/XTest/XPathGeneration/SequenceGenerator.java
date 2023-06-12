@@ -39,19 +39,6 @@ public class SequenceGenerator {
         stringBuild += ")";
         return stringBuild;
     }
-
-    public String generateConstantSequence(int length, XMLDatatype xmlDatatype) {
-        String stringBuild = "(";
-        boolean start = true;
-        for(int i = 0; i < length; i ++) {
-            String element = generateSingleElementExpr(xmlDatatype);
-            if(!start) stringBuild += ",";
-            stringBuild += element;
-            start = false;
-        }
-        stringBuild += ")";
-        return stringBuild;
-    }
     
     public String generateConstantNodeSequence(int length) {
         String stringBuild = "(";
@@ -78,13 +65,5 @@ public class SequenceGenerator {
     String generateSingleConstantNodeExpr() {
         return XMLWriter.writeContext(new String(),
                 GlobalRandom.getInstance().getRandomFromList(mainExecutor.extraLeafNodeList));
-    }
-
-    String generateSingleElementExpr(XMLDatatype xmlDatatype) {
-        if(xmlDatatype.getValueHandler() != null) {
-            String value = xmlDatatype.getValueHandler().getValue();
-            return XMLDatatype.wrapExpression(value, xmlDatatype);
-        }
-        return null;
     }
 }

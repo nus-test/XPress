@@ -87,27 +87,51 @@ public class InformationTreeFunctionNodeManager {
         return castableDatatype;
     }
 
+    public InformationTreeNode getNodeWithSimpleValueOrSequence(XMLDatatype datatype) {
+        InformationTreeNode node = getNodeWithSequenceType(datatype);
+        double prob = GlobalRandom.getInstance().nextDouble();
+        if(node != null && prob < 0.6) return node;
+        return getNodeWithSimpleType(datatype);
+    }
+
+    public InformationTreeNode getNodeWithAnySequence(XMLDatatype datatype) {
+        InformationTreeNode node = getNodeWithSequenceType(XMLDatatype.MIXED);
+        double prob = GlobalRandom.getInstance().nextDouble();
+        if(node != null && prob < 0.3) return node;
+        return getNodeWithSequenceType(datatype);
+    }
+
+    public InformationTreeNode getNodeWithSequenceType(XMLDatatype datatype) {
+        return getNodeWithType(datatype, true, true);
+    }
+
     public InformationTreeNode getNodeWithSimpleType(XMLDatatype datatype) {
         return getNodeWithSimpleType(datatype, false);
     }
 
     public InformationTreeNode getNodeWithSimpleType(XMLDatatype datatype, boolean onlyRoot) {
+        return getNodeWithType(datatype, false, onlyRoot);
+    }
+
+    public InformationTreeNode getNodeWithType(XMLDatatype datatype, boolean isSequence, boolean onlyRoot) {
         double prob = GlobalRandom.getInstance().nextDouble();
         if(prob < 0.3 && mapLock == 0) {
-            int length = InformationTreeGenerator.contextInformationTreeMap.get(datatype).size();
+            int length = isSequence ? InformationTreeGenerator.sequenceInformationTreeMap.get(datatype).size() :
+                    InformationTreeGenerator.contextInformationTreeMap.get(datatype).size();
             if(length != 0) {
                 int id = GlobalRandom.getInstance().nextInt(length);
-                InformationTreeNode treeNode = InformationTreeGenerator.contextInformationTreeMap.get(datatype).get(id);
+                InformationTreeNode treeNode = isSequence ? InformationTreeGenerator.sequenceInformationTreeMap.get(datatype).get(id) :
+                        InformationTreeGenerator.contextInformationTreeMap.get(datatype).get(id);
                 InformationTreeGenerator.contextInformationTreeMap.get(datatype).remove(id);
-//                try {
-//                    System.out.println("Yayyyy" + treeNode.getXPathExpression());
-//                }catch(Exception e) {
-//
-//                }
                 return treeNode;
             }
         }
         if(onlyRoot) return null;
+        if(isSequence) {
+            if(datatype == XMLDatatype.NODE) return null;
+            return new InformationTreeConstantNode(new XMLDatatypeComplexRecorder(XMLDatatype.SEQUENCE, datatype, false),
+                    datatype.getValueHandler().getSequenceValue(datatype));
+        }
         return new InformationTreeConstantNode(datatype, datatype.getValueHandler().getValue(false));
     }
 

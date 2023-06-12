@@ -22,7 +22,7 @@ public abstract class InformationTreeComparisonOperatorNode extends BinaryOperat
     }
 
     @Override
-    public abstract InformationTreeComparisonOperatorNode modifyToContainStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException;
+    public abstract InformationTreeNode modifyToContainStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException;
 
     /**
      * To transfer all information of the previous node to current node (change only the comparison operator

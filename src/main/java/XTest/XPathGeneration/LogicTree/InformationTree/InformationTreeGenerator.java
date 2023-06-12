@@ -25,6 +25,7 @@ import java.util.List;
 
 public class InformationTreeGenerator {
     public static DefaultListHashMap<XMLDatatype, InformationTreeNode> contextInformationTreeMap = new DefaultListHashMap<>();
+    public static DefaultListHashMap<XMLDatatype, InformationTreeNode> sequenceInformationTreeMap = new DefaultListHashMap<>();
 
     MainExecutor mainExecutor;
 
@@ -67,11 +68,11 @@ public class InformationTreeGenerator {
         contextNode.setContextInfo(mainExecutor, XPathPrefix, starredNode.id, containsContextFlag,
                 constantExprFlag, selfContextFlag);
         contextNode.calculateInfo();
-        if(selfContextFlag && GlobalRandom.getInstance().nextDouble() < 0.4) {
-            Integer randomNum = GlobalRandom.getInstance().nextInt(3) + 1;
+        if(GlobalRandom.getInstance().nextDouble() < 0.4) {
+            Integer randomNum = 10;
             for(int i = 0; i < randomNum; i ++) {
                  InformationTreeContextNode subContextNode = new InformationTreeContextNode(contextNode);
-                 Integer levelLimit = GlobalRandom.getInstance().nextInt(2) + 1;
+                 Integer levelLimit = GlobalRandom.getInstance().nextInt(3) + 1;
                  if(levelLimit == 3 && GlobalRandom.getInstance().nextDouble() < 0.3) {
                      levelLimit = 1;
                  }
