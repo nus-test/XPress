@@ -57,17 +57,17 @@ public class MapFunctionNode extends BinaryOperatorFunctionNode {
     }
 
     @Override
-    public void fillContentParameters(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    public void fillContentParameters(InformationTreeNode childNode) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         fillContentParametersRandom(childNode);
     }
 
     @Override
-    public void fillContentParametersRandom(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    public void fillContentParametersRandom(InformationTreeNode childNode) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         Integer functionCnt = fillContentParameterFunctions(childNode);
         inferResultRecorder(functionCnt);
     }
 
-    private Integer fillContentParameterFunctions(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    private Integer fillContentParameterFunctions(InformationTreeNode childNode) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         int functionCnt = 1;
         double prob = GlobalRandom.getInstance().nextDouble();
         InformationTreeGenerator informationTreeGenerator = new InformationTreeGenerator(contextInfo.mainExecutor);

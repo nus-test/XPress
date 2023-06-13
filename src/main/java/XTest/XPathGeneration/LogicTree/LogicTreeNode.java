@@ -27,15 +27,15 @@ public abstract class LogicTreeNode {
      * Cached XPathExpr with no constant substitution.
      */
     public String XPathExpr = null;
-    public abstract LogicTreeNode modifyToContainStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException;
+    public abstract LogicTreeNode modifyToContainStarredNode(int starredNodeId) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException;
 
-    public LogicTreeNode modifyToContainStarredNodeWithCheck(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    public LogicTreeNode modifyToContainStarredNodeWithCheck(int starredNodeId) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         boolean contains = checkIfContainsStarredNode(starredNodeId);
         if(contains) return this;
         return modifyToContainStarredNode(starredNodeId);
     }
 
-    public boolean checkIfContainsStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    public boolean checkIfContainsStarredNode(int starredNodeId) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         String expr = getXPathExpression();
         //System.out.println("execute: " + contextInfo.XPathPrefix + "[" + expr + "]");
         List<Integer> resultList = contextInfo.mainExecutor.executeSingleProcessorGetIdList(contextInfo.XPathPrefix + "[" + expr + "]");

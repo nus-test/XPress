@@ -6,7 +6,7 @@ import XTest.TestException.UnsupportedContextSetUpException;
 import org.apache.commons.lang3.tuple.Pair;
 import net.sf.saxon.s9api.SaxonApiException;
 //TODO:eXist problem
-//import org.exist.xmldb.EXistResource;
+import org.exist.xmldb.EXistResource;
 import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.*;
 import org.xmldb.api.modules.XMLResource;
@@ -42,65 +42,92 @@ public class ExistExecutor extends DatabaseExecutor {
     Collection collection, indexCollection = null;
     XMLResource resource, indexResource;
     XQueryService xqs;
-    public ExistExecutor(String collName, String dbName) throws XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        this.collName = "/" + collName;
-        init();
-        this.dbName = dbName;
+    public ExistExecutor(String collName, String dbName) {
+        try {
+            this.collName = "/" + collName;
+            init();
+            this.dbName = dbName;
+        } catch(Exception e) {
+            System.out.println("Failed to instantiate eXist executor!");
+            System.out.println(e);
+            throw new RuntimeException();
+        }
     }
 
-    public ExistExecutor() throws XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        init();
+    public ExistExecutor() {
+        try {
+            init();
+        } catch(Exception e) {
+            System.out.println("Failed to instantiate eXist executor!");
+            System.out.println(e);
+            throw new RuntimeException();
+        }
     }
 
-    public void init() throws ClassNotFoundException, XMLDBException, InstantiationException, IllegalAccessException {
-        dbName = "Exist";
-        // initialize database driver
-        Class cl = Class.forName(driver);
-        Database database = (Database) cl.newInstance();
-        database.setProperty("create-database", "true");
-        dbXPathVersion = GlobalSettings.XPathVersion.VERSION_3;
-        DatabaseManager.registerDatabase(database);
+    public void init() {
+        try {
+            dbName = "Exist";
+            // initialize database driver
+            Class cl = Class.forName(driver);
+            Database database = (Database) cl.newInstance();
+            database.setProperty("create-database", "true");
+            dbXPathVersion = GlobalSettings.XPathVersion.VERSION_3;
+            DatabaseManager.registerDatabase(database);
+        } catch (Exception e) {
+            System.out.println("Failed to set context for eXist!");
+            System.out.println(e);
+        }
     }
 
 
-    static public ExistExecutor getInstance() throws XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+    static public ExistExecutor getInstance() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         if(existExecutor == null)
             existExecutor = new ExistExecutor();
         return existExecutor;
     }
 
     @Override
-    void setContextWithCheck(String content, String fileAddr) throws SQLException, UnsupportedContextSetUpException, XMLDBException, IOException, SaxonApiException {
+    void setContextWithCheck(String content, String fileAddr) throws SQLException, UnsupportedContextSetUpException, IOException {
         setContextByFileWithCheck(fileAddr);
     }
 
-    public void setContext(String info) throws SQLException, XMLDBException, IOException, SaxonApiException, UnsupportedContextSetUpException {
+    public void setContext(String info) throws SQLException, IOException, UnsupportedContextSetUpException {
         super.setContextByFile(info);
     }
 
     @Override
-    public void setContextByFileLow(String fileAddr) throws IOException, XMLDBException {
+    public void setContextByFileLow(String fileAddr) {
         setContextByFileLow(rootDir + collName, fileAddr, "autotest.xml");
     }
 
-    public void setIndexContextByFileLow(String collName, String fileAddr, String resourceName) throws IOException, XMLDBException {
-        indexCollection = DatabaseManager.getCollection(URI + collName);
-        indexCollection.setProperty(OutputKeys.INDENT, "no");
-        indexResource = (XMLResource) indexCollection.createResource(resourceName, XMLResource.RESOURCE_TYPE);
-        File f = new File(fileAddr);
-        indexResource.setContent(f);
-        indexCollection.storeResource(indexResource);
+    public void setIndexContextByFileLow(String collName, String fileAddr, String resourceName) {
+        try {
+            indexCollection = DatabaseManager.getCollection(URI + collName);
+            indexCollection.setProperty(OutputKeys.INDENT, "no");
+            indexResource = (XMLResource) indexCollection.createResource(resourceName, XMLResource.RESOURCE_TYPE);
+            File f = new File(fileAddr);
+            indexResource.setContent(f);
+            indexCollection.storeResource(indexResource);
+        } catch (Exception e) {
+            System.out.println("Failed to set context for eXist!");
+            System.out.println(e);
+        }
     }
 
-    public void setContextByFileLow(String collName, String fileAddr, String resourceName) throws IOException, XMLDBException {
-        collection = DatabaseManager.getCollection(URI + collName);
-        collection.setProperty(OutputKeys.INDENT, "no");
-        resource = (XMLResource) collection.createResource(resourceName, XMLResource.RESOURCE_TYPE);
-        File f = new File(fileAddr);
-        resource.setContent(f);
-        collection.storeResource(resource);
-        xqs = (XQueryService) collection.getService("XQueryService", "1.0");
-        xqs.setProperty("indent", "yes");
+    public void setContextByFileLow(String collName, String fileAddr, String resourceName) {
+        try {
+            collection = DatabaseManager.getCollection(URI + collName);
+            collection.setProperty(OutputKeys.INDENT, "no");
+            resource = (XMLResource) collection.createResource(resourceName, XMLResource.RESOURCE_TYPE);
+            File f = new File(fileAddr);
+            resource.setContent(f);
+            collection.storeResource(resource);
+            xqs = (XQueryService) collection.getService("XQueryService", "1.0");
+            xqs.setProperty("indent", "yes");
+        } catch (Exception e) {
+            System.out.println("Failed to set context for eXist!");
+            System.out.println(e);
+        }
     }
 
     @Override
@@ -109,20 +136,25 @@ public class ExistExecutor extends DatabaseExecutor {
     }
 
     @Override
-    public void clearCurrentContext() throws XMLDBException {
-        collection.removeResource(resource);
-        if(indexCollection != null && indexResource != null) {
-            System.out.println("Remove index ....");
-            indexCollection.removeResource(indexResource);
-            indexResource = null;
+    public void clearCurrentContext() {
+        try {
+            collection.removeResource(resource);
+            if (indexCollection != null && indexResource != null) {
+                System.out.println("Remove index ....");
+                indexCollection.removeResource(indexResource);
+                indexResource = null;
+            }
+        } catch (Exception e) {
+            System.out.println("Failed to set context for eXist!");
+            System.out.println(e);
         }
     }
 
-    public void setIndexByFile(String fileAddr) throws XMLDBException, IOException {
+    public void setIndexByFile(String fileAddr) {
         setIndexContextByFileLow(configDir + rootDir + collName, fileAddr, indexResourceName);
     }
 
-    public void setIndexByContent(String indexSetup) throws XMLDBException, IOException {
+    public void setIndexByContent(String indexSetup) throws IOException {
         CommonUtils.writeContextToFile(indexSetup, indexSetupTempStorageFileAddr);
         System.out.println("Set index ....");
         setIndexContextByFileLow(configDir + rootDir + collName,
@@ -180,22 +212,27 @@ public class ExistExecutor extends DatabaseExecutor {
             } finally {
                 //dont forget to cleanup resources
                 //TODO:eXist problem
-//                try {
-//                    ((EXistResource) resultRes).freeResources();
-//                } catch (XMLDBException xe) {
-//                    xe.printStackTrace();
-//                }
+                try {
+                    ((EXistResource) resultRes).freeResources();
+                } catch (XMLDBException xe) {
+                    xe.printStackTrace();
+                }
             }
         }
         return resultString;
     }
 
     @Override
-    public void close() throws XMLDBException {
-        collection.close();
-        if(indexCollection != null) {
-            indexCollection.close();
-            indexCollection = null;
+    public void close() {
+        try {
+            collection.close();
+            if(indexCollection != null) {
+                indexCollection.close();
+                indexCollection = null;
+            }
+        } catch (Exception e) {
+            System.out.println("Failed to close eXist.");
+            System.out.println(e);
         }
     }
 }

@@ -39,7 +39,7 @@ public class PredicateGenerator {
      * @throws SaxonApiException
      */
     public XPathResultListPair generatePredicate(String XPathPrefix, int maxPhraseLength,
-                                                 boolean mixedContent, ContextNode starredNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+                                                 boolean mixedContent, ContextNode starredNode) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         List<LogicTreeNode> rootList = new ArrayList<>();
         int phraseLength = GlobalRandom.getInstance().nextInt(maxPhraseLength) + 1;
         InformationTreeGenerator informationTreeGenerator = new InformationTreeGenerator(mainExecutor);

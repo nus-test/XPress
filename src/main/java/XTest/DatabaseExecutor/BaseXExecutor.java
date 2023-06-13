@@ -18,13 +18,19 @@ public class BaseXExecutor extends DatabaseExecutor {
     String username = "admin";
     String password = "shuxin";
 
-    private BaseXExecutor() throws IOException {
-        dbName = "BaseX";
-        dbXPathVersion = GlobalSettings.XPathVersion.VERSION_3;
-        BaseXSession = new BaseXClient("localhost", 1984, username, password);
+    private BaseXExecutor() {
+        try {
+            dbName = "BaseX";
+            dbXPathVersion = GlobalSettings.XPathVersion.VERSION_3;
+            BaseXSession = new BaseXClient("localhost", 1984, username, password);
+        } catch(Exception e) {
+            System.out.println("Failed to instantiate BaseX executor!");
+            System.out.println(e);
+            throw new RuntimeException();
+        }
     }
 
-    static public BaseXExecutor getInstance() throws IOException {
+    static public BaseXExecutor getInstance() {
         if(baseXExecutor == null) {
             baseXExecutor = new BaseXExecutor();
         }
@@ -32,12 +38,12 @@ public class BaseXExecutor extends DatabaseExecutor {
     }
 
     @Override
-    void setContextWithCheck(String content, String fileAddr) throws SQLException, UnsupportedContextSetUpException, XMLDBException, IOException, SaxonApiException {
+    void setContextWithCheck(String content, String fileAddr) throws SQLException, UnsupportedContextSetUpException, IOException {
         setContextByFileWithCheck(fileAddr);
     }
 
     @Override
-    public void setContext(String info) throws SQLException, XMLDBException, IOException, SaxonApiException, UnsupportedContextSetUpException {
+    public void setContext(String info) throws SQLException, IOException, UnsupportedContextSetUpException {
         super.setContextByFile(info);
     }
 

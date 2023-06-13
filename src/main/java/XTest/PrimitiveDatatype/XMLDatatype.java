@@ -88,7 +88,7 @@ public enum XMLDatatype {
      * @param to
      * @return True if data type "from" castable as "to"
      */
-    public static Boolean checkCastable(MainExecutor mainExecutor, XMLDatatype from, XMLDatatype to) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
+    public static Boolean checkCastable(MainExecutor mainExecutor, XMLDatatype from, XMLDatatype to) throws SQLException, UnexpectedExceptionThrownException, IOException {
         Boolean answer = null;
         Pair<XMLDatatype, XMLDatatype> pair = Pair.of(from, to);
         if(castableMap.containsKey(Pair.of(from, to))) {
@@ -133,7 +133,7 @@ public enum XMLDatatype {
         return GlobalRandom.getInstance().getRandomFromList(castableCandidateMap.get(datatype));
     }
 
-    public static void getCastable(MainExecutor mainExecutor) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
+    public static void getCastable(MainExecutor mainExecutor) throws SQLException, UnexpectedExceptionThrownException, IOException {
         for(XMLDatatype xmlDatatype : XMLDatatype.values()) {
             if(xmlDatatype.getValueHandler() instanceof XMLSimple) {
                 for(XMLDatatype xmlDatatype2 : XMLDatatype.values()) {

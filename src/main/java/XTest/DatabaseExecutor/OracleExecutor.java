@@ -37,12 +37,12 @@ public class OracleExecutor extends DatabaseExecutor {
     }
 
     @Override
-    void setContextWithCheck(String content, String fileAddr) throws SQLException, UnsupportedContextSetUpException, XMLDBException, IOException, SaxonApiException {
+    void setContextWithCheck(String content, String fileAddr) throws SQLException, UnsupportedContextSetUpException, IOException {
         setContextByContentWithCheck(content);
     }
 
     @Override
-    public void setContext(String info) throws SQLException, XMLDBException, IOException, SaxonApiException, UnsupportedContextSetUpException {
+    public void setContext(String info) throws SQLException, IOException, UnsupportedContextSetUpException {
         super.setContextByContent(info);
     }
 
@@ -59,7 +59,7 @@ public class OracleExecutor extends DatabaseExecutor {
     }
 
     @Override
-    public void clearCurrentContext() throws XMLDBException, IOException, SQLException {
+    public void clearCurrentContext() throws SQLException {
         System.out.println("Dropped Oracle!");
         statement.execute(dropSQL);
     }

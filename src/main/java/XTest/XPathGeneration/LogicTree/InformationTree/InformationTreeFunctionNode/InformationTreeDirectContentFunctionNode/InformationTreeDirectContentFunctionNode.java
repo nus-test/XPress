@@ -16,7 +16,7 @@ import java.sql.SQLException;
 public abstract class InformationTreeDirectContentFunctionNode extends InformationTreeFunctionNode {
 
     @Override
-    protected void fillContentParameters(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    protected void fillContentParameters(InformationTreeNode childNode) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         fillContentParametersRandom(childNode);
     }
 

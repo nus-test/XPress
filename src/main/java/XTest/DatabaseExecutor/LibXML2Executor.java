@@ -27,35 +27,35 @@ public class LibXML2Executor extends DatabaseExecutor {
     }
 
     @Override
-    void setContext(String info) throws SQLException, XMLDBException, IOException, SaxonApiException, UnsupportedContextSetUpException {
+    void setContext(String info) throws IOException, UnsupportedContextSetUpException {
         setContextByFile(info);
     }
 
     @Override
-    void setContextByFileLow(String fileAddr) throws IOException, XMLDBException, UnsupportedContextSetUpException {
+    void setContextByFileLow(String fileAddr) {
         this.fileAddr = fileAddr;
     }
 
     @Override
-    void setContextByContentLow(String content) throws SaxonApiException, SQLException, UnsupportedContextSetUpException {
+    void setContextByContentLow(String content) throws UnsupportedContextSetUpException {
         throw new UnsupportedContextSetUpException();
     }
 
     @Override
-    public String execute(String Xquery) throws IOException, XMLDBException, SaxonApiException, SQLException {
+    public String execute(String Xquery) throws IOException, SQLException {
         return libXML2ExecutorLow.execute(fileAddr, Xquery).trim();
     }
 
     @Override
-    void setContextWithCheck(String content, String fileAddr) throws SQLException, UnsupportedContextSetUpException, XMLDBException, IOException, SaxonApiException {
+    void setContextWithCheck(String content, String fileAddr) throws SQLException, UnsupportedContextSetUpException, IOException {
         setContextByFileWithCheck(fileAddr);
     }
 
     @Override
-    public void close() throws IOException, XMLDBException, SQLException {}
+    public void close() throws IOException, SQLException {}
 
     @Override
-    public List<Integer> executeGetNodeIdList(String Xquery) throws SQLException, XMLDBException, IOException, SaxonApiException {
+    public List<Integer> executeGetNodeIdList(String Xquery) throws SQLException, IOException {
         String result = execute(Xquery);
         if(result.length() == 0)
             return new ArrayList<>();

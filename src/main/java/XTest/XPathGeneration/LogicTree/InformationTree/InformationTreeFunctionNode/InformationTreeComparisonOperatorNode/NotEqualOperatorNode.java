@@ -12,6 +12,7 @@ import org.xmldb.api.base.XMLDBException;
 
 import java.io.IOException;
 import java.sql.SQLException;
+
 @FunctionV1
 public class NotEqualOperatorNode extends InformationTreeComparisonOperatorNode {
     public NotEqualOperatorNode() {
@@ -19,7 +20,7 @@ public class NotEqualOperatorNode extends InformationTreeComparisonOperatorNode 
     }
 
     @Override
-    public InformationTreeComparisonOperatorNode modifyToContainStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    public InformationTreeComparisonOperatorNode modifyToContainStarredNode(int starredNodeId) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         InformationTreeComparisonOperatorNode newRoot = new EqualOperatorNode();
         newRoot.transferInfo(this);
         return newRoot;

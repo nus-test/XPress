@@ -20,9 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) throws IOException, XMLDBException, ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, SaxonApiException, UnexpectedExceptionThrownException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException, UnexpectedExceptionThrownException {
         ReportManager reportManager = new ReportManager("C:\\app\\log\\log.txt");
         MainExecutor mainExecutor = new MainExecutor(reportManager);
+        mainExecutor.setReportLock();
 
         List<DatabaseExecutor> dbExecuterList = new ArrayList<>();
 
@@ -30,8 +31,8 @@ public class Main {
         dbExecuterList.add(SaxonExecutor.getInstance());
      //   dbExecuterList.add(PgExecutor.getInstance());
      //   dbExecuterList.add(LibXML2Executor.getInstance());
-//        SaxonExecutor.getInstance().compareFlag = false;
-//        dbExecuterList.add(new ExistExecutor());
+        SaxonExecutor.getInstance().compareFlag = false;
+        dbExecuterList.add(new ExistExecutor());
 //        ExistExecutor existIndexExecutor = new ExistExecutor("test-index", "Exist-index");
 //        dbExecuterList.add(existIndexExecutor);
 
@@ -42,7 +43,7 @@ public class Main {
             dbExecutor.registerDatabase(mainExecutor);
         XMLDatatype.getCastable(mainExecutor);
 
-        int round = 500;
+        int round = 10;
         XMLDocumentGenerator xmlDocumentGenerator;
         if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3)
             xmlDocumentGenerator = new XMLDocumentGenerator();
@@ -59,9 +60,9 @@ public class Main {
                 System.out.println("------------------ " + i);
                 System.out.println(xmlContext.getXmlContent());
                 try {
-                    int xpathCnt = 200;
+                    int xpathCnt = 30;
                     mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
-                    List<Pair<String, String>> indexList = mainExecutor.getRandomTagNameTypePair(GlobalRandom.getInstance().nextInt(5) + 1);
+                  //  List<Pair<String, String>> indexList = mainExecutor.getRandomTagNameTypePair(GlobalRandom.getInstance().nextInt(5) + 1);
                     //existIndexExecutor.setIndex(indexList, null);
                     for (int j = 0; j < xpathCnt; j++) {
 //                        if(j == 39) {
@@ -69,8 +70,10 @@ public class Main {
 //                        }
                         String XPath = "";
                         try {
-                            XPath = XPathGenerator.getXPath(GlobalRandom.getInstance().nextInt(5) + 2);
-                            mainExecutor.executeAndCompare(XPath);
+                            Pair<List<Pair<Integer, Integer>>, String> XPathResult = XPathGenerator.getXPathSectionDivided(GlobalRandom.getInstance().nextInt(5) + 2);
+                            XPath = XPathResult.getRight();
+                            //XPath = XPathGenerator.getXPath(GlobalRandom.getInstance().nextInt(5) + 2);
+                            mainExecutor.executeAndCompare(XPathResult);
                         } catch (MismatchingResultException | UnexpectedExceptionThrownException e) {
                             XPath = e.toString();
                             if(e instanceof UnexpectedExceptionThrownException)

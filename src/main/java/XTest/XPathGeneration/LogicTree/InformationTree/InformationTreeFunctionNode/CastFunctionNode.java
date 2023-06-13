@@ -29,7 +29,7 @@ public class CastFunctionNode extends BinaryOperatorFunctionNode {
      * @param childNode Given context.
      */
     @Override
-    protected void fillContentParameters(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    protected void fillContentParameters(InformationTreeNode childNode) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         fillContentParametersRandom(childNode);
     }
 
@@ -38,7 +38,7 @@ public class CastFunctionNode extends BinaryOperatorFunctionNode {
      * @param childNode Given context.
      */
     @Override
-    protected void fillContentParametersRandom(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    protected void fillContentParametersRandom(InformationTreeNode childNode) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         if(internalDatatype == null) {
             XMLDatatype originalDatatype = null;
             if (childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
@@ -86,7 +86,7 @@ public class CastFunctionNode extends BinaryOperatorFunctionNode {
      * Implicitly cast the child node into a specific castable type.
      * @param childNode Given context.
      */
-    protected void fillContentParametersSpecificAimedType(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    protected void fillContentParametersSpecificAimedType(InformationTreeNode childNode) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         if(internalDatatype == XMLDatatype.NODE)
             throw new DebugErrorException("Should not cast any data into nodes");
         if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)

@@ -38,7 +38,7 @@ public abstract class InformationTreeFunctionNode extends InformationTreeNode {
      * to be evaluated true for given context.
      * @param childNode Given context.
      */
-    protected void fillContentParameters(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    protected void fillContentParameters(InformationTreeNode childNode) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
     }
 
     /**
@@ -48,7 +48,7 @@ public abstract class InformationTreeFunctionNode extends InformationTreeNode {
      * The given context is either not evaluable or sequence, fill the remaining contents randomly.
      * @param childNode Given context.
      */
-    protected void fillContentParametersRandom(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    protected void fillContentParametersRandom(InformationTreeNode childNode) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
     }
 
     /**
@@ -57,11 +57,11 @@ public abstract class InformationTreeFunctionNode extends InformationTreeNode {
      * to be evaluated true for given context.
      * @param childNode Given context.
      */
-    public void fillContents(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    public void fillContents(InformationTreeNode childNode) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         fillContents(childNode, true);
     }
 
-    public void fillContents(InformationTreeNode childNode, Boolean calculate) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    public void fillContents(InformationTreeNode childNode, Boolean calculate) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         childList.add(childNode);
         inheritContextChildInfo(childNode);
         if(!childNode.checkValidContext())
@@ -75,11 +75,11 @@ public abstract class InformationTreeFunctionNode extends InformationTreeNode {
      * The given context is either not evaluable or sequence, fill the remaining contents randomly.
      * @param childNode Given context.
      */
-    public void fillContentsRandom(InformationTreeNode childNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    public void fillContentsRandom(InformationTreeNode childNode) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         fillContentsRandom(childNode, true);
     }
 
-    public void fillContentsRandom(InformationTreeNode childNode, Boolean calculate) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    public void fillContentsRandom(InformationTreeNode childNode, Boolean calculate) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         childList.add(childNode);
         inheritContextChildInfo(childNode);
         fillContentParametersRandom(childNode);

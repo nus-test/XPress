@@ -24,56 +24,56 @@ public abstract class DatabaseExecutor {
         mainExecutor.registerDatabase(this, dbName);
     }
 
-    public void setContextWithCheck(String info) throws SQLException, XMLDBException, IOException, UnsupportedContextSetUpException, SaxonApiException {
+    public void setContextWithCheck(String info) throws SQLException, IOException, UnsupportedContextSetUpException{
         clearContextWithCheck();
         setContext(info);
         clearFlag = true;
     }
 
-    abstract void setContextWithCheck(String content, String fileAddr) throws SQLException, UnsupportedContextSetUpException, XMLDBException, IOException, SaxonApiException;
+    abstract void setContextWithCheck(String content, String fileAddr) throws SQLException, UnsupportedContextSetUpException, IOException;
 
-    public void setContextByFileWithCheck(String fileAddr) throws SQLException, XMLDBException, IOException, SaxonApiException, UnsupportedContextSetUpException {
+    public void setContextByFileWithCheck(String fileAddr) throws SQLException, IOException, UnsupportedContextSetUpException {
         clearContextWithCheck();
         setContextByFile(fileAddr);
         clearFlag = true;
     }
 
-    public void setContextByContentWithCheck(String content) throws SQLException, XMLDBException, IOException, SaxonApiException, UnsupportedContextSetUpException {
+    public void setContextByContentWithCheck(String content) throws SQLException, IOException, UnsupportedContextSetUpException {
         clearContextWithCheck();
         setContextByContent(content);
         clearFlag = true;
     }
 
-    abstract void setContext(String info) throws SQLException, XMLDBException, IOException, SaxonApiException, UnsupportedContextSetUpException;
+    abstract void setContext(String info) throws SQLException, IOException, UnsupportedContextSetUpException;
 
-    public void setContextByFile(String fileAddr) throws SQLException, IOException, SaxonApiException, XMLDBException, UnsupportedContextSetUpException {
+    public void setContextByFile(String fileAddr) throws IOException, UnsupportedContextSetUpException {
         String xmlData = CommonUtils.readInputStream(new FileInputStream(fileAddr));
         this.currentContext = xmlData;
         setContextByFileLow(fileAddr);
     }
 
-    abstract void setContextByFileLow(String fileAddr) throws IOException, XMLDBException, UnsupportedContextSetUpException;
+    abstract void setContextByFileLow(String fileAddr) throws IOException, UnsupportedContextSetUpException;
 
-    void setContextByContent(String content) throws SaxonApiException, SQLException, XMLDBException, IOException, UnsupportedContextSetUpException {
+    void setContextByContent(String content) throws SQLException, UnsupportedContextSetUpException {
         this.currentContext = content;
         setContextByContentLow(content);
     }
 
-    abstract void setContextByContentLow(String content) throws SaxonApiException, SQLException, UnsupportedContextSetUpException;
+    abstract void setContextByContentLow(String content) throws SQLException, UnsupportedContextSetUpException;
 
-    public void clearContextWithCheck() throws SQLException, XMLDBException, IOException {
+    public void clearContextWithCheck() throws SQLException, IOException {
         if (clearFlag) {
             clearCurrentContext();
             clearFlag = false;
         }
     }
-    void clearCurrentContext() throws XMLDBException, IOException, SQLException {};
-    public abstract String execute(String Xquery) throws IOException, XMLDBException, SaxonApiException, SQLException;
-    public List<Integer> executeGetNodeIdList(String Xquery) throws SQLException, XMLDBException, IOException, SaxonApiException {
+    void clearCurrentContext() throws IOException, SQLException {};
+    public abstract String execute(String Xquery) throws IOException, SQLException, SaxonApiException, XMLDBException;
+    public List<Integer> executeGetNodeIdList(String Xquery) throws SQLException, IOException, XMLDBException, SaxonApiException {
         String result = execute(Xquery);
         return getNodeIdList(result, this.dbName);
     }
-    public abstract void close() throws IOException, XMLDBException, SQLException;
+    public abstract void close() throws IOException, SQLException;
 
     public static List<Integer> getNodeIdList(String resultString) {
         List<Integer> nodeIdList = new ArrayList<>();

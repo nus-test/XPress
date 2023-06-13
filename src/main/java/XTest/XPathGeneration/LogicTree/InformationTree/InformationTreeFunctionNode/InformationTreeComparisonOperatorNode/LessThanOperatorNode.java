@@ -20,7 +20,7 @@ public class LessThanOperatorNode extends InformationTreeComparisonOperatorNode 
     }
 
     @Override
-    public InformationTreeComparisonOperatorNode modifyToContainStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    public InformationTreeComparisonOperatorNode modifyToContainStarredNode(int starredNodeId) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         InformationTreeComparisonOperatorNode newRoot = new GreaterOrEqualOperatorNode();
         newRoot.transferInfo(this);
         return newRoot;

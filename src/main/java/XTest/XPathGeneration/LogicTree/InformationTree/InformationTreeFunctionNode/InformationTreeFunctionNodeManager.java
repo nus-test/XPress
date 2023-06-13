@@ -173,7 +173,7 @@ public class InformationTreeFunctionNodeManager {
      * with given "datatypeRecorder". The tree node is attached to the function node as the first child with
      * other contents also filled (non-randomly).
      */
-    public InformationTreeFunctionNode getRandomMatchingFunctionNodeWithContentAttached(InformationTreeNode treeNode, XMLDatatypeComplexRecorder datatypeRecorder) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    public InformationTreeFunctionNode getRandomMatchingFunctionNodeWithContentAttached(InformationTreeNode treeNode, XMLDatatypeComplexRecorder datatypeRecorder) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         return getRandomMatchingFunctionNodeWithContentAttached(treeNode, datatypeRecorder, false, true, true);
     }
 
@@ -189,7 +189,7 @@ public class InformationTreeFunctionNodeManager {
     public InformationTreeFunctionNode getRandomMatchingFunctionNodeWithContentAttached(
             InformationTreeNode treeNode,
             XMLDatatypeComplexRecorder datatypeRecorder,
-            Boolean random, Boolean calculate, Boolean acceptSequenceOperation) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+            Boolean random, Boolean calculate, Boolean acceptSequenceOperation) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         InformationTreeFunctionNode functionNode = null;
         boolean flag = false;
         while(!flag) {
@@ -237,7 +237,7 @@ public class InformationTreeFunctionNodeManager {
         //throw new RuntimeException();
     }
 
-    public InformationTreeNode getMapDummyChildNode(InformationTreeNode node) throws DebugErrorException, SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
+    public InformationTreeNode getMapDummyChildNode(InformationTreeNode node) throws DebugErrorException, SQLException, UnexpectedExceptionThrownException, IOException {
         InformationTreeContextNode dummyChildNode = new InformationTreeContextNode();
         dummyChildNode.XPathExpr = ".";
         dummyChildNode.inheritContextChildInfo(node);

@@ -42,7 +42,7 @@ public class InformationTreeGenerator {
      * @param starredNode The starred node in current candidate node set which is required to be in the answer set.
      * @return Root node of the generated information tree (tree height is random within range).
      */
-    public InformationTreeNode generateInformationTree(String XPathPrefix, boolean mixedContent, ContextNode starredNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    public InformationTreeNode generateInformationTree(String XPathPrefix, boolean mixedContent, ContextNode starredNode) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         // First select the direct context for current evaluation.
         double prob = GlobalRandom.getInstance().nextDouble();
 
@@ -96,7 +96,7 @@ public class InformationTreeGenerator {
      * @param levelLimit Limitation of generated tree height, but is not guaranteed to strictly meet the limits.
      * @return The root node of the generated information tree.
      */
-    public InformationTreeNode buildBooleanInformationTree(InformationTreeNode informationTreeNode, int levelLimit) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    public InformationTreeNode buildBooleanInformationTree(InformationTreeNode informationTreeNode, int levelLimit) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         InformationTreeNode root = buildInformationTree(informationTreeNode, levelLimit);
         double prob = GlobalRandom.getInstance().nextDouble();
         InformationTreeNode newRoot = null;
@@ -121,7 +121,7 @@ public class InformationTreeGenerator {
      * @param levelLimit Limitation of generated tree height.
      * @return The root node of the generated information tree.
      */
-    public InformationTreeNode buildInformationTree(InformationTreeNode informationTreeNode, int levelLimit) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    public InformationTreeNode buildInformationTree(InformationTreeNode informationTreeNode, int levelLimit) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         return buildInformationTree(informationTreeNode, levelLimit, false, true, true);
     }
 
@@ -132,7 +132,7 @@ public class InformationTreeGenerator {
      * @param levelLimit Limitation of generated tree height.
      * @return The root node of the generated information tree.
      */
-    public InformationTreeNode buildInformationTree(InformationTreeNode informationTreeNode, int levelLimit, Boolean random, Boolean calculate, Boolean acceptSequenceOperation) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    public InformationTreeNode buildInformationTree(InformationTreeNode informationTreeNode, int levelLimit, Boolean random, Boolean calculate, Boolean acceptSequenceOperation) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         if(levelLimit == 0)  return informationTreeNode;
 
         // Update information tree node in to a new root
@@ -181,7 +181,7 @@ public class InformationTreeGenerator {
      * @throws SaxonApiException
      * @throws DebugErrorException
      */
-    public InformationTreeNode aimedBooleanInformationTreeBuild(InformationTreeNode informationTreeNode) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    public InformationTreeNode aimedBooleanInformationTreeBuild(InformationTreeNode informationTreeNode) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         if(new BooleanFunctionNode().checkContextAcceptability(informationTreeNode)) {
             if(informationTreeNode.datatypeRecorder.xmlDatatype.getValueHandler() instanceof XMLNumeric) {
                 BooleanFunctionNode newRoot = new BooleanFunctionNode();

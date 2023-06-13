@@ -63,19 +63,19 @@ public abstract class InformationTreeNode extends LogicTreeNode {
         return null;
     }
 
-    boolean checkIfContainsStarredNode() throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    boolean checkIfContainsStarredNode() throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         return checkIfContainsStarredNode(getContextInfo().starredNodeId);
     }
 
     @Override
-    public InformationTreeNode modifyToContainStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    public InformationTreeNode modifyToContainStarredNode(int starredNodeId) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         NotFunctionNode newRoot = new NotFunctionNode();
         newRoot.fillContents(this);
         return newRoot;
     }
 
     @Override
-    public final InformationTreeNode modifyToContainStarredNodeWithCheck(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    public final InformationTreeNode modifyToContainStarredNodeWithCheck(int starredNodeId) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         //System.out.println("check result: " + checkIfContainsStarredNode() + " **& " + getXPathExpression());
         if(checkIfContainsStarredNode()) return this;
         return modifyToContainStarredNode(starredNodeId);
@@ -90,7 +90,7 @@ public abstract class InformationTreeNode extends LogicTreeNode {
         contextInfo = new InformationTreeContextInfo(childNode);
     }
 
-    public void calculateInfo() throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    public void calculateInfo() throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         String calculationString = getCalculationString();
         if(datatypeRecorder.xmlDatatype == XMLDatatype.NODE) {
             getContext().context = contextInfo.mainExecutor.executeSingleProcessor(calculationString + "/@id cast as xs:integer");

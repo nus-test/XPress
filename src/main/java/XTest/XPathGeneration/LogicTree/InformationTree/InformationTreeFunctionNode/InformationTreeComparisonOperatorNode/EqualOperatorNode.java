@@ -23,7 +23,7 @@ public class EqualOperatorNode extends InformationTreeComparisonOperatorNode {
     }
 
     @Override
-    public InformationTreeNode modifyToContainStarredNode(int starredNodeId) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
+    public InformationTreeNode modifyToContainStarredNode(int starredNodeId) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         NotFunctionNode newRoot = new NotFunctionNode();
         newRoot.fillContents(this);
         return newRoot;

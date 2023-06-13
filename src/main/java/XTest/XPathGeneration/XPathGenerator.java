@@ -9,6 +9,7 @@ import XTest.TestException.MismatchingResultException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XMLGeneration.ContextNode;
 import net.sf.saxon.s9api.SaxonApiException;
+import org.apache.commons.lang3.tuple.Pair;
 import org.xmldb.api.base.XMLDBException;
 
 import java.io.IOException;
@@ -27,12 +28,32 @@ public class XPathGenerator {
         sequenceGenerator = new SequenceGenerator(mainExecutor);
     }
 
+    public Pair<List<Pair<Integer, Integer>>, String> generateXPathSectionDivided
+            (Pair<List<Pair<Integer, Integer>>, String> currentList,
+             XPathResultListPair starterBuildPair, int depth, boolean complex)
+            throws SQLException, IOException, UnexpectedExceptionThrownException, DebugErrorException {
+        if(depth == 0) {
+            return currentList;
+        }
+        Pair<Pair<Integer, Integer>, XPathResultListPair> XPathRecord = generateXPathSingleSection(starterBuildPair, complex);
+        currentList.getLeft().add(XPathRecord.getLeft());
+        return generateXPathSectionDivided(Pair.of(currentList.getLeft(), XPathRecord.getRight().XPath),
+                XPathRecord.getRight(), depth - 1, complex);
+    }
+
     public String generateXPath(XPathResultListPair starterBuildPair, int depth, boolean complex)
-            throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, UnexpectedExceptionThrownException, InstantiationException, IllegalAccessException, DebugErrorException {
+            throws SQLException, IOException, UnexpectedExceptionThrownException, DebugErrorException {
         if(depth == 0) {
             return starterBuildPair.XPath;
         }
+        return generateXPath(generateXPathSingleSection(starterBuildPair, complex).getRight()
+                , depth - 1, complex);
+    }
 
+    public Pair<Pair<Integer, Integer>, XPathResultListPair> generateXPathSingleSection(
+            XPathResultListPair starterBuildPair, boolean complex
+    ) throws SQLException, IOException, UnexpectedExceptionThrownException, DebugErrorException {
+        int idL, idR;
         XPathResultListPair currentBuildPair = new XPathResultListPair(starterBuildPair);
         // First stage
         List<String> availablePrefixes = prefixQualifier.getPrefixes(starterBuildPair.contextNodeList, !complex);
@@ -46,8 +67,8 @@ public class XPathGenerator {
         ContextNode randomNode;
 
         double prob = GlobalRandom.getInstance().nextDouble();
-        if(prob < 0.8 || GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_1
-            || starterBuildPair.XPath.length() == 0 || mainExecutor.extraLeafNodeList == null) {
+        if(prob < 0.7 || GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_1
+                || starterBuildPair.XPath.length() == 0 || mainExecutor.extraLeafNodeList == null) {
             String prefix = GlobalRandom.getInstance().getRandomFromList(availablePrefixes);
             prob = GlobalRandom.getInstance().nextDouble();
             if (prob < 0.5) {
@@ -64,12 +85,10 @@ public class XPathGenerator {
             String tempBuilder = currentBuildPair.XPath + "*";
             nodeIdList = mainExecutor.executeSingleProcessorGetIdList(tempBuilder);
             currentBuildPair.contextNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
-            //Unwanted situation!
-            if (currentBuildPair.contextNodeList.size() == 0)
-                return tempBuilder;
 
             prob = GlobalRandom.getInstance().nextDouble();
             randomNode = GlobalRandom.getInstance().getRandomFromList(currentBuildPair.contextNodeList);
+            idL = currentBuildPair.XPath.length();
             // TODO: Saxon bug
             if (prob < -1 && GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3)
                 currentBuildPair.XPath += "*";
@@ -77,15 +96,14 @@ public class XPathGenerator {
                 currentBuildPair.XPath += randomNode.tagName;
                 allowTextContentFlag = true;
             }
-            nodeIdList = mainExecutor.executeSingleProcessorGetIdList(currentBuildPair.XPath);
-            currentBuildPair.contextNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
         } else {
             int length = GlobalRandom.getInstance().nextInt(5) + 1;
-          //  System.out.println("#####" + currentBuildPair.XPath);
+            //  System.out.println("#####" + currentBuildPair.XPath);
+            idL = currentBuildPair.XPath.length() + 1;
             currentBuildPair.XPath += "/" + sequenceGenerator.generateNodeSequenceFromContext(length, starterBuildPair.contextNodeList);
-            nodeIdList = mainExecutor.executeSingleProcessorGetIdList(currentBuildPair.XPath);
-            currentBuildPair.contextNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
         }
+        nodeIdList = mainExecutor.executeSingleProcessorGetIdList(currentBuildPair.XPath);
+        currentBuildPair.contextNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
 //        if(prob < 0.15 && (!KnownBugs.exist)) {
 //            currentBuildPair = indexSearchAttempt(currentBuildPair);
 //        }
@@ -101,7 +119,7 @@ public class XPathGenerator {
 //            currentBuildPair.XPath += predicateContext.predicate;
 //            currentBuildPair.contextNodeList = predicateContext.executionResult;
 //        }
-       // System.out.println("********************** " + currentBuildPair.XPath);
+        // System.out.println("********************** " + currentBuildPair.XPath);
         if(prob < 0.6) {
             randomNode = GlobalRandom.getInstance().getRandomFromList(currentBuildPair.contextNodeList);
             XPathResultListPair predicateContext = predicateGenerator.generatePredicate(currentBuildPair.XPath, 4, !allowTextContentFlag, randomNode);
@@ -113,22 +131,30 @@ public class XPathGenerator {
 //        prob = GlobalRandom.getInstance().nextDouble();
 //        if(prob < 0.2 && (!KnownBugs.exist))
 //            currentBuildPair = indexSearchAttempt(currentBuildPair);
-        return generateXPath(currentBuildPair, depth - 1, complex);
+        idR = currentBuildPair.XPath.length();
+        return Pair.of(Pair.of(idL, idR), currentBuildPair);
     }
 
-    public String generateXPath(String currentBuilder, List<ContextNode> currentNodeList, int depth, boolean complex) throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, UnexpectedExceptionThrownException, InstantiationException, IllegalAccessException, DebugErrorException {
+    public String generateXPath(String currentBuilder, List<ContextNode> currentNodeList, int depth, boolean complex) throws SQLException, IOException, UnexpectedExceptionThrownException, InstantiationException, IllegalAccessException, DebugErrorException {
         return generateXPath(new XPathResultListPair(currentBuilder, currentNodeList), depth, complex);
     }
 
-    public String generateXPath(String currentBuilder, List<ContextNode> currentNodeList, int depth) throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, UnexpectedExceptionThrownException, InstantiationException, IllegalAccessException, DebugErrorException {
+    public String generateXPath(String currentBuilder, List<ContextNode> currentNodeList, int depth) throws SQLException, MismatchingResultException, IOException, UnexpectedExceptionThrownException, InstantiationException, IllegalAccessException, DebugErrorException {
         return generateXPath(currentBuilder, currentNodeList, depth, true);
     }
 
-    public String getXPath(int depth) throws SQLException, XMLDBException, MismatchingResultException, IOException, SaxonApiException, InstantiationException, IllegalAccessException, UnexpectedExceptionThrownException, DebugErrorException {
+    public String getXPath(int depth) throws SQLException, MismatchingResultException, IOException, InstantiationException, IllegalAccessException, UnexpectedExceptionThrownException, DebugErrorException {
         return generateXPath("", null, depth);
     }
 
-    XPathResultListPair indexSearchAttempt(XPathResultListPair buildPair) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
+    public Pair<List<Pair<Integer, Integer>>, String> getXPathSectionDivided
+            (int depth)
+            throws SQLException, IOException, UnexpectedExceptionThrownException, DebugErrorException {
+        return generateXPathSectionDivided(Pair.of(new ArrayList<>(), ""),
+                new XPathResultListPair("", null), depth, true);
+    }
+
+    XPathResultListPair indexSearchAttempt(XPathResultListPair buildPair) throws SQLException, UnexpectedExceptionThrownException, IOException {
         String builder = buildPair.XPath;
         List<ContextNode> selectedNodeList = buildPair.contextNodeList;
         int length = selectedNodeList.size();

@@ -44,12 +44,12 @@ public class MySQLExecutor extends DatabaseExecutor {
     }
 
     @Override
-    public void setContext(String info) throws SQLException, XMLDBException, IOException, SaxonApiException, UnsupportedContextSetUpException {
+    public void setContext(String info) throws SQLException, IOException, UnsupportedContextSetUpException {
         super.setContextByContent(info);
     }
 
     @Override
-    void setContextWithCheck(String content, String fileAddr) throws SQLException, UnsupportedContextSetUpException, XMLDBException, IOException, SaxonApiException {
+    void setContextWithCheck(String content, String fileAddr) throws SQLException, UnsupportedContextSetUpException, IOException {
         setContextByContentWithCheck(content);
     }
 

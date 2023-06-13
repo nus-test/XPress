@@ -34,18 +34,23 @@ public class SaxonExecutor extends DatabaseExecutor {
     }
 
     @Override
-    public void setContextByContentLow(String context) throws SaxonApiException {
-        Source src = new StreamSource(new StringReader(context));
-        document = builder.build(src);
+    public void setContextByContentLow(String context) {
+        try {
+            Source src = new StreamSource(new StringReader(context));
+            document = builder.build(src);
+        } catch (Exception e) {
+            System.out.println("Failed to set context for eXist!");
+            System.out.println(e);
+        }
     }
 
     @Override
-    void setContextWithCheck(String content, String fileAddr) throws SQLException, UnsupportedContextSetUpException, XMLDBException, IOException, SaxonApiException {
+    void setContextWithCheck(String content, String fileAddr) throws SQLException, UnsupportedContextSetUpException, IOException {
         setContextByContentWithCheck(content);
     }
 
     @Override
-    public void setContext(String info) throws SQLException, XMLDBException, IOException, SaxonApiException, UnsupportedContextSetUpException {
+    public void setContext(String info) throws SQLException, IOException, UnsupportedContextSetUpException {
         super.setContextByContent(info);
     }
 
