@@ -1,6 +1,7 @@
 package XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeComparisonOperatorNode;
 
 import XTest.GlobalRandom;
+import XTest.GlobalSettings;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.TestException.DebugErrorException;
@@ -25,7 +26,9 @@ public class EqualOperatorNode extends InformationTreeComparisonOperatorNode {
     @Override
     public InformationTreeNode modifyToContainStarredNode(int starredNodeId) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         NotFunctionNode newRoot = new NotFunctionNode();
-        newRoot.fillContents(this);
+        if(GlobalSettings.starNodeSelection)
+            newRoot.fillContents(this);
+        else newRoot.fillContentsRandom(this, false);
         return newRoot;
     }
 

@@ -12,6 +12,8 @@ public class GlobalSettings {
 
     public static String defaultDBName = "Saxon";
     public static Boolean debugOutput = false;
+    public static Boolean starNodeSelection = true;
+    public static Boolean rectifySelection = true;
 
     private GlobalSettings(){};
 

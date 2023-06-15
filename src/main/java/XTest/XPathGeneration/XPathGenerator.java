@@ -30,38 +30,36 @@ public class XPathGenerator {
 
     public Pair<List<Pair<Integer, Integer>>, String> generateXPathSectionDivided
             (Pair<List<Pair<Integer, Integer>>, String> currentList,
-             XPathResultListPair starterBuildPair, int depth, boolean complex)
+             XPathResultListPair starterBuildPair, int depth)
             throws SQLException, IOException, UnexpectedExceptionThrownException, DebugErrorException {
         if(depth == 0) {
             return currentList;
         }
-        Pair<Pair<Integer, Integer>, XPathResultListPair> XPathRecord = generateXPathSingleSection(starterBuildPair, complex);
+        Pair<Pair<Integer, Integer>, XPathResultListPair> XPathRecord = generateXPathSingleSection(starterBuildPair);
         currentList.getLeft().add(XPathRecord.getLeft());
+        if(XPathRecord.getRight().contextNodeList.isEmpty() && GlobalSettings.starNodeSelection && !GlobalSettings.rectifySelection)
+            return Pair.of(currentList.getLeft(), XPathRecord.getRight().XPath);
         return generateXPathSectionDivided(Pair.of(currentList.getLeft(), XPathRecord.getRight().XPath),
-                XPathRecord.getRight(), depth - 1, complex);
+                XPathRecord.getRight(), depth - 1);
     }
 
-    public String generateXPath(XPathResultListPair starterBuildPair, int depth, boolean complex)
+    public String generateXPath(XPathResultListPair starterBuildPair, int depth)
             throws SQLException, IOException, UnexpectedExceptionThrownException, DebugErrorException {
         if(depth == 0) {
             return starterBuildPair.XPath;
         }
-        return generateXPath(generateXPathSingleSection(starterBuildPair, complex).getRight()
-                , depth - 1, complex);
+        XPathResultListPair XPathRecord = generateXPathSingleSection(starterBuildPair).getRight();
+        if(XPathRecord.contextNodeList.isEmpty() && GlobalSettings.starNodeSelection && !GlobalSettings.rectifySelection)
+            return XPathRecord.XPath;
+        return generateXPath(XPathRecord, depth - 1);
     }
 
     public Pair<Pair<Integer, Integer>, XPathResultListPair> generateXPathSingleSection(
-            XPathResultListPair starterBuildPair, boolean complex
+            XPathResultListPair starterBuildPair
     ) throws SQLException, IOException, UnexpectedExceptionThrownException, DebugErrorException {
         int idL, idR;
         XPathResultListPair currentBuildPair = new XPathResultListPair(starterBuildPair);
-        // First stage
-        List<String> availablePrefixes = prefixQualifier.getPrefixes(starterBuildPair.contextNodeList, !complex);
-        if(availablePrefixes.isEmpty()) {
-            // Something wrong might be happening?
-            return null;
-        }
-
+        List<String> availablePrefixes = prefixQualifier.getPrefixes(starterBuildPair.contextNodeList);
         List<Integer> nodeIdList;
         boolean allowTextContentFlag = false;
         ContextNode randomNode;
@@ -87,7 +85,10 @@ public class XPathGenerator {
             currentBuildPair.contextNodeList = mainExecutor.getNodeListFromIdList(nodeIdList);
 
             prob = GlobalRandom.getInstance().nextDouble();
-            randomNode = GlobalRandom.getInstance().getRandomFromList(currentBuildPair.contextNodeList);
+            if(!GlobalSettings.starNodeSelection || currentBuildPair.contextNodeList.isEmpty())
+                randomNode = mainExecutor.contextNodeMap.get(
+                        GlobalRandom.getInstance().nextInt(mainExecutor.maxId - 1) + 1);
+            else randomNode = GlobalRandom.getInstance().getRandomFromList(currentBuildPair.contextNodeList);
             idL = currentBuildPair.XPath.length();
             // TODO: Saxon bug
             if (prob < -1 && GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3)
@@ -98,7 +99,6 @@ public class XPathGenerator {
             }
         } else {
             int length = GlobalRandom.getInstance().nextInt(5) + 1;
-            //  System.out.println("#####" + currentBuildPair.XPath);
             idL = currentBuildPair.XPath.length() + 1;
             currentBuildPair.XPath += "/" + sequenceGenerator.generateNodeSequenceFromContext(length, starterBuildPair.contextNodeList);
         }
@@ -107,10 +107,6 @@ public class XPathGenerator {
 //        if(prob < 0.15 && (!KnownBugs.exist)) {
 //            currentBuildPair = indexSearchAttempt(currentBuildPair);
 //        }
-//        prob = GlobalRandom.getInstance().nextDouble();
-
-        // Debug: currently make sure that predicate is generated.
-        prob = 0.1;
         // Predicate application start
 //        if(prob < 0.6) {
 //            randomNode = GlobalRandom.getInstance().getRandomFromList(currentBuildPair.contextNodeList);
@@ -120,9 +116,21 @@ public class XPathGenerator {
 //            currentBuildPair.contextNodeList = predicateContext.executionResult;
 //        }
         // System.out.println("********************** " + currentBuildPair.XPath);
+        prob = GlobalRandom.getInstance().nextDouble();
         if(prob < 0.6) {
-            randomNode = GlobalRandom.getInstance().getRandomFromList(currentBuildPair.contextNodeList);
-            XPathResultListPair predicateContext = predicateGenerator.generatePredicate(currentBuildPair.XPath, 4, !allowTextContentFlag, randomNode);
+            Integer randomId = null;
+            if(!GlobalSettings.starNodeSelection) {
+                randomNode = mainExecutor.contextNodeMap.get(
+                        GlobalRandom.getInstance().nextInt(mainExecutor.maxId - 1) + 1);
+                if(!currentBuildPair.contextNodeList.isEmpty())
+                    randomId = GlobalRandom.getInstance().getRandomFromList(currentBuildPair.contextNodeList).id;
+            }
+            else {
+                randomNode = GlobalRandom.getInstance().getRandomFromList(currentBuildPair.contextNodeList);
+                randomId = randomNode.id;
+            }
+            XPathResultListPair predicateContext = predicateGenerator.generatePredicate(
+                    currentBuildPair.XPath, 4, !allowTextContentFlag, randomNode, randomId);
             currentBuildPair.XPath += predicateContext.XPath;
             currentBuildPair.contextNodeList = predicateContext.contextNodeList;
         }
@@ -132,15 +140,12 @@ public class XPathGenerator {
 //        if(prob < 0.2 && (!KnownBugs.exist))
 //            currentBuildPair = indexSearchAttempt(currentBuildPair);
         idR = currentBuildPair.XPath.length();
+        //System.out.println("--> " + currentBuildPair.XPath.substring(idL, idR) + " " + currentBuildPair.contextNodeList.size());
         return Pair.of(Pair.of(idL, idR), currentBuildPair);
     }
 
-    public String generateXPath(String currentBuilder, List<ContextNode> currentNodeList, int depth, boolean complex) throws SQLException, IOException, UnexpectedExceptionThrownException, InstantiationException, IllegalAccessException, DebugErrorException {
-        return generateXPath(new XPathResultListPair(currentBuilder, currentNodeList), depth, complex);
-    }
-
-    public String generateXPath(String currentBuilder, List<ContextNode> currentNodeList, int depth) throws SQLException, MismatchingResultException, IOException, UnexpectedExceptionThrownException, InstantiationException, IllegalAccessException, DebugErrorException {
-        return generateXPath(currentBuilder, currentNodeList, depth, true);
+    public String generateXPath(String currentBuilder, List<ContextNode> currentNodeList, int depth) throws SQLException, IOException, UnexpectedExceptionThrownException, InstantiationException, IllegalAccessException, DebugErrorException {
+        return generateXPath(new XPathResultListPair(currentBuilder, currentNodeList), depth);
     }
 
     public String getXPath(int depth) throws SQLException, MismatchingResultException, IOException, InstantiationException, IllegalAccessException, UnexpectedExceptionThrownException, DebugErrorException {
@@ -151,7 +156,7 @@ public class XPathGenerator {
             (int depth)
             throws SQLException, IOException, UnexpectedExceptionThrownException, DebugErrorException {
         return generateXPathSectionDivided(Pair.of(new ArrayList<>(), ""),
-                new XPathResultListPair("", null), depth, true);
+                new XPathResultListPair("", null), depth);
     }
 
     XPathResultListPair indexSearchAttempt(XPathResultListPair buildPair) throws SQLException, UnexpectedExceptionThrownException, IOException {

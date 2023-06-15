@@ -1,17 +1,13 @@
 package XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeComparisonOperatorNode;
 
-import XTest.GlobalRandom;
 import XTest.GlobalSettings;
 import XTest.PrimitiveDatatype.XMLComparable;
 import XTest.PrimitiveDatatype.XMLDatatype;
-import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.BinaryOperatorFunctionNode;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
-import net.sf.saxon.s9api.SaxonApiException;
-import org.xmldb.api.base.XMLDBException;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -34,8 +30,10 @@ public abstract class InformationTreeComparisonOperatorNode extends BinaryOperat
         childList = prevNode.childList;
         datatypeRecorder = prevNode.datatypeRecorder;
         setContextInfo(prevNode.getContextInfo());
-        calculateInfo();
-        setCalculableContextFlag();
+        if(GlobalSettings.starNodeSelection) {
+            calculateInfo();
+            setCalculableContextFlag();
+        }
     }
 
     @Override

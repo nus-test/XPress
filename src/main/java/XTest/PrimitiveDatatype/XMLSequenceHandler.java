@@ -25,8 +25,9 @@ public class XMLSequenceHandler extends ValueHandler {
 
     @Override
     public String getValue() {
-        Pair pair = getRandomIntervalPair();
-        return "(" + pair.x + " to " + pair.y + ")";
+        //Pair pair = getRandomIntervalPair();
+        return "()";
+        //return "(" + pair.x + " to " + pair.y + ")";
     }
 
     @Override

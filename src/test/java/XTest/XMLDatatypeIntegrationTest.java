@@ -34,7 +34,6 @@ public class XMLDatatypeIntegrationTest {
             dbExecutor.registerDatabase(mainExecutor);
         XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
         mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
-        mainExecutor.setExtraLeafNodeContext(xmlDocumentGenerator.generateExtraLeafNodes(20));
 
         XMLDatatype.getCastable(mainExecutor);
 

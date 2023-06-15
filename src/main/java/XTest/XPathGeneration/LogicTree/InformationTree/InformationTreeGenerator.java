@@ -3,6 +3,7 @@ package XTest.XPathGeneration.LogicTree.InformationTree;
 import XTest.DatabaseExecutor.MainExecutor;
 import XTest.DefaultListHashMap;
 import XTest.GlobalRandom;
+import XTest.GlobalSettings;
 import XTest.PrimitiveDatatype.XMLAtomic;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLNumeric;
@@ -67,7 +68,8 @@ public class InformationTreeGenerator {
         }
         contextNode.setContextInfo(mainExecutor, XPathPrefix, starredNode.id, containsContextFlag,
                 constantExprFlag, selfContextFlag);
-        contextNode.calculateInfo();
+        if(GlobalSettings.starNodeSelection)
+            contextNode.calculateInfo();
         if(GlobalRandom.getInstance().nextDouble() < 0.4) {
             Integer randomNum = 10;
             for(int i = 0; i < randomNum; i ++) {
@@ -76,7 +78,8 @@ public class InformationTreeGenerator {
                  if(levelLimit == 3 && GlobalRandom.getInstance().nextDouble() < 0.3) {
                      levelLimit = 1;
                  }
-                 InformationTreeNode subRoot = buildInformationTree(subContextNode, levelLimit,false, true, false);
+                 InformationTreeNode subRoot = buildInformationTree(subContextNode, levelLimit,
+                         !GlobalSettings.starNodeSelection, GlobalSettings.starNodeSelection, false);
                  if(subRoot.datatypeRecorder.xmlDatatype.getValueHandler() instanceof XMLAtomic) {
                      contextInformationTreeMap.get(subRoot.datatypeRecorder.xmlDatatype).add(subRoot);
                  }
@@ -97,7 +100,8 @@ public class InformationTreeGenerator {
      * @return The root node of the generated information tree.
      */
     public InformationTreeNode buildBooleanInformationTree(InformationTreeNode informationTreeNode, int levelLimit) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
-        InformationTreeNode root = buildInformationTree(informationTreeNode, levelLimit);
+        InformationTreeNode root = buildInformationTree(informationTreeNode, levelLimit,
+            !GlobalSettings.starNodeSelection, GlobalSettings.starNodeSelection, true);
         double prob = GlobalRandom.getInstance().nextDouble();
         InformationTreeNode newRoot = null;
         if(prob < 0.5) {
@@ -108,7 +112,9 @@ public class InformationTreeGenerator {
         }
         if(newRoot.datatypeRecorder.xmlDatatype != XMLDatatype.BOOLEAN) {
             InformationTreeFunctionNode booleanRoot = new BooleanFunctionNode();
-            booleanRoot.fillContents(newRoot);
+            if(GlobalSettings.starNodeSelection)
+                booleanRoot.fillContents(newRoot);
+            else booleanRoot.fillContentsRandom(newRoot, false);
             newRoot = booleanRoot;
         }
         return newRoot;
@@ -137,17 +143,6 @@ public class InformationTreeGenerator {
 
         // Update information tree node in to a new root
         InformationTreeNode newRoot;
-        double prob = GlobalRandom.getInstance().nextDouble();
-        // TODO: could loosen the constraint hear for attribute node cast through record of nodeMix?
-//        if(prob < 0.4 && (informationTreeNode.datatypeRecorder.xmlDatatype != XMLDatatype.SEQUENCE ||
-//                Integer.parseInt(informationTreeNode.context) != 0)
-//            && !(informationTreeNode instanceof AttributeFunctionNode)) {
-//            XMLDatatypeComplexRecorder recorder = InformationTreeFunctionNodeManager.getInstance()
-//                    .getRandomTargetedDatatypeRecorder(informationTreeNode.datatypeRecorder);
-//            CastFunctionNode castedInformationTreeNode = new CastFunctionNode();
-//            castedInformationTreeNode.fillContentsSpecificAimedType(informationTreeNode, recorder);
-//            informationTreeNode = castedInformationTreeNode;
-//        }
         newRoot = InformationTreeFunctionNodeManager.getInstance()
                         .getRandomMatchingFunctionNodeWithContentAttached(
                                 informationTreeNode, informationTreeNode.datatypeRecorder, random, calculate, acceptSequenceOperation);
@@ -185,7 +180,7 @@ public class InformationTreeGenerator {
         if(new BooleanFunctionNode().checkContextAcceptability(informationTreeNode)) {
             if(informationTreeNode.datatypeRecorder.xmlDatatype.getValueHandler() instanceof XMLNumeric) {
                 BooleanFunctionNode newRoot = new BooleanFunctionNode();
-                newRoot.fillContentsRandom(informationTreeNode);
+                newRoot.fillContentsRandom(informationTreeNode, GlobalSettings.starNodeSelection);
                 informationTreeNode = newRoot;
             }
             return informationTreeNode;

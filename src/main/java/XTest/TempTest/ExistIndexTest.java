@@ -49,7 +49,7 @@ public class ExistIndexTest {
                 System.out.println(mainExecutor.executeSingleProcessor(xquery, databaseExecutor));
                 System.out.println(mainExecutor.executeSingleProcessorGetIdList(xquery, databaseExecutor));
             }
-        } catch (Exception | UnsupportedContextSetUpException e) {
+        } catch (Exception e) {
             if(e instanceof UnexpectedExceptionThrownException)
                 System.out.println(((UnexpectedExceptionThrownException) e).originalException);
             System.out.println(e);

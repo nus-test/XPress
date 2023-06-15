@@ -36,7 +36,7 @@ public class AttributeFunctionNode extends InformationTreeDirectContentFunctionN
 
     @Override
     protected void fillContentParametersRandom(InformationTreeNode childNode) {
-        int nodeId = GlobalRandom.getInstance().nextInt(contextInfo.mainExecutor.maxId);
+        int nodeId = GlobalRandom.getInstance().nextInt(contextInfo.mainExecutor.maxId - 1) + 1;
         fillContentParametersWithNodeID(childNode, nodeId);
     }
 

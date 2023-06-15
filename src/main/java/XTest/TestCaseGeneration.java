@@ -59,7 +59,7 @@ public class TestCaseGeneration {
                     mainExecutor.cleanUp();
                 }
             }
-        }catch (Exception | UnsupportedContextSetUpException e) {
+        }catch (Exception e) {
             System.out.println(e);
             e.printStackTrace();
         }

@@ -37,11 +37,9 @@ public abstract class LogicTreeNode {
 
     public boolean checkIfContainsStarredNode(int starredNodeId) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         String expr = getXPathExpression();
-        //System.out.println("execute: " + contextInfo.XPathPrefix + "[" + expr + "]");
         List<Integer> resultList = contextInfo.mainExecutor.executeSingleProcessorGetIdList(contextInfo.XPathPrefix + "[" + expr + "]");
         return resultList.contains(starredNodeId);
     }
-
 
     /**
      *

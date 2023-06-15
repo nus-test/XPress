@@ -2,6 +2,7 @@ package XTest.XPathGeneration;
 
 import XTest.DatabaseExecutor.MainExecutor;
 import XTest.GlobalRandom;
+import XTest.GlobalSettings;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.XMLGeneration.AttributeNode;
 import XTest.XMLGeneration.ContextNode;
@@ -55,7 +56,8 @@ public class SequenceGenerator {
 
     String generateSingleNodeExprFromContext(List<ContextNode> currentNodeList) {
         double prob = GlobalRandom.getInstance().nextDouble();
-        ContextNode starredNode = GlobalRandom.getInstance().getRandomFromList(currentNodeList);
+        ContextNode starredNode = GlobalSettings.starNodeSelection ? GlobalRandom.getInstance().getRandomFromList(currentNodeList) :
+            mainExecutor.contextNodeMap.get(GlobalRandom.getInstance().nextInt(mainExecutor.maxId - 1) + 1);
         if(prob < 0.7 && starredNode.childList.size() != 0)
             return starredNode.getStrPathToRandomChildNode();
         return starredNode.getPath();

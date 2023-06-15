@@ -26,6 +26,7 @@ public class MainExecutor {
 
     String fileAddr = "C:\\app\\log\\autotest.xml";
     public Integer maxId = 0;
+    public Integer maxIdContainsLeaf = 0;
     public Map<Integer, ContextNode> contextNodeMap = new HashMap<>();
     public List<ContextNode> extraLeafNodeList = new ArrayList<>();
     public List<DatabaseExecutor> databaseExecutorList = new ArrayList<>();
@@ -49,7 +50,7 @@ public class MainExecutor {
         for(ContextNode contextNode : contextNodeList) {
             contextNodeMap.put(contextNode.id, contextNode);
             extraLeafNodeList.add(contextNode);
-            maxId = max(contextNode.id, maxId);
+            maxIdContainsLeaf = max(contextNode.id, maxIdContainsLeaf);
         }
     }
 
@@ -68,6 +69,7 @@ public class MainExecutor {
     void getContextNodeMap(ContextNode currentNode) {
         contextNodeMap.put(currentNode.id, currentNode);
         maxId = max(maxId, currentNode.id);
+        maxIdContainsLeaf = max(maxIdContainsLeaf, maxId);
         for(ContextNode childNode : currentNode.childList)
             getContextNodeMap(childNode);
     }
@@ -196,6 +198,7 @@ public class MainExecutor {
 
     public void close() throws SQLException, IOException {
         try {
+            if(reportManager != null) reportManager.close();
             cleanUp();
             for (DatabaseExecutor databaseExecutor : databaseExecutorList)
                 databaseExecutor.close();

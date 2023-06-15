@@ -1,5 +1,7 @@
 package XTest.XPathGeneration;
 
+import XTest.GlobalRandom;
+import XTest.GlobalSettings;
 import XTest.XMLGeneration.ContextNode;
 
 import java.util.*;
@@ -14,17 +16,25 @@ public class PrefixQualifier {
         return axes.stream().map(PrefixQualifier::getAxis).toList();
     }
 
-    List<String> getPrefixes(List<ContextNode> currentNodes, boolean noAxes) {
+    List<String> getPrefixes(List<ContextNode> currentNodes) {
         boolean haveChildNode = false, haveParentNode = false;
         boolean haveFollowingSibling = false, haveFollowing = false;
         boolean havePrecedingSibling = false, havePreceding = false;
         List<String> availablePrefix = new ArrayList<>();
 
+        if(!GlobalSettings.starNodeSelection) {
+            availablePrefix.addAll(Arrays.asList("/", "//"));
+            availablePrefix.addAll(getAxesList(Arrays.asList("child", "descendant", "parent", "ancestor",
+                    "following-sibling", "preceding-sibling", "following", "preceding",
+                    "self", "descendant-or-self", "ancestor-or-self")));
+            return availablePrefix;
+        }
+
         if(currentNodes == null) {
-            noAxes = true;
             haveChildNode = true;
             currentNodes = new ArrayList<>();
         }
+
         for(ContextNode node : currentNodes) {
             if(!node.childList.isEmpty())
                 haveChildNode = true;
@@ -43,26 +53,19 @@ public class PrefixQualifier {
         }
         if(haveChildNode) {
             availablePrefix.addAll(Arrays.asList("/", "//"));
-            if(!noAxes)
-                availablePrefix.addAll(getAxesList(Arrays.asList("child","descendant")));
+            availablePrefix.addAll(getAxesList(Arrays.asList("child","descendant")));
         }
-        if(!noAxes) {
-            if(haveParentNode)
-                availablePrefix.addAll(getAxesList(Arrays.asList("parent", "ancestor")));
-            if(haveFollowingSibling)
-                availablePrefix.add(getAxis("following-sibling"));
-            if(havePrecedingSibling)
-                availablePrefix.add(getAxis("preceding-sibling"));
-            if(haveFollowing)
-                availablePrefix.add(getAxis("following"));
-            if(havePreceding)
-                availablePrefix.add(getAxis("preceding"));
-            availablePrefix.addAll(getAxesList(Arrays.asList("self", "descendant-or-self", "ancestor-or-self")));
-        }
+        if(haveParentNode)
+            availablePrefix.addAll(getAxesList(Arrays.asList("parent", "ancestor")));
+        if(haveFollowingSibling)
+            availablePrefix.add(getAxis("following-sibling"));
+        if(havePrecedingSibling)
+            availablePrefix.add(getAxis("preceding-sibling"));
+        if(haveFollowing)
+            availablePrefix.add(getAxis("following"));
+        if(havePreceding)
+            availablePrefix.add(getAxis("preceding"));
+        availablePrefix.addAll(getAxesList(Arrays.asList("self", "descendant-or-self", "ancestor-or-self")));
         return availablePrefix;
-    }
-
-    List<String> getPrefixes(List<ContextNode> currentNodes) {
-        return getPrefixes(currentNodes, false);
     }
 }

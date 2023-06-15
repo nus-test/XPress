@@ -174,7 +174,8 @@ public class InformationTreeFunctionNodeManager {
      * other contents also filled (non-randomly).
      */
     public InformationTreeFunctionNode getRandomMatchingFunctionNodeWithContentAttached(InformationTreeNode treeNode, XMLDatatypeComplexRecorder datatypeRecorder) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
-        return getRandomMatchingFunctionNodeWithContentAttached(treeNode, datatypeRecorder, false, true, true);
+        return getRandomMatchingFunctionNodeWithContentAttached(treeNode, datatypeRecorder,
+                !GlobalSettings.starNodeSelection,  GlobalSettings.starNodeSelection, true);
     }
 
     /**
@@ -243,7 +244,7 @@ public class InformationTreeFunctionNodeManager {
         dummyChildNode.inheritContextChildInfo(node);
         dummyChildNode.dummyContext = true;
         if(node.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) {
-            int id = GlobalRandom.getInstance().nextInt(Integer.parseInt(node.getContext().context)) + 1;
+            Integer id = GlobalSettings.starNodeSelection ? GlobalRandom.getInstance().nextInt(Integer.parseInt(node.getContext().context)) + 1 : null;
             String calString = "((" + node.getCalculationString() + ")[" + id + "])";
             dummyChildNode.datatypeRecorder = new XMLDatatypeComplexRecorder(node.datatypeRecorder.getActualDatatype());
             if(node.datatypeRecorder.subDatatype == XMLDatatype.NODE) {
@@ -251,8 +252,9 @@ public class InformationTreeFunctionNodeManager {
             } else {
                 calString = "(" + calString + " cast as " + node.datatypeRecorder.subDatatype.getValueHandler().officialTypeName + ")";
             }
-            dummyChildNode.getContext().setContext(
-                    dummyChildNode.getContextInfo().mainExecutor.executeSingleProcessor(calString));
+            if(GlobalSettings.starNodeSelection)
+                dummyChildNode.getContext().setContext(
+                        dummyChildNode.getContextInfo().mainExecutor.executeSingleProcessor(calString));
             dummyChildNode.dummyCalculateString = calString;
         }
         else {

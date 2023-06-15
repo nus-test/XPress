@@ -2,6 +2,7 @@ package XTest.XPathGeneration;
 
 import XTest.DatabaseExecutor.MainExecutor;
 import XTest.GlobalRandom;
+import XTest.GlobalSettings;
 import XTest.TestException.DebugErrorException;
 import XTest.TestException.UnexpectedExceptionThrownException;
 import XTest.XMLGeneration.ContextNode;
@@ -39,7 +40,7 @@ public class PredicateGenerator {
      * @throws SaxonApiException
      */
     public XPathResultListPair generatePredicate(String XPathPrefix, int maxPhraseLength,
-                                                 boolean mixedContent, ContextNode starredNode) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
+                                                 boolean mixedContent, ContextNode starredNode, Integer containId) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         List<LogicTreeNode> rootList = new ArrayList<>();
         int phraseLength = GlobalRandom.getInstance().nextInt(maxPhraseLength) + 1;
         InformationTreeGenerator informationTreeGenerator = new InformationTreeGenerator(mainExecutor);
@@ -61,9 +62,15 @@ public class PredicateGenerator {
             rootList.add(newRoot);
         }
         LogicTreeNode root = rootList.get(0);
-        root = root.modifyToContainStarredNodeWithCheck(starredNode.id);
+        if(containId != null && GlobalSettings.rectifySelection)
+            root = root.modifyToContainStarredNodeWithCheck(containId);
         String XPathExpression = XPathPrefix + "[" + root.getXPathExpression() + "]";
         List<ContextNode> selectedList = mainExecutor.executeSingleProcessorGetNodeList(XPathExpression);
         return new XPathResultListPair("[" + root.getXPathExpression() + "]", selectedList);
+    }
+
+    public XPathResultListPair generatePredicate(String XPathPrefix, int maxPhraseLength,
+                                                 boolean mixedContent, ContextNode starredNode) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
+        return generatePredicate(XPathPrefix, maxPhraseLength, mixedContent, starredNode, starredNode.id);
     }
 }

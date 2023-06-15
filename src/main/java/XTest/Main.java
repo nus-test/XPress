@@ -55,7 +55,7 @@ public class Main {
                 xmlDocumentGenerator.clearContext();
                 XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(50);
                 mainExecutor.setExtraLeafNodeContext(xmlDocumentGenerator.generateExtraLeafNodes(15));
-                mainExecutor.maxId = 0;
+                mainExecutor.maxId = mainExecutor.maxIdContainsLeaf = 0;
                 XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
                 System.out.println("------------------ " + i);
                 System.out.println(xmlContext.getXmlContent());
@@ -86,12 +86,11 @@ public class Main {
                     mainExecutor.cleanUp();
                 }
             }
-        }catch (Exception | UnsupportedContextSetUpException e) {
+        }catch (Exception e) {
             System.out.println(e);
             e.printStackTrace();
         }
         finally {
-            reportManager.close();
             mainExecutor.close();
         }
     }

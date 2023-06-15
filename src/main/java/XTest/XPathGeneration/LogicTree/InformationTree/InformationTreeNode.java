@@ -2,6 +2,7 @@ package XTest.XPathGeneration.LogicTree.InformationTree;
 
 import XTest.DatabaseExecutor.MainExecutor;
 import XTest.GlobalRandom;
+import XTest.GlobalSettings;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLIntegerHandler;
 import XTest.TestException.DebugErrorException;
@@ -70,14 +71,16 @@ public abstract class InformationTreeNode extends LogicTreeNode {
     @Override
     public InformationTreeNode modifyToContainStarredNode(int starredNodeId) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         NotFunctionNode newRoot = new NotFunctionNode();
-        newRoot.fillContents(this);
+        if(GlobalSettings.starNodeSelection)
+            newRoot.fillContents(this);
+        else newRoot.fillContentsRandom(this, false);
         return newRoot;
     }
 
     @Override
     public final InformationTreeNode modifyToContainStarredNodeWithCheck(int starredNodeId) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
-        //System.out.println("check result: " + checkIfContainsStarredNode() + " **& " + getXPathExpression());
-        if(checkIfContainsStarredNode()) return this;
+        Boolean result = checkIfContainsStarredNode(starredNodeId);
+        if(result) return this;
         return modifyToContainStarredNode(starredNodeId);
     }
 

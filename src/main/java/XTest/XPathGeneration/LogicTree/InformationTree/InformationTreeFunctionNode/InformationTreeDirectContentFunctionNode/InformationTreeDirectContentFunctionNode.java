@@ -1,5 +1,6 @@
 package XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeDirectContentFunctionNode;
 
+import XTest.GlobalSettings;
 import XTest.PrimitiveDatatype.XMLDatatype;
 import XTest.PrimitiveDatatype.XMLDatatypeComplexRecorder;
 import XTest.TestException.DebugErrorException;
@@ -24,6 +25,7 @@ public abstract class InformationTreeDirectContentFunctionNode extends Informati
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
         Boolean checkResult = childNode.datatypeRecorder.xmlDatatype == XMLDatatype.NODE;
         if(!checkResult) {
+            if(!GlobalSettings.starNodeSelection) return false;
             if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE && childNode.datatypeRecorder.subDatatype == XMLDatatype.NODE &&
             Integer.parseInt(childNode.getContext().context) != 0)
                 checkResult = true;
