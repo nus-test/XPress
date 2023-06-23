@@ -18,6 +18,7 @@ public class SaxonExecutor extends DatabaseExecutor {
     Processor saxon;
     DocumentBuilder builder;
     XdmNode document;
+    String mathNamespaceDeclarer = "declare namespace math=\"http://www.w3.org/2005/xpath-functions/math\";";
 
 
     private SaxonExecutor() {
@@ -62,7 +63,7 @@ public class SaxonExecutor extends DatabaseExecutor {
     @Override
     public String execute(String Xquery) throws SaxonApiException {
         XQueryCompiler compiler = saxon.newXQueryCompiler();
-        XQueryExecutable exec = compiler.compile(Xquery);
+        XQueryExecutable exec = compiler.compile(mathNamespaceDeclarer + Xquery);
         XQueryEvaluator query = exec.load();
         query.setContextItem(document);
         XdmValue result = query.evaluate();

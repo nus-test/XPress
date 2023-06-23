@@ -31,8 +31,8 @@ public class Main {
         dbExecuterList.add(SaxonExecutor.getInstance());
      //   dbExecuterList.add(PgExecutor.getInstance());
      //   dbExecuterList.add(LibXML2Executor.getInstance());
-        SaxonExecutor.getInstance().compareFlag = false;
-        dbExecuterList.add(new ExistExecutor());
+        //SaxonExecutor.getInstance().compareFlag = false;
+        //dbExecuterList.add(new ExistExecutor());
 //        ExistExecutor existIndexExecutor = new ExistExecutor("test-index", "Exist-index");
 //        dbExecuterList.add(existIndexExecutor);
 
@@ -43,7 +43,7 @@ public class Main {
             dbExecutor.registerDatabase(mainExecutor);
         XMLDatatype.getCastable(mainExecutor);
 
-        int round = 10;
+        int round = 500;
         XMLDocumentGenerator xmlDocumentGenerator;
         if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3)
             xmlDocumentGenerator = new XMLDocumentGenerator();
@@ -60,7 +60,7 @@ public class Main {
                 System.out.println("------------------ " + i);
                 System.out.println(xmlContext.getXmlContent());
                 try {
-                    int xpathCnt = 30;
+                    int xpathCnt = 200;
                     mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
                   //  List<Pair<String, String>> indexList = mainExecutor.getRandomTagNameTypePair(GlobalRandom.getInstance().nextInt(5) + 1);
                     //existIndexExecutor.setIndex(indexList, null);
@@ -72,6 +72,7 @@ public class Main {
                         try {
                             Pair<List<Pair<Integer, Integer>>, String> XPathResult = XPathGenerator.getXPathSectionDivided(GlobalRandom.getInstance().nextInt(5) + 2);
                             XPath = XPathResult.getRight();
+                            if(XPath.length() == 0) continue;
                             //XPath = XPathGenerator.getXPath(GlobalRandom.getInstance().nextInt(5) + 2);
                             mainExecutor.executeAndCompare(XPathResult);
                         } catch (MismatchingResultException | UnexpectedExceptionThrownException e) {

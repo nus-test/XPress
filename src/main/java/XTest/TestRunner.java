@@ -18,6 +18,7 @@ import java.util.List;
 public class TestRunner {
     MainExecutor mainExecutor;
     XMLDocumentGenerator xmlDocumentGenerator;
+    public String xmlContext;
 
     public TestRunner(MainExecutor mainExecutor) {
         this.mainExecutor = mainExecutor;
@@ -32,9 +33,16 @@ public class TestRunner {
         mainExecutor.cleanUp();
         xmlDocumentGenerator.clearContext();
         XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(50);
+        setContext(xmlContext.getXmlContent());
         mainExecutor.maxId = mainExecutor.maxIdContainsLeaf = 0;
-        System.out.println(xmlContext.getXmlContent());
         mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
+    }
+
+    public void setContext(String context) throws SQLException, UnsupportedContextSetUpException, IOException {
+        mainExecutor.cleanUp();
+        xmlDocumentGenerator.clearContext();
+        mainExecutor.setXPathGenerationContext(context);
+        this.xmlContext = context;
     }
 
     public void clearContext() throws SQLException, IOException {

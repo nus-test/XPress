@@ -22,9 +22,20 @@ public class XPathGenerator {
     SequenceGenerator sequenceGenerator;
     PrefixQualifier prefixQualifier = new PrefixQualifier();
     PredicateGenerator predicateGenerator;
+    boolean complex = false;
+
     public XPathGenerator(MainExecutor mainExecutor) {
+        setup(mainExecutor, true);
+    }
+
+    public XPathGenerator(MainExecutor mainExecutor, boolean complex) {
+        setup(mainExecutor, complex);
+    }
+
+    void setup(MainExecutor mainExecutor, boolean complex) {
         this.mainExecutor = mainExecutor;
-        predicateGenerator = new PredicateGenerator(mainExecutor);
+        this.complex = complex;
+        predicateGenerator = new PredicateGenerator(mainExecutor, complex);
         sequenceGenerator = new SequenceGenerator(mainExecutor);
     }
 
@@ -37,6 +48,8 @@ public class XPathGenerator {
         }
         Pair<Pair<Integer, Integer>, XPathResultListPair> XPathRecord = generateXPathSingleSection(starterBuildPair);
         currentList.getLeft().add(XPathRecord.getLeft());
+        if(XPathRecord.getRight().XPath.contains("null"))
+            return currentList;
         if(XPathRecord.getRight().contextNodeList.isEmpty() && GlobalSettings.starNodeSelection && !GlobalSettings.rectifySelection)
             return Pair.of(currentList.getLeft(), XPathRecord.getRight().XPath);
         return generateXPathSectionDivided(Pair.of(currentList.getLeft(), XPathRecord.getRight().XPath),
@@ -50,6 +63,8 @@ public class XPathGenerator {
         }
         XPathResultListPair XPathRecord = generateXPathSingleSection(starterBuildPair).getRight();
         if(XPathRecord.contextNodeList.isEmpty() && GlobalSettings.starNodeSelection && !GlobalSettings.rectifySelection)
+            return XPathRecord.XPath;
+        if(XPathRecord.XPath.contains("null"))
             return XPathRecord.XPath;
         return generateXPath(XPathRecord, depth - 1);
     }
@@ -91,14 +106,14 @@ public class XPathGenerator {
             else randomNode = GlobalRandom.getInstance().getRandomFromList(currentBuildPair.contextNodeList);
             idL = currentBuildPair.XPath.length();
             // TODO: Saxon bug
-            if (prob < -1 && GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3)
+            if (prob < 0.6 && GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3)
                 currentBuildPair.XPath += "*";
             else {
                 currentBuildPair.XPath += randomNode.tagName;
                 allowTextContentFlag = true;
             }
         } else {
-            int length = GlobalRandom.getInstance().nextInt(5) + 1;
+            int length = GlobalRandom.getInstance().nextInt(complex ? 5 : 2) + 1;
             idL = currentBuildPair.XPath.length() + 1;
             currentBuildPair.XPath += "/" + sequenceGenerator.generateNodeSequenceFromContext(length, starterBuildPair.contextNodeList);
         }
@@ -117,7 +132,7 @@ public class XPathGenerator {
 //        }
         // System.out.println("********************** " + currentBuildPair.XPath);
         prob = GlobalRandom.getInstance().nextDouble();
-        if(prob < 0.6) {
+        if(complex ? prob < 0.6 : prob < 0.3) {
             Integer randomId = null;
             if(!GlobalSettings.starNodeSelection) {
                 randomNode = mainExecutor.contextNodeMap.get(
@@ -130,7 +145,7 @@ public class XPathGenerator {
                 randomId = randomNode.id;
             }
             XPathResultListPair predicateContext = predicateGenerator.generatePredicate(
-                    currentBuildPair.XPath, 4, !allowTextContentFlag, randomNode, randomId);
+                    currentBuildPair.XPath, complex ? 4 : 1, !allowTextContentFlag, randomNode, randomId);
             currentBuildPair.XPath += predicateContext.XPath;
             currentBuildPair.contextNodeList = predicateContext.contextNodeList;
         }

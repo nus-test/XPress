@@ -15,6 +15,7 @@ import XTest.XMLGeneration.ContextNode;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.BooleanFunctionNode;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeFunctionNode;
 import XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeFunctionNodeManager;
+import XTest.XPathGeneration.XPathGenerator;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
 
@@ -22,6 +23,7 @@ import javax.xml.xpath.XPath;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class InformationTreeGenerator {
@@ -29,11 +31,17 @@ public class InformationTreeGenerator {
     public static DefaultListHashMap<XMLDatatype, InformationTreeNode> sequenceInformationTreeMap = new DefaultListHashMap<>();
 
     MainExecutor mainExecutor;
+    boolean complex;
+
+    public InformationTreeGenerator(MainExecutor mainExecutor, boolean complex){
+        this.mainExecutor = mainExecutor;
+        this.complex = complex;
+    }
 
     public InformationTreeGenerator(MainExecutor mainExecutor){
         this.mainExecutor = mainExecutor;
+        complex = true;
     }
-
 
 
     /**
@@ -48,33 +56,46 @@ public class InformationTreeGenerator {
         double prob = GlobalRandom.getInstance().nextDouble();
 
         InformationTreeContextNode contextNode = new InformationTreeContextNode();
-        boolean selfContextFlag, containsContextFlag = true, constantExprFlag = false;
+        boolean selfContextFlag = false, containsContextFlag = true, constantExprFlag = false;
         contextInformationTreeMap = new DefaultListHashMap<>();
+        boolean getXPathFlag = false;
 
-        // Select a sequence
-        if(prob < 0.3 && starredNode.childWithLeafList.size() != 0 && !KnownBugs.exist) {
-            String pathToLeaf = starredNode.getStrPathToSpecifiedLeafNode();
-            contextNode.datatypeRecorder.setData(XMLDatatype.SEQUENCE, XMLDatatype.NODE, true);
-            if(!pathToLeaf.endsWith("*"))
-                contextNode.datatypeRecorder.nodeMix = false;
-            contextNode.setXPath(pathToLeaf);
-            selfContextFlag = false;
-        } else {
-            // Select current node
-            contextNode.datatypeRecorder.setData(XMLDatatype.NODE, null, mixedContent);
-            selfContextFlag = true;
-            contextNode.setXPath(".");
-            contextNode.getContext().context = Integer.toString(starredNode.id);
+        if(prob < 0.3 && complex) {
+            String XPath;
+            try {
+                String pre = "//*[@id=\"" + starredNode.id + "\"]";
+                XPath = new XPathGenerator(mainExecutor, false).generateXPath(pre,
+                        List.of(starredNode), GlobalRandom.getInstance().nextInt(2) + 1);
+                XPath = "." + XPath.substring(pre.length());
+                contextNode.datatypeRecorder.setData(XMLDatatype.SEQUENCE, XMLDatatype.NODE, true);
+                contextNode.setXPath(XPath);
+                getXPathFlag = true;
+            } catch(Exception ignore) {}
+        }
+        if(!getXPathFlag) {
+            if (prob < 0.4 && starredNode.childWithLeafList.size() != 0 && !KnownBugs.exist) {
+                String pathToLeaf = starredNode.getStrPathToSpecifiedLeafNode();
+                contextNode.datatypeRecorder.setData(XMLDatatype.SEQUENCE, XMLDatatype.NODE, true);
+                if (!pathToLeaf.endsWith("*"))
+                    contextNode.datatypeRecorder.nodeMix = false;
+                contextNode.setXPath(pathToLeaf);
+            } else {
+                // Select current node
+                contextNode.datatypeRecorder.setData(XMLDatatype.NODE, null, mixedContent);
+                selfContextFlag = true;
+                contextNode.setXPath(".");
+                contextNode.getContext().context = Integer.toString(starredNode.id);
+            }
         }
         contextNode.setContextInfo(mainExecutor, XPathPrefix, starredNode.id, containsContextFlag,
                 constantExprFlag, selfContextFlag);
         if(GlobalSettings.starNodeSelection)
             contextNode.calculateInfo();
-        if(GlobalRandom.getInstance().nextDouble() < 0.4) {
-            Integer randomNum = 10;
+        if(complex && GlobalRandom.getInstance().nextDouble() < 0.4) {
+            int randomNum = 10;
             for(int i = 0; i < randomNum; i ++) {
                  InformationTreeContextNode subContextNode = new InformationTreeContextNode(contextNode);
-                 Integer levelLimit = GlobalRandom.getInstance().nextInt(3) + 1;
+                 int levelLimit = GlobalRandom.getInstance().nextInt(3) + 1;
                  if(levelLimit == 3 && GlobalRandom.getInstance().nextDouble() < 0.3) {
                      levelLimit = 1;
                  }
@@ -83,13 +104,15 @@ public class InformationTreeGenerator {
                  if(subRoot.datatypeRecorder.xmlDatatype.getValueHandler() instanceof XMLAtomic) {
                      contextInformationTreeMap.get(subRoot.datatypeRecorder.xmlDatatype).add(subRoot);
                  }
+                if(subRoot.getCalculationString() == null) {
+                    System.out.println("HUHUHUHUUHU");
+                }
             }
         }
         // Build information tree from context node
-        int levelLimit = GlobalRandom.getInstance().nextInt(5);
+        int levelLimit = GlobalRandom.getInstance().nextInt(complex ? 5 : 2);
         if(contextNode.getContextInfo().selfContext) levelLimit += 1;
-        InformationTreeNode root = buildBooleanInformationTree(contextNode, levelLimit);
-        return root;
+        return buildBooleanInformationTree(contextNode, levelLimit);
     }
 
     /**

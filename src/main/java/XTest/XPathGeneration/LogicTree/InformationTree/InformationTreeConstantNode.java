@@ -6,6 +6,8 @@ import XTest.TestException.DebugErrorException;
 import XTest.XPathGeneration.LogicTree.LogicTreeNode;
 import org.apache.commons.lang3.tuple.Pair;
 
+import javax.xml.xpath.XPath;
+
 public class InformationTreeConstantNode extends InformationTreeNode {
     public InformationTreeConstantNode() {}
 

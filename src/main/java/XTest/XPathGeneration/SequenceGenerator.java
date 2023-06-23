@@ -58,7 +58,7 @@ public class SequenceGenerator {
         double prob = GlobalRandom.getInstance().nextDouble();
         ContextNode starredNode = GlobalSettings.starNodeSelection ? GlobalRandom.getInstance().getRandomFromList(currentNodeList) :
             mainExecutor.contextNodeMap.get(GlobalRandom.getInstance().nextInt(mainExecutor.maxId - 1) + 1);
-        if(prob < 0.7 && starredNode.childList.size() != 0)
+        if(prob < 0.8 && starredNode.childList.size() != 0)
             return starredNode.getStrPathToRandomChildNode();
         return starredNode.getPath();
         //return generateSingleConstantNodeExpr();

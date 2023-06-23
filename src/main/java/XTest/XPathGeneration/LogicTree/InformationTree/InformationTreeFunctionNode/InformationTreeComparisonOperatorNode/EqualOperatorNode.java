@@ -16,6 +16,7 @@ import org.xmldb.api.base.XMLDBException;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Objects;
 
 @FunctionV1
 public class EqualOperatorNode extends InformationTreeComparisonOperatorNode {
@@ -41,7 +42,7 @@ public class EqualOperatorNode extends InformationTreeComparisonOperatorNode {
     protected void fillContentParameters(InformationTreeNode childNode) {
         double prob = GlobalRandom.getInstance().nextDouble();
         if(prob < 0.5) {
-            InformationTreeNode node = InformationTreeFunctionNodeManager.getInstance().getNodeWithSimpleValueOrSequence(childNode.datatypeRecorder.getActualDatatype());
+            InformationTreeNode node = InformationTreeFunctionNodeManager.getInstance().getNodeWithSimpleType(childNode.datatypeRecorder.getActualDatatype());
             if(node != null) {
                 childList.add(node);
                 return;
@@ -56,6 +57,7 @@ public class EqualOperatorNode extends InformationTreeComparisonOperatorNode {
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
-        return childNode.datatypeRecorder.getActualDatatype() != XMLDatatype.DOUBLE;
+        return childNode.datatypeRecorder.getActualDatatype() != XMLDatatype.DOUBLE
+                && childNode.datatypeRecorder.getActualDatatype() != XMLDatatype.MIXED;
     }
 }

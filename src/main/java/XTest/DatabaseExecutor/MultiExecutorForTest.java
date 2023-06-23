@@ -30,13 +30,13 @@ public class MultiExecutorForTest {
 
         List<DatabaseExecutor> dbExecutorList = new ArrayList<>();
 
-       // dbExecutorList.add(ExistExecutor.getInstance());
-
-        dbExecutorList.add(BaseXExecutor.getInstance());
+        //dbExecutorList.add(ExistExecutor.getInstance());
         dbExecutorList.add(SaxonExecutor.getInstance());
+        //dbExecutorList.add(BaseXExecutor.getInstance());
+
         //dbExecutorList.add(OracleExecutor.getInstance());
 
-        //dbExecutorList.add(LibXML2Executor.getInstance());
+       // dbExecutorList.add(LibXML2Executor.getInstance());
         //dbExecutorList.add(PgExecutor.getInstance());
         //dbExecutorList.add(MySQLExecutor.getInstance());
         for(DatabaseExecutor dbExecutor: dbExecutorList)
@@ -56,7 +56,7 @@ public class MultiExecutorForTest {
             mainExecutor.setXPathGenerationContext(xmlDataString);
             for (DatabaseExecutor databaseExecutor : dbExecutorList) {
                 System.out.println("------------------------------ " + databaseExecutor.dbName + " ------------------------");
-                //System.out.println(mainExecutor.executeSingleProcessor(xquery, databaseExecutor));
+                System.out.println(mainExecutor.executeSingleProcessor(xquery, databaseExecutor));
                 System.out.println(mainExecutor.executeSingleProcessorGetIdList(xquery, databaseExecutor));
             }
         } catch (Exception e) {

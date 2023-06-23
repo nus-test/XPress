@@ -112,11 +112,11 @@ public class MainExecutor {
         databaseExecutorList.add(databaseExecutor);
     }
 
-    public List<Integer> executeAndCompare(String XPath) throws SQLException, XMLDBException, MismatchingResultException, UnexpectedExceptionThrownException, IOException, SaxonApiException {
+    public List<Integer> executeAndCompare(String XPath) throws MismatchingResultException, UnexpectedExceptionThrownException, IOException {
         return executeAndCompare(XPath, false);
     }
 
-    public List<Integer> executeAndCompare(String XPath, boolean ignoreException) throws SQLException, MismatchingResultException, UnexpectedExceptionThrownException, IOException {
+    public List<Integer> executeAndCompare(String XPath, boolean ignoreException) throws MismatchingResultException, UnexpectedExceptionThrownException, IOException {
         return executeAndCompare(XPath, false, false);
     }
 
@@ -133,7 +133,7 @@ public class MainExecutor {
             String subPath = XPath.substring(XPathRecord.getLeft().get(k).getLeft(),
                     XPathRecord.getLeft().get(k).getRight());
             if(subPath.startsWith("(")) {
-                subPath = "//*" + subPath;
+                subPath = "//*/" + subPath;
             } else subPath = "//" + subPath;
             try {
                 executeAndCompare(subPath, ignoreException);
@@ -144,11 +144,11 @@ public class MainExecutor {
         return executeAndCompare(XPath, ignoreException);
     }
 
-    public List<Integer> executeAndCompareResultOnly(String XPath, boolean ignoreException) throws SQLException, IOException, MismatchingResultException, UnexpectedExceptionThrownException {
+    public List<Integer> executeAndCompareResultOnly(String XPath, boolean ignoreException) throws IOException, MismatchingResultException, UnexpectedExceptionThrownException {
         return executeAndCompare(XPath, ignoreException, true);
     }
 
-    public List<Integer> executeAndCompare(String XPath, boolean ignoreException, boolean resultOnly) throws SQLException, IOException, MismatchingResultException, UnexpectedExceptionThrownException {
+    public List<Integer> executeAndCompare(String XPath, boolean ignoreException, boolean resultOnly) throws IOException, MismatchingResultException, UnexpectedExceptionThrownException {
         List<Integer> nodeIdResultSet = null;
         String lastDBName = null;
         //System.out.println(XPath);
@@ -163,7 +163,11 @@ public class MainExecutor {
                 currentNodeIdResultSet.sort(Integer::compareTo);
             }catch(Exception e) {
                 if(ignoreException) return null;
-                System.out.println("Unknown exception thrown!");
+                if(reportManager != null) {
+                    //System.out.println("Inconsistency found!");
+                    reportManager.reportPotentialBug(this, XPath);
+                }
+                //System.out.println("Unknown exception thrown!");
                 throw new UnexpectedExceptionThrownException(e);
             }
             if(nodeIdResultSet != null) {
@@ -171,17 +175,17 @@ public class MainExecutor {
                 if (!checkResult) {
                     if(resultOnly) return null;
                     if(reportManager != null) {
-                        System.out.println("Inconsistency found!");
+                        //System.out.println("Inconsistency found!");
                         reportManager.reportPotentialBug(this, XPath);
                     }
-                    else {
-                        System.out.println(lastDBName);
-                        System.out.println("+++++++++++++++++++++++++++++++");
-                        System.out.println(nodeIdResultSet);
-                        System.out.println(databaseExecutor.dbName);
-                        System.out.println("-------------------------------");
-                        System.out.println(currentNodeIdResultSet);
-                    }
+//                    else {
+//                        System.out.println(lastDBName);
+//                        System.out.println("+++++++++++++++++++++++++++++++");
+//                        System.out.println(nodeIdResultSet);
+//                        System.out.println(databaseExecutor.dbName);
+//                        System.out.println("-------------------------------");
+//                        System.out.println(currentNodeIdResultSet);
+//                    }
                     throw new MismatchingResultException();
                 }
             }
@@ -209,7 +213,7 @@ public class MainExecutor {
         }
     }
 
-    public List<Integer> executeSingleProcessorGetIdList(String XPath) throws SQLException, IOException, UnexpectedExceptionThrownException {
+    public List<Integer> executeSingleProcessorGetIdList(String XPath) throws UnexpectedExceptionThrownException {
         String dbName = GlobalSettings.defaultDBName;
         if(dbName == null)
             return executeSingleProcessorGetIdList(XPath, databaseExecutorList.get(0));
@@ -217,11 +221,11 @@ public class MainExecutor {
             return executeSingleProcessorGetIdList(XPath, dbName);
     }
 
-    public List<Integer> executeSingleProcessorGetIdList(String XPath, String databaseName) throws SQLException, IOException, UnexpectedExceptionThrownException {
+    public List<Integer> executeSingleProcessorGetIdList(String XPath, String databaseName) throws UnexpectedExceptionThrownException {
         return executeSingleProcessorGetIdList(XPath, databaseExecutorNameMap.get(databaseName));
     }
 
-    public List<ContextNode> executeSingleProcessorGetNodeList(String XPath) throws SQLException, IOException, UnexpectedExceptionThrownException {
+    public List<ContextNode> executeSingleProcessorGetNodeList(String XPath) throws UnexpectedExceptionThrownException {
         String dbName = GlobalSettings.defaultDBName;
         if(dbName == null)
             return executeSingleProcessorGetNodeList(XPath, databaseExecutorList.get(0));
@@ -229,15 +233,15 @@ public class MainExecutor {
             return executeSingleProcessorGetNodeList(XPath, dbName);
     }
 
-    public List<ContextNode> executeSingleProcessorGetNodeList(String XPath, String databaseName) throws SQLException, IOException, UnexpectedExceptionThrownException {
+    public List<ContextNode> executeSingleProcessorGetNodeList(String XPath, String databaseName) throws UnexpectedExceptionThrownException {
         return getNodeListFromIdList(executeSingleProcessorGetIdList(XPath, databaseExecutorNameMap.get(databaseName)));
     }
 
-    public List<ContextNode> executeSingleProcessorGetNodeList(String XPath, DatabaseExecutor databaseExecutor) throws SQLException, IOException, UnexpectedExceptionThrownException {
+    public List<ContextNode> executeSingleProcessorGetNodeList(String XPath, DatabaseExecutor databaseExecutor) throws UnexpectedExceptionThrownException {
         return getNodeListFromIdList(executeSingleProcessorGetIdList(XPath, databaseExecutor));
     }
 
-    public List<Integer> executeSingleProcessorGetIdList(String XPath, DatabaseExecutor databaseExecutor) throws SQLException, IOException, UnexpectedExceptionThrownException {
+    public List<Integer> executeSingleProcessorGetIdList(String XPath, DatabaseExecutor databaseExecutor) throws UnexpectedExceptionThrownException {
         List<Integer> resultList = null;
         try {
             resultList = databaseExecutor.executeGetNodeIdList(XPath);
@@ -248,21 +252,21 @@ public class MainExecutor {
 //                    reportManager.reportUnexpectedException(this, XPath, e);
             }
             else {
-                System.out.println("---------------- Unexpected Exception Thrown ------------------");
-                System.out.println(currentContext);
-                System.out.println(XPath);
-                System.out.println(databaseExecutor.dbName);
+//                System.out.println("---------------- Unexpected Exception Thrown ------------------");
+//                System.out.println(currentContext);
+//                System.out.println(XPath);
+//                System.out.println(databaseExecutor.dbName);
             }
             throw new UnexpectedExceptionThrownException(e);
         }
         return resultList;
     }
 
-    public String executeSingleProcessor(String XPath) throws SQLException, IOException, UnexpectedExceptionThrownException {
+    public String executeSingleProcessor(String XPath) throws UnexpectedExceptionThrownException {
         return executeSingleProcessor(XPath, databaseExecutorList.get(0));
     }
 
-    public String executeSingleProcessor(String XPath, String databaseName) throws SQLException, IOException, UnexpectedExceptionThrownException {
+    public String executeSingleProcessor(String XPath, String databaseName) throws UnexpectedExceptionThrownException {
         DatabaseExecutor databaseExecutor = databaseExecutorNameMap.get(databaseName);
         return executeSingleProcessor(XPath, databaseExecutor);
     }
@@ -275,13 +279,13 @@ public class MainExecutor {
         reportLock = false;
     }
 
-    public String executeSingleProcessor(String XPath, DatabaseExecutor databaseExecutor) throws SQLException, IOException, UnexpectedExceptionThrownException {
+    public String executeSingleProcessor(String XPath, DatabaseExecutor databaseExecutor) throws UnexpectedExceptionThrownException {
         //System.out.println("Execute: " + XPath);
         String result = null;
         try {
             result = databaseExecutor.execute(XPath);
         } catch(Exception e) {
-            if(reportManager != null && !reportLock) {
+            if(reportManager != null) {
                 // TODO: Currently diabled for exist testing
                 //                if(databaseExecutor.dbName != null && !databaseExecutor.dbName.equals("Exist"))
 //                    reportManager.reportUnexpectedException(this, XPath, e);

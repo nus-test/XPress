@@ -32,8 +32,8 @@ public class XPathGenerationTest {
         MainExecutor mainExecutor = new MainExecutor();
         mainExecutor.setReportLock();
         List<DatabaseExecutor> dbExecuterList = new ArrayList<>();
-        GlobalSettings.starNodeSelection = false;
-        GlobalSettings.rectifySelection = false;
+        GlobalSettings.starNodeSelection = true;
+        GlobalSettings.rectifySelection = true;
         dbExecuterList.add(SaxonExecutor.getInstance());
         //dbExecuterList.add(LibXML2Executor.getInstance());
         //dbExecuterList.add(PgExecutor.getInstance());

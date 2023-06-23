@@ -20,9 +20,11 @@ import java.util.List;
 
 public class PredicateGenerator {
     MainExecutor mainExecutor;
+    boolean complex;
 
-    public PredicateGenerator(MainExecutor mainExecutor){
+    public PredicateGenerator(MainExecutor mainExecutor, boolean complex) {
         this.mainExecutor = mainExecutor;
+        this.complex = complex;
     }
 
     /**
@@ -43,7 +45,7 @@ public class PredicateGenerator {
                                                  boolean mixedContent, ContextNode starredNode, Integer containId) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         List<LogicTreeNode> rootList = new ArrayList<>();
         int phraseLength = GlobalRandom.getInstance().nextInt(maxPhraseLength) + 1;
-        InformationTreeGenerator informationTreeGenerator = new InformationTreeGenerator(mainExecutor);
+        InformationTreeGenerator informationTreeGenerator = new InformationTreeGenerator(mainExecutor, complex);
         for(int i = 0; i < phraseLength; i ++) {
             InformationTreeNode currentRoot = informationTreeGenerator.generateInformationTree(XPathPrefix, mixedContent, starredNode);
             rootList.add(currentRoot);
