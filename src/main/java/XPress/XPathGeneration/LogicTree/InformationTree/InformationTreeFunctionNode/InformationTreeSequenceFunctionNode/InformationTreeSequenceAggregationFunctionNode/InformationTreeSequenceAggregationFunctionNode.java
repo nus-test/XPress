@@ -1,0 +1,11 @@
+package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeSequenceFunctionNode.InformationTreeSequenceAggregationFunctionNode;
+
+import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeSequenceFunctionNode.InformationTreeSequenceFunctionNode;
+import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
+
+public abstract class InformationTreeSequenceAggregationFunctionNode extends InformationTreeSequenceFunctionNode {
+
+    @Override
+    protected void fillContentParametersRandom(InformationTreeNode childNode) {
+    }
+}
