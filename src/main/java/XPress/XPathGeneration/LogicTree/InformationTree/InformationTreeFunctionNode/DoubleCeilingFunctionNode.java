@@ -1,18 +1,18 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
 
-import XPress.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLDouble;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
 @FunctionV1
 public class DoubleCeilingFunctionNode extends InformationTreeFunctionNode {
     public DoubleCeilingFunctionNode() {
-        this.datatypeRecorder.xmlDatatype = XMLDatatype.DOUBLE;
+        this.datatypeRecorder.xmlDatatype = XMLDouble.getInstance();
         functionExpr = "ceiling";
     }
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
-        return childNode.datatypeRecorder.xmlDatatype == XMLDatatype.DOUBLE;
+        return childNode.datatypeRecorder.xmlDatatype instanceof XMLDouble;
     }
     @Override
     public DoubleCeilingFunctionNode newInstance() {

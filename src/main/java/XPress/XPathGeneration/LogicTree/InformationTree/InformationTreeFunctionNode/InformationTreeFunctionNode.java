@@ -1,6 +1,6 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
 
-import XPress.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLDatatype;
 import XPress.TestException.DebugErrorException;
 import XPress.TestException.UnexpectedExceptionThrownException;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;

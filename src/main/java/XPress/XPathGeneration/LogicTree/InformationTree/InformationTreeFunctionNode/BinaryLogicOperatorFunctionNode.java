@@ -1,17 +1,17 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
 
-import XPress.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLBoolean;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
 public abstract class BinaryLogicOperatorFunctionNode extends BinaryOperatorFunctionNode {
     public BinaryLogicOperatorFunctionNode() {
-        datatypeRecorder.xmlDatatype = XMLDatatype.BOOLEAN;
+        datatypeRecorder.xmlDatatype = XMLBoolean.getInstance();
     }
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
-        return childNode.datatypeRecorder.xmlDatatype == XMLDatatype.BOOLEAN;
+        return childNode.datatypeRecorder.xmlDatatype instanceof XMLBoolean;
     }
 
     protected void fillContentParameters(InformationTreeNode childNode) {
@@ -19,6 +19,6 @@ public abstract class BinaryLogicOperatorFunctionNode extends BinaryOperatorFunc
     }
     protected void fillContentParametersRandom(InformationTreeNode childNode) {
         childList.add(new InformationTreeConstantNode(childNode.datatypeRecorder.xmlDatatype,
-                XMLDatatype.BOOLEAN.getValueHandler().getValue()));
+                XMLBoolean.getInstance().getValueHandler().getValue()));
     }
 }

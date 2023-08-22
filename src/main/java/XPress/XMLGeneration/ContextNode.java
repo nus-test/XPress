@@ -1,11 +1,13 @@
 package XPress.XMLGeneration;
 
 import XPress.GlobalRandom;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ContextNode extends ElementNode {
+    public List<String> prefixList = new ArrayList<>();
     public List<AttributeNode> attributeList = new ArrayList<>();
     public List<ContextNode> childList = new ArrayList<>();
     public List<ContextNode> childWithLeafList = new ArrayList<>();
@@ -16,6 +18,11 @@ public class ContextNode extends ElementNode {
     public boolean hasFollowing = true;
     public boolean hasLeaf = false;
     public int size;
+    public String prefix = null;
+    public String namespace = null;
+    public String declareNamespace = null;
+    public List<Pair<String, String>> declarePrefixNamespacePair = new ArrayList<>();
+    public List<String> declarePrefixList = new ArrayList<>();
 
     void addAttribute(AttributeNode attributeNode) {
         attributeNode.parentNode = this;

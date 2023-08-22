@@ -1,6 +1,6 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeSequenceFunctionNode.InformationTreeSequenceAggregationFunctionNode;
 
-import XPress.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLDouble;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.FunctionV3;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
@@ -8,7 +8,7 @@ import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 public class AverageFunctionNode extends InformationTreeSequenceNumericalAggregationFunctionNode {
     public AverageFunctionNode() {
         functionExpr = "avg";
-        datatypeRecorder.xmlDatatype = XMLDatatype.DOUBLE;
+        datatypeRecorder.xmlDatatype = XMLDouble.getInstance();
     }
 
     @Override

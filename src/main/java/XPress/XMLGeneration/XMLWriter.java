@@ -1,5 +1,7 @@
 package XPress.XMLGeneration;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 public class XMLWriter {
 
     static public String newLine(String currentBuilder, Boolean withStructure) {
@@ -18,10 +20,15 @@ public class XMLWriter {
             for(int i = 0; i < currentNode.depth; i ++)
                 preSpace += "\t";
         currentBuilder += preSpace;
-        currentBuilder += "<" + currentNode.tagName;
+        currentBuilder += "<" + (currentNode.prefix != null ? currentNode.prefix + ":" : "") + currentNode.tagName;
         for(AttributeNode attributeNode : currentNode.attributeList) {
             currentBuilder += " ";
             currentBuilder = writeAttribute(currentBuilder, attributeNode);
+        }
+        if(currentNode.declareNamespace != null)
+            currentBuilder += " xmlns=\"" + currentNode.declareNamespace + "\"";
+        for(Pair prefixPair : currentNode.declarePrefixNamespacePair) {
+            currentBuilder += " xmlns:" + prefixPair.getLeft() + "=\"" + prefixPair.getRight() + "\"";
         }
         currentBuilder += ">";
         for (ContextNode childNode : currentNode.childList) {
@@ -32,7 +39,7 @@ public class XMLWriter {
         currentBuilder = newTab(currentBuilder, withStructure);
         currentBuilder += preSpace + currentNode.dataContext;
         currentBuilder = newLine(currentBuilder, withStructure);
-        currentBuilder += preSpace + "</" + currentNode.tagName + ">";
+        currentBuilder += preSpace + "</" + (currentNode.prefix != null ? currentNode.prefix + ":" : "") + currentNode.tagName + ">";
         return currentBuilder;
     }
 

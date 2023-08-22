@@ -5,17 +5,17 @@ import XPress.DatatypeControl.ValueHandler.XMLBooleanHandler;
 import XPress.DatatypeControl.XMLSimple;
 
 @Datatype
-public class XML_Boolean extends XMLDatatype implements XMLSimple, XMLAtomic {
-    static XML_Boolean instance;
+public class XMLBoolean extends XMLDatatype implements XMLSimple, XMLAtomic {
+    static XMLBoolean instance;
 
-    XML_Boolean() {
+    XMLBoolean() {
         valueHandler = new XMLBooleanHandler();
         officialTypeName = "xs:boolean";
     }
 
-    static public XML_Boolean getInstance() {
+    static public XMLBoolean getInstance() {
         if(instance == null) {
-            instance = new XML_Boolean();
+            instance = new XMLBoolean();
         }
         return instance;
     }

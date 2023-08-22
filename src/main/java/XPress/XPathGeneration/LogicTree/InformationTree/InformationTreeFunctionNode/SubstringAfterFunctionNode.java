@@ -1,7 +1,7 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
 
+import XPress.DatatypeControl.PrimitiveDatatype.XMLString;
 import XPress.GlobalRandom;
-import XPress.PrimitiveDatatype.XMLDatatype;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
@@ -9,7 +9,7 @@ import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 public class SubstringAfterFunctionNode extends InformationTreeFunctionNode {
     private String internalStr = null;
     public SubstringAfterFunctionNode() {
-        datatypeRecorder.xmlDatatype = XMLDatatype.STRING;
+        datatypeRecorder.xmlDatatype = XMLString.getInstance();
         functionExpr = "substring-after";
     }
 
@@ -22,7 +22,7 @@ public class SubstringAfterFunctionNode extends InformationTreeFunctionNode {
 
     @Override
     protected void fillContentParametersRandom(InformationTreeNode childNode) {
-        String subString = XMLDatatype.STRING.getValueHandler().getValue(false);
+        String subString = XMLString.getInstance().getValueHandler().getValue(false);
         internalStr = subString;
         fillContentParametersWithStr(childNode);
     }
@@ -31,7 +31,7 @@ public class SubstringAfterFunctionNode extends InformationTreeFunctionNode {
         double prob = GlobalRandom.getInstance().nextDouble();
         if(prob < 0.1)
             internalStr = "";
-        childList.add(new InformationTreeConstantNode(XMLDatatype.STRING, internalStr));
+        childList.add(new InformationTreeConstantNode(XMLString.getInstance(), internalStr));
         internalStr = null;
     }
     @Override
@@ -41,6 +41,6 @@ public class SubstringAfterFunctionNode extends InformationTreeFunctionNode {
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
-        return childNode.datatypeRecorder.xmlDatatype == XMLDatatype.STRING;
+        return childNode.datatypeRecorder.xmlDatatype instanceof XMLString;
     }
  }

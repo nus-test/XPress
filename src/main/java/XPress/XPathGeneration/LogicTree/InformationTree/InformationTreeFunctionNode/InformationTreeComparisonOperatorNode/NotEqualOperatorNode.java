@@ -1,7 +1,10 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeComparisonOperatorNode;
 
+import XPress.DatatypeControl.PrimitiveDatatype.XMLDouble;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLMixed;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLNode;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLSequence;
 import XPress.GlobalSettings;
-import XPress.PrimitiveDatatype.XMLDatatype;
 import XPress.TestException.DebugErrorException;
 import XPress.TestException.UnexpectedExceptionThrownException;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
@@ -40,10 +43,10 @@ public class NotEqualOperatorNode extends InformationTreeComparisonOperatorNode 
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
-        if(childNode.datatypeRecorder.getActualDatatype() == XMLDatatype.DOUBLE)
+        if(childNode.datatypeRecorder.getActualDatatype() instanceof XMLDouble)
             return false;
-        return childNode.datatypeRecorder.xmlDatatype != XMLDatatype.SEQUENCE &&
-                childNode.datatypeRecorder.xmlDatatype != XMLDatatype.NODE &&
-                childNode.datatypeRecorder.xmlDatatype != XMLDatatype.MIXED;
+        return !(childNode.datatypeRecorder.xmlDatatype instanceof XMLSequence) &&
+                !(childNode.datatypeRecorder.xmlDatatype instanceof XMLNode) &&
+                !(childNode.datatypeRecorder.xmlDatatype instanceof XMLMixed);
     }
 }

@@ -2,7 +2,7 @@
 #include <libxml/xpath.h>
 #include <string.h>
 #include <stdlib.h>
-#include "XTest_DatabaseExecutor_LibXML2ExecutorLow.h"
+#include "XPress_DatabaseExecutor_LibXML2ExecutorLow.h"
 
 xmlChar* idAttrName = "id";
 
@@ -59,7 +59,7 @@ getnodeset (xmlDocPtr doc, xmlChar *xpath){
 	}
 	return result;
 }
-JNIEXPORT jstring JNICALL Java_XTest_DatabaseExecutor_LibXML2ExecutorLow_execute
+JNIEXPORT jstring JNICALL Java_XPress_DatabaseExecutor_LibXML2ExecutorLow_execute
   (JNIEnv * env, jobject jobj, jstring jXMLDocumentPath, jstring jXPath) {
 	const char *docname;
 	xmlDocPtr doc;

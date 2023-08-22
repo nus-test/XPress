@@ -4,7 +4,7 @@ import XPress.DatabaseExecutor.BaseXExecutor;
 import XPress.DatabaseExecutor.DatabaseExecutor;
 import XPress.DatabaseExecutor.MainExecutor;
 import XPress.DatabaseExecutor.SaxonExecutor;
-import XPress.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLDatatype;
 import XPress.TestException.DebugErrorException;
 import XPress.TestException.MismatchingResultException;
 import XPress.TestException.UnexpectedExceptionThrownException;

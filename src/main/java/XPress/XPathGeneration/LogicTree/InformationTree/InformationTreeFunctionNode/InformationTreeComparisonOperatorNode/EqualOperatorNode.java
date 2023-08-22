@@ -1,9 +1,8 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeComparisonOperatorNode;
 
+import XPress.DatatypeControl.PrimitiveDatatype.*;
 import XPress.GlobalRandom;
 import XPress.GlobalSettings;
-import XPress.PrimitiveDatatype.XMLDatatype;
-import XPress.PrimitiveDatatype.XMLNumeric;
 import XPress.TestException.DebugErrorException;
 import XPress.TestException.UnexpectedExceptionThrownException;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
@@ -45,8 +44,8 @@ public class EqualOperatorNode extends InformationTreeComparisonOperatorNode {
                 return;
             }
         }
-        if(childNode.datatypeRecorder.getActualDatatype() == XMLDatatype.NODE || childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) {
-            childList.add(new InformationTreeConstantNode(XMLDatatype.INTEGER, "()"));
+        if(childNode.datatypeRecorder.getActualDatatype() instanceof XMLNode || childNode.datatypeRecorder.xmlDatatype instanceof XMLSequence) {
+            childList.add(new InformationTreeConstantNode(XMLInteger.getInstance(), "()"));
         }
         String value = childNode.datatypeRecorder.xmlDatatype.getValueHandler().getEqual(childNode.getContext().context);
         childList.add(new InformationTreeConstantNode(childNode.datatypeRecorder.xmlDatatype, value));
@@ -55,9 +54,9 @@ public class EqualOperatorNode extends InformationTreeComparisonOperatorNode {
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
         if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_1)
-            return childNode.datatypeRecorder.xmlDatatype.getValueHandler() instanceof XMLNumeric &&
-                    childNode.datatypeRecorder.xmlDatatype != XMLDatatype.DOUBLE;
-        return childNode.datatypeRecorder.getActualDatatype() != XMLDatatype.DOUBLE
-                && childNode.datatypeRecorder.getActualDatatype() != XMLDatatype.MIXED;
+            return childNode.datatypeRecorder.xmlDatatype instanceof XMLNumeric &&
+                    !(childNode.datatypeRecorder.xmlDatatype instanceof XMLDouble);
+        return !(childNode.datatypeRecorder.getActualDatatype() instanceof XMLDouble)
+                && !(childNode.datatypeRecorder.getActualDatatype() instanceof XMLMixed);
     }
 }

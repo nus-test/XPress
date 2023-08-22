@@ -1,12 +1,12 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
 
-import XPress.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLDouble;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
 @FunctionV1
 public class DoubleRoundFunctionNode extends InformationTreeFunctionNode {
     public DoubleRoundFunctionNode() {
-        datatypeRecorder.xmlDatatype = XMLDatatype.DOUBLE;
+        datatypeRecorder.xmlDatatype = XMLDouble.getInstance();
         functionExpr = "round";
     }
 
@@ -17,6 +17,6 @@ public class DoubleRoundFunctionNode extends InformationTreeFunctionNode {
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
-        return childNode.datatypeRecorder.xmlDatatype == XMLDatatype.DOUBLE;
+        return childNode.datatypeRecorder.xmlDatatype instanceof XMLDouble;
     }
 }

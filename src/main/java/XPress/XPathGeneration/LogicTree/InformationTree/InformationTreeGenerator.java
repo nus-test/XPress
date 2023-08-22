@@ -1,12 +1,11 @@
 package XPress.XPathGeneration.LogicTree.InformationTree;
 
 import XPress.DatabaseExecutor.MainExecutor;
+import XPress.DatatypeControl.PrimitiveDatatype.*;
 import XPress.DefaultListHashMap;
 import XPress.GlobalRandom;
 import XPress.GlobalSettings;
-import XPress.PrimitiveDatatype.XMLAtomic;
-import XPress.PrimitiveDatatype.XMLDatatype;
-import XPress.PrimitiveDatatype.XMLNumeric;
+import XPress.DatatypeControl.XMLAtomic;
 import XPress.ReportGeneration.KnownBugs;
 import XPress.TestException.DebugErrorException;
 import XPress.TestException.UnexpectedExceptionThrownException;
@@ -63,7 +62,7 @@ public class InformationTreeGenerator {
                 XPath = new XPathGenerator(mainExecutor, false).generateXPath(pre,
                         List.of(starredNode), GlobalRandom.getInstance().nextInt(2) + 1);
                 XPath = "." + XPath.substring(pre.length());
-                contextNode.datatypeRecorder.setData(XMLDatatype.SEQUENCE, XMLDatatype.NODE, true);
+                contextNode.datatypeRecorder.setData(XMLSequence.getInstance(), XMLNode.getInstance(), true);
                 contextNode.setXPath(XPath);
                 getXPathFlag = true;
             } catch(Exception ignore) {}
@@ -71,13 +70,13 @@ public class InformationTreeGenerator {
         if(!getXPathFlag) {
             if (prob < 0.4 && starredNode.childWithLeafList.size() != 0 && !KnownBugs.exist) {
                 String pathToLeaf = starredNode.getStrPathToSpecifiedLeafNode();
-                contextNode.datatypeRecorder.setData(XMLDatatype.SEQUENCE, XMLDatatype.NODE, true);
+                contextNode.datatypeRecorder.setData(XMLSequence.getInstance(), XMLNode.getInstance(), true);
                 if (!pathToLeaf.endsWith("*"))
                     contextNode.datatypeRecorder.nodeMix = false;
                 contextNode.setXPath(pathToLeaf);
             } else {
                 // Select current node
-                contextNode.datatypeRecorder.setData(XMLDatatype.NODE, null, mixedContent);
+                contextNode.datatypeRecorder.setData(XMLNode.getInstance(), null, mixedContent);
                 selfContextFlag = true;
                 contextNode.setXPath(".");
                 contextNode.getContext().context = Integer.toString(starredNode.id);
@@ -97,7 +96,7 @@ public class InformationTreeGenerator {
                  }
                  InformationTreeNode subRoot = buildInformationTree(subContextNode, levelLimit,
                          !GlobalSettings.starNodeSelection, GlobalSettings.starNodeSelection, false);
-                 if(subRoot.datatypeRecorder.xmlDatatype.getValueHandler() instanceof XMLAtomic) {
+                 if(subRoot.datatypeRecorder.xmlDatatype instanceof XMLAtomic) {
                      contextInformationTreeMap.get(subRoot.datatypeRecorder.xmlDatatype).add(subRoot);
                  }
             }
@@ -126,7 +125,7 @@ public class InformationTreeGenerator {
         if(newRoot == null) {
             newRoot = aimedBooleanInformationTreeBuild(root);
         }
-        if(newRoot.datatypeRecorder.xmlDatatype != XMLDatatype.BOOLEAN) {
+        if(!(newRoot.datatypeRecorder.xmlDatatype instanceof XMLBoolean)) {
             InformationTreeFunctionNode booleanRoot = new BooleanFunctionNode();
             if(GlobalSettings.starNodeSelection)
                 booleanRoot.fillContents(newRoot);
@@ -194,7 +193,7 @@ public class InformationTreeGenerator {
      */
     public InformationTreeNode aimedBooleanInformationTreeBuild(InformationTreeNode informationTreeNode) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         if(new BooleanFunctionNode().checkContextAcceptability(informationTreeNode)) {
-            if(informationTreeNode.datatypeRecorder.xmlDatatype.getValueHandler() instanceof XMLNumeric) {
+            if(informationTreeNode.datatypeRecorder.xmlDatatype instanceof XMLNumeric) {
                 BooleanFunctionNode newRoot = new BooleanFunctionNode();
                 newRoot.fillContentsRandom(informationTreeNode, GlobalSettings.starNodeSelection);
                 informationTreeNode = newRoot;

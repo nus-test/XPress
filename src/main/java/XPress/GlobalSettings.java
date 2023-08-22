@@ -10,8 +10,9 @@ public class GlobalSettings {
 
     public static XPathVersion xPathVersion = XPathVersion.VERSION_3;
 
+    public static Boolean useNamespace = true;
+
     public static String defaultDBName = "Saxon";
-    public static String logAddress;
     public static Boolean debugOutput = false;
 
     public static Boolean starNodeSelection = false;
@@ -26,4 +27,3 @@ public class GlobalSettings {
     }
 
 }
-

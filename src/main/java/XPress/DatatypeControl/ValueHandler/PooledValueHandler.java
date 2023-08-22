@@ -1,4 +1,4 @@
-package XPress.DatatypeControl;
+package XPress.DatatypeControl.ValueHandler;
 
 import XPress.GlobalRandom;
 

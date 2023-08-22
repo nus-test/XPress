@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/XTest.iml" filepath="$PROJECT_DIR$/XTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/XPress.iml" filepath="$PROJECT_DIR$/XPress.iml" />
     </modules>
   </component>
 </project>

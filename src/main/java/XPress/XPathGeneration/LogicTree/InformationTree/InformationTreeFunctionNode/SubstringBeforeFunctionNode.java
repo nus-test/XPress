@@ -1,7 +1,7 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
 
+import XPress.DatatypeControl.PrimitiveDatatype.XMLString;
 import XPress.GlobalRandom;
-import XPress.PrimitiveDatatype.XMLDatatype;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
@@ -9,21 +9,19 @@ import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 public class SubstringBeforeFunctionNode extends InformationTreeFunctionNode {
     private String internalStr = null;
     public SubstringBeforeFunctionNode() {
-        datatypeRecorder.xmlDatatype = XMLDatatype.STRING;
+        datatypeRecorder.xmlDatatype = XMLString.getInstance();
         functionExpr = "substring-before";
     }
 
     @Override
     protected void fillContentParameters(InformationTreeNode childNode) {
-        String subString = GlobalRandom.getInstance().nextSubstring(childList.get(0).getContext().context);
-        internalStr = subString;
+        internalStr = GlobalRandom.getInstance().nextSubstring(childList.get(0).getContext().context);
         fillContentParametersWithStr(childNode);
     }
 
     @Override
     protected void fillContentParametersRandom(InformationTreeNode childNode) {
-        String subString = XMLDatatype.STRING.getValueHandler().getValue(false);
-        internalStr = subString;
+        internalStr = XMLString.getInstance().getValueHandler().getValue(false);
         fillContentParametersWithStr(childNode);
     }
 
@@ -31,13 +29,13 @@ public class SubstringBeforeFunctionNode extends InformationTreeFunctionNode {
         double prob = GlobalRandom.getInstance().nextDouble();
         if(prob < 0.1)
             internalStr = "";
-        childList.add(new InformationTreeConstantNode(XMLDatatype.STRING, internalStr));
+        childList.add(new InformationTreeConstantNode(XMLString.getInstance(), internalStr));
         internalStr = null;
     }
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
-        return childNode.datatypeRecorder.xmlDatatype == XMLDatatype.STRING;
+        return childNode.datatypeRecorder.xmlDatatype instanceof XMLString;
     }
 
     @Override

@@ -1,7 +1,7 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
 
+import XPress.DatatypeControl.PrimitiveDatatype.XMLString;
 import XPress.GlobalRandom;
-import XPress.PrimitiveDatatype.XMLDatatype;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
@@ -10,7 +10,7 @@ public class ReplaceFunctionNode extends InformationTreeFunctionNode {
     private String internalStr = null;
 
     public ReplaceFunctionNode() {
-        datatypeRecorder.xmlDatatype = XMLDatatype.STRING;
+        datatypeRecorder.xmlDatatype = XMLString.getInstance();
         functionExpr = "replace";
     }
 
@@ -23,24 +23,24 @@ public class ReplaceFunctionNode extends InformationTreeFunctionNode {
 
     @Override
     protected void fillContentParametersRandom(InformationTreeNode childNode) {
-        String subString = XMLDatatype.STRING.getValueHandler().getValue(false);
+        String subString = XMLString.getInstance().getValueHandler().getValue(false);
         internalStr = subString;
         fillContentParametersWithStr(childNode);
     }
 
     private void fillContentParametersWithStr(InformationTreeNode childNode) {
         if(internalStr.length() == 0) internalStr = "a";
-        childList.add(new InformationTreeConstantNode(XMLDatatype.STRING, internalStr.replaceAll("[{}()*.]", "e").replace('\\', 'q')));
+        childList.add(new InformationTreeConstantNode(XMLString.getInstance(), internalStr.replaceAll("[{}()*.]", "e").replace('\\', 'q')));
         double prob = GlobalRandom.getInstance().nextDouble();
         if(prob < 0.6) {
-            childList.add(new InformationTreeConstantNode(XMLDatatype.STRING,
-                    XMLDatatype.STRING.getValueHandler().getValue(false).replaceAll("[${}()*.]", "c")
+            childList.add(new InformationTreeConstantNode(XMLString.getInstance(),
+                    XMLString.getInstance().getValueHandler().getValue(false).replaceAll("[${}()*.]", "c")
                             .replace('\\', 'z')));
         } else {
-            if(prob < 0.9) childList.add(new InformationTreeConstantNode(XMLDatatype.STRING, "$1"));
+            if(prob < 0.9) childList.add(new InformationTreeConstantNode(XMLString.getInstance(), "$1"));
             else {
                 int num = GlobalRandom.getInstance().nextInt(10) + 1;
-                childList.add(new InformationTreeConstantNode(XMLDatatype.STRING, "$" + num));
+                childList.add(new InformationTreeConstantNode(XMLString.getInstance(), "$" + num));
             }
         }
         internalStr = null;
@@ -48,7 +48,7 @@ public class ReplaceFunctionNode extends InformationTreeFunctionNode {
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
-        return childNode.datatypeRecorder.xmlDatatype == XMLDatatype.STRING;
+        return childNode.datatypeRecorder.xmlDatatype instanceof XMLString;
     }
 
 

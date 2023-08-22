@@ -5,17 +5,17 @@ import XPress.DatatypeControl.ValueHandler.XMLIntegerHandler;
 import XPress.GlobalRandom;
 
 @Datatype
-public class XML_Integer extends XMLDatatype implements XMLComparable, XMLSimple, XMLAtomic {
-    static XML_Integer instance;
+public class XMLInteger extends XMLNumeric implements XMLComparable, XMLSimple, XMLAtomic {
+    static XMLInteger instance;
 
-    XML_Integer() {
+    XMLInteger() {
         valueHandler = new XMLIntegerHandler();
         officialTypeName = "xs:integer";
     }
 
-    static public XML_Integer getInstance() {
+    static public XMLInteger getInstance() {
         if(instance == null) {
-            instance = new XML_Integer();
+            instance = new XMLInteger();
         }
         return instance;
     }

@@ -3,16 +3,16 @@ package XPress.DatatypeControl.PrimitiveDatatype;
 import XPress.DatatypeControl.ValueHandler.XMLMixedHandler;
 
 @Datatype
-public class XML_Mixed extends XMLDatatype {
-    static XML_Mixed instance;
+public class XMLMixed extends XMLDatatype {
+    static XMLMixed instance;
 
-    XML_Mixed() {
+    XMLMixed() {
         valueHandler = new XMLMixedHandler();
     }
 
-    static public XML_Mixed getInstance() {
+    static public XMLMixed getInstance() {
         if(instance == null) {
-            instance = new XML_Mixed();
+            instance = new XMLMixed();
         }
         return instance;
     }

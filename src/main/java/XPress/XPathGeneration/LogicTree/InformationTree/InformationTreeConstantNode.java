@@ -1,7 +1,7 @@
 package XPress.XPathGeneration.LogicTree.InformationTree;
 
-import XPress.PrimitiveDatatype.XMLDatatype;
-import XPress.PrimitiveDatatype.XMLDatatypeComplexRecorder;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.XMLDatatypeComplexRecorder;
 import XPress.TestException.DebugErrorException;
 import XPress.XPathGeneration.LogicTree.LogicTreeNode;
 import org.apache.commons.lang3.tuple.Pair;

@@ -1,7 +1,7 @@
 package XPress.XMLGeneration;
 
+import XPress.DatatypeControl.PrimitiveDatatype.XMLDatatype;
 import XPress.GlobalRandom;
-import XPress.PrimitiveDatatype.XMLDatatype;
 
 import java.util.ArrayList;
 import java.util.List;

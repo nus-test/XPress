@@ -1,11 +1,8 @@
-package XPress.DatatypeControl;
+package XPress.DatatypeControl.ValueHandler;
 
 import XPress.GlobalRandom;
 
 public class XMLBooleanHandler extends ValueHandler {
-    XMLBooleanHandler() {
-        officialTypeName = "xs:boolean";
-    }
 
     @Override
     public String getValue() {

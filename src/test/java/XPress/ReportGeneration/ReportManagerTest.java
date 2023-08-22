@@ -40,7 +40,7 @@ public class ReportManagerTest {
         List<Integer> generationDepth = Arrays.asList(5);
         List<String> XPath = new ArrayList<>();
         try {
-            mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
+            mainExecutor.setXPathGenerationContext(xmlContext);
             for(Integer depth : generationDepth)
                 XPath.add(XPathGenerator.getXPath(depth));
             for(String XPathStr: XPath) {

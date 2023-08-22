@@ -1,7 +1,7 @@
 package XPress.XPathGeneration.LogicTree.InformationTree;
 
-import XPress.PrimitiveDatatype.XMLDatatype;
-import XPress.PrimitiveDatatype.XMLDatatypeComplexRecorder;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLSequence;
+import XPress.DatatypeControl.XMLDatatypeComplexRecorder;
 import XPress.TestException.DebugErrorException;
 import XPress.XPathGeneration.LogicTree.LogicTreeNode;
 
@@ -63,7 +63,7 @@ public class InformationTreeContextNode extends InformationTreeNode {
         if(dummyContext)
             return dummyCalculateString;
         String calculationStr = "//*[@id=\"" + getContextInfo().starredNodeId + "\"]";
-        if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
+        if(datatypeRecorder.xmlDatatype instanceof XMLSequence)
             calculationStr += "/" + XPathExpr;
         return calculationStr;
     }

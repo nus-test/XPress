@@ -4,17 +4,17 @@ import XPress.DatatypeControl.*;
 import XPress.DatatypeControl.ValueHandler.XMLDoubleHandler;
 
 @Datatype
-public class XML_Double extends XMLDatatype implements XMLComparable, XMLSimple, XMLAtomic {
-    static XML_Double instance;
+public class XMLDouble extends XMLNumeric implements XMLComparable, XMLSimple, XMLAtomic {
+    static XMLDouble instance;
 
-    XML_Double() {
+    XMLDouble() {
         valueHandler = new XMLDoubleHandler();
         officialTypeName = "xs:double";
     }
 
-    static public XML_Double getInstance() {
+    static public XMLDouble getInstance() {
         if(instance == null) {
-            instance = new XML_Double();
+            instance = new XMLDouble();
         }
         return instance;
     }

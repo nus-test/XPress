@@ -1,13 +1,13 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeSequenceFunctionNode;
 
-import XPress.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLBoolean;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
 //@FunctionV3
 public class EmptyFunctionNode extends InformationTreeSequenceFunctionNode {
     public EmptyFunctionNode() {
         functionExpr = "empty";
-        datatypeRecorder.xmlDatatype = XMLDatatype.BOOLEAN;
+        datatypeRecorder.xmlDatatype = XMLBoolean.getInstance();
     }
 
     @Override

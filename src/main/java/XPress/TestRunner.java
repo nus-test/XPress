@@ -35,7 +35,7 @@ public class TestRunner {
         XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(50);
         setContext(xmlContext.getXmlContent());
         mainExecutor.maxId = mainExecutor.maxIdContainsLeaf = 0;
-        mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
+        mainExecutor.setXPathGenerationContext(xmlContext);
     }
 
     public void setContext(String context) throws SQLException, UnsupportedContextSetUpException, IOException {

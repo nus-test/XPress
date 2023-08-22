@@ -5,17 +5,17 @@ import XPress.DatatypeControl.ValueHandler.XMLStringHandler;
 import XPress.GlobalRandom;
 
 @Datatype
-public class XML_String extends XMLDatatype implements XMLComparable, XMLSimple, XMLAtomic {
-    static XML_String instance;
+public class XMLString extends XMLDatatype implements XMLComparable, XMLSimple, XMLAtomic {
+    static XMLString instance;
 
-    public XML_String() {
+    public XMLString() {
         valueHandler = new XMLStringHandler();
         officialTypeName = "xs:string";
     }
 
-    static public XML_String getInstance() {
+    static public XMLString getInstance() {
         if(instance == null) {
-            instance = new XML_String();
+            instance = new XMLString();
         }
         return instance;
     }

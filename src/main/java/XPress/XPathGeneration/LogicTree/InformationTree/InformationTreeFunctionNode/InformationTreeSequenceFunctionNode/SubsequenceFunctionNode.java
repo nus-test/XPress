@@ -1,9 +1,11 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeSequenceFunctionNode;
 
+import XPress.DatatypeControl.PrimitiveDatatype.XMLInteger;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLNode;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLSequence;
 import XPress.GlobalRandom;
 import XPress.Pair;
-import XPress.PrimitiveDatatype.XMLDatatype;
-import XPress.PrimitiveDatatype.XMLDatatypeComplexRecorder;
+import XPress.DatatypeControl.XMLDatatypeComplexRecorder;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.FunctionV3;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
@@ -22,7 +24,7 @@ public class SubsequenceFunctionNode extends InformationTreeSequenceFunctionNode
     @Override
     protected void fillContentParameters(InformationTreeNode childNode) {
         int originalSequenceLength;
-        if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
+        if(childNode.datatypeRecorder.xmlDatatype instanceof XMLSequence)
             originalSequenceLength = Integer.parseInt(childNode.getContext().context);
         else originalSequenceLength = 1;
         fillContentParametersWithSequenceLength(childNode, originalSequenceLength);
@@ -39,12 +41,12 @@ public class SubsequenceFunctionNode extends InformationTreeSequenceFunctionNode
         Pair pair = GlobalRandom.getInstance().nextInterval(originalSequenceLength);
         int length = pair.y - pair.x + 1;
         double prob = GlobalRandom.getInstance().nextDouble();
-        childList.add(new InformationTreeConstantNode(XMLDatatype.INTEGER, Integer.toString(pair.x + 1)));
+        childList.add(new InformationTreeConstantNode(XMLInteger.getInstance(), Integer.toString(pair.x + 1)));
         if(prob < 0.5) {
-            childList.add(new InformationTreeConstantNode(XMLDatatype.INTEGER, Integer.toString(length)));
+            childList.add(new InformationTreeConstantNode(XMLInteger.getInstance(), Integer.toString(length)));
         }
-        boolean nodeMix = childNode.datatypeRecorder.getActualDatatype() == XMLDatatype.NODE
+        boolean nodeMix = childNode.datatypeRecorder.getActualDatatype() instanceof XMLNode
                 && childNode.datatypeRecorder.nodeMix;
-        datatypeRecorder = new XMLDatatypeComplexRecorder(XMLDatatype.SEQUENCE, childNode.datatypeRecorder.getActualDatatype(), nodeMix);
+        datatypeRecorder = new XMLDatatypeComplexRecorder(XMLSequence.getInstance(), childNode.datatypeRecorder.getActualDatatype(), nodeMix);
     }
 }

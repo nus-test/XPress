@@ -1,12 +1,12 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
 
-import XPress.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLInteger;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
 @FunctionV3
 public class IntegerAbsFunctionNode extends InformationTreeFunctionNode {
     public IntegerAbsFunctionNode() {
-        datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;
+        datatypeRecorder.xmlDatatype = XMLInteger.getInstance();
         functionExpr = "abs";
     }
 
@@ -17,6 +17,6 @@ public class IntegerAbsFunctionNode extends InformationTreeFunctionNode {
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
-        return childNode.datatypeRecorder.xmlDatatype == XMLDatatype.INTEGER;
+        return childNode.datatypeRecorder.xmlDatatype instanceof XMLInteger;
     }
 }

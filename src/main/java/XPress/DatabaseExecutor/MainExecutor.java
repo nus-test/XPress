@@ -1,14 +1,18 @@
 package XPress.DatabaseExecutor;
 
 import XPress.CommonUtils;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLString;
 import XPress.GlobalRandom;
 import XPress.GlobalSettings;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.ValueHandler.XMLStringHandler;
 import XPress.ReportGeneration.ReportManager;
 import XPress.TestException.MismatchingResultException;
 import XPress.TestException.UnexpectedExceptionThrownException;
 import XPress.TestException.UnsupportedContextSetUpException;
 import XPress.XMLGeneration.AttributeNode;
 import XPress.XMLGeneration.ContextNode;
+import XPress.XMLGeneration.XMLContext;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.IOException;
@@ -23,6 +27,9 @@ public class MainExecutor {
     public Integer maxId = 0;
     public Integer maxIdContainsLeaf = 0;
     public Map<Integer, ContextNode> contextNodeMap = new HashMap<>();
+    public List<String> namespaceList = new ArrayList<>();
+    public List<Pair<String, String>> prefixNamespaceList = new ArrayList<>();
+    public Map<String, List<String>> namespacePrefixMap = new HashMap<>();
     public List<ContextNode> extraLeafNodeList = new ArrayList<>();
     public List<DatabaseExecutor> databaseExecutorList = new ArrayList<>();
     public Map<String, DatabaseExecutor> databaseExecutorNameMap = new HashMap<>();
@@ -35,10 +42,46 @@ public class MainExecutor {
         this.reportManager = reportManager;
     }
 
-    public void setXPathGenerationContext(ContextNode root, String xmlDataContent) throws IOException, SQLException, UnsupportedContextSetUpException {
+    public void setXPathGenerationContext(XMLContext context) throws IOException, SQLException, UnsupportedContextSetUpException {
         contextNodeMap = new HashMap<>();
-        getContextNodeMap(root);
-        setXPathGenerationContext(xmlDataContent);
+        namespacePrefixMap = new HashMap<>();
+        prefixNamespaceList = new ArrayList<>();
+        getContextNodeMap(context.getRoot());
+        setXPathGenerationContext(context.getXmlContent());
+        namespaceList = context.getNamespaceList();
+        getNamespace(context.getRoot());
+        getPrefixNamespaceList();
+    }
+
+    public void getPrefixNamespaceList() {
+        Set<String> prefixes = new HashSet<>();
+        for(String namespace : namespaceList) {
+            addUniquePrefixForNamespace(namespace, prefixes);
+        }
+        int additional = GlobalRandom.getInstance().nextInt(3) + 1;
+        for(int i = 0; i < additional; i ++) {
+            String namespace = GlobalRandom.getInstance().getRandomFromList(namespaceList);
+            addUniquePrefixForNamespace(namespace, prefixes);
+        }
+    }
+
+    public void addUniquePrefixForNamespace(String namespace, Set<String> prefixes) {
+        String prefix = getUniquePrefix(prefixes);
+        prefixNamespaceList.add(Pair.of(prefix, namespace));
+        if(!namespacePrefixMap.containsKey(namespace))
+            namespacePrefixMap.put(namespace, new ArrayList<>());
+        namespacePrefixMap.get(namespace).add(prefix);
+    }
+
+    public String getUniquePrefix(Set<String> prefixes) {
+        String prefix;
+        while (true) {
+            prefix = ((XMLStringHandler) XMLString.getInstance().getValueHandler()).getRandomValueEng(GlobalRandom.getInstance().nextInt(5) + 1);
+            if(!prefixes.contains(prefix)) {
+                prefixes.add(prefix);
+                return prefix;
+            }
+        }
     }
 
     public void setExtraLeafNodeContext(List<ContextNode> contextNodeList) {
@@ -69,6 +112,19 @@ public class MainExecutor {
             getContextNodeMap(childNode);
     }
 
+    void getNamespace(ContextNode currentNode) {
+        try {
+            currentNode.namespace = executeSingleProcessor("//*[@id=\"" + currentNode.id + "\"]/namespace-uri-from-QName(node-name())");
+        } catch(Exception e) {
+            System.out.println(currentNode.id + " " + e);
+            String s = "//*[@id=\"" + currentNode.id + "\"]/namespace-uri-from-QName(node-name())";
+            System.out.println(s);
+            throw new RuntimeException("Failed to get namespace of node.");
+        }
+        for(ContextNode childNode : currentNode.childList)
+            getNamespace(childNode);
+    }
+
     public List<Pair<String, String>> getRandomTagNameTypePair(int length) {
         Set<String> nameSet = new HashSet<>();
         List<Pair<String, String>> randomList = new ArrayList<>();
@@ -79,7 +135,7 @@ public class MainExecutor {
             AttributeNode attributeNode = GlobalRandom.getInstance().getRandomFromList(node.attributeList);
             if(!nameSet.contains(attributeNode.tagName)) {
                 nameSet.add(attributeNode.tagName);
-                randomList.add(Pair.of(attributeNode.tagName, attributeNode.dataType.getValueHandler().officialTypeName));
+                randomList.add(Pair.of(attributeNode.tagName, attributeNode.dataType.officialTypeName));
                 failures = 0;
                 cnt ++;
             }
@@ -145,7 +201,7 @@ public class MainExecutor {
                 continue;
             List<Integer> currentNodeIdResultSet = null;
             try{
-                currentNodeIdResultSet = executeSingleProcessorGetIdList(XPath, databaseExecutor);  
+                currentNodeIdResultSet = executeSingleProcessorGetIdList(XPath, databaseExecutor);
                 currentNodeIdResultSet.sort(Integer::compareTo);
             }catch(Exception e) {
                 if(ignoreException) return null;
@@ -228,10 +284,21 @@ public class MainExecutor {
         return getNodeListFromIdList(executeSingleProcessorGetIdList(XPath, databaseExecutor));
     }
 
+    public String wrapWithNamespaceDeclaration(String XPath) {
+        if(GlobalSettings.useNamespace) {
+            for (Pair prefixNamespacePair : prefixNamespaceList) {
+                XPath = "declare namespace " +
+                        prefixNamespacePair.getLeft() +
+                        " =\"" + prefixNamespacePair.getRight() + "\";" + XPath;
+            }
+        }
+        return XPath;
+    }
+
     public List<Integer> executeSingleProcessorGetIdList(String XPath, DatabaseExecutor databaseExecutor) throws UnexpectedExceptionThrownException {
         List<Integer> resultList = null;
         try {
-            resultList = databaseExecutor.executeGetNodeIdList(XPath);
+            resultList = databaseExecutor.executeGetNodeIdList(wrapWithNamespaceDeclaration(XPath));
         } catch (Exception e) {
             if(reportManager != null) {
                 // TODO: Currently disabled for exist testing
@@ -259,7 +326,7 @@ public class MainExecutor {
     }
 
     public void setReportLock() {
-       reportLock = true;
+        reportLock = true;
     }
 
     public void unlockReportLock() {
@@ -270,7 +337,7 @@ public class MainExecutor {
         //System.out.println("Execute: " + XPath);
         String result = null;
         try {
-            result = databaseExecutor.execute(XPath);
+            result = databaseExecutor.execute(wrapWithNamespaceDeclaration(XPath));
         } catch(Exception e) {
             if(reportManager != null) {
                 // TODO: Currently diabled for exist testing

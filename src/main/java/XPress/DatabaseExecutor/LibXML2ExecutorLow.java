@@ -6,7 +6,7 @@ public class LibXML2ExecutorLow {
 
 
     static {
-        System.loadLibrary("LibXML2ExecutorLow");
+        System.loadLibrary("LibXML2ExecutorXPress");
     }
 
     public native String execute(String XMLDocumentPath, String XPath);

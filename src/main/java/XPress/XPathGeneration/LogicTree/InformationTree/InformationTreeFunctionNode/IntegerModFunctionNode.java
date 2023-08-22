@@ -1,14 +1,14 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
 
+import XPress.DatatypeControl.PrimitiveDatatype.XMLInteger;
 import XPress.GlobalRandom;
-import XPress.PrimitiveDatatype.XMLDatatype;
-import XPress.PrimitiveDatatype.XMLIntegerHandler;
+import XPress.DatatypeControl.ValueHandler.XMLIntegerHandler;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 @FunctionV3
 public class IntegerModFunctionNode extends BinaryNumericalOperatorFunctionNode {
     public IntegerModFunctionNode() {
-        datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;
+        datatypeRecorder.xmlDatatype = XMLInteger.getInstance();
         functionExpr = "mod";
         priorityLevel = 3;
     }
@@ -21,11 +21,11 @@ public class IntegerModFunctionNode extends BinaryNumericalOperatorFunctionNode 
     @Override
     protected void fillContentParametersRandom(InformationTreeNode childNode) {
         String value = null;
-        value = ((XMLIntegerHandler) XMLDatatype.INTEGER.getValueHandler()).
+        value = ((XMLIntegerHandler) XMLInteger.getInstance().getValueHandler()).
                 getRandomValueBounded(Integer.MAX_VALUE / 2) + 1;
         double prob = GlobalRandom.getInstance().nextDouble();
         if(prob < 0.5) value = "-" + value;
-        childList.add(new InformationTreeConstantNode(XMLDatatype.INTEGER, value));
+        childList.add(new InformationTreeConstantNode(XMLInteger.getInstance(), value));
     }
 
     @Override
@@ -35,6 +35,6 @@ public class IntegerModFunctionNode extends BinaryNumericalOperatorFunctionNode 
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
-        return childNode.datatypeRecorder.xmlDatatype == XMLDatatype.INTEGER;
+        return childNode.datatypeRecorder.xmlDatatype instanceof XMLInteger;
     }
 }

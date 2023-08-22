@@ -3,7 +3,6 @@ package XPress.DatabaseExecutor;
 import XPress.GlobalSettings;
 import XPress.TestException.UnsupportedContextSetUpException;
 import net.sf.saxon.s9api.*;
-
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
@@ -46,7 +45,7 @@ public class SaxonExecutor extends DatabaseExecutor {
             Source src = new StreamSource(new StringReader(context));
             document = builder.build(src);
         } catch (Exception e) {
-            System.out.println("Failed to set context for Saxon!");
+            System.out.println("Failed to set context for eXist!");
             System.out.println(e);
         }
     }

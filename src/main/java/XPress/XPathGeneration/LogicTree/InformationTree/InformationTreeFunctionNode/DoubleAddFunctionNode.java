@@ -1,6 +1,6 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
 
-import XPress.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLDouble;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
@@ -10,7 +10,7 @@ import static java.lang.Math.abs;
 @FunctionV1
 public class DoubleAddFunctionNode extends BinaryNumericalOperatorFunctionNode {
     public DoubleAddFunctionNode() {
-        this.datatypeRecorder.xmlDatatype = XMLDatatype.DOUBLE;
+        this.datatypeRecorder.xmlDatatype = XMLDouble.getInstance();
         priorityLevel = 2;
         functionExpr = "+";
     }
@@ -23,7 +23,7 @@ public class DoubleAddFunctionNode extends BinaryNumericalOperatorFunctionNode {
     @Override
     protected void fillContentParameters(InformationTreeNode childNode) {
         double currentValue = Double.parseDouble(childNode.getContext().context);
-        String value = XMLDatatype.DOUBLE.getValueHandler().getValue(false);
+        String value = XMLDouble.getInstance().getValueHandler().getValue(false);
         double addValue = Double.parseDouble(value);
         if(abs(currentValue + addValue) < 0.5) {
             if(addValue > 0) value = "-" + value;
@@ -36,18 +36,18 @@ public class DoubleAddFunctionNode extends BinaryNumericalOperatorFunctionNode {
                 value = value.substring(1);
             }
         }
-        childList.add(new InformationTreeConstantNode(XMLDatatype.DOUBLE, value));
+        childList.add(new InformationTreeConstantNode(XMLDouble.getInstance(), value));
     }
 
     @Override
     protected void fillContentParametersRandom(InformationTreeNode childNode) {
         // TODO: Control interval of randomly generated value to avoid overflow if necessary
-        String value = XMLDatatype.DOUBLE.getValueHandler().getValue(false);
-        childList.add(new InformationTreeConstantNode(XMLDatatype.DOUBLE, value));
+        String value = XMLDouble.getInstance().getValueHandler().getValue(false);
+        childList.add(new InformationTreeConstantNode(XMLDouble.getInstance(), value));
     }
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
-        return childNode.datatypeRecorder.xmlDatatype == XMLDatatype.DOUBLE;
+        return childNode.datatypeRecorder.xmlDatatype instanceof XMLDouble;
     }
 }

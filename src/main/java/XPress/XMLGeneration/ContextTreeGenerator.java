@@ -1,7 +1,9 @@
 package XPress.XMLGeneration;
 
+import java.util.List;
+
 public interface ContextTreeGenerator {
-    ContextNode GenerateRandomTree(int contextTreeSize);
+    ContextNode generateRandomTree(int contextTreeSize, List<String> namespaceList);
 
     public static void markPrecedingFollowing(ContextNode currentNode, MarkChoice currentMarking) {
         if(currentMarking == MarkChoice.PRECEDING)

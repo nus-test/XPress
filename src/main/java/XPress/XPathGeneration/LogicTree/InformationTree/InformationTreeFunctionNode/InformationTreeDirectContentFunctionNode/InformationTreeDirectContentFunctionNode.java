@@ -1,7 +1,8 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeDirectContentFunctionNode;
 
+import XPress.DatatypeControl.PrimitiveDatatype.XMLNode;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLSequence;
 import XPress.GlobalSettings;
-import XPress.PrimitiveDatatype.XMLDatatype;
 import XPress.TestException.DebugErrorException;
 import XPress.TestException.UnexpectedExceptionThrownException;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeFunctionNode;
@@ -20,10 +21,10 @@ public abstract class InformationTreeDirectContentFunctionNode extends Informati
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
-        Boolean checkResult = childNode.datatypeRecorder.xmlDatatype == XMLDatatype.NODE;
+        Boolean checkResult = childNode.datatypeRecorder.xmlDatatype instanceof XMLNode;
         if(!checkResult) {
             if(!GlobalSettings.starNodeSelection) return false;
-            if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE && childNode.datatypeRecorder.subDatatype == XMLDatatype.NODE &&
+            if(childNode.datatypeRecorder.xmlDatatype instanceof XMLSequence && childNode.datatypeRecorder.subDatatype instanceof XMLNode &&
             Integer.parseInt(childNode.getContext().context) != 0)
                 checkResult = true;
         }

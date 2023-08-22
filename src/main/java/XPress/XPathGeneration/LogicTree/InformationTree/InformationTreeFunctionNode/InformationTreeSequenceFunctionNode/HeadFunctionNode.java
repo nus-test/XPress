@@ -1,8 +1,9 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeSequenceFunctionNode;
 
-import XPress.PrimitiveDatatype.XMLAtomic;
-import XPress.PrimitiveDatatype.XMLDatatype;
-import XPress.PrimitiveDatatype.XMLDatatypeComplexRecorder;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLMixed;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLSequence;
+import XPress.DatatypeControl.XMLAtomic;
+import XPress.DatatypeControl.XMLDatatypeComplexRecorder;
 import XPress.TestException.DebugErrorException;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.FunctionV3;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
@@ -17,10 +18,10 @@ public class HeadFunctionNode extends InformationTreeSequenceFunctionNode {
     @Override
     public String getCalculationString(LogicTreeNode parentNode, boolean checkImpact) throws DebugErrorException {
         String calculationStr;
-        if(datatypeRecorder.xmlDatatype != XMLDatatype.SEQUENCE &&
-            datatypeRecorder.xmlDatatype.getValueHandler() instanceof XMLAtomic)
+        if(!(datatypeRecorder.xmlDatatype instanceof XMLSequence) &&
+            datatypeRecorder.xmlDatatype instanceof XMLAtomic)
             calculationStr = "(" + functionExpr + "(" + childList.get(0).getCalculationString(parentNode, false)
-                + ") cast as " + this.datatypeRecorder.getActualDatatype().getValueHandler().officialTypeName + ")";
+                + ") cast as " + this.datatypeRecorder.getActualDatatype().officialTypeName + ")";
         else {
             calculationStr = functionExpr + "(" + childList.get(0).getCalculationString(parentNode, false) + ")";
         }
@@ -34,7 +35,7 @@ public class HeadFunctionNode extends InformationTreeSequenceFunctionNode {
 
     @Override
     protected void fillContentParametersRandom(InformationTreeNode childNode) {
-        if(childNode.datatypeRecorder.getActualDatatype() == XMLDatatype.MIXED)
+        if(childNode.datatypeRecorder.getActualDatatype() instanceof XMLMixed)
             datatypeRecorder = new XMLDatatypeComplexRecorder(childNode.datatypeRecorder);
         else datatypeRecorder.xmlDatatype = childNode.datatypeRecorder.getActualDatatype();
     }

@@ -1,5 +1,6 @@
-package XPress.DatatypeControl;
+package XPress.DatatypeControl.ValueHandler;
 
+import XPress.DatatypeControl.PrimitiveDatatype.*;
 import XPress.GlobalRandom;
 
 public class XMLMixedHandler extends ValueHandler {
@@ -9,12 +10,12 @@ public class XMLMixedHandler extends ValueHandler {
         StringBuilder value = new StringBuilder("(");
         for(int i = 0; i < length; i ++) {
             double prob = GlobalRandom.getInstance().nextDouble();
-            XMLDatatype_t xmlDatatype;
-            if(prob < 0.25) xmlDatatype = XMLDatatype_t.INTEGER;
-            else if(prob < 0.5) xmlDatatype = XMLDatatype_t.STRING;
-            else if(prob < 0.75) xmlDatatype = XMLDatatype_t.DOUBLE;
-            else xmlDatatype = XMLDatatype_t.BOOLEAN;
-            value.append(XMLDatatype_t.wrapExpression(xmlDatatype.getValueHandler().getValue(), xmlDatatype));
+            XMLDatatype xmlDatatype;
+            if(prob < 0.25) xmlDatatype = XMLInteger.getInstance();
+            else if(prob < 0.5) xmlDatatype = XMLString.getInstance();
+            else if(prob < 0.75) xmlDatatype = XMLDouble.getInstance();
+            else xmlDatatype = XMLBoolean.getInstance();
+            value.append(XMLDatatype.wrapExpression(xmlDatatype.getValueHandler().getValue(), xmlDatatype));
             if(i != length - 1) value.append(",");
         }
         value.append(")");

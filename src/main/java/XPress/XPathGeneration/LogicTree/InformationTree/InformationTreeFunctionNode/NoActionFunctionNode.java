@@ -1,6 +1,6 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
 
-import XPress.PrimitiveDatatype.XMLDatatypeComplexRecorder;
+import XPress.DatatypeControl.XMLDatatypeComplexRecorder;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
 public class NoActionFunctionNode extends InformationTreeFunctionNode {

@@ -1,10 +1,8 @@
-package XPress.DatatypeControl;
+package XPress.DatatypeControl.ValueHandler;
+
+import XPress.DatatypeControl.XMLSimple;
 
 public class XMLNodeHandler extends ValueHandler implements XMLSimple {
-    XMLNodeHandler() {
-        // Just to avoid null, maybe it is not an official name...
-        officialTypeName = "xs:node";
-    }
 
     @Override
     public String getValue() {

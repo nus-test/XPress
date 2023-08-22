@@ -1,8 +1,9 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
 
+import XPress.DatatypeControl.PrimitiveDatatype.XMLInteger;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLString;
 import XPress.GlobalRandom;
 import XPress.Pair;
-import XPress.PrimitiveDatatype.XMLDatatype;
 import XPress.TestException.DebugErrorException;
 import XPress.TestException.UnexpectedExceptionThrownException;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
@@ -18,7 +19,7 @@ public class SubstringFunctionNode extends InformationTreeFunctionNode {
     private Integer internalLength = null;
 
     public SubstringFunctionNode() {
-        datatypeRecorder.xmlDatatype = XMLDatatype.STRING;
+        datatypeRecorder.xmlDatatype = XMLString.getInstance();
         functionExpr = "substring";
     }
 
@@ -45,9 +46,9 @@ public class SubstringFunctionNode extends InformationTreeFunctionNode {
         if(internalLength == 0) internalLength = 20;
         Pair interval = GlobalRandom.getInstance().nextInterval(internalLength);
         InformationTreeConstantNode constantNodeStart = new InformationTreeConstantNode
-                (XMLDatatype.INTEGER, Integer.toString(interval.x));
+                (XMLInteger.getInstance(), Integer.toString(interval.x));
         InformationTreeConstantNode constantNodeLength = new InformationTreeConstantNode
-                (XMLDatatype.INTEGER, Integer.toString(interval.y - interval.x + 1));
+                (XMLInteger.getInstance(), Integer.toString(interval.y - interval.x + 1));
         childList.add(constantNodeStart);
         if(prob < 0.5)
             childList.add(constantNodeLength);
@@ -61,7 +62,7 @@ public class SubstringFunctionNode extends InformationTreeFunctionNode {
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
-        return childNode.datatypeRecorder.xmlDatatype == XMLDatatype.STRING;
+        return childNode.datatypeRecorder.xmlDatatype instanceof XMLString;
     }
 
 

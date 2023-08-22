@@ -1,10 +1,13 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
 
+import XPress.DatatypeControl.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLMixed;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLNode;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLSequence;
 import XPress.GlobalRandom;
 import XPress.GlobalSettings;
-import XPress.PrimitiveDatatype.XMLAtomic;
-import XPress.PrimitiveDatatype.XMLDatatype;
-import XPress.PrimitiveDatatype.XMLDatatypeComplexRecorder;
+import XPress.DatatypeControl.XMLAtomic;
+import XPress.DatatypeControl.XMLDatatypeComplexRecorder;
 import XPress.TestException.DebugErrorException;
 import XPress.TestException.UnexpectedExceptionThrownException;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeDirectContentFunctionNode.AttributeFunctionNode;
@@ -41,8 +44,8 @@ public class MapFunctionNode extends BinaryOperatorFunctionNode {
     }
 
     public String binaryWrap(String resultString, LogicTreeNode parentNode, boolean calculateString) {
-        if(calculateString && datatypeRecorder.xmlDatatype.getValueHandler() instanceof XMLAtomic)
-            return "((" + resultString + ") cast as " + datatypeRecorder.xmlDatatype.getValueHandler().officialTypeName + ")";
+        if(calculateString && datatypeRecorder.xmlDatatype instanceof XMLAtomic)
+            return "((" + resultString + ") cast as " + datatypeRecorder.xmlDatatype.officialTypeName + ")";
         if(parentNode != null) {
             return super.binaryWrap(resultString, parentNode);
         }
@@ -96,21 +99,21 @@ public class MapFunctionNode extends BinaryOperatorFunctionNode {
 
     private void inferResultRecorder(Integer functionCnt) {
         XMLDatatypeComplexRecorder recorder = new XMLDatatypeComplexRecorder();
-        if(functionCnt > 1 || childList.get(0).datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) {
-            recorder.xmlDatatype = XMLDatatype.SEQUENCE;
+        if(functionCnt > 1 || childList.get(0).datatypeRecorder.xmlDatatype instanceof XMLSequence) {
+            recorder.xmlDatatype = XMLSequence.getInstance();
         }
         XMLDatatype actualType = null;
         for(int i = 1; i <= functionCnt; i ++) {
-            if(((InformationTreeNode) childList.get(i)).datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
-                recorder.xmlDatatype = XMLDatatype.SEQUENCE;
-            if(actualType != XMLDatatype.MIXED) {
+            if(((InformationTreeNode) childList.get(i)).datatypeRecorder.xmlDatatype instanceof XMLSequence)
+                recorder.xmlDatatype = XMLSequence.getInstance();
+            if(!(actualType instanceof XMLMixed)) {
                 if (actualType == null) {
                     actualType = ((InformationTreeNode) childList.get(i)).datatypeRecorder.getActualDatatype();
                 } else if (actualType != ((InformationTreeNode) childList.get(i)).datatypeRecorder.getActualDatatype())
-                    actualType = XMLDatatype.MIXED;
+                    actualType = XMLMixed.getInstance();
             }
         }
-        if(recorder.xmlDatatype == XMLDatatype.SEQUENCE)
+        if(recorder.xmlDatatype instanceof XMLSequence)
             recorder.subDatatype = actualType;
         else recorder.xmlDatatype = actualType;
         this.datatypeRecorder = recorder;
@@ -118,12 +121,12 @@ public class MapFunctionNode extends BinaryOperatorFunctionNode {
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
-        if(GlobalSettings.starNodeSelection && childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE &&
+        if(GlobalSettings.starNodeSelection && childNode.datatypeRecorder.xmlDatatype instanceof XMLSequence &&
             Integer.parseInt(childNode.context.context) == 0)
                 return false;
-        if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) {
-            return childNode.datatypeRecorder.subDatatype != XMLDatatype.MIXED &&
-                    (childNode.datatypeRecorder.subDatatype != XMLDatatype.NODE || !childNode.datatypeRecorder.nodeMix);
+        if(childNode.datatypeRecorder.xmlDatatype instanceof XMLSequence) {
+            return !(childNode.datatypeRecorder.subDatatype instanceof XMLMixed) &&
+                    (!(childNode.datatypeRecorder.subDatatype instanceof XMLNode) || !childNode.datatypeRecorder.nodeMix);
         }
         return true;
     }

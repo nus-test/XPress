@@ -3,8 +3,8 @@ package XPress;
 import XPress.DatabaseExecutor.DatabaseExecutor;
 import XPress.DatabaseExecutor.MainExecutor;
 import XPress.DatabaseExecutor.SaxonExecutor;
-import XPress.PrimitiveDatatype.XMLDatatype;
-import XPress.PrimitiveDatatype.XMLSimple;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.XMLSimple;
 import XPress.TestException.UnexpectedExceptionThrownException;
 import XPress.TestException.UnsupportedContextSetUpException;
 import XPress.XMLGeneration.XMLContext;
@@ -31,16 +31,16 @@ public class XMLDatatypeIntegrationTest {
         for(DatabaseExecutor dbExecutor: dbExecuterList)
             dbExecutor.registerDatabase(mainExecutor);
         XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
-        mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
+        mainExecutor.setXPathGenerationContext(xmlContext);
 
         XMLDatatype.getCastable(mainExecutor);
 
-        for(XMLDatatype xmlDatatype : XMLDatatype.values()) {
-            if(xmlDatatype.getValueHandler() instanceof XMLSimple) {
-                for(XMLDatatype xmlDatatype2 : XMLDatatype.values()) {
-                    if(xmlDatatype2.getValueHandler() instanceof XMLSimple) {
-                        System.out.println(xmlDatatype.getValueHandler().officialTypeName + " castable as " +
-                                xmlDatatype2.getValueHandler().officialTypeName + " = " + XMLDatatype.checkCastable(mainExecutor, xmlDatatype, xmlDatatype2));
+        for(XMLDatatype xmlDatatype : XMLDatatype.allDatatypeList) {
+            if(xmlDatatype instanceof XMLSimple) {
+                for(XMLDatatype xmlDatatype2 : XMLDatatype.allDatatypeList) {
+                    if(xmlDatatype2 instanceof XMLSimple) {
+                        System.out.println(xmlDatatype.officialTypeName + " castable as " +
+                                xmlDatatype2.officialTypeName + " = " + XMLDatatype.checkCastable(mainExecutor, xmlDatatype, xmlDatatype2));
                     }
                 }
             }

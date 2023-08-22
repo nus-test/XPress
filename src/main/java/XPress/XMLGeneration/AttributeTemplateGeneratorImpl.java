@@ -1,6 +1,7 @@
 package XPress.XMLGeneration;
 
-import XPress.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLInteger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ public class AttributeTemplateGeneratorImpl implements AttributeTemplateGenerato
         List<AttributeNode> attributeNodeList = new ArrayList<>();
         AttributeNode attributeID = new AttributeNode();
         attributeID.tagName = "id";
-        attributeID.dataType = XMLDatatype.INTEGER;
+        attributeID.dataType = XMLInteger.getInstance();
         attributeNodeList.add(attributeID);
 
         for(int i = 1; i < templateSize; i ++) {

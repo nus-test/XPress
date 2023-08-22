@@ -1,8 +1,11 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
 
+import XPress.DatatypeControl.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLBoolean;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLNode;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLSequence;
 import XPress.GlobalSettings;
-import XPress.PrimitiveDatatype.XMLDatatype;
-import XPress.PrimitiveDatatype.XMLDatatypeComplexRecorder;
+import XPress.DatatypeControl.XMLDatatypeComplexRecorder;
 import XPress.TestException.DebugErrorException;
 import XPress.TestException.UnexpectedExceptionThrownException;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
@@ -41,7 +44,7 @@ public class CastFunctionNode extends BinaryOperatorFunctionNode {
     protected void fillContentParametersRandom(InformationTreeNode childNode) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         if(internalDatatype == null) {
             XMLDatatype originalDatatype = null;
-            if (childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
+            if (childNode.datatypeRecorder.xmlDatatype instanceof XMLSequence)
                 originalDatatype = childNode.datatypeRecorder.subDatatype;
             else
                 originalDatatype = childNode.datatypeRecorder.xmlDatatype;
@@ -65,10 +68,10 @@ public class CastFunctionNode extends BinaryOperatorFunctionNode {
      * @param childNode Given context.
      */
     public void fillContentsSpecificAimedType(InformationTreeNode childNode, XMLDatatypeComplexRecorder transformedRecorder) throws SQLException, XMLDBException, UnexpectedExceptionThrownException, IOException, SaxonApiException, DebugErrorException {
-        if(transformedRecorder.subDatatype == XMLDatatype.NODE || transformedRecorder.xmlDatatype == XMLDatatype.NODE)
+        if(transformedRecorder.subDatatype instanceof XMLNode || transformedRecorder.xmlDatatype instanceof XMLNode)
             throw new DebugErrorException("Should not cast any data into nodes");
-        if(childNode.datatypeRecorder.xmlDatatype != XMLDatatype.SEQUENCE) {
-            if(transformedRecorder.xmlDatatype != XMLDatatype.SEQUENCE) {
+        if(!(childNode.datatypeRecorder.xmlDatatype instanceof XMLSequence)) {
+            if(!(transformedRecorder.xmlDatatype instanceof XMLSequence)) {
                 internalDatatype = transformedRecorder.xmlDatatype;
                 fillContentsRandom(childNode);
             }
@@ -87,9 +90,9 @@ public class CastFunctionNode extends BinaryOperatorFunctionNode {
      * @param childNode Given context.
      */
     protected void fillContentParametersSpecificAimedType(InformationTreeNode childNode) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
-        if(internalDatatype == XMLDatatype.NODE)
+        if(internalDatatype instanceof XMLNode)
             throw new DebugErrorException("Should not cast any data into nodes");
-        if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
+        if(childNode.datatypeRecorder.xmlDatatype instanceof XMLSequence)
             originalDatatype = childNode.datatypeRecorder.subDatatype;
         else
             originalDatatype = childNode.datatypeRecorder.xmlDatatype;
@@ -100,22 +103,22 @@ public class CastFunctionNode extends BinaryOperatorFunctionNode {
 
         datatypeRecorder = new XMLDatatypeComplexRecorder(childNode.datatypeRecorder);
         castedDatatype = internalDatatype;
-        if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) {
+        if(childNode.datatypeRecorder.xmlDatatype instanceof XMLSequence) {
             context = childNode.context;
             datatypeRecorder.subDatatype = internalDatatype;
         }
         else {
             datatypeRecorder.xmlDatatype = internalDatatype;
             String originalContext = childNode.getContext().context;
-            if(originalDatatype == XMLDatatype.NODE) {
+            if(originalDatatype instanceof XMLNode) {
                 originalContext = "//*[@id=\"" + originalContext + "\"]";
             }
             else {
                 originalContext = XMLDatatype.wrapExpression(originalContext, originalDatatype);
             }
             String XPathExpr;
-            if(internalDatatype != XMLDatatype.BOOLEAN)
-                XPathExpr = originalContext + " cast as " + internalDatatype.getValueHandler().officialTypeName;
+            if(!(internalDatatype instanceof XMLBoolean))
+                XPathExpr = originalContext + " cast as " + internalDatatype.officialTypeName;
             else XPathExpr = "boolean(" + originalContext + ")";
             getContext().context = contextInfo.mainExecutor.executeSingleProcessor(XPathExpr, GlobalSettings.defaultDBName);
         }
@@ -125,16 +128,16 @@ public class CastFunctionNode extends BinaryOperatorFunctionNode {
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
-        return childNode.datatypeRecorder.xmlDatatype != XMLDatatype.SEQUENCE;
+        return !(childNode.datatypeRecorder.xmlDatatype instanceof XMLSequence);
     }
 
     @Override
     public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode, boolean calculateString) throws DebugErrorException {
         String returnString = getXPathExpressionCheck(returnConstant, parentNode, calculateString);
         if(returnString != null) return returnString;
-        if(childList.get(0).datatypeRecorder.xmlDatatype != XMLDatatype.SEQUENCE && (originalDatatype != XMLDatatype.NODE || calculateString)) {
+        if(!(childList.get(0).datatypeRecorder.xmlDatatype instanceof XMLSequence) && (!(originalDatatype instanceof XMLNode) || calculateString)) {
             returnString = binaryWrap(childList.get(0).getXPathExpression(returnConstant, this, calculateString)
-                    + " cast as " + castedDatatype.getValueHandler().officialTypeName, parentNode);
+                    + " cast as " + castedDatatype.officialTypeName, parentNode);
         }
         else returnString = childList.get(0).getXPathExpression(returnConstant, parentNode, calculateString);
         cacheXPathExpression(returnString, returnConstant, calculateString);

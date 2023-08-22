@@ -1,4 +1,4 @@
-package XPress.DatatypeControl;
+package XPress.DatatypeControl.ValueHandler;
 
 import XPress.DatatypeControl.ValueHandler.XMLStringHandler;
 import org.junit.jupiter.api.Test;

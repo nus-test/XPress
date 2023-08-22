@@ -1,4 +1,4 @@
-package XPress.DatatypeControl;
+package XPress.DatatypeControl.ValueHandler;
 
 import XPress.GlobalRandom;
 
@@ -11,10 +11,7 @@ public class XMLStringHandler extends PooledValueHandler {
     Map<Integer, String> valuePoolLookUpMap = new HashMap<>();
     static int minLength = 0, maxLength = 20;
     boolean spaceFlipFlop = false;
-
-    XMLStringHandler() {
-        officialTypeName = "xs:string";
-    }
+    public boolean characterLock = false;
 
     public String mutateValue(String value) {
         double prob = GlobalRandom.getInstance().nextDouble();
@@ -49,21 +46,33 @@ public class XMLStringHandler extends PooledValueHandler {
         return value;
     }
 
-    String getRandomValue() {
+    public String getRandomValue() {
         int valueLength = GlobalRandom.getInstance().nextInt(maxLength) + 1;
-        String generatedString = getRandomValue(valueLength);
-        return generatedString;
+        return getRandomValue(valueLength);
+    }
+
+    public String getRandomValueEng() {
+        int valueLength = GlobalRandom.getInstance().nextInt(maxLength) + 1;
+        String value = getRandomValueEng(valueLength);
+        return value;
+    }
+
+    public String getRandomValueEng(int valueLength) {
+        characterLock = true;
+        String result = getRandomValue(valueLength);
+        characterLock = false;
+        return result;
     }
 
     public String getRandomValue(int valueLength) {
         StringBuilder stringBuilder = new StringBuilder();
         for(int i = 0; i < valueLength; i ++) {
-            if(i == 0 || i == valueLength - 1)
+            if(characterLock || (i == 0 || i == valueLength - 1))
                 stringBuilder.append(getRandomCharacter());
             else stringBuilder.append(getRandomCharacterWithSpace());
         }
         String generatedString = stringBuilder.toString();
-        if(valueLength > 5 && GlobalRandom.getInstance().nextDouble() < 0.2) {
+        if(!characterLock && valueLength > 5 && GlobalRandom.getInstance().nextDouble() < 0.2) {
             int index = GlobalRandom.getInstance().nextInt(generatedString.length() - 1) + 1;
             generatedString = generatedString.substring(0, index) + ' ' + generatedString.substring(index);
         }
@@ -79,13 +88,15 @@ public class XMLStringHandler extends PooledValueHandler {
         return getRandomCharacter();
     }
 
-    Character getRandomCharacter() {
+    public Character getRandomCharacter() {
         boolean flag = false;
-        int maxCharValue = 126;
-        int minCharValue = 32;
+        int maxCharValue = characterLock ? 90 : 126;
+        int minCharValue = characterLock ? 65 : 32;
         char c = 'a';
         while(!flag) {
             c = (char) (GlobalRandom.getInstance().nextInt(minCharValue, maxCharValue + 1));
+            if(characterLock && GlobalRandom.getInstance().nextDouble() < 0.5)
+                c += 32;
             if(!escapeSet.contains(c))
                 flag = true;
         }

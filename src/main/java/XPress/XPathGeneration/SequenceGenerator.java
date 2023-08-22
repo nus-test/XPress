@@ -56,8 +56,7 @@ public class SequenceGenerator {
         double prob = GlobalRandom.getInstance().nextDouble();
         ContextNode starredNode = (currentNodeList.size() > 0 && (GlobalSettings.starNodeSelection || GlobalSettings.targetedParameter)) ?
             GlobalRandom.getInstance().getRandomFromList(currentNodeList) :
-            mainExecutor.contextNodeMap.get(
-                    GlobalRandom.getInstance().nextInt(mainExecutor.maxId) + 1);
+            mainExecutor.contextNodeMap.get(GlobalRandom.getInstance().nextInt(mainExecutor.maxId) + 1);
         if(prob < 0.8 && starredNode.childList.size() != 0)
             return starredNode.getStrPathToRandomChildNode();
         return starredNode.getPath();

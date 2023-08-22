@@ -1,8 +1,8 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
 
+import XPress.DatatypeControl.PrimitiveDatatype.XMLInteger;
 import XPress.GlobalRandom;
-import XPress.PrimitiveDatatype.XMLDatatype;
-import XPress.PrimitiveDatatype.XMLIntegerHandler;
+import XPress.DatatypeControl.ValueHandler.XMLIntegerHandler;
 import XPress.TestException.DebugErrorException;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
@@ -10,7 +10,7 @@ import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 @FunctionV1
 public class IntegerMultiplicationFunctionNode extends BinaryNumericalOperatorFunctionNode {
     public IntegerMultiplicationFunctionNode() {
-        datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;
+        datatypeRecorder.xmlDatatype = XMLInteger.getInstance();
         functionExpr = "*";
         priorityLevel = 3;
     }
@@ -24,22 +24,22 @@ public class IntegerMultiplicationFunctionNode extends BinaryNumericalOperatorFu
         }
         else {
             Integer boundValue = Integer.MAX_VALUE / inputValue;
-            value = ((XMLIntegerHandler) XMLDatatype.INTEGER.getValueHandler()).
+            value = ((XMLIntegerHandler) XMLInteger.getInstance().getValueHandler()).
                     getRandomValueBounded(-boundValue, boundValue);
             if (value.equals("0"))
                 value = Integer.toString(1);
         }
-        childList.add(new InformationTreeConstantNode(XMLDatatype.INTEGER, value));
+        childList.add(new InformationTreeConstantNode(XMLInteger.getInstance(), value));
     }
     @Override
     protected void fillContentParametersRandom(InformationTreeNode childNode) {
         String value = Integer.toString(GlobalRandom.getInstance().nextInt(1000));
-        childList.add(new InformationTreeConstantNode(XMLDatatype.INTEGER, value));
+        childList.add(new InformationTreeConstantNode(XMLInteger.getInstance(), value));
     }
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
-        return childNode.datatypeRecorder.xmlDatatype == XMLDatatype.INTEGER;
+        return childNode.datatypeRecorder.xmlDatatype instanceof XMLInteger;
     }
 
     @Override

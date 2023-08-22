@@ -1,13 +1,13 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeSequenceFunctionNode;
 
-import XPress.PrimitiveDatatype.XMLDatatype;
-import XPress.PrimitiveDatatype.XMLDatatypeComplexRecorder;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLSequence;
+import XPress.DatatypeControl.XMLDatatypeComplexRecorder;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeFunctionNode;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
 public abstract class InformationTreeSequenceFunctionNode extends InformationTreeFunctionNode {
     public InformationTreeSequenceFunctionNode() {
-        datatypeRecorder.xmlDatatype = XMLDatatype.SEQUENCE;
+        datatypeRecorder.xmlDatatype = XMLSequence.getInstance();
     }
 
     @Override

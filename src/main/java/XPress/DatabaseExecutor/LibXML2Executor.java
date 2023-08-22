@@ -15,9 +15,14 @@ public class LibXML2Executor extends DatabaseExecutor {
 
     private LibXML2Executor() {
         libXML2ExecutorLow = new LibXML2ExecutorLow();
-        dbName = "LibXML2";
+        dbName = "libXML2";
         dbXPathVersion = GlobalSettings.XPathVersion.VERSION_1;
     }
+
+    public static void registerMap() {
+        nameExecutorMap.put("libXML2", LibXML2Executor.class);
+    }
+
     static public LibXML2Executor getInstance() throws SQLException, ClassNotFoundException {
         if(libXML2Executor == null)
             libXML2Executor = new LibXML2Executor();

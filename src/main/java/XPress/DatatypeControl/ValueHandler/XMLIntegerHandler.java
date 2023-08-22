@@ -1,14 +1,11 @@
-package XPress.DatatypeControl;
+package XPress.DatatypeControl.ValueHandler;
 
 import XPress.DataCheckUtils;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLDatatype;
 import XPress.GlobalRandom;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class XMLIntegerHandler extends PooledValueHandler {
-
-    XMLIntegerHandler() {
-        officialTypeName = "xs:integer";
-    }
 
     @Override
     String getRandomValue() {
@@ -42,7 +39,7 @@ public class XMLIntegerHandler extends PooledValueHandler {
         return currentNum.toString();
     }
 
-    public Pair<Integer, String> getSequenceValue(XMLDatatype_t xmlDatatype) {
+    public Pair<Integer, String> getSequenceValue(XMLDatatype xmlDatatype) {
         double prob = GlobalRandom.getInstance().nextDouble();
         if(prob < 0.5) {
             int l = GlobalRandom.getInstance().nextInt(-1000, 1000);

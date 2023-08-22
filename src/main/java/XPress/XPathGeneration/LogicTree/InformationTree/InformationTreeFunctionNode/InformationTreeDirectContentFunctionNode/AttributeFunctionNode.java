@@ -1,7 +1,8 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeDirectContentFunctionNode;
 
+import XPress.DatatypeControl.PrimitiveDatatype.XMLNode;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLSequence;
 import XPress.GlobalRandom;
-import XPress.PrimitiveDatatype.XMLDatatype;
 import XPress.TestException.DebugErrorException;
 import XPress.XMLGeneration.AttributeNode;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.FunctionV1;
@@ -14,8 +15,8 @@ public class AttributeFunctionNode extends InformationTreeDirectContentFunctionN
     public String getCalculationString(LogicTreeNode parentNode, boolean checkImpact) throws DebugErrorException {
         String calculationStr = childList.get(0).getCalculationString(parentNode, false)
                 + "/@" + functionExpr;
-        if(datatypeRecorder.xmlDatatype != XMLDatatype.SEQUENCE) {
-            calculationStr = "(" + calculationStr + " cast as " + datatypeRecorder.xmlDatatype.getValueHandler().officialTypeName + ")";
+        if(!(datatypeRecorder.xmlDatatype instanceof XMLSequence)) {
+            calculationStr = "(" + calculationStr + " cast as " + datatypeRecorder.xmlDatatype.officialTypeName + ")";
         }
         return calculationStr;
     }
@@ -23,7 +24,7 @@ public class AttributeFunctionNode extends InformationTreeDirectContentFunctionN
     @Override
     protected void fillContentParameters(InformationTreeNode childNode) {
         int nodeId;
-        if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.NODE) {
+        if(childNode.datatypeRecorder.xmlDatatype instanceof XMLNode) {
             nodeId = Integer.parseInt(childNode.getContext().context);
         }
         else {
@@ -35,8 +36,7 @@ public class AttributeFunctionNode extends InformationTreeDirectContentFunctionN
 
     @Override
     protected void fillContentParametersRandom(InformationTreeNode childNode) {
-        int nodeId =
-                GlobalRandom.getInstance().nextInt(contextInfo.mainExecutor.maxId) + 1;
+        int nodeId = GlobalRandom.getInstance().nextInt(contextInfo.mainExecutor.maxId) + 1;
         fillContentParametersWithNodeID(childNode, nodeId);
     }
 
@@ -44,11 +44,11 @@ public class AttributeFunctionNode extends InformationTreeDirectContentFunctionN
         AttributeNode attributeNode = GlobalRandom.getInstance().getRandomFromList(
                 contextInfo.mainExecutor.contextNodeMap.get(nodeId).attributeList);
         functionExpr = attributeNode.tagName;
-        if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.NODE) {
+        if(childNode.datatypeRecorder.xmlDatatype instanceof XMLNode) {
             datatypeRecorder.xmlDatatype = attributeNode.dataType;
         }
         else {
-            datatypeRecorder.xmlDatatype = XMLDatatype.SEQUENCE;
+            datatypeRecorder.xmlDatatype = XMLSequence.getInstance();
             datatypeRecorder.subDatatype = attributeNode.dataType;
         }
     }

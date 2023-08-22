@@ -1,7 +1,7 @@
 package XPress.XPathGeneration.LogicTree;
 
+import XPress.DatatypeControl.PrimitiveDatatype.XMLBoolean;
 import XPress.GlobalRandom;
-import XPress.PrimitiveDatatype.XMLDatatype;
 import XPress.TestException.DebugErrorException;
 
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ public abstract class LogicTreeComparisonNode extends LogicTreeNode {
     String funcExpr;
 
     {
-        datatypeRecorder.xmlDatatype = XMLDatatype.BOOLEAN;
+        datatypeRecorder.xmlDatatype = XMLBoolean.getInstance();
     }
 
     static {

@@ -35,7 +35,7 @@ public abstract class DatabaseExecutor {
         scanner.addIncludeFilter(new AnnotationTypeFilter(Executor.class));
 
         for (BeanDefinition bd : scanner.findCandidateComponents(
-                "XTest.DatabaseExecutor")) {
+                "XPress.DatabaseExecutor")) {
             try {
                 Class c = Class.forName(bd.getBeanClassName());
                 Method factoryMethod = c.getDeclaredMethod("registerMap");
@@ -54,10 +54,12 @@ public abstract class DatabaseExecutor {
     public static DatabaseExecutor getExecutor(String dbName, String config) {
         try {
             Class<?>[] argClasses = { String.class };
-            Method factoryMethod = nameExecutorMap.get(dbName).getDeclaredMethod("getInstance", argClasses);
+            Class dbClass = nameExecutorMap.get(dbName);
+            if(dbClass == null) return null;
+            Method factoryMethod = dbClass.getDeclaredMethod("getInstance", argClasses);
             return (DatabaseExecutor) factoryMethod.invoke(null, config);
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new RuntimeException(e);
+            return null;
         }
     }
 

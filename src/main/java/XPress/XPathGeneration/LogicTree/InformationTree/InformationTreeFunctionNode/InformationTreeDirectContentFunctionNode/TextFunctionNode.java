@@ -1,6 +1,8 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeDirectContentFunctionNode;
 
-import XPress.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLMixed;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLNode;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLSequence;
 import XPress.XMLGeneration.ContextNode;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.FunctionV1;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
@@ -14,7 +16,7 @@ public class TextFunctionNode extends InformationTreeDirectContentFunctionNode {
     @Override
     protected void fillContentParameters(InformationTreeNode childNode) {
         int nodeId;
-        if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.NODE) {
+        if(childNode.datatypeRecorder.xmlDatatype instanceof XMLNode) {
             nodeId = Integer.parseInt(childNode.getContext().context);
         }
         else {
@@ -22,27 +24,27 @@ public class TextFunctionNode extends InformationTreeDirectContentFunctionNode {
             nodeId = Integer.parseInt(childNode.getContext().supplementaryContext);
         }
         ContextNode contextNode = contextInfo.mainExecutor.contextNodeMap.get(nodeId);
-        if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.NODE) {
+        if(childNode.datatypeRecorder.xmlDatatype instanceof XMLNode) {
             datatypeRecorder.xmlDatatype = contextNode.dataType;
         }
         else {
-            datatypeRecorder.xmlDatatype = XMLDatatype.SEQUENCE;
+            datatypeRecorder.xmlDatatype = XMLSequence.getInstance();
             datatypeRecorder.subDatatype = contextNode.dataType;
         }
     }
 
     @Override
     protected void fillContentParametersRandom(InformationTreeNode childNode) {
-        datatypeRecorder.xmlDatatype = XMLDatatype.SEQUENCE;
-        datatypeRecorder.subDatatype = XMLDatatype.MIXED;
+        datatypeRecorder.xmlDatatype = XMLSequence.getInstance();
+        datatypeRecorder.subDatatype = XMLMixed.getInstance();
     }
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
-        Boolean checkResult = (childNode.datatypeRecorder.xmlDatatype == XMLDatatype.NODE && !childNode.datatypeRecorder.nodeMix);
+        Boolean checkResult = (childNode.datatypeRecorder.xmlDatatype instanceof XMLNode && !childNode.datatypeRecorder.nodeMix);
         if (!checkResult) {
-            if (childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE &&
-                    childNode.datatypeRecorder.subDatatype == XMLDatatype.NODE &&
+            if (childNode.datatypeRecorder.xmlDatatype instanceof XMLSequence &&
+                    childNode.datatypeRecorder.subDatatype instanceof XMLNode &&
                     (!childNode.datatypeRecorder.nodeMix))
                 checkResult = true;
         }

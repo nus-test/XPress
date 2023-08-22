@@ -1,13 +1,13 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
 
-import XPress.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLString;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
 @FunctionV1
 public class ConcatFunctionNode extends InformationTreeFunctionNode {
     public ConcatFunctionNode() {
-        this.datatypeRecorder.xmlDatatype = XMLDatatype.STRING;
+        this.datatypeRecorder.xmlDatatype = XMLString.getInstance();
         functionExpr = "concat";
     }
 
@@ -18,19 +18,19 @@ public class ConcatFunctionNode extends InformationTreeFunctionNode {
 
     @Override
     protected void fillContentParameters(InformationTreeNode childNode) {
-        if(fillContentParameterBySubRoot(XMLDatatype.STRING)) return;
+        if(fillContentParameterBySubRoot(XMLString.getInstance())) return;
         fillContentParametersRandom(childNode);
     }
 
     @Override
     protected void fillContentParametersRandom(InformationTreeNode childNode) {
-        String randomString = XMLDatatype.STRING.getValueHandler().getValue(false);
-        InformationTreeConstantNode constantNode = new InformationTreeConstantNode(XMLDatatype.STRING, randomString);
+        String randomString = XMLString.getInstance().getValueHandler().getValue(false);
+        InformationTreeConstantNode constantNode = new InformationTreeConstantNode(XMLString.getInstance(), randomString);
         childList.add(constantNode);
     }
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
-        return childNode.datatypeRecorder.xmlDatatype == XMLDatatype.STRING;
+        return childNode.datatypeRecorder.xmlDatatype instanceof XMLString;
     }
 }

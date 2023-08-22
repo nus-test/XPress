@@ -1,4 +1,4 @@
-package XPress.DatatypeControl;
+package XPress.DatatypeControl.ValueHandler;
 
 import XPress.GlobalRandom;
 
@@ -6,10 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class XMLDurationHandler extends PooledValueHandler {
-
-    XMLDurationHandler() {
-        officialTypeName = "xs:duration";
-    }
 
     List<Character> yearMonthDurationPostfix = Arrays.asList('Y', 'M', 'D');
     List<Character> dayTimeDurationPostfix = Arrays.asList('H', 'M', 'S');

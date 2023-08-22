@@ -1,6 +1,8 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
 
-import XPress.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLBoolean;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLNode;
 import XPress.TestException.DebugErrorException;
 import XPress.TestException.UnexpectedExceptionThrownException;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
@@ -14,7 +16,7 @@ import java.sql.SQLException;
 public class CastableFunctionNode extends BinaryOperatorFunctionNode {
     String transformedDatatypeName;
     public CastableFunctionNode() {
-        datatypeRecorder.xmlDatatype = XMLDatatype.BOOLEAN;
+        datatypeRecorder.xmlDatatype = XMLBoolean.getInstance();
         functionExpr = "castable as";
     }
 
@@ -39,12 +41,12 @@ public class CastableFunctionNode extends BinaryOperatorFunctionNode {
     @Override
     protected void fillContentParametersRandom(InformationTreeNode childNode) throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         XMLDatatype transformedDatatype = XMLDatatype.getRandomDataType();
-        transformedDatatypeName = transformedDatatype.getValueHandler().officialTypeName;
+        transformedDatatypeName = transformedDatatype.officialTypeName;
     }
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
-        return childNode.datatypeRecorder.getActualDatatype() != XMLDatatype.NODE;
+        return !(childNode.datatypeRecorder.getActualDatatype() instanceof XMLNode);
     }
     @Override
     public String getXPathExpression(boolean returnConstant, LogicTreeNode parentNode, boolean calculateString) throws DebugErrorException {

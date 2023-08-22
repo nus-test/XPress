@@ -1,12 +1,19 @@
 package XPress.DatatypeControl.PrimitiveDatatype;
 
-@Datatype
-public class XML_Sequence extends XMLDatatype {
-    static XML_Sequence instance;
+import XPress.DatatypeControl.ValueHandler.XMLMixedHandler;
+import XPress.DatatypeControl.ValueHandler.XMLSequenceHandler;
 
-    static public XML_Sequence getInstance() {
+@Datatype
+public class XMLSequence extends XMLDatatype {
+    static XMLSequence instance;
+
+    XMLSequence() {
+        valueHandler = new XMLSequenceHandler();
+    }
+
+    static public XMLSequence getInstance() {
         if(instance == null) {
-            instance = new XML_Sequence();
+            instance = new XMLSequence();
         }
         return instance;
     }

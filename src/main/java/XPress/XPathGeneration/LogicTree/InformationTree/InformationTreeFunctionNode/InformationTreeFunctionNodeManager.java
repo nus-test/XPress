@@ -1,11 +1,14 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
 
+import XPress.DatatypeControl.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLMixed;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLNode;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLSequence;
 import XPress.DefaultListHashMap;
 import XPress.GlobalRandom;
 import XPress.GlobalSettings;
-import XPress.PrimitiveDatatype.XMLDatatype;
-import XPress.PrimitiveDatatype.XMLDatatypeComplexRecorder;
-import XPress.PrimitiveDatatype.XMLSimple;
+import XPress.DatatypeControl.XMLDatatypeComplexRecorder;
+import XPress.DatatypeControl.XMLSimple;
 import XPress.TestException.DebugErrorException;
 import XPress.TestException.UnexpectedExceptionThrownException;
 import XPress.TestException.XPathVersion1Exception;
@@ -56,7 +59,7 @@ public class InformationTreeFunctionNodeManager {
             scanner.addIncludeFilter(new AnnotationTypeFilter(FunctionV3.class));
 
         for (BeanDefinition bd : scanner.findCandidateComponents(
-                "XTest.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode")) {
+                "XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode")) {
             try {
                 registeredFunctionList.add(Class.forName(bd.getBeanClassName()).
                         asSubclass(InformationTreeFunctionNode.class).newInstance());
@@ -90,7 +93,7 @@ public class InformationTreeFunctionNodeManager {
     }
 
     public InformationTreeNode getNodeWithAnySequence(XMLDatatype datatype) {
-        InformationTreeNode node = getNodeWithSequenceType(XMLDatatype.MIXED);
+        InformationTreeNode node = getNodeWithSequenceType(XMLMixed.getInstance());
         double prob = GlobalRandom.getInstance().nextDouble();
         if(node != null && prob < 0.3) return node;
         return getNodeWithSequenceType(datatype);
@@ -123,8 +126,8 @@ public class InformationTreeFunctionNodeManager {
         }
         if(onlyRoot) return null;
         if(isSequence) {
-            if(datatype == XMLDatatype.NODE) return null;
-            return new InformationTreeConstantNode(new XMLDatatypeComplexRecorder(XMLDatatype.SEQUENCE, datatype, false),
+            if(datatype instanceof XMLNode) return null;
+            return new InformationTreeConstantNode(new XMLDatatypeComplexRecorder(XMLSequence.getInstance(), datatype, false),
                     datatype.getValueHandler().getSequenceValue(datatype));
         }
         return new InformationTreeConstantNode(datatype, datatype.getValueHandler().getValue(false));
@@ -137,7 +140,7 @@ public class InformationTreeFunctionNodeManager {
      */
     public XMLDatatypeComplexRecorder getRandomTargetedDatatypeRecorder(XMLDatatypeComplexRecorder currentDatatypeRecorder) {
         XMLDatatypeComplexRecorder derivedRecorder = new XMLDatatypeComplexRecorder(currentDatatypeRecorder);
-        if(currentDatatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) {
+        if(currentDatatypeRecorder.xmlDatatype instanceof XMLSequence) {
             derivedRecorder.subDatatype = getRandomCastableDatatype(currentDatatypeRecorder.subDatatype);
         }
         else derivedRecorder.xmlDatatype = getRandomCastableDatatype(currentDatatypeRecorder.xmlDatatype);
@@ -152,7 +155,7 @@ public class InformationTreeFunctionNodeManager {
      */
     public InformationTreeFunctionNode getRandomMatchingFunctionNode(XMLDatatypeComplexRecorder datatypeRecorder) {
         InformationTreeFunctionNode functionNode;
-        if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE)
+        if(datatypeRecorder.xmlDatatype instanceof XMLSequence)
             functionNode = GlobalRandom.getInstance().getRandomFromList(
                     sequenceRoughContextMatchingMap.get(datatypeRecorder.getActualDatatype())).newInstance();
         else functionNode = GlobalRandom.getInstance().getRandomFromList(
@@ -214,8 +217,8 @@ public class InformationTreeFunctionNodeManager {
         dummyNode.getContext().context = "10";
         XMLDatatypeComplexRecorder recorder = new XMLDatatypeComplexRecorder();
         for(InformationTreeFunctionNode functionNode : registeredFunctionList) {
-            for(XMLDatatype xmlDatatype: XMLDatatype.values()) {
-                if(xmlDatatype.getValueHandler() instanceof XMLSimple) {
+            for(XMLDatatype xmlDatatype: XMLDatatype.allDatatypeList) {
+                if(xmlDatatype instanceof XMLSimple) {
                         // For single node check
                         dummyNode.datatypeRecorder.setData(xmlDatatype);
                         if(functionNode.checkContextAcceptability(dummyNode)) {
@@ -223,15 +226,15 @@ public class InformationTreeFunctionNodeManager {
                         }
 
                         // For sequence check
-                        dummyNode.datatypeRecorder.setData(XMLDatatype.SEQUENCE, xmlDatatype, true);
+                        dummyNode.datatypeRecorder.setData(XMLSequence.getInstance(), xmlDatatype, true);
                         if(functionNode.checkContextAcceptability(dummyNode)) {
                             sequenceRoughContextMatchingMap.get(xmlDatatype).add(functionNode);
                         }
                     }
                 }
-            dummyNode.datatypeRecorder.setData(XMLDatatype.SEQUENCE, XMLDatatype.MIXED, true);
+            dummyNode.datatypeRecorder.setData(XMLSequence.getInstance(), XMLMixed.getInstance(), true);
             if(functionNode.checkContextAcceptability(dummyNode)) {
-                sequenceRoughContextMatchingMap.get(XMLDatatype.MIXED).add(functionNode);
+                sequenceRoughContextMatchingMap.get(XMLMixed.getInstance()).add(functionNode);
             }
         }
         //throw new RuntimeException();
@@ -242,14 +245,14 @@ public class InformationTreeFunctionNodeManager {
         dummyChildNode.XPathExpr = ".";
         dummyChildNode.inheritContextChildInfo(node);
         dummyChildNode.dummyContext = true;
-        if(node.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) {
+        if(node.datatypeRecorder.xmlDatatype instanceof XMLSequence) {
             Integer id = GlobalSettings.starNodeSelection ? GlobalRandom.getInstance().nextInt(Integer.parseInt(node.getContext().context)) + 1 : null;
             String calString = "((" + node.getCalculationString() + ")[" + id + "])";
             dummyChildNode.datatypeRecorder = new XMLDatatypeComplexRecorder(node.datatypeRecorder.getActualDatatype());
-            if(node.datatypeRecorder.subDatatype == XMLDatatype.NODE) {
+            if(node.datatypeRecorder.subDatatype instanceof XMLNode) {
                 calString = "(" + calString + "/@id cast as xs:integer)";
             } else {
-                calString = "(" + calString + " cast as " + node.datatypeRecorder.subDatatype.getValueHandler().officialTypeName + ")";
+                calString = "(" + calString + " cast as " + node.datatypeRecorder.subDatatype.officialTypeName + ")";
             }
             if(GlobalSettings.starNodeSelection)
                 dummyChildNode.getContext().setContext(

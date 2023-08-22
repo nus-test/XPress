@@ -2,7 +2,7 @@ package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunction
 
 import XPress.GlobalRandom;
 import XPress.GlobalSettings;
-import XPress.PrimitiveDatatype.XMLComparable;
+import XPress.DatatypeControl.XMLComparable;
 import XPress.TestException.DebugErrorException;
 import XPress.TestException.UnexpectedExceptionThrownException;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;

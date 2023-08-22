@@ -1,7 +1,6 @@
 package XPress.DatabaseExecutor;
 
 import XPress.GlobalSettings;
-import XPress.TempTest.BaseXClient;
 import XPress.TestException.UnsupportedContextSetUpException;
 
 import java.io.FileInputStream;

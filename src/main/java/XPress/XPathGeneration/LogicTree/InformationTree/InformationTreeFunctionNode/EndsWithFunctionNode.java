@@ -1,7 +1,8 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
 
+import XPress.DatatypeControl.PrimitiveDatatype.XMLBoolean;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLString;
 import XPress.GlobalRandom;
-import XPress.PrimitiveDatatype.XMLDatatype;
 import XPress.TestException.DebugErrorException;
 import XPress.TestException.UnexpectedExceptionThrownException;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
@@ -17,13 +18,13 @@ public class EndsWithFunctionNode extends InformationTreeFunctionNode {
     String internalStr = null;
 
     public EndsWithFunctionNode() {
-        datatypeRecorder.xmlDatatype = XMLDatatype.BOOLEAN;
+        datatypeRecorder.xmlDatatype = XMLBoolean.getInstance();
         functionExpr = "ends-with";
     }
 
     @Override
     protected void fillContentParameters(InformationTreeNode childNode) {
-        if(fillContentParameterBySubRoot(XMLDatatype.STRING)) return;
+        if(fillContentParameterBySubRoot(XMLString.getInstance())) return;
         internalStr = childNode.getContext().context;
         fillContentParametersWithGivenContext(childNode);
     }
@@ -31,7 +32,7 @@ public class EndsWithFunctionNode extends InformationTreeFunctionNode {
     @Override
     protected void fillContentParametersRandom(InformationTreeNode childNode) {
         if(internalStr == null) {
-            internalStr = XMLDatatype.STRING.getValueHandler().getValue(false);
+            internalStr = XMLString.getInstance().getValueHandler().getValue(false);
         }
         fillContentParametersWithGivenContext(childNode);
     }
@@ -44,20 +45,20 @@ public class EndsWithFunctionNode extends InformationTreeFunctionNode {
     private void fillContentParametersWithGivenContext(InformationTreeNode childNode) {
         double prob = GlobalRandom.getInstance().nextDouble();
         while(internalStr.length() == 0) {
-            internalStr = XMLDatatype.STRING.getValueHandler().getValue(false);
+            internalStr = XMLString.getInstance().getValueHandler().getValue(false);
         }
         int startIndex = GlobalRandom.getInstance().nextInt(internalStr.length());
         String endStr = internalStr.substring(startIndex);
         if(prob < 0.2) {
-            endStr = XMLDatatype.STRING.getValueHandler().mutateValue(endStr);
+            endStr = XMLString.getInstance().getValueHandler().mutateValue(endStr);
         }
-        childList.add(new InformationTreeConstantNode(XMLDatatype.STRING, endStr));
+        childList.add(new InformationTreeConstantNode(XMLString.getInstance(), endStr));
         internalStr = null;
     }
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
-        return childNode.datatypeRecorder.xmlDatatype == XMLDatatype.STRING;
+        return childNode.datatypeRecorder.xmlDatatype instanceof XMLString;
     }
 
     @Override

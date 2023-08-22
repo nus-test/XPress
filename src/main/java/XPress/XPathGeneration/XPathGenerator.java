@@ -109,6 +109,10 @@ public class XPathGenerator {
             if (prob < 0.6 && GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_3)
                 currentBuildPair.XPath += "*";
             else {
+                if(GlobalSettings.useNamespace && randomNode.namespace.length() > 0) {
+                    currentBuildPair.XPath += GlobalRandom.getInstance().getRandomFromList(
+                            mainExecutor.namespacePrefixMap.get(randomNode.namespace)) + ":";
+                }
                 currentBuildPair.XPath += randomNode.tagName;
                 allowTextContentFlag = true;
             }

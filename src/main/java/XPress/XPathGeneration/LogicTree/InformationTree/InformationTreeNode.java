@@ -1,10 +1,12 @@
 package XPress.XPathGeneration.LogicTree.InformationTree;
 
 import XPress.DatabaseExecutor.MainExecutor;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLInteger;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLNode;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLSequence;
 import XPress.GlobalRandom;
 import XPress.GlobalSettings;
-import XPress.PrimitiveDatatype.XMLDatatype;
-import XPress.PrimitiveDatatype.XMLIntegerHandler;
 import XPress.TestException.DebugErrorException;
 import XPress.TestException.UnexpectedExceptionThrownException;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.NotFunctionNode;
@@ -93,25 +95,25 @@ public abstract class InformationTreeNode extends LogicTreeNode {
 
     public void calculateInfo() throws SQLException, UnexpectedExceptionThrownException, IOException, DebugErrorException {
         String calculationString = getCalculationString();
-        if(datatypeRecorder.xmlDatatype == XMLDatatype.NODE) {
+        if(datatypeRecorder.xmlDatatype instanceof XMLNode) {
             getContext().context = contextInfo.mainExecutor.executeSingleProcessor(calculationString + "/@id cast as xs:integer");
         }
         else if(calculationString != null) {
-            if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) {
+            if(datatypeRecorder.xmlDatatype instanceof XMLSequence) {
                 getContext().context = contextInfo.mainExecutor.executeSingleProcessor("count(" + calculationString + ")");
             }
             else {
                 getContext().context = contextInfo.mainExecutor.executeSingleProcessor(calculationString);
                 try {
-                    if (datatypeRecorder.xmlDatatype == XMLDatatype.INTEGER)
-                        getContext().context = Integer.toString(XMLIntegerHandler.parseInt(getContext().context));
+                    if (datatypeRecorder.xmlDatatype instanceof XMLInteger)
+                        getContext().context = Integer.toString(XMLInteger.parseInt(getContext().context));
                 } catch (Exception e) {
                     System.out.println(getContext().context);
                     System.out.println(calculationString);
                     throw new RuntimeException();
                 }
             }
-            if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE && datatypeRecorder.subDatatype == XMLDatatype.NODE) {
+            if(datatypeRecorder.xmlDatatype instanceof XMLSequence && datatypeRecorder.subDatatype instanceof XMLNode) {
                 Integer size = Integer.parseInt(getContext().context);
                 if(size != 0) {
                     Integer randomId = GlobalRandom.getInstance().nextInt(size) + 1;
@@ -125,8 +127,8 @@ public abstract class InformationTreeNode extends LogicTreeNode {
 
     public void setCalculableContextFlag() {
         boolean flag = true;
-        if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) flag = false;
-        if(datatypeRecorder.subDatatype == XMLDatatype.NODE) flag = false;
+        if(datatypeRecorder.xmlDatatype instanceof XMLSequence) flag = false;
+        if(datatypeRecorder.subDatatype instanceof XMLNode) flag = false;
         getContextInfo().constantExpr = flag;
     }
 
@@ -135,8 +137,8 @@ public abstract class InformationTreeNode extends LogicTreeNode {
      * @return
      */
     public Boolean checkValidCalculableContext() {
-        if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) return false;
-        if(datatypeRecorder.xmlDatatype == XMLDatatype.NODE) return false;
+        if(datatypeRecorder.xmlDatatype instanceof XMLSequence) return false;
+        if(datatypeRecorder.xmlDatatype instanceof XMLNode) return false;
         return getContext().context != null;
     }
 

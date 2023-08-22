@@ -1,7 +1,7 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
 
+import XPress.DatatypeControl.PrimitiveDatatype.XMLDouble;
 import XPress.GlobalRandom;
-import XPress.PrimitiveDatatype.XMLDatatype;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
@@ -11,7 +11,7 @@ import static java.lang.Math.abs;
 public class DoubleMultiplicationFunctionNode extends BinaryNumericalOperatorFunctionNode {
 
     public DoubleMultiplicationFunctionNode() {
-        datatypeRecorder.xmlDatatype = XMLDatatype.DOUBLE;
+        datatypeRecorder.xmlDatatype = XMLDouble.getInstance();
         priorityLevel = 3;
         functionExpr = "*";
     }
@@ -30,7 +30,7 @@ public class DoubleMultiplicationFunctionNode extends BinaryNumericalOperatorFun
             if(last < 0.0001) last = 0.0001;
             multiplicationValue = pre + last;
         }
-        childList.add(new InformationTreeConstantNode(XMLDatatype.DOUBLE, Double.toString(multiplicationValue)));
+        childList.add(new InformationTreeConstantNode(XMLDouble.getInstance(), Double.toString(multiplicationValue)));
     }
 
     @Override
@@ -48,7 +48,7 @@ public class DoubleMultiplicationFunctionNode extends BinaryNumericalOperatorFun
             multiplicationValue = pre + last;
         }
         String multiplicationValueStr = Double.toString(multiplicationValue);
-        childList.add(new InformationTreeConstantNode(XMLDatatype.DOUBLE, multiplicationValueStr));
+        childList.add(new InformationTreeConstantNode(XMLDouble.getInstance(), multiplicationValueStr));
         inheritContextChildInfo(childNode);
     }
 
@@ -59,6 +59,6 @@ public class DoubleMultiplicationFunctionNode extends BinaryNumericalOperatorFun
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
-        return childNode.datatypeRecorder.xmlDatatype == XMLDatatype.DOUBLE;
+        return childNode.datatypeRecorder.xmlDatatype instanceof XMLDouble;
     }
 }

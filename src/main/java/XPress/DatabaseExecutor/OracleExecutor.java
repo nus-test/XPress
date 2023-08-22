@@ -9,24 +9,37 @@ import java.sql.*;
 public class OracleExecutor extends DatabaseExecutor {
     static OracleExecutor oracleExecutor;
     String url = "jdbc:oracle:thin:@localhost:1521/XE";
-    String username = "test";
-    String password = "shuxin";
+    String username;
+    String password;
     Connection connection;
     Statement statement;
     String createSQL = "create table test of xmltype";
     String dropSQL = "drop table test";
 
-    private OracleExecutor() throws SQLException {
+    private OracleExecutor(String config) throws SQLException {
         dbName = "Oracle";
+        if(config.length() > 0) {
+            String[] configs = config.split("[\\s,]+");
+            username = configs[0];
+            password = configs[1];
+        }
         connection = DriverManager.getConnection(url, username, password);
         statement = connection.createStatement();
         dbXPathVersion = GlobalSettings.XPathVersion.VERSION_1;
     }
 
-    static public OracleExecutor getInstance() throws SQLException, ClassNotFoundException {
+    public static void registerMap() {
+        nameExecutorMap.put("Oracle", OracleExecutor.class);
+    }
+
+    static public OracleExecutor getInstance(String config) throws SQLException {
         if(oracleExecutor == null)
-            oracleExecutor = new OracleExecutor();
+            oracleExecutor = new OracleExecutor(config);
         return oracleExecutor;
+    }
+
+    static public OracleExecutor getInstance() throws SQLException, ClassNotFoundException {
+        return getInstance("");
     }
 
     @Override

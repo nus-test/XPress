@@ -1,11 +1,8 @@
-package XPress.DatatypeControl;
+package XPress.DatatypeControl.ValueHandler;
 
 import XPress.GlobalRandom;
 
 public class XMLDoubleHandler extends PooledValueHandler {
-    XMLDoubleHandler() {
-        officialTypeName = "xs:double";
-    }
 
     @Override
     String getRandomValue() {

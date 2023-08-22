@@ -1,12 +1,13 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
 
-import XPress.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLInteger;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLString;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
 @FunctionV1
 public class StringLengthFunctionNode extends InformationTreeFunctionNode {
     public StringLengthFunctionNode() {
-        datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;
+        datatypeRecorder.xmlDatatype = XMLInteger.getInstance();
         functionExpr = "string-length";
     }
 
@@ -17,6 +18,6 @@ public class StringLengthFunctionNode extends InformationTreeFunctionNode {
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
-        return childNode.datatypeRecorder.xmlDatatype == XMLDatatype.STRING;
+        return childNode.datatypeRecorder.xmlDatatype instanceof XMLString;
     }
 }

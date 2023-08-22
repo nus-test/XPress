@@ -1,6 +1,6 @@
 package XPress.XMLGeneration;
 
-import XPress.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLDatatype;
 
 public class ElementNode {
     public String tagName;

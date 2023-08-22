@@ -1,39 +1,39 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
 
-import XPress.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLString;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
 @FunctionV1
 public class TranslateFunctionNode extends InformationTreeFunctionNode {
     public TranslateFunctionNode() {
-        datatypeRecorder.xmlDatatype = XMLDatatype.STRING;
+        datatypeRecorder.xmlDatatype = XMLString.getInstance();
         functionExpr = "translate";
     }
 
     @Override
     protected void fillContentParameters(InformationTreeNode childNode) {;
-        String mapStr = XMLDatatype.STRING.getValueHandler().mutateValue(childNode.context.context);
-        String transStr = XMLDatatype.STRING.getValueHandler().getValue();
-        InformationTreeConstantNode mapNode = new InformationTreeConstantNode(XMLDatatype.STRING, mapStr);
-        InformationTreeConstantNode transNode = new InformationTreeConstantNode(XMLDatatype.STRING, transStr);
+        String mapStr = XMLString.getInstance().getValueHandler().mutateValue(childNode.context.context);
+        String transStr = XMLString.getInstance().getValueHandler().getValue();
+        InformationTreeConstantNode mapNode = new InformationTreeConstantNode(XMLString.getInstance(), mapStr);
+        InformationTreeConstantNode transNode = new InformationTreeConstantNode(XMLString.getInstance(), transStr);
         childList.add(mapNode);
         childList.add(transNode);
     }
 
     @Override
     protected void fillContentParametersRandom(InformationTreeNode childNode) {
-        String mapStr = XMLDatatype.STRING.getValueHandler().getValue();
-        String transStr = XMLDatatype.STRING.getValueHandler().getValue();
-        InformationTreeConstantNode mapNode = new InformationTreeConstantNode(XMLDatatype.STRING, mapStr);
-        InformationTreeConstantNode transNode = new InformationTreeConstantNode(XMLDatatype.STRING, transStr);
+        String mapStr = XMLString.getInstance().getValueHandler().getValue();
+        String transStr = XMLString.getInstance().getValueHandler().getValue();
+        InformationTreeConstantNode mapNode = new InformationTreeConstantNode(XMLString.getInstance(), mapStr);
+        InformationTreeConstantNode transNode = new InformationTreeConstantNode(XMLString.getInstance(), transStr);
         childList.add(mapNode);
         childList.add(transNode);
     }
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
-        return childNode.datatypeRecorder.xmlDatatype == XMLDatatype.STRING;
+        return childNode.datatypeRecorder.xmlDatatype instanceof XMLString;
     }
 
     @Override

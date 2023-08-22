@@ -1,8 +1,8 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeComparisonOperatorNode;
 
+import XPress.DatatypeControl.PrimitiveDatatype.XMLDouble;
 import XPress.GlobalSettings;
-import XPress.PrimitiveDatatype.XMLComparable;
-import XPress.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.XMLComparable;
 import XPress.TestException.DebugErrorException;
 import XPress.TestException.UnexpectedExceptionThrownException;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
@@ -43,7 +43,7 @@ public class LessOrEqualOperatorNode extends InformationTreeComparisonOperatorNo
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
         boolean result = super.checkContextAcceptability(childNode);
         if(result) {
-            return childNode.datatypeRecorder.getActualDatatype() != XMLDatatype.DOUBLE;
+            return !(childNode.datatypeRecorder.getActualDatatype() instanceof XMLDouble);
         } else return false;
     }
 }

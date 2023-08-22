@@ -40,7 +40,7 @@ public class TestCaseGeneration {
                 System.out.println("Writing round " + i + "...");
                 try {
                     int xpathCnt = 100;
-                    mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
+                    mainExecutor.setXPathGenerationContext(xmlContext);
                     for (int j = 0; j < xpathCnt; j++) {
                         String XPath = "";
                         try {

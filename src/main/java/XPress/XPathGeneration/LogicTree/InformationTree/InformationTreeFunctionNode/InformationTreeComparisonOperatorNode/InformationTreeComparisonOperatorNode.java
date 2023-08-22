@@ -1,8 +1,8 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeComparisonOperatorNode;
 
+import XPress.DatatypeControl.PrimitiveDatatype.*;
 import XPress.GlobalSettings;
-import XPress.PrimitiveDatatype.XMLComparable;
-import XPress.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.XMLComparable;
 import XPress.TestException.DebugErrorException;
 import XPress.TestException.UnexpectedExceptionThrownException;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
@@ -15,7 +15,7 @@ import java.sql.SQLException;
 
 public abstract class InformationTreeComparisonOperatorNode extends BinaryOperatorFunctionNode {
     InformationTreeComparisonOperatorNode() {
-        datatypeRecorder.xmlDatatype = XMLDatatype.BOOLEAN;
+        datatypeRecorder.xmlDatatype = XMLBoolean.getInstance();
     }
 
     @Override
@@ -51,13 +51,13 @@ public abstract class InformationTreeComparisonOperatorNode extends BinaryOperat
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
-        if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_1 && childNode.datatypeRecorder.xmlDatatype == XMLDatatype.STRING) {
+        if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_1 && childNode.datatypeRecorder.xmlDatatype instanceof XMLString) {
             return false;
         }
-        if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE ||
-            childNode.datatypeRecorder.xmlDatatype == XMLDatatype.NODE ||
-            childNode.datatypeRecorder.xmlDatatype == XMLDatatype.MIXED)
+        if(childNode.datatypeRecorder.xmlDatatype instanceof XMLSequence ||
+            childNode.datatypeRecorder.xmlDatatype instanceof XMLNode ||
+            childNode.datatypeRecorder.xmlDatatype instanceof XMLMixed)
             return false;
-        return childNode.datatypeRecorder.xmlDatatype.getValueHandler() instanceof XMLComparable;
+        return childNode.datatypeRecorder.xmlDatatype instanceof XMLComparable;
     }
 }

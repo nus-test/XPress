@@ -1,14 +1,15 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
 
+import XPress.DatatypeControl.PrimitiveDatatype.XMLBoolean;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLString;
 import XPress.GlobalRandom;
 import XPress.Pair;
-import XPress.PrimitiveDatatype.XMLDatatype;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 @FunctionV1
 public class ContainsFunctionNode extends InformationTreeFunctionNode {
     public ContainsFunctionNode() {
-        this.datatypeRecorder.xmlDatatype = XMLDatatype.BOOLEAN;
+        this.datatypeRecorder.xmlDatatype = XMLBoolean.getInstance();
         functionExpr = "contains";
     }
 
@@ -30,23 +31,23 @@ public class ContainsFunctionNode extends InformationTreeFunctionNode {
         double prob = GlobalRandom.getInstance().nextDouble();
         subString = childString.substring(l, r);
         if(prob < 0.2)
-            subString = XMLDatatype.STRING.getValueHandler().mutateValue(subString);
+            subString = XMLString.getInstance().getValueHandler().mutateValue(subString);
         InformationTreeConstantNode constantNode = new InformationTreeConstantNode
-                (XMLDatatype.STRING, subString);
+                (XMLString.getInstance(), subString);
         childList.add(constantNode);
     }
 
     @Override
     protected void fillContentParametersRandom(InformationTreeNode childNode) {
         String subString;
-        subString = XMLDatatype.STRING.getValueHandler().getValue();
+        subString = XMLString.getInstance().getValueHandler().getValue();
         InformationTreeConstantNode constantNode = new InformationTreeConstantNode
-                (XMLDatatype.STRING, subString);
+                (XMLString.getInstance(), subString);
         childList.add(constantNode);
     }
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
-        return childNode.datatypeRecorder.xmlDatatype == XMLDatatype.STRING;
+        return childNode.datatypeRecorder.xmlDatatype instanceof XMLString;
     }
 }

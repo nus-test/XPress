@@ -1,13 +1,13 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
 
-import XPress.PrimitiveDatatype.XMLDatatype;
-import XPress.PrimitiveDatatype.XMLNumeric;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLDouble;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLNumeric;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
 @FunctionV3
 public class CosFunctionNode extends InformationTreeFunctionNode {
     public CosFunctionNode() {
-        datatypeRecorder.xmlDatatype = XMLDatatype.DOUBLE;
+        datatypeRecorder.xmlDatatype = XMLDouble.getInstance();
         functionExpr = "math:cos";
     }
 
@@ -18,6 +18,6 @@ public class CosFunctionNode extends InformationTreeFunctionNode {
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
-        return childNode.datatypeRecorder.xmlDatatype.getValueHandler() instanceof XMLNumeric;
+        return childNode.datatypeRecorder.xmlDatatype instanceof XMLNumeric;
     }
 }

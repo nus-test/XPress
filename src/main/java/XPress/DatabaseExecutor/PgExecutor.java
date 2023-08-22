@@ -2,7 +2,6 @@ package XPress.DatabaseExecutor;
 
 import XPress.GlobalSettings;
 import XPress.TestException.UnsupportedContextSetUpException;
-
 import java.io.IOException;
 import java.sql.*;
 
@@ -15,16 +14,29 @@ public class PgExecutor extends DatabaseExecutor{
     Statement statement;
     String xmlDataContent;
 
-    private PgExecutor() throws SQLException {
+    private PgExecutor(String config) throws SQLException {
         dbName = "PostgreSQL";
+        if(config.length() > 0) {
+            String[] configs = config.split("[\\s,]+");
+            username = configs[0];
+            password = configs[1];
+        }
         connection = DriverManager.getConnection(url, username, password);
         statement = connection.createStatement();
         dbXPathVersion = GlobalSettings.XPathVersion.VERSION_1;
     }
 
+    public static void registerMap() {
+        nameExecutorMap.put("PostgreSQL", PgExecutor.class);
+    }
+
     static public PgExecutor getInstance() throws SQLException, ClassNotFoundException {
+        return getInstance("");
+    }
+
+    static public PgExecutor getInstance(String config) throws SQLException, ClassNotFoundException {
         if(pgExecutor == null)
-            pgExecutor = new PgExecutor();
+            pgExecutor = new PgExecutor(config);
         return pgExecutor;
     }
 

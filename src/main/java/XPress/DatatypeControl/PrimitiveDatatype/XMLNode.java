@@ -4,18 +4,18 @@ import XPress.DatatypeControl.ValueHandler.XMLNodeHandler;
 import XPress.DatatypeControl.XMLSimple;
 
 @Datatype
-public class XML_Node extends XMLDatatype implements XMLSimple {
-    static XML_Node instance;
+public class XMLNode extends XMLDatatype implements XMLSimple {
+    static XMLNode instance;
 
-    XML_Node() {
+    XMLNode() {
         valueHandler = new XMLNodeHandler();
         // Just to avoid null, maybe it is not an official name...
         officialTypeName = "xs:node";
     }
 
-    static public XML_Node getInstance() {
+    static public XMLNode getInstance() {
         if(instance == null) {
-            instance = new XML_Node();
+            instance = new XMLNode();
         }
         return instance;
     }

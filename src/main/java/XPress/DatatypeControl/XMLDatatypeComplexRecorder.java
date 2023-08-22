@@ -1,5 +1,8 @@
 package XPress.DatatypeControl;
 
+import XPress.DatatypeControl.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLSequence;
+
 public class XMLDatatypeComplexRecorder {
     /**
      * Datatype of result of the current information tree node
@@ -42,7 +45,7 @@ public class XMLDatatypeComplexRecorder {
     }
 
     public XMLDatatype getActualDatatype() {
-        if(xmlDatatype instanceof XML_Sequence) return subDatatype;
+        if(xmlDatatype instanceof XMLSequence) return subDatatype;
         return xmlDatatype;
     }
 }

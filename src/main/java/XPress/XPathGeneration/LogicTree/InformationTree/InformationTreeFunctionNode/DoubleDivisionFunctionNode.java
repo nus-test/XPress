@@ -1,7 +1,7 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
 
+import XPress.DatatypeControl.PrimitiveDatatype.XMLDouble;
 import XPress.GlobalRandom;
-import XPress.PrimitiveDatatype.XMLDatatype;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
@@ -10,7 +10,7 @@ import static java.lang.Math.abs;
 @FunctionV1
 public class DoubleDivisionFunctionNode extends BinaryNumericalOperatorFunctionNode {
     public DoubleDivisionFunctionNode() {
-        this.datatypeRecorder.xmlDatatype = XMLDatatype.DOUBLE;
+        this.datatypeRecorder.xmlDatatype = XMLDouble.getInstance();
         priorityLevel = 3;
         functionExpr = "div";
     }
@@ -25,7 +25,7 @@ public class DoubleDivisionFunctionNode extends BinaryNumericalOperatorFunctionN
         double divisionValue = GlobalRandom.getInstance().nextDouble() + 0.5;
         if(divisionValue > 1.2) divisionValue = 1;
         String divisionValueStr = Double.toString(divisionValue);
-        childList.add(new InformationTreeConstantNode(XMLDatatype.DOUBLE, divisionValueStr));
+        childList.add(new InformationTreeConstantNode(XMLDouble.getInstance(), divisionValueStr));
     }
 
     @Override
@@ -35,7 +35,7 @@ public class DoubleDivisionFunctionNode extends BinaryNumericalOperatorFunctionN
         if(last == 0) last = 1;
         double divisionValue = Double.parseDouble(pre + "." + last);
         String divisionValueStr = Double.toString(divisionValue);
-        childList.add(new InformationTreeConstantNode(XMLDatatype.DOUBLE, divisionValueStr));
+        childList.add(new InformationTreeConstantNode(XMLDouble.getInstance(), divisionValueStr));
     }
 
     @Override
@@ -45,6 +45,6 @@ public class DoubleDivisionFunctionNode extends BinaryNumericalOperatorFunctionN
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
-        return childNode.datatypeRecorder.xmlDatatype == XMLDatatype.DOUBLE;
+        return childNode.datatypeRecorder.xmlDatatype instanceof XMLDouble;
     }
 }

@@ -1,9 +1,12 @@
 package XPress.XMLGeneration;
 
+import XPress.DatatypeControl.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLString;
 import XPress.GlobalRandom;
-import XPress.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.ValueHandler.XMLStringHandler;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Math.max;
@@ -20,6 +23,7 @@ public class XMLDocumentGenerator {
                     attributeTemplateGenerator);
     List<ContextNode> contextNodeTemplateList;
     List<ContextNode> leafContextNodeTemplateList;
+    List<String> namespaceList = new ArrayList<>();
 
 
     public XMLDocumentGenerator() {}
@@ -58,13 +62,24 @@ public class XMLDocumentGenerator {
     }
 
     public XMLContext generateXMLContext(int contextNodeSize) {
+        generateNamespaceList(GlobalRandom.getInstance().nextInt(10) + 1);
+        System.out.println("get namespace list");
         ContextNode root = generateXMLDocument(contextNodeSize);
         String xmlData = getXMLDocument(root);
-        return new XMLContext(root, xmlData);
+        return new XMLContext(root, xmlData, namespaceList);
+    }
+
+
+    public void generateNamespaceList(int length) {
+        namespaceList = new ArrayList<>();
+        for(int i = 0; i < length; i ++) {
+            String namespace = ((XMLStringHandler) XMLString.getInstance().getValueHandler()).getRandomValueEng();
+            namespaceList.add(namespace);
+        }
     }
 
     public ContextNode generateXMLDocument(int contextNodeSize) {
-        ContextNode root = contextTreeGenerator.GenerateRandomTree(contextNodeSize);
+        ContextNode root = contextTreeGenerator.generateRandomTree(contextNodeSize, namespaceList);
         int templateSize = max(1, contextNodeSize / 2);
         contextNodeTemplateList = contextTemplateGenerator.generateContextTemplate(templateSize);
         int leafTemplateSize = max(1, contextNodeSize / 3);
@@ -89,7 +104,7 @@ public class XMLDocumentGenerator {
         if(prob < 0.5 && currentNode.childList.size() == 0)
             currentNode.hasLeaf = true;
         ContextNode templateNode = GlobalRandom.getInstance().getRandomFromList(currentNode.hasLeaf
-                 ? leafContextNodeTemplateList : contextNodeTemplateList);
+                ? leafContextNodeTemplateList : contextNodeTemplateList);
         currentNode.assignTemplate(templateNode);
         assignValueToNode(currentNode);
         for(ContextNode childNode: currentNode.childList) {
@@ -117,8 +132,8 @@ public class XMLDocumentGenerator {
         attributeNodeNameGenerator = new BaseCharIDStyleNameGeneratorImpl('a');
         attributeTemplateGenerator = new AttributeTemplateGeneratorImpl(attributeNodeNameGenerator);
         contextTemplateGenerator = new ContextTemplateGeneratorImpl(contextNodeNameGenerator,
-                        attributeTemplateGenerator);
-        for(XMLDatatype datatype : XMLDatatype.values()) {
+                attributeTemplateGenerator);
+        for(XMLDatatype datatype : XMLDatatype.allDatatypeList) {
             if(datatype.getValueHandler() != null)
                 datatype.getValueHandler().clear();
         }

@@ -1,6 +1,8 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeDirectContentFunctionNode;
 
-import XPress.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLInteger;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLNode;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLSequence;
 import XPress.TestException.DebugErrorException;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.FunctionV3;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
@@ -14,7 +16,7 @@ public class PositionFunctionNode extends InformationTreeDirectContentFunctionNo
 
     @Override
     public String getCalculationString(LogicTreeNode parentNode, boolean checkImpact) throws DebugErrorException {
-        if(datatypeRecorder.xmlDatatype == XMLDatatype.SEQUENCE) {
+        if(datatypeRecorder.xmlDatatype instanceof XMLSequence) {
             return super.getCalculationString(parentNode, checkImpact);
         }
         return "index-of((" + childList.get(0).getContextCalculationString() + ")/@id, \"" + childList.get(0).getContext().context + "\")";
@@ -22,12 +24,12 @@ public class PositionFunctionNode extends InformationTreeDirectContentFunctionNo
 
     @Override
     protected void fillContentParametersRandom(InformationTreeNode childNode) {
-        if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.NODE) {
-            datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;
+        if(childNode.datatypeRecorder.xmlDatatype instanceof XMLNode) {
+            datatypeRecorder.xmlDatatype = XMLInteger.getInstance();
         }
         else {
-            datatypeRecorder.xmlDatatype = XMLDatatype.SEQUENCE;
-            datatypeRecorder.subDatatype = XMLDatatype.INTEGER;
+            datatypeRecorder.xmlDatatype = XMLSequence.getInstance();
+            datatypeRecorder.subDatatype = XMLInteger.getInstance();
         }
     }
 

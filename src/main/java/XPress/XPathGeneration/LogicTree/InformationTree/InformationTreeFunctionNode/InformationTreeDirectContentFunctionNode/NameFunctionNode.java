@@ -1,6 +1,8 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeDirectContentFunctionNode;
 
-import XPress.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLNode;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLSequence;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLString;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.FunctionV3;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
@@ -17,12 +19,12 @@ public class NameFunctionNode extends InformationTreeDirectContentFunctionNode {
 
     @Override
     protected void fillContentParametersRandom(InformationTreeNode childNode) {
-        if(childNode.datatypeRecorder.xmlDatatype == XMLDatatype.NODE) {
-            datatypeRecorder.xmlDatatype = XMLDatatype.STRING;
+        if(childNode.datatypeRecorder.xmlDatatype instanceof XMLNode) {
+            datatypeRecorder.xmlDatatype = XMLString.getInstance();
         }
         else {
-            datatypeRecorder.xmlDatatype = XMLDatatype.SEQUENCE;
-            datatypeRecorder.subDatatype = XMLDatatype.STRING;
+            datatypeRecorder.xmlDatatype = XMLSequence.getInstance();
+            datatypeRecorder.subDatatype = XMLString.getInstance();
         }
     }
 }

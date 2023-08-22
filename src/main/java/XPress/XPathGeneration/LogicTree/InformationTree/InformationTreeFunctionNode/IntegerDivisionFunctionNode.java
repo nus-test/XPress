@@ -1,8 +1,8 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode;
 
+import XPress.DatatypeControl.PrimitiveDatatype.XMLInteger;
 import XPress.GlobalRandom;
-import XPress.PrimitiveDatatype.XMLDatatype;
-import XPress.PrimitiveDatatype.XMLIntegerHandler;
+import XPress.DatatypeControl.ValueHandler.XMLIntegerHandler;
 import XPress.TestException.DebugErrorException;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeConstantNode;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
@@ -10,7 +10,7 @@ import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 @FunctionV3
 public class IntegerDivisionFunctionNode extends BinaryNumericalOperatorFunctionNode {
     public IntegerDivisionFunctionNode() {
-        datatypeRecorder.xmlDatatype = XMLDatatype.INTEGER;
+        datatypeRecorder.xmlDatatype = XMLInteger.getInstance();
         functionExpr = "idiv";
         priorityLevel = 3;
     }
@@ -20,25 +20,25 @@ public class IntegerDivisionFunctionNode extends BinaryNumericalOperatorFunction
         double prob = GlobalRandom.getInstance().nextDouble();
         String value = null;
         if(prob < 0.7 && Integer.parseInt(childNode.getContext().context) >= 2)
-            value = ((XMLIntegerHandler) XMLDatatype.INTEGER.getValueHandler()).
+            value = ((XMLIntegerHandler) XMLInteger.getInstance().getValueHandler()).
                     getRandomValueBounded(1, Integer.parseInt(childNode.getContext().context));
         else {
-            value = XMLDatatype.INTEGER.getValueHandler().getValue(false);
+            value = XMLInteger.getInstance().getValueHandler().getValue(false);
         }
         if(Integer.parseInt(value) == 0)
             value = "2";
-        childList.add(new InformationTreeConstantNode(XMLDatatype.INTEGER, value));
+        childList.add(new InformationTreeConstantNode(XMLInteger.getInstance(), value));
     }
 
     @Override
     protected void fillContentParametersRandom(InformationTreeNode childNode) {
-        String value = XMLDatatype.INTEGER.getValueHandler().getValue(false);
-        childList.add(new InformationTreeConstantNode(XMLDatatype.INTEGER, value));
+        String value = XMLInteger.getInstance().getValueHandler().getValue(false);
+        childList.add(new InformationTreeConstantNode(XMLInteger.getInstance(), value));
     }
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
-        return childNode.datatypeRecorder.xmlDatatype == XMLDatatype.INTEGER;
+        return childNode.datatypeRecorder.xmlDatatype instanceof XMLInteger;
     }
 
     @Override

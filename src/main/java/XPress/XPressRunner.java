@@ -1,8 +1,9 @@
 package XPress;
 
+import XPress.CmdArgs.CmdArgs;
 import XPress.DatabaseExecutor.DatabaseExecutor;
 import XPress.DatabaseExecutor.MainExecutor;
-import XPress.PrimitiveDatatype.XMLDatatype;
+import XPress.DatatypeControl.PrimitiveDatatype.XMLDatatype;
 import XPress.ReportGeneration.ReportManager;
 import XPress.TestException.MismatchingResultException;
 import XPress.TestException.UnexpectedExceptionThrownException;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class XTestRunner {
+public class XPressRunner {
     public static void main(String[] argv) throws IOException, SQLException, UnexpectedExceptionThrownException {
         CmdArgs args = new CmdArgs();
         JCommander.newBuilder()
@@ -90,11 +91,12 @@ public class XTestRunner {
                 System.out.println(xmlContext.getXmlContent());
                 try {
                     int xpathCnt = 200;
-                    mainExecutor.setXPathGenerationContext(xmlContext.getRoot(), xmlContext.getXmlContent());
+                    mainExecutor.setXPathGenerationContext(xmlContext);
                     for (int j = 0; j < xpathCnt; j++) {
                         String XPath = "";
                         try {
-                            Pair<List<Pair<Integer, Integer>>, String> XPathResult = XPathGenerator.getXPathSectionDivided(GlobalRandom.getInstance().nextInt(5) + 2);
+                            Pair<List<Pair<Integer, Integer>>, String> XPathResult = XPathGenerator.
+                                    getXPathSectionDivided(GlobalRandom.getInstance().nextInt(args.section) + 1);
                             XPath = XPathResult.getRight();
                             if(XPath.length() == 0) continue;
                             mainExecutor.executeAndCompare(XPathResult);
