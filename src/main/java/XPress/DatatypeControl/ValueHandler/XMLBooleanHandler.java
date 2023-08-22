@@ -1,8 +1,8 @@
-package XPress.PrimitiveDatatype;
+package XPress.DatatypeControl;
 
 import XPress.GlobalRandom;
 
-public class XMLBooleanHandler extends ValueHandler implements XMLSimple, XMLAtomic {
+public class XMLBooleanHandler extends ValueHandler {
     XMLBooleanHandler() {
         officialTypeName = "xs:boolean";
     }

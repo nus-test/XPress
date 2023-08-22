@@ -1,4 +1,4 @@
-package XPress.PrimitiveDatatype;
+package XPress.DatatypeControl;
 
 public enum XMLComparedResult {
     LESS, EQUAL, GREATER

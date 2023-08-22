@@ -1,11 +1,11 @@
-package XPress.PrimitiveDatatype;
+package XPress.DatatypeControl;
 
 import XPress.GlobalRandom;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class XMLDurationHandler extends PooledValueHandler implements XMLSimple, XMLAtomic {
+public class XMLDurationHandler extends PooledValueHandler {
 
     XMLDurationHandler() {
         officialTypeName = "xs:duration";

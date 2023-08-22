@@ -1,4 +1,4 @@
-package XPress.PrimitiveDatatype;
+package XPress.DatatypeControl;
 
 public class XMLDatatypeComplexRecorder {
     /**
@@ -42,7 +42,7 @@ public class XMLDatatypeComplexRecorder {
     }
 
     public XMLDatatype getActualDatatype() {
-        if(xmlDatatype == XMLDatatype.SEQUENCE) return subDatatype;
+        if(xmlDatatype instanceof XML_Sequence) return subDatatype;
         return xmlDatatype;
     }
 }

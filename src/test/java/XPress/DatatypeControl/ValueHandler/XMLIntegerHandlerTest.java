@@ -1,6 +1,7 @@
-package XPress.PrimitiveDatatype;
+package XPress.DatatypeControl;
 
 
+import XPress.DatatypeControl.ValueHandler.XMLIntegerHandler;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

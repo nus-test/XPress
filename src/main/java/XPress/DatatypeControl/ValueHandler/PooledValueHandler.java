@@ -1,4 +1,4 @@
-package XPress.PrimitiveDatatype;
+package XPress.DatatypeControl;
 
 import XPress.GlobalRandom;
 

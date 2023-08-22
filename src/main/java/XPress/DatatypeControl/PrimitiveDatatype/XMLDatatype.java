@@ -1,4 +1,4 @@
-package XPress.PrimitiveDatatype;
+package XPress.DatatypeControl;
 
 import XPress.DatabaseExecutor.MainExecutor;
 import XPress.DefaultListHashMap;
@@ -10,50 +10,19 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public enum XMLDatatype {
-    INTEGER(1, new XMLIntegerHandler()),
-    STRING(2, new XMLStringHandler()),
-    BOOLEAN(3, new XMLBooleanHandler()),
-    DOUBLE(4, new XMLDoubleHandler()),
-    DURATION(5, new XMLDurationHandler()),
-    NODE(6, new XMLNodeHandler()),
-    SEQUENCE(7, new XMLSequenceHandler()),
-    MIXED(8, new XMLMixedHandler());
-
-    int id;
-    ValueHandler valueHandler;
+public abstract class XMLDatatype {
     public static List<XMLDatatype> dataTypeList = new ArrayList<>();
-    /**
-     * Only value types of integrated would be generated directly: string, boolean, etc.
-     * Non-integrated types could appear as castable types or be constructed through casting: QName, etc.
-     * Not all data types are covered.
-     * Also, only integrated types would be accepted as function node inputs (Non-integrated types are not implemented).
-     */
-    public boolean integrated;
-
-
-    /**
-     * Check if 'A castable as B' is true or false.
-     */
     static Map<Pair<XMLDatatype, XMLDatatype>, Boolean> castableMap = new HashMap<>();
     static DefaultListHashMap<XMLDatatype, XMLDatatype> castableCandidateMap = new DefaultListHashMap<>();
     static Boolean castableMapSet = false;
 
-    private XMLDatatype(int id, ValueHandler valueHandler) {
-        this.id = id;
-        this.valueHandler = valueHandler;
-    }
+    ValueHandler valueHandler;
 
-    static {
-        for(XMLDatatype xmlDatatype : XMLDatatype.values()) {
-            if(xmlDatatype == DURATION && GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_1)
-                continue;
-            if(xmlDatatype != NODE && xmlDatatype != SEQUENCE && xmlDatatype != MIXED)
-                dataTypeList.add(xmlDatatype);
-        }
-    }
 
     /**
      *
@@ -61,8 +30,8 @@ public enum XMLDatatype {
      */
     public static XMLDatatype getRandomDataType() {
         XMLDatatype xmlDatatype = GlobalRandom.getInstance().getRandomFromList(dataTypeList);
-        if(xmlDatatype == BOOLEAN && GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_1)
-            xmlDatatype = INTEGER;
+        if(xmlDatatype instanceof XML_Boolean && GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_1)
+            xmlDatatype = XML_Integer.getInstance();
         return xmlDatatype;
     }
 
@@ -71,11 +40,11 @@ public enum XMLDatatype {
     }
 
     public static String wrapExpression(String value, XMLDatatype xmlDatatype) {
-        if(xmlDatatype == XMLDatatype.BOOLEAN)
+        if(xmlDatatype instanceof XML_Boolean)
             value += "()";
-        else if(xmlDatatype == XMLDatatype.STRING)
+        else if(xmlDatatype instanceof XML_String)
             value = "\"" + value + "\"";
-        else if(xmlDatatype == XMLDatatype.DURATION)
+        else if(xmlDatatype instanceof XML)
             value = "xs:duration('" + value + "')";
         return value;
     }
@@ -86,9 +55,9 @@ public enum XMLDatatype {
      * @param to
      * @return True if data type "from" castable as "to"
      */
-    public static Boolean checkCastable(MainExecutor mainExecutor, XMLDatatype from, XMLDatatype to) throws SQLException, UnexpectedExceptionThrownException, IOException {
+    public static Boolean checkCastable(MainExecutor mainExecutor, XMLDatatype_t from, XMLDatatype_t to) throws SQLException, UnexpectedExceptionThrownException, IOException {
         Boolean answer = null;
-        Pair<XMLDatatype, XMLDatatype> pair = Pair.of(from, to);
+        Pair<XMLDatatype_t, XMLDatatype_t> pair = Pair.of(from, to);
         if(castableMap.containsKey(Pair.of(from, to))) {
             answer = castableMap.get(pair);
         }
@@ -109,9 +78,9 @@ public enum XMLDatatype {
         return answer;
     }
 
-    public static Boolean checkCastableFromMap(XMLDatatype from, XMLDatatype to) {
+    public static Boolean checkCastableFromMap(XMLDatatype_t from, XMLDatatype_t to) {
         Boolean answer = null;
-        Pair<XMLDatatype, XMLDatatype> pair = Pair.of(from, to);
+        Pair<XMLDatatype_t, XMLDatatype_t> pair = Pair.of(from, to);
         if(castableMap.containsKey(Pair.of(from, to))) {
             answer = castableMap.get(pair);
         }
@@ -124,7 +93,7 @@ public enum XMLDatatype {
      * @return Random integrated datatype which "datatype" is castable as, no requirements on "datatype":
      * could be non-integrated.
      */
-    public static XMLDatatype getRandomCastableIntegratedDatatype(XMLDatatype datatype) throws DebugErrorException {
+    public static XMLDatatype_t getRandomCastableIntegratedDatatype(XMLDatatype_t datatype) throws DebugErrorException {
         if(castableCandidateMap.get(datatype).isEmpty()) {
             throw new DebugErrorException("Non-castable data type");
         }
@@ -132,9 +101,9 @@ public enum XMLDatatype {
     }
 
     public static void getCastable(MainExecutor mainExecutor) throws SQLException, UnexpectedExceptionThrownException, IOException {
-        for(XMLDatatype xmlDatatype : XMLDatatype.values()) {
+        for(XMLDatatype_t xmlDatatype : XMLDatatype_t.values()) {
             if(xmlDatatype.getValueHandler() instanceof XMLSimple) {
-                for(XMLDatatype xmlDatatype2 : XMLDatatype.values()) {
+                for(XMLDatatype_t xmlDatatype2 : XMLDatatype_t.values()) {
                     if(xmlDatatype2.getValueHandler() instanceof XMLSimple) {
                         boolean castable = checkCastable(mainExecutor, xmlDatatype, xmlDatatype2);
                         if(castable) {

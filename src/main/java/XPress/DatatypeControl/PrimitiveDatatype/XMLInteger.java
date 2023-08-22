@@ -1,45 +1,23 @@
-package XPress.PrimitiveDatatype;
+package XPress.DatatypeControl.PrimitiveDatatype;
 
-import XPress.DataCheckUtils;
+import XPress.DatatypeControl.*;
+import XPress.DatatypeControl.ValueHandler.XMLIntegerHandler;
 import XPress.GlobalRandom;
-import org.apache.commons.lang3.tuple.Pair;
 
-public class XMLIntegerHandler extends PooledValueHandler implements XMLComparable, XMLNumeric, XMLSimple, XMLAtomic {
+@Datatype
+public class XML_Integer extends XMLDatatype implements XMLComparable, XMLSimple, XMLAtomic {
+    static XML_Integer instance;
 
-    XMLIntegerHandler() {
+    XML_Integer() {
+        valueHandler = new XMLIntegerHandler();
         officialTypeName = "xs:integer";
     }
 
-    @Override
-    String getRandomValue() {
-        return Integer.toString(GlobalRandom.getInstance().nextInt());
-    }
-
-    public String getRandomValueBounded(int minBound, int maxBound) {
-        return Integer.toString(GlobalRandom.getInstance().nextInt(minBound, maxBound));
-    }
-
-    public String getRandomValueBounded(int maxBound) {
-        return Integer.toString(GlobalRandom.getInstance().nextInt(maxBound));
-    }
-
-    @Override
-    public String mutateValue(String baseString) {
-        Integer currentNum = Integer.parseInt(baseString);
-        double prob = GlobalRandom.getInstance().nextDouble();
-        if(prob < 0.5 && currentNum < Integer.MAX_VALUE)
-            currentNum += GlobalRandom.getInstance().nextInt(20);
-        else if(prob < 0.8 && currentNum < Integer.MIN_VALUE)
-            currentNum -= GlobalRandom.getInstance().nextInt(20);
-        else {
-            Integer num = Integer.parseInt(this.getRandomValueFromPool());
-            prob = GlobalRandom.getInstance().nextDouble();
-            if(prob < 0.5 && DataCheckUtils.integerAdditionCheck(currentNum, num))
-                currentNum = currentNum + num;
-            else if(prob > 0.5 && DataCheckUtils.integerSubtractionCheck(currentNum, num))
-                currentNum = currentNum - num;
+    static public XML_Integer getInstance() {
+        if(instance == null) {
+            instance = new XML_Integer();
         }
-        return currentNum.toString();
+        return instance;
     }
 
     public static Integer parseInt(String numString) throws NumberFormatException {
@@ -87,17 +65,6 @@ public class XMLIntegerHandler extends PooledValueHandler implements XMLComparab
         resultNum *= sign;
         return resultNum;
     }
-
-    public Pair<Integer, String> getSequenceValue(XMLDatatype xmlDatatype) {
-        double prob = GlobalRandom.getInstance().nextDouble();
-        if(prob < 0.5) {
-            int l = GlobalRandom.getInstance().nextInt(-1000, 1000);
-            int length = GlobalRandom.getInstance().nextInt(10) + 1;
-            String s = "(" + l + " to " + (l + length) + ")";
-            return Pair.of(length, s);
-        }
-        return super.getSequenceValue(xmlDatatype);
-    };
 
     @Override
     public String getDefiniteGreater(String baseValue) {

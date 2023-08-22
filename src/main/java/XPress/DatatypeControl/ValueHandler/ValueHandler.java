@@ -1,4 +1,4 @@
-package XPress.PrimitiveDatatype;
+package XPress.DatatypeControl;
 
 import XPress.GlobalRandom;
 import org.apache.commons.lang3.tuple.Pair;
@@ -17,7 +17,7 @@ public abstract class ValueHandler {
      * @param xmlDatatype
      * @return
      */
-    public Pair<Integer, String> getSequenceValue(XMLDatatype xmlDatatype) {
+    public Pair<Integer, String> getSequenceValue(XMLDatatype_t xmlDatatype) {
         int length = GlobalRandom.getInstance().nextInt(5) + 1;
         return Pair.of(length, generateConstantSequence(length, xmlDatatype));
     }
@@ -27,10 +27,10 @@ public abstract class ValueHandler {
      * @param xmlDatatype Datatype of element to generate.
      * @return
      */
-    String generateSingleElementExpr(XMLDatatype xmlDatatype) {
+    String generateSingleElementExpr(XMLDatatype_t xmlDatatype) {
         if(xmlDatatype.getValueHandler() != null) {
             String value = xmlDatatype.getValueHandler().getValue();
-            return XMLDatatype.wrapExpression(value, xmlDatatype);
+            return XMLDatatype_t.wrapExpression(value, xmlDatatype);
         }
         return null;
     }
@@ -41,7 +41,7 @@ public abstract class ValueHandler {
      * @param xmlDatatype Data type of sequence items.
      * @return
      */
-    public String generateConstantSequence(int length, XMLDatatype xmlDatatype) {
+    public String generateConstantSequence(int length, XMLDatatype_t xmlDatatype) {
         String stringBuild = "(";
         boolean start = true;
         for(int i = 0; i < length; i ++) {

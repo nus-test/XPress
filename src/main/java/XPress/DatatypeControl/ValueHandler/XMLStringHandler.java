@@ -1,10 +1,10 @@
-package XPress.PrimitiveDatatype;
+package XPress.DatatypeControl;
 
 import XPress.GlobalRandom;
 
 import java.util.*;
 
-public class XMLStringHandler extends PooledValueHandler implements XMLComparable, XMLSimple, XMLAtomic {
+public class XMLStringHandler extends PooledValueHandler {
     Set<Character> escapeSet = new HashSet<>(Arrays.asList('\'', '\"', '<', '>', '/', '&'));
     int valuePoolIdCnt = 0;
     Set<String> valuePool = new HashSet<>();
@@ -90,43 +90,5 @@ public class XMLStringHandler extends PooledValueHandler implements XMLComparabl
                 flag = true;
         }
         return c;
-    }
-
-    @Override
-    public XMLComparedResult compare(String baseValue, String compareValue) {
-        return compareT(baseValue, compareValue);
-    }
-
-    @Override
-    public String getDefiniteGreater(String baseValue) {
-        double prob = GlobalRandom.getInstance().nextDouble();
-        String compareString = null;
-        if(prob < 0.5) {
-            Character c = getRandomCharacter();
-            if(compareT(c + baseValue, baseValue) == XMLComparedResult.GREATER)
-                compareString = c + baseValue;
-        }
-        if(compareString == null) {
-            Character c = getRandomCharacter();
-            compareString = baseValue + c;
-        }
-        return compareString;
-    }
-
-    @Override
-    public String getDefiniteLess(String baseValue) {
-        double prob = GlobalRandom.getInstance().nextDouble();
-        String compareString = null;
-        if(prob < 0.5 && baseValue.length() >= 1) {
-            compareString = baseValue.substring(1);
-            if(compareT(baseValue, compareString) != XMLComparedResult.LESS)
-                compareString = null;
-        }
-        if(compareString == null && baseValue.length() >= 1) {
-            compareString = baseValue.substring(0, baseValue.length());
-        }
-        if(compareString == null)
-            compareString = "";
-        return compareString;
     }
 }

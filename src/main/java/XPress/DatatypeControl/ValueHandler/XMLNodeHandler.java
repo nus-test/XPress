@@ -1,4 +1,4 @@
-package XPress.PrimitiveDatatype;
+package XPress.DatatypeControl;
 
 public class XMLNodeHandler extends ValueHandler implements XMLSimple {
     XMLNodeHandler() {

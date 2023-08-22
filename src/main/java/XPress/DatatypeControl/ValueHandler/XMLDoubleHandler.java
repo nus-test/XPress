@@ -1,8 +1,8 @@
-package XPress.PrimitiveDatatype;
+package XPress.DatatypeControl;
 
 import XPress.GlobalRandom;
 
-public class XMLDoubleHandler extends PooledValueHandler implements XMLComparable, XMLNumeric, XMLSimple, XMLAtomic {
+public class XMLDoubleHandler extends PooledValueHandler {
     XMLDoubleHandler() {
         officialTypeName = "xs:double";
     }
@@ -42,26 +42,5 @@ public class XMLDoubleHandler extends PooledValueHandler implements XMLComparabl
             result = Double.toString(Double.parseDouble(baseString) + value);
         }
         return result;
-    }
-
-    @Override
-    public XMLComparedResult compare(String baseValue, String compareValue) {
-        Double value1 = Double.parseDouble(baseValue);
-        Double value2 = Double.parseDouble(compareValue);
-        return compareT(value1, value2);
-    }
-
-    @Override
-    public String getDefiniteGreater(String baseValue) {
-        Double value = Double.parseDouble(baseValue);
-        Double valueAdd = Double.parseDouble(getValue(false));
-        return Double.toString(value + valueAdd);
-    }
-
-    @Override
-    public String getDefiniteLess(String baseValue) {
-        Double value = Double.parseDouble(baseValue);
-        Double valueMinus = Double.parseDouble(getValue(false));
-        return Double.toString(value - valueMinus);
     }
 }
