@@ -5,7 +5,6 @@ import XPress.DatabaseExecutor.DatabaseExecutor;
 import XPress.DatabaseExecutor.MainExecutor;
 import XPress.DatabaseExecutor.SaxonExecutor;
 import XPress.DatatypeControl.PrimitiveDatatype.XMLDatatype;
-import XPress.TestException.DebugErrorException;
 import XPress.TestException.MismatchingResultException;
 import XPress.TestException.UnexpectedExceptionThrownException;
 import XPress.TestException.UnsupportedContextSetUpException;
@@ -22,7 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EvaluationTest {
-    String rootAddr = "";
+    String rootAddr = "/experiment/";
+    String hourSeparationLine = "-----------------------------\n";
     FileWriter recordWriter;
 
     public void report(String XPath, String XMLContent) throws IOException {
@@ -33,17 +33,20 @@ public class EvaluationTest {
     }
 
     @Test
-    public void coverageTest() throws IOException, SQLException, UnexpectedExceptionThrownException, DebugErrorException, UnsupportedContextSetUpException, InstantiationException, IllegalAccessException {
-        BufferedReader reader = new BufferedReader(new FileReader(rootAddr + "basex_config.txt"));
+    public void evaluationTest1() throws IOException, SQLException, UnexpectedExceptionThrownException, UnsupportedContextSetUpException {
+        BufferedReader reader = new BufferedReader(new FileReader(rootAddr + "evaluation_config.txt"));
+        GlobalRandom.getInstance().random.setSeed(System.currentTimeMillis());
         Integer setTime = Integer.parseInt(reader.readLine());
         String fileAddr = reader.readLine();
         String recordFileAddr = reader.readLine();
         recordWriter = new FileWriter(recordFileAddr);
         Boolean starNodeSelection = Boolean.parseBoolean(reader.readLine());
+        Boolean targetedParameter = Boolean.parseBoolean(reader.readLine());
         Boolean rectifySelection = Boolean.parseBoolean(reader.readLine());
 
         MainExecutor mainExecutor = new MainExecutor();
         GlobalSettings.starNodeSelection = starNodeSelection;
+        GlobalSettings.targetedSectionPrefix = targetedParameter;
         GlobalSettings.rectifySelection = rectifySelection;
         List<DatabaseExecutor> dbExecuterList = new ArrayList<>();
         dbExecuterList.add(SaxonExecutor.getInstance());
@@ -52,7 +55,6 @@ public class EvaluationTest {
             dbExecutor.registerDatabase(mainExecutor);
         XMLDatatype.getCastable(mainExecutor);
         TestRunner testRunner = new TestRunner(mainExecutor);
-        testRunner.setContext();
         long start = System.currentTimeMillis();
 
         System.out.println(setTime);
@@ -60,8 +62,15 @@ public class EvaluationTest {
         long reducedCnt = 0;
         long totalQueryCnt = 0;
         long sectionLength = 0;
+        long discrepancySectionTotal = 0;
+        long startWithinHour = start;
 
         while((System.currentTimeMillis() - start) / 1000 < setTime) {
+            testRunner.setContext();
+            if((System.currentTimeMillis() - startWithinHour) / 1000 > 3600) {
+                recordWriter.write(hourSeparationLine);
+                startWithinHour = System.currentTimeMillis();
+            }
             int round = 200;
             XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
             boolean XMLFlag = false;
@@ -76,59 +85,71 @@ public class EvaluationTest {
                 XPath = XPathResult.getRight();
                 if(XPath.contains("null"))
                     continue;
+                // if(discrepancyTotal >= 700)
+                //     System.out.println(XPath);
                 totalQueryCnt ++;
                 try{
                     mainExecutor.executeAndCompare(XPath);
                 } catch (MismatchingResultException | UnexpectedExceptionThrownException e) {
+                    if(e instanceof UnexpectedExceptionThrownException && (((UnexpectedExceptionThrownException) e).info.equals(SaxonExecutor.getInstance().dbName))) {
+                        continue;
+                    }
                     boolean flag = false;
-                    for(int k = 0; k < XPathResult.getLeft().size(); k ++) {
+                    for(int k = XPathResult.getLeft().size() - 1; k >= 0; k --) {
                         String subPath = XPath.substring(XPathResult.getLeft().get(k).getLeft(),
                                 XPathResult.getLeft().get(k).getRight());
                         if(subPath.startsWith("(")) {
-                            subPath = "//*" + subPath;
+                            subPath = "//*/" + subPath;
                         } else subPath = "//" + subPath;
                         try {
                             mainExecutor.executeAndCompare(subPath, false);
                         } catch (Exception e2) {
-                            if(e == e2) {
+                            if(!flag) {
                                 flag = true;
-                                report(subPath, XMLFlag ? null : testRunner.xmlContext);
-                                sectionLength += subPath.length();
                                 reducedCnt ++;
                             }
+                            report(subPath, XMLFlag ? null : testRunner.xmlContext);
+                            XMLFlag = true;
+                            sectionLength += subPath.length();
+                            discrepancySectionTotal ++;
                         }
-                        if(flag) break;
                     }
                     if(!flag) {
                         report(XPath, XMLFlag ? null : testRunner.xmlContext);
+                        XMLFlag = true;
                         sectionLength += XPath.length();
+                        discrepancySectionTotal ++;
                     }
                     discrepancyTotal ++;
                 }
             }
+            testRunner.clearContext();
         }
-        testRunner.clearContext();
         FileWriter writer = new FileWriter(fileAddr);
-        writer.write("basex: s:" + GlobalSettings.starNodeSelection + " r:" + GlobalSettings.rectifySelection + "\n");
-        writer.write("total-query-cnt:" + totalQueryCnt);
-        writer.write("discrepancy-total:" + discrepancyTotal);
-        writer.write("reduced-cnt:" + reducedCnt);
-        writer.write("avg-length-after-reduce:" + sectionLength / discrepancyTotal);
+        writer.write("evaluation: s:" + GlobalSettings.starNodeSelection + " r:" + GlobalSettings.rectifySelection + "\n");
+        writer.write("total-query-cnt:" + totalQueryCnt + "\n");
+        writer.write("discrepancy-total:" + discrepancyTotal + "\n");
+        writer.write("discrepancy-section-total:" + discrepancySectionTotal + "\n");
+        writer.write("reduced-cnt:" + reducedCnt + "\n");
+        writer.write("avg-length-after-reduce:" + (discrepancySectionTotal > 0 ? (sectionLength / discrepancySectionTotal) : "NaN") + "\n");
         writer.close();
+        recordWriter.close();
+        mainExecutor.close();
     }
 
-
     @Test
-    public void sectionTest() throws IOException, SQLException, UnexpectedExceptionThrownException, DebugErrorException, UnsupportedContextSetUpException, InstantiationException, IllegalAccessException {
-        BufferedReader reader = new BufferedReader(new FileReader(rootAddr + "basex_config.txt"));
+    public void evaluationTest2() throws IOException, SQLException, UnexpectedExceptionThrownException, UnsupportedContextSetUpException {
+        BufferedReader reader = new BufferedReader(new FileReader(rootAddr + "evaluation_config.txt"));
+        GlobalRandom.getInstance().random.setSeed(System.currentTimeMillis());
         Integer setTime = Integer.parseInt(reader.readLine());
         String fileAddr = reader.readLine();
-        String recordFileAddr = reader.readLine();
         Boolean starNodeSelection = Boolean.parseBoolean(reader.readLine());
+        Boolean targetedParameter = Boolean.parseBoolean(reader.readLine());
         Boolean rectifySelection = Boolean.parseBoolean(reader.readLine());
 
         MainExecutor mainExecutor = new MainExecutor();
         GlobalSettings.starNodeSelection = starNodeSelection;
+        GlobalSettings.targetedSectionPrefix = targetedParameter;
         GlobalSettings.rectifySelection = rectifySelection;
         List<DatabaseExecutor> dbExecuterList = new ArrayList<>();
         dbExecuterList.add(SaxonExecutor.getInstance());
@@ -137,59 +158,142 @@ public class EvaluationTest {
             dbExecutor.registerDatabase(mainExecutor);
         XMLDatatype.getCastable(mainExecutor);
         TestRunner testRunner = new TestRunner(mainExecutor);
-        testRunner.setContext();
         long start = System.currentTimeMillis();
 
         System.out.println(setTime);
-        long totalTestedSectionCnt = 0;
-        long effectiveSelectionSectionCnt = 0;
+        long startWithinHour = start;
+
+
+        Integer totalQueryCnt = 0;
+        Integer nonEmptyResultSetCount = 0;
+        Integer successful = 0;
+        Integer SaxonInvalid = 0;
+        Integer BaseXInvalid = 0;
+        Integer invalid = 0;
+
+        List<Integer> totalQueryCntList = new ArrayList<>();
+        List<Integer> nonEmptyResultSetCountList = new ArrayList<>();
+        List<Integer> successfulList = new ArrayList<>();
+        List<Integer> SaxonInvalidList = new ArrayList<>();
+        List<Integer> BaseXInvalidList = new ArrayList<>();
+        List<Integer> invalidList = new ArrayList<>();
 
         while((System.currentTimeMillis() - start) / 1000 < setTime) {
+            testRunner.setContext();
+            if((System.currentTimeMillis() - startWithinHour) / 1000 > 3600) {
+                startWithinHour = System.currentTimeMillis();
+                totalQueryCntList.add(totalQueryCnt);
+                nonEmptyResultSetCountList.add(nonEmptyResultSetCount);
+                successfulList.add(successful);
+                SaxonInvalidList.add(SaxonInvalid);
+                BaseXInvalidList.add(BaseXInvalid);
+                invalidList.add(invalid);
+                totalQueryCnt = 0;
+                nonEmptyResultSetCount = 0;
+                successful = 0;
+                SaxonInvalid = 0;
+                BaseXInvalid = 0;
+                invalid = 0;
+            }
             int round = 200;
             XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
+            boolean XMLFlag = false;
             for (int j = 0; j < round; j++) {
                 String XPath = "";
                 Pair<List<Pair<Integer, Integer>>, String> XPathResult;
                 try {
-                    XPathResult = XPathGenerator.getXPathSectionDivided(GlobalRandom.getInstance().nextInt(5) + 2);
+                    XPathResult = XPathGenerator.getXPathSectionDivided(GlobalRandom.getInstance().nextInt(6) + 1);
                 } catch(Exception e) {
                     continue;
                 }
                 XPath = XPathResult.getRight();
                 if(XPath.contains("null"))
                     continue;
-                for(int k = 0; k < XPathResult.getLeft().size(); k ++) {
-                    String subPath = XPath.substring(XPathResult.getLeft().get(k).getLeft(),
-                            XPathResult.getLeft().get(k).getRight());
-                    if(subPath.startsWith("(")) {
-                        subPath = "//*" + subPath;
-                    } else subPath = "//" + subPath;
-                    List<Integer> idListBefore;
-                    List<Integer> idListAfter;
-                    try {
-                        idListAfter = mainExecutor.executeAndCompare(subPath, false);
-                    } catch (Exception e2) {
-                        break;
+                totalQueryCnt ++;
+                try{
+                    List<Integer> result = mainExecutor.executeAndCompare(XPath);
+                    successful ++;
+                    if(result.size() > 0)
+                        nonEmptyResultSetCount ++;
+                } catch (MismatchingResultException | UnexpectedExceptionThrownException e) {
+                    if(e instanceof MismatchingResultException)
+                        continue;
+                    if(((UnexpectedExceptionThrownException) e).info.equals(SaxonExecutor.getInstance().dbName)) {
+                        try {
+                            mainExecutor.executeSingleProcessorGetIdList(XPath, BaseXExecutor.getInstance());
+                            SaxonInvalid ++;
+                        } catch(Exception e2) {
+                            invalid ++;
+                        }
                     }
-                    int predicateStartIndex = subPath.indexOf("[");
-                    String prePath = subPath.substring(predicateStartIndex);
-                    try {
-                        idListBefore = mainExecutor.executeAndCompare(prePath, false);
-                    } catch (Exception e2) {
-                        break;
+                    else {
+                        BaseXInvalid ++;
                     }
-                    if(idListBefore.size() > 1) {
-                        totalTestedSectionCnt ++;
-                        if(idListAfter.size() != 0 && idListAfter.size() != idListBefore.size())
-                            effectiveSelectionSectionCnt ++;
-                    }
-
                 }
             }
+            testRunner.clearContext();
         }
-        testRunner.clearContext();
+        if(invalidList.size() < 24) {
+            totalQueryCntList.add(totalQueryCnt);
+            nonEmptyResultSetCountList.add(nonEmptyResultSetCount);
+            successfulList.add(successful);
+            SaxonInvalidList.add(SaxonInvalid);
+            BaseXInvalidList.add(BaseXInvalid);
+            invalidList.add(invalid);
+        }
+        totalQueryCnt = 0;
+        nonEmptyResultSetCount = 0;
+        successful = 0;
+        SaxonInvalid = 0;
+        BaseXInvalid = 0;
+        invalid = 0;
+
         FileWriter writer = new FileWriter(fileAddr);
-        writer.write("basex: s:" + GlobalSettings.starNodeSelection + " r:" + GlobalSettings.rectifySelection + "\n");
+        writer.write("evaluation: s:" + GlobalSettings.starNodeSelection + " r:" + GlobalSettings.rectifySelection + "\n");
+        writer.write("total-query-cnt-list:");
+        for(Integer x:totalQueryCntList) {
+            totalQueryCnt += x;
+            writer.write(" " + x);
+        }
+        writer.write("\n");
+        writer.write("non-empty-list:");
+        for(Integer x:nonEmptyResultSetCountList) {
+            nonEmptyResultSetCount += x;
+            writer.write(" " + x);
+        }
+        writer.write("\n");
+        writer.write("successful-list:");
+        for(Integer x:successfulList) {
+            successful += x;
+            writer.write(" " + x);
+        }
+        writer.write("\n");
+        writer.write("saxon-invalid-list:");
+        for(Integer x:SaxonInvalidList) {
+            SaxonInvalid += x;
+            writer.write(" " + x);
+        }
+        writer.write("\n");
+        writer.write("basex-invalid-list:");
+        for(Integer x:BaseXInvalidList) {
+            BaseXInvalid += x;
+            writer.write(" " + x);
+        }
+        writer.write("\n");
+        writer.write("invalid-list:");
+        for(Integer x:invalidList) {
+            invalid += x;
+            writer.write(" " + x);
+        }
+        writer.write("\n");
+
+        writer.write("total-query-cnt: " + totalQueryCnt + "\n");
+        writer.write("successful: " + successful + "\n");
+        writer.write("non-empty: " + nonEmptyResultSetCount + "\n");
+        writer.write("invalid: " + invalid + "\n");
+        writer.write("saxon-invalid: " + SaxonInvalid + "\n");
+        writer.write("basex-invalid: " + BaseXInvalid + "\n");
         writer.close();
+        mainExecutor.close();
     }
 }

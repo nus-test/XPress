@@ -74,7 +74,7 @@ public abstract class XMLDatatype {
     public static String wrapExpression(String value, XMLDatatype xmlDatatype) {
         if(xmlDatatype instanceof XMLBoolean)
             value += "()";
-        else if(xmlDatatype instanceof XMLString)
+        else if(xmlDatatype instanceof XMLString || xmlDatatype instanceof XMLQName)
             value = "\"" + value + "\"";
         else if(xmlDatatype instanceof XMLDuration)
             value = "xs:duration('" + value + "')";

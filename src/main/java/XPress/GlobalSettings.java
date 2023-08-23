@@ -16,7 +16,7 @@ public class GlobalSettings {
     public static Boolean debugOutput = false;
 
     public static Boolean starNodeSelection = false;
-    public static Boolean targetedParameter = true;
+    public static Boolean targetedSectionPrefix = true;
     public static Boolean rectifySelection = true;
 
     private GlobalSettings(){};

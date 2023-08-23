@@ -21,7 +21,7 @@ public class PrefixQualifier {
         boolean havePrecedingSibling = false, havePreceding = false;
         List<String> availablePrefix = new ArrayList<>();
 
-        if((!GlobalSettings.starNodeSelection && !GlobalSettings.targetedParameter) ||
+        if((!GlobalSettings.starNodeSelection && !GlobalSettings.targetedSectionPrefix) ||
                 (currentNodes != null && currentNodes.size() == 0)) {
             availablePrefix.addAll(Arrays.asList("/", "//"));
             availablePrefix.addAll(getAxesList(Arrays.asList("child", "descendant", "parent", "ancestor",

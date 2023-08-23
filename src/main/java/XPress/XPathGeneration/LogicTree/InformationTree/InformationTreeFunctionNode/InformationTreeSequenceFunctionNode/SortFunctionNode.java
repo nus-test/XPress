@@ -1,5 +1,6 @@
 package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeSequenceFunctionNode;
 
+import XPress.DatatypeControl.PrimitiveDatatype.XMLQName;
 import XPress.DatatypeControl.XMLSimple;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.FunctionV3;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.MapFunctionNode;
@@ -23,6 +24,8 @@ public class SortFunctionNode extends InformationTreeSequenceFunctionNode {
             if(((MapFunctionNode) childNode).mixAttrFlag)
                 return false;
         if(!(childNode.datatypeRecorder.getActualDatatype() instanceof XMLSimple))
+            return false;
+        if(childNode.datatypeRecorder.getActualDatatype() instanceof XMLQName)
             return false;
         try {
             childNode.contextInfo.mainExecutor.setReportLock();

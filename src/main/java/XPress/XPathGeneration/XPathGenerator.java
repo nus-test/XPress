@@ -98,7 +98,7 @@ public class XPathGenerator {
 
             prob = GlobalRandom.getInstance().nextDouble();
             if(currentBuildPair.contextNodeList.isEmpty() || (
-                    !GlobalSettings.starNodeSelection && !GlobalSettings.targetedParameter
+                    !GlobalSettings.starNodeSelection && !GlobalSettings.targetedSectionPrefix
                     )) {
                 randomNode = mainExecutor.contextNodeMap.get(
                         GlobalRandom.getInstance().nextInt(mainExecutor.maxId) + 1);
@@ -139,7 +139,7 @@ public class XPathGenerator {
         if(complex ? prob < 0.6 : prob < 0.3) {
             Integer randomId = null;
             if(!GlobalSettings.starNodeSelection) {
-                if(GlobalSettings.targetedParameter && !currentBuildPair.contextNodeList.isEmpty()) {
+                if(GlobalSettings.targetedSectionPrefix && !currentBuildPair.contextNodeList.isEmpty()) {
                     randomNode = GlobalRandom.getInstance().getRandomFromList(currentBuildPair.contextNodeList);
                     randomId = randomNode.id;
                 }

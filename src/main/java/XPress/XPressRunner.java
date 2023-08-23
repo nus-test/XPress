@@ -102,6 +102,8 @@ public class XPressRunner {
                             mainExecutor.executeAndCompare(XPathResult);
                         } catch (MismatchingResultException | UnexpectedExceptionThrownException e) {
                             XPath = e.toString();
+                            System.out.println(XPath);
+                            System.out.println(mainExecutor.wrapWithNamespaceDeclaration(XPath));
                             if(e instanceof UnexpectedExceptionThrownException)
                                 XPath = ((UnexpectedExceptionThrownException) e).originalException.toString();
                         } catch (XPathVersion1Exception e2) {

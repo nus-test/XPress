@@ -68,6 +68,7 @@ public class ReportManager {
         logToFile("id:" + id + "\n");
         logToFile("originalxml:" + mainExecutor.currentContext + "\n");
         logToFile("originalxpath:" + XPath + "\n");
+        logToFile("xpathwithnamespace:" + mainExecutor.wrapWithNamespaceDeclaration(XPath) + "\n");
         logToFile("executionresults:\n");
         for(DatabaseExecutor databaseExecutor:mainExecutor.databaseExecutorList) {
             if(databaseExecutor.dbXPathVersion != GlobalSettings.xPathVersion)
@@ -75,7 +76,7 @@ public class ReportManager {
             if(!databaseExecutor.compareFlag)
                 continue;
             try {
-                List<Integer> resultNodeIntegerList = databaseExecutor.executeGetNodeIdList(XPath);
+                List<Integer> resultNodeIntegerList = databaseExecutor.executeGetNodeIdList(mainExecutor.wrapWithNamespaceDeclaration(XPath));
                 String resultIdStringExpr = "";
                 boolean delim = false;
                 for(int id : resultNodeIntegerList) {

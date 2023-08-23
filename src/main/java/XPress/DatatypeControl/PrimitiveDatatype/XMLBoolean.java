@@ -7,7 +7,6 @@ import XPress.DatatypeControl.XMLSimple;
 @Datatype
 public class XMLBoolean extends XMLDatatype implements XMLSimple, XMLAtomic {
     static XMLBoolean instance;
-
     XMLBoolean() {
         valueHandler = new XMLBooleanHandler();
         officialTypeName = "xs:boolean";

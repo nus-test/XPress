@@ -54,7 +54,7 @@ public class SequenceGenerator {
 
     String generateSingleNodeExprFromContext(List<ContextNode> currentNodeList) {
         double prob = GlobalRandom.getInstance().nextDouble();
-        ContextNode starredNode = (currentNodeList.size() > 0 && (GlobalSettings.starNodeSelection || GlobalSettings.targetedParameter)) ?
+        ContextNode starredNode = (currentNodeList.size() > 0 && (GlobalSettings.starNodeSelection || GlobalSettings.targetedSectionPrefix)) ?
             GlobalRandom.getInstance().getRandomFromList(currentNodeList) :
             mainExecutor.contextNodeMap.get(GlobalRandom.getInstance().nextInt(mainExecutor.maxId) + 1);
         if(prob < 0.8 && starredNode.childList.size() != 0)

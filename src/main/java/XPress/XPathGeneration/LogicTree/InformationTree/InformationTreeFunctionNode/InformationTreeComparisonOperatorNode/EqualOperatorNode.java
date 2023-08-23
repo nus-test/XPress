@@ -53,6 +53,8 @@ public class EqualOperatorNode extends InformationTreeComparisonOperatorNode {
 
     @Override
     public Boolean checkContextAcceptability(InformationTreeNode childNode) {
+        if(childNode.datatypeRecorder.getActualDatatype() instanceof XMLQName)
+            return false;
         if(GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_1)
             return childNode.datatypeRecorder.xmlDatatype instanceof XMLNumeric &&
                     !(childNode.datatypeRecorder.xmlDatatype instanceof XMLDouble);
