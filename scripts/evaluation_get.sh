@@ -1,10 +1,10 @@
 #!/bin/bash
 
-base_dir="/home/shuxin/results"
+base_dir=$1
 configs=("p_nr" "p_r" "s_nr" "s_r")
-number=$2
+number=1
 
-for i in $(eval echo {1..$1} ); do
+for i in $(eval echo {1..$2} ); do
     for config in ${configs[@]};
         do
             echo docker run --name $config -d $config:latest 1

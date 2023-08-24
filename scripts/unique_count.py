@@ -14,7 +14,6 @@ final_result_file = open(final_result_addr, "w")
 for config in config_list:
     record_addr = record_root_addr + config + '/'
     report_file = open(record_root_addr + "report_" + config + "_24.txt")
-    os.system("mkdir -p " + config)
     raw_reports = report_file.read().splitlines()
     time_ticks = []
     row_cnt = 0
