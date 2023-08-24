@@ -55,7 +55,8 @@ public class InformationTreeGenerator {
         contextInformationTreeMap = new DefaultListHashMap<>();
         boolean getXPathFlag = false;
 
-        if(prob < 0.3 && complex && GlobalSettings.xPathVersion != GlobalSettings.XPathVersion.VERSION_1) {
+        if(prob < 0.3 && complex && !KnownBugs.basex2193
+                && GlobalSettings.xPathVersion != GlobalSettings.XPathVersion.VERSION_1) {
             String XPath;
             try {
                 String pre = "//*[@id=\"" + starredNode.id + "\"]";

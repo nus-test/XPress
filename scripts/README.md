@@ -1,36 +1,32 @@
-## README
+# README
 
-```
-├── experiment
-│   ├── 1 (the first run)
-│   │   ├── diagnosis_{config}.txt
-│   │   ├── evaluation_{config}.txt
-│   │   ├── report_{config}.txt
-│   ├── 2 (the second run)
-│   ├── ...
-├── BaseX Historical Bug Analysis.xlsx
-└── README.md
+## Description
+
+Scripts in this directory could be used to reproduce experimental results in the evaluation section. 
+
+### Before Testing
+
+```bash
+./build_docker.sh
 ```
 
-##### Config: 
+### Evaluation Test 1
 
-​	s_r: targeted w Rect
+___
 
-​	s_nr: Targeted w/o Rect
+```bash
+./evaluation_get.sh $dir_to_store_results$ $times_to_repeat_experiment$
+```
 
-​	p_r: Untargeted w Rect
+### Evaluation Test 2
 
-​	p_nr: Untargeted w/o Rect
+____
 
-##### diagnosis_{config}.txt: 
+```bash
+./evaluation_get2.sh $dir_to_store_results$ $times_to_repeat_experiment$
+```
 
-​	Count of total test cases, non-empty test cases and invalid test cases under {config} in 24 hours.
 
-##### evaluation_{config}.txt:
 
-​	Count of total test cases and discrepancy detected test cases under {config} in 24 hours.
 
-##### report_{config}.txt:
-
-​	Recording of all discrepancy detected test cases under {config} in 24 hours. `----` marks testing for 1 hour. 
 

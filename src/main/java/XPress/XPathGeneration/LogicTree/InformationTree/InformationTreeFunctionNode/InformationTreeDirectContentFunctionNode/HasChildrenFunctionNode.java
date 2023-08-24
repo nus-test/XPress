@@ -3,6 +3,8 @@ package XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunction
 import XPress.DatatypeControl.PrimitiveDatatype.XMLBoolean;
 import XPress.DatatypeControl.PrimitiveDatatype.XMLNode;
 import XPress.DatatypeControl.PrimitiveDatatype.XMLSequence;
+import XPress.GlobalSettings;
+import XPress.ReportGeneration.KnownBugs;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.FunctionV3;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeNode;
 
@@ -21,6 +23,12 @@ public class HasChildrenFunctionNode extends InformationTreeDirectContentFunctio
             datatypeRecorder.xmlDatatype = XMLSequence.getInstance();
             datatypeRecorder.subDatatype = XMLBoolean.getInstance();
         }
+    }
+
+    @Override
+    public Boolean checkContextAcceptability(InformationTreeNode childNode) {
+        if(KnownBugs.basex2213) return false;
+        return super.checkContextAcceptability(childNode);
     }
 
     @Override
