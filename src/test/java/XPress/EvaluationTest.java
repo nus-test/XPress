@@ -5,6 +5,7 @@ import XPress.DatabaseExecutor.DatabaseExecutor;
 import XPress.DatabaseExecutor.MainExecutor;
 import XPress.DatabaseExecutor.SaxonExecutor;
 import XPress.DatatypeControl.PrimitiveDatatype.XMLDatatype;
+import XPress.ReportGeneration.KnownBugs;
 import XPress.TestException.MismatchingResultException;
 import XPress.TestException.UnexpectedExceptionThrownException;
 import XPress.TestException.UnsupportedContextSetUpException;
@@ -43,6 +44,8 @@ public class EvaluationTest {
         Boolean starNodeSelection = Boolean.parseBoolean(reader.readLine());
         Boolean targetedParameter = Boolean.parseBoolean(reader.readLine());
         Boolean rectifySelection = Boolean.parseBoolean(reader.readLine());
+        KnownBugs.basex2213 = true;
+        KnownBugs.basex2193 = true;
 
         MainExecutor mainExecutor = new MainExecutor();
         GlobalSettings.starNodeSelection = starNodeSelection;
