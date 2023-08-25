@@ -28,9 +28,9 @@ public class EvaluationTest {
 
     public void report(String XPath, String XMLContent) throws IOException {
         if(XMLContent != null) {
-            recordWriter.write(XMLContent);
+            recordWriter.write(XMLContent + "\n");
         }
-        recordWriter.write(XPath);
+        recordWriter.write(XPath + "\n");
     }
 
     @Test
@@ -48,6 +48,7 @@ public class EvaluationTest {
         KnownBugs.basex2193 = true;
 
         MainExecutor mainExecutor = new MainExecutor();
+        GlobalSettings.useNamespace = false;
         GlobalSettings.starNodeSelection = starNodeSelection;
         GlobalSettings.targetedSectionPrefix = targetedParameter;
         GlobalSettings.rectifySelection = rectifySelection;
@@ -154,6 +155,7 @@ public class EvaluationTest {
         GlobalSettings.starNodeSelection = starNodeSelection;
         GlobalSettings.targetedSectionPrefix = targetedParameter;
         GlobalSettings.rectifySelection = rectifySelection;
+        GlobalSettings.useNamespace = false;
         List<DatabaseExecutor> dbExecuterList = new ArrayList<>();
         dbExecuterList.add(SaxonExecutor.getInstance());
         dbExecuterList.add(BaseXExecutor.getInstance());
@@ -299,4 +301,6 @@ public class EvaluationTest {
         writer.close();
         mainExecutor.close();
     }
+
+    
 }
