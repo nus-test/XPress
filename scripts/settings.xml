@@ -1,5 +1,5 @@
 <settings>
-    <!-- <mirrors>
+    <mirrors>
         <mirror>
           <id>maven-default-http-blocker</id>
           <mirrorOf>external:http:*</mirrorOf>
@@ -7,5 +7,5 @@
           <url>http://0.0.0.0</url>
           <blocked>false</blocked>
         </mirror>
-    </mirrors> -->
+    </mirrors>
 </settings>

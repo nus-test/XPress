@@ -12,18 +12,12 @@ if [ $EVAL_TYPE = "1" ]; then
 else
     basex_commit=3efb304
 fi
-echo `pwd`
 echo ./basex_version_setup.sh /basex $basex_commit
 ./basex_version_setup.sh /basex $basex_commit
 sleep 2
 server_PID=`cat ../../server_PID.txt`
-echo `pwd`
-echo cat /experiment/evaluation_config.txt
-echo before whatttt
 echo `cat /experiment/evaluation_config.txt`
-echo whattttt
 echo "cd .." "&&" mvn -e --global-settings ./scripts/settings.xml test -Dtest=EvaluationTest#evaluationTest$EVAL_TYPE test
 (cd .. && mvn -e --global-settings ./scripts/settings.xml test -Dtest=EvaluationTest#evaluationTest$EVAL_TYPE test)
-
 kill -9 $server_PID
 sleep 2
