@@ -8,7 +8,7 @@ do
     do 
         echo mkdir -p ${1}${i}/$config
         mkdir -p ${1}${i}/$config
-        python3 unique_check.py $1 $config $i    
+        python3 unique_check.py $1 $config $i $3
     done
     python3 unique_count.py $1 $i
 done

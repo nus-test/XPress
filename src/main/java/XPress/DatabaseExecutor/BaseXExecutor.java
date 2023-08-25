@@ -14,7 +14,7 @@ public class BaseXExecutor extends DatabaseExecutor {
     static BaseXExecutor baseXExecutor;
     BaseXClient BaseXSession;
     String username = "admin";
-    String password = "shuxin";
+    String password = "pass";
 
     private BaseXExecutor(String config) {
         try {
