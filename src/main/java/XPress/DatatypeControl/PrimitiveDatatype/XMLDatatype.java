@@ -13,6 +13,7 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 
+import javax.xml.namespace.QName;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -64,6 +65,8 @@ public abstract class XMLDatatype {
         XMLDatatype xmlDatatype = GlobalRandom.getInstance().getRandomFromList(datatypeList);
         if(xmlDatatype instanceof XMLBoolean && GlobalSettings.xPathVersion == GlobalSettings.XPathVersion.VERSION_1)
             xmlDatatype = XMLInteger.getInstance();
+        if(xmlDatatype instanceof XMLQName)
+            xmlDatatype = XMLString.getInstance();
         return xmlDatatype;
     }
 
