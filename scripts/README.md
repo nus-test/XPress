@@ -2,7 +2,7 @@
 
 ## Description
 
-Scripts in this directory could be used to reproduce experimental results in the evaluation section. 
+Scripts in this directory could be used to reproduce experimental results in the evaluation section. All directories input should not end with '/'.
 
 ### Before Testing
 
@@ -29,7 +29,7 @@ ____
 
 ```bash
 ./evaluation_get2.sh $dir_to_store_results$ $times_to_repeat_experiment$ $time_to_run_experiment_in_sec$
-python3 evaluation_result2.py
+python3 evaluation_result2.py $dir_to_store_results$ $times_to_repeat_experiment$
 ```
 
 
