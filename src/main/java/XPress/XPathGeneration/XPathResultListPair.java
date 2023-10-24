@@ -6,10 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class XPathResultListPair {
-    String XPath;
-    List<ContextNode> contextNodeList;
+    public String XPath;
+    public List<ContextNode> contextNodeList;
 
     public XPathResultListPair(String XPath, List<ContextNode> contextNodeList) {
+        setData(XPath, contextNodeList);
+    }
+
+    void setData(String XPath, List<ContextNode> contextNodeList) {
         this.XPath = XPath;
         this.contextNodeList = contextNodeList;
     }

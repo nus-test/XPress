@@ -2,17 +2,14 @@ package XPress.XPathGeneration;
 
 import XPress.DatabaseExecutor.*;
 import XPress.DatatypeControl.PrimitiveDatatype.XMLDatatype;
-import XPress.GlobalRandom;
 import XPress.GlobalSettings;
 import XPress.TestException.DebugErrorException;
 import XPress.TestException.MismatchingResultException;
 import XPress.TestException.UnexpectedExceptionThrownException;
 import XPress.TestException.UnsupportedContextSetUpException;
-import XPress.TestRunner;
 import XPress.XMLGeneration.XMLContext;
 import XPress.XMLGeneration.XMLDocumentGenerator;
 import net.sf.saxon.s9api.SaxonApiException;
-import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 import org.xmldb.api.base.XMLDBException;
 
@@ -44,7 +41,7 @@ public class XPathGenerationTest {
             dbExecutor.registerDatabase(mainExecutor);
         XMLDatatype.getCastable(mainExecutor);
 
-        XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
+        XPathGeneratorImpl XPathGenerator = new XPathGeneratorImpl(mainExecutor);
         List<String> XPath = new ArrayList<>();
         try {
             mainExecutor.setXPathGenerationContext(xmlContext);

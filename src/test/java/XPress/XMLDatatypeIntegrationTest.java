@@ -9,7 +9,7 @@ import XPress.TestException.UnexpectedExceptionThrownException;
 import XPress.TestException.UnsupportedContextSetUpException;
 import XPress.XMLGeneration.XMLContext;
 import XPress.XMLGeneration.XMLDocumentGenerator;
-import XPress.XPathGeneration.XPathGenerator;
+import XPress.XPathGeneration.XPathGeneratorImpl;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.junit.jupiter.api.Test;
 import org.xmldb.api.base.XMLDBException;
@@ -26,11 +26,11 @@ public class XMLDatatypeIntegrationTest {
         XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(15);
         System.out.println(xmlContext.getXmlContent());
         MainExecutor mainExecutor = new MainExecutor();
-        List<DatabaseExecutor> dbExecuterList = new ArrayList<>();
-        dbExecuterList.add(SaxonExecutor.getInstance());
-        for(DatabaseExecutor dbExecutor: dbExecuterList)
+        List<DatabaseExecutor> dbExecutorList = new ArrayList<>();
+        dbExecutorList.add(SaxonExecutor.getInstance());
+        for(DatabaseExecutor dbExecutor: dbExecutorList)
             dbExecutor.registerDatabase(mainExecutor);
-        XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
+        XPathGeneratorImpl XPathGenerator = new XPathGeneratorImpl(mainExecutor);
         mainExecutor.setXPathGenerationContext(xmlContext);
 
         XMLDatatype.getCastable(mainExecutor);

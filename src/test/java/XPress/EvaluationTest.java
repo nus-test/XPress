@@ -1,15 +1,19 @@
 package XPress;
 
+import XPress.Baseline.XPathGeneration.ComXPathGenerator;
+import XPress.Baseline.XPathGeneration.XQGenXPathGenerator;
 import XPress.DatabaseExecutor.BaseXExecutor;
 import XPress.DatabaseExecutor.DatabaseExecutor;
 import XPress.DatabaseExecutor.MainExecutor;
 import XPress.DatabaseExecutor.SaxonExecutor;
 import XPress.DatatypeControl.PrimitiveDatatype.XMLDatatype;
 import XPress.ReportGeneration.KnownBugs;
+import XPress.TestException.DebugErrorException;
 import XPress.TestException.MismatchingResultException;
 import XPress.TestException.UnexpectedExceptionThrownException;
 import XPress.TestException.UnsupportedContextSetUpException;
 import XPress.XPathGeneration.XPathGenerator;
+import XPress.XPathGeneration.XPathGeneratorImpl;
 import org.apache.commons.lang3.tuple.Pair;
 import org.testng.annotations.Test;
 
@@ -22,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EvaluationTest {
-    String rootAddr = "/experiment/";
+    String rootAddr = "e:\\";
     String hourSeparationLine = "-----------------------------\n";
     FileWriter recordWriter;
 
@@ -34,7 +38,7 @@ public class EvaluationTest {
     }
 
     @Test
-    public void evaluationTest1() throws IOException, SQLException, UnexpectedExceptionThrownException, UnsupportedContextSetUpException {
+    public void evaluationTest1() throws IOException, SQLException, UnexpectedExceptionThrownException, UnsupportedContextSetUpException, DebugErrorException {
         BufferedReader reader = new BufferedReader(new FileReader(rootAddr + "evaluation_config.txt"));
         GlobalRandom.getInstance().random.setSeed(System.currentTimeMillis());
         Integer setTime = Integer.parseInt(reader.readLine());
@@ -44,6 +48,14 @@ public class EvaluationTest {
         Boolean starNodeSelection = Boolean.parseBoolean(reader.readLine());
         Boolean targetedParameter = Boolean.parseBoolean(reader.readLine());
         Boolean rectifySelection = Boolean.parseBoolean(reader.readLine());
+        String generator = reader.readLine();
+        Integer generatorId = 0;
+        if(generator != null) {
+            if(generator.equals("Com"))
+                generatorId = 1;
+            else if(generator.equals("XQGen"))
+                generatorId = 2;
+        }
         KnownBugs.basex2213 = true;
         KnownBugs.basex2193 = true;
 
@@ -52,10 +64,10 @@ public class EvaluationTest {
         GlobalSettings.starNodeSelection = starNodeSelection;
         GlobalSettings.targetedSectionPrefix = targetedParameter;
         GlobalSettings.rectifySelection = rectifySelection;
-        List<DatabaseExecutor> dbExecuterList = new ArrayList<>();
-        dbExecuterList.add(SaxonExecutor.getInstance());
-        dbExecuterList.add(BaseXExecutor.getInstance());
-        for(DatabaseExecutor dbExecutor: dbExecuterList)
+        List<DatabaseExecutor> dbExecutorList = new ArrayList<>();
+        dbExecutorList.add(SaxonExecutor.getInstance());
+        dbExecutorList.add(BaseXExecutor.getInstance());
+        for(DatabaseExecutor dbExecutor: dbExecutorList)
             dbExecutor.registerDatabase(mainExecutor);
         XMLDatatype.getCastable(mainExecutor);
         TestRunner testRunner = new TestRunner(mainExecutor);
@@ -68,7 +80,7 @@ public class EvaluationTest {
         long sectionLength = 0;
         long discrepancySectionTotal = 0;
         long startWithinHour = start;
-
+        System.out.println((System.currentTimeMillis() - start) / 1000 < setTime);
         while((System.currentTimeMillis() - start) / 1000 < setTime) {
             testRunner.setContext();
             if((System.currentTimeMillis() - startWithinHour) / 1000 > 3600) {
@@ -76,7 +88,13 @@ public class EvaluationTest {
                 startWithinHour = System.currentTimeMillis();
             }
             int round = 200;
-            XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
+            XPathGenerator XPathGenerator;
+            if(generatorId == 0)
+                XPathGenerator = new XPathGeneratorImpl(mainExecutor);
+            else if(generatorId == 1)
+                XPathGenerator = new ComXPathGenerator(mainExecutor);
+            else
+                XPathGenerator = new XQGenXPathGenerator(mainExecutor);
             boolean XMLFlag = false;
             for (int j = 0; j < round; j++) {
                 String XPath = "";
@@ -87,6 +105,7 @@ public class EvaluationTest {
                     continue;
                 }
                 XPath = XPathResult.getRight();
+                if(XPath.length() == 0) continue;
                 if(XPath.contains("null"))
                     continue;
                 // if(discrepancyTotal >= 700)
@@ -150,16 +169,24 @@ public class EvaluationTest {
         Boolean starNodeSelection = Boolean.parseBoolean(reader.readLine());
         Boolean targetedParameter = Boolean.parseBoolean(reader.readLine());
         Boolean rectifySelection = Boolean.parseBoolean(reader.readLine());
+        String generator = reader.readLine();
+        Integer generatorId = 0;
+        if(generator != null) {
+            if(generator.equals("Com"))
+                generatorId = 1;
+            else if(generator.equals("XQGen"))
+                generatorId = 2;
+        }
 
         MainExecutor mainExecutor = new MainExecutor();
         GlobalSettings.starNodeSelection = starNodeSelection;
         GlobalSettings.targetedSectionPrefix = targetedParameter;
         GlobalSettings.rectifySelection = rectifySelection;
         GlobalSettings.useNamespace = false;
-        List<DatabaseExecutor> dbExecuterList = new ArrayList<>();
-        dbExecuterList.add(SaxonExecutor.getInstance());
-        dbExecuterList.add(BaseXExecutor.getInstance());
-        for(DatabaseExecutor dbExecutor: dbExecuterList)
+        List<DatabaseExecutor> dbExecutorList = new ArrayList<>();
+        dbExecutorList.add(SaxonExecutor.getInstance());
+        dbExecutorList.add(BaseXExecutor.getInstance());
+        for(DatabaseExecutor dbExecutor: dbExecutorList)
             dbExecutor.registerDatabase(mainExecutor);
         XMLDatatype.getCastable(mainExecutor);
         TestRunner testRunner = new TestRunner(mainExecutor);
@@ -201,7 +228,13 @@ public class EvaluationTest {
                 invalid = 0;
             }
             int round = 200;
-            XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
+            XPathGenerator XPathGenerator;
+            if(generatorId == 0)
+                XPathGenerator = new XPathGeneratorImpl(mainExecutor);
+            else if(generatorId == 1)
+                XPathGenerator = new ComXPathGenerator(mainExecutor);
+            else
+                XPathGenerator = new XQGenXPathGenerator(mainExecutor);
             boolean XMLFlag = false;
             for (int j = 0; j < round; j++) {
                 String XPath = "";

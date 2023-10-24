@@ -63,7 +63,6 @@ public class XMLDocumentGenerator {
 
     public XMLContext generateXMLContext(int contextNodeSize) {
         generateNamespaceList(GlobalRandom.getInstance().nextInt(10) + 1);
-        System.out.println("get namespace list");
         ContextNode root = generateXMLDocument(contextNodeSize);
         String xmlData = getXMLDocument(root);
         return new XMLContext(root, xmlData, namespaceList);

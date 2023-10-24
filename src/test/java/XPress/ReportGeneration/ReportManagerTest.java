@@ -7,7 +7,7 @@ import XPress.TestException.UnexpectedExceptionThrownException;
 import XPress.TestException.UnsupportedContextSetUpException;
 import XPress.XMLGeneration.XMLContext;
 import XPress.XMLGeneration.XMLDocumentGenerator;
-import XPress.XPathGeneration.XPathGenerator;
+import XPress.XPathGeneration.XPathGeneratorImpl;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.junit.jupiter.api.Test;
 import org.xmldb.api.base.XMLDBException;
@@ -31,7 +31,7 @@ public class ReportManagerTest {
         dbExecuterList.add(SaxonExecutor.getInstance());
         MainExecutor mainExecutor = new MainExecutor();
 
-        XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
+        XPathGeneratorImpl XPathGenerator = new XPathGeneratorImpl(mainExecutor);
         for(DatabaseExecutor dbExecutor: dbExecuterList)
             dbExecutor.registerDatabase(mainExecutor);
 

@@ -14,18 +14,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class XPathGenerator {
+public class XPathGeneratorImpl implements XPathGenerator {
     MainExecutor mainExecutor;
     SequenceGenerator sequenceGenerator;
     PrefixQualifier prefixQualifier = new PrefixQualifier();
     PredicateGenerator predicateGenerator;
     boolean complex = false;
 
-    public XPathGenerator(MainExecutor mainExecutor) {
+    public XPathGeneratorImpl(MainExecutor mainExecutor) {
         setup(mainExecutor, true);
     }
 
-    public XPathGenerator(MainExecutor mainExecutor, boolean complex) {
+    public XPathGeneratorImpl(MainExecutor mainExecutor, boolean complex) {
         setup(mainExecutor, complex);
     }
 

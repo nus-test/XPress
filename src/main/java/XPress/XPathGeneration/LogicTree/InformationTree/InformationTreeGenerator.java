@@ -13,7 +13,7 @@ import XPress.XMLGeneration.ContextNode;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.BooleanFunctionNode;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeFunctionNode;
 import XPress.XPathGeneration.LogicTree.InformationTree.InformationTreeFunctionNode.InformationTreeFunctionNodeManager;
-import XPress.XPathGeneration.XPathGenerator;
+import XPress.XPathGeneration.XPathGeneratorImpl;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
 
@@ -60,7 +60,7 @@ public class InformationTreeGenerator {
             String XPath;
             try {
                 String pre = "//*[@id=\"" + starredNode.id + "\"]";
-                XPath = new XPathGenerator(mainExecutor, false).generateXPath(pre,
+                XPath = new XPathGeneratorImpl(mainExecutor, false).generateXPath(pre,
                         List.of(starredNode), GlobalRandom.getInstance().nextInt(2) + 1);
                 XPath = "." + XPath.substring(pre.length());
                 contextNode.datatypeRecorder.setData(XMLSequence.getInstance(), XMLNode.getInstance(), true);

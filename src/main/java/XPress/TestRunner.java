@@ -8,7 +8,7 @@ import XPress.TestException.UnsupportedContextSetUpException;
 import XPress.XMLGeneration.XMLContext;
 import XPress.XMLGeneration.XMLDocumentGenerator;
 import XPress.XMLGeneration.XMLStructuredDocumentGenerator;
-import XPress.XPathGeneration.XPathGenerator;
+import XPress.XPathGeneration.XPathGeneratorImpl;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.IOException;
@@ -51,7 +51,7 @@ public class TestRunner {
 
     public void testContext(int round) throws SQLException, IOException, DebugErrorException {
         for (int j = 0; j < round; j++) {
-            XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
+            XPathGeneratorImpl XPathGenerator = new XPathGeneratorImpl(mainExecutor);
             String XPath = "";
             try {
                 Pair<List<Pair<Integer, Integer>>, String> XPathResult = XPathGenerator.getXPathSectionDivided(GlobalRandom.getInstance().nextInt(5) + 2);

@@ -23,7 +23,7 @@ import static java.lang.Math.max;
 
 public class MainExecutor {
 
-    String fileAddr = "C:\\app\\log\\autotest.xml";
+    String fileAddr = "autotest.xml";
     public Integer maxId = 0;
     public Integer maxIdContainsLeaf = 0;
     public Map<Integer, ContextNode> contextNodeMap = new HashMap<>();

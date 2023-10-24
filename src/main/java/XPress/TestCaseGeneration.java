@@ -6,7 +6,7 @@ import XPress.TestException.UnexpectedExceptionThrownException;
 import XPress.XMLGeneration.XMLContext;
 import XPress.XMLGeneration.XMLDocumentGenerator;
 import XPress.XMLGeneration.XMLStructuredDocumentGenerator;
-import XPress.XPathGeneration.XPathGenerator;
+import XPress.XPathGeneration.XPathGeneratorImpl;
 import net.sf.saxon.s9api.SaxonApiException;
 import org.xmldb.api.base.XMLDBException;
 
@@ -35,7 +35,7 @@ public class TestCaseGeneration {
             for (int i = 0; i < round; i++) {
                 xmlDocumentGenerator.clearContext();
                 XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(120);
-                XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
+                XPathGeneratorImpl XPathGenerator = new XPathGeneratorImpl(mainExecutor);
                 testCaseWriter.write(xmlContext.getXmlContent() + "\n");
                 System.out.println("Writing round " + i + "...");
                 try {

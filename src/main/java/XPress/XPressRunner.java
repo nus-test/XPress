@@ -11,7 +11,7 @@ import XPress.TestException.XPathVersion1Exception;
 import XPress.XMLGeneration.XMLContext;
 import XPress.XMLGeneration.XMLDocumentGenerator;
 import XPress.XMLGeneration.XMLStructuredDocumentGenerator;
-import XPress.XPathGeneration.XPathGenerator;
+import XPress.XPathGeneration.XPathGeneratorImpl;
 import com.beust.jcommander.JCommander;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -86,7 +86,7 @@ public class XPressRunner {
                 XMLContext xmlContext = xmlDocumentGenerator.generateXMLContext(50);
                 mainExecutor.setExtraLeafNodeContext(xmlDocumentGenerator.generateExtraLeafNodes(15));
                 mainExecutor.maxId = mainExecutor.maxIdContainsLeaf = 0;
-                XPathGenerator XPathGenerator = new XPathGenerator(mainExecutor);
+                XPathGeneratorImpl XPathGenerator = new XPathGeneratorImpl(mainExecutor);
                 System.out.println("------------------ " + i);
                 System.out.println(xmlContext.getXmlContent());
                 try {
