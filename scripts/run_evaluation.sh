@@ -4,8 +4,8 @@ exec 2>&1 3>&1 >/experiment/log.out
 cd ./scripts
 chmod +x basex_version_setup.sh
 chmod +x write_config.sh
-echo ./write_config.sh /experiment $CONFIG $EVAL_TYPE $TIME
-./write_config.sh /experiment $CONFIG $EVAL_TYPE $TIME
+echo ./write_config.sh /experiment $CONFIG $EVAL_TYPE $TIME $GEN
+./write_config.sh /experiment $CONFIG $EVAL_TYPE $TIME $GEN
 
 if [ $EVAL_TYPE = "1" ]; then
     basex_commit=d1bb20b

@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EvaluationTest {
-    String rootAddr = "e:\\";
+    String rootAddr = "/experiment/";
     String hourSeparationLine = "-----------------------------\n";
     FileWriter recordWriter;
 

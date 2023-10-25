@@ -6,17 +6,18 @@ meta_file = open('basex_commit_data.txt', 'r')
 commit_info=meta_file.readlines()
 base_addr = sys.argv[1]
 meta_file.close()
-result_root_dir = base_addr + "/" + sys.argv[3]
+result_root_dir = base_addr + "/" + sys.argv[4]
 config = sys.argv[2]
-cover = sys.argv[4]
+generator = sys.argv[3]
+cover = sys.argv[5]
 
 for commit in commit_info:
     date, sha = commit.split()
-    output_file = result_root_dir + "/" + config + "/" + date + "_" + sha + ".txt"
+    output_file = result_root_dir + "/" + config + "_" + generator + "/" + date + "_" + sha + ".txt"
     if(cover == "false" and os.path.isfile(output_file)):
         continue
     os.system("./basex_version_setup.sh " + os.environ['BASEX_HOME'] + " " + sha)
-    input_file = result_root_dir + "/report_" + config + "_24.txt"
+    input_file = result_root_dir + "/report_" + config + "_" + generator + "_24.txt"
     os.system("echo " + output_file + " > " + base_addr + "/config.txt")
     os.system("echo " + input_file + " >> " + base_addr + "/config.txt")
     pid_file=open("server_PID.txt")
