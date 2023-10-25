@@ -11,7 +11,7 @@ for i in $(eval echo {1..$2} ); do
         for config in ${configs[@]};
         do
             echo docker run -e EVAL_TYPE=2 -e CONFIG=$config -e TIME=$3 -e GEN=$generator --name ${config}_${generator}_2 -d xpress_eval:latest &
-            docker run -e EVAL_TYPE=2 -e CONFIG=$config -e TIME=$3 -r GEN=$generator --name ${config}_${generator}_2 -d xpress_eval:latest &
+            docker run -e EVAL_TYPE=2 -e CONFIG=$config -e TIME=$3 -e GEN=$generator --name ${config}_${generator}_2 -d xpress_eval:latest &
             if [ $generator != "XPress" ]; then
                 break
             fi
