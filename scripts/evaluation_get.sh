@@ -10,8 +10,8 @@ for i in $(eval echo {1..$2} ); do
     do
         for config in ${configs[@]};
         do
-            echo docker run -e EVAL_TYPE=1 -e CONFIG=$config -e TIME=$3 -e GEN=$generator --name ${config}_${generator} -d xpress_eval:latest &
-            docker run -e EVAL_TYPE=1 -e CONFIG=$config -e TIME=$3 -e GEN=$generator --name ${config}_${generator} -d xpress_eval:latest &
+            echo docker run -e EVAL_TYPE=1 -e CONFIG=$config -e TIME=$3 -e GEN=$generator --name ${config}_${generator}_1 -d xpress_eval:latest &
+            docker run -e EVAL_TYPE=1 -e CONFIG=$config -e TIME=$3 -e GEN=$generator --name ${config}_${generator}_1 -d xpress_eval:latest &
             if [ $generator != "XPress" ]; then
                 break
             fi
@@ -22,8 +22,8 @@ for i in $(eval echo {1..$2} ); do
     do
         for config in ${configs[@]};
         do
-            echo docker wait ${config}_${generator}
-            docker wait ${config}_${generator}
+            echo docker wait ${config}_${generator}_1
+            docker wait ${config}_${generator}_1
             if [ $generator != "XPress" ]; then
                 break
             fi
@@ -34,9 +34,9 @@ for i in $(eval echo {1..$2} ); do
     do
         for config in ${configs[@]};
         do
-            docker cp ${config}_${generator}:/experiment/evaluation_${config}_${generator}_24.txt $base_dir/$number/
-            docker cp ${config}_${generator}:/experiment/report_${config}_${generator}_24.txt $base_dir/$number/
-            docker cp ${config}_${generator}:/experiment/log.out $base_dir/$number/
+            docker cp ${config}_${generator}_1:/experiment/evaluation_${config}_${generator}_24.txt $base_dir/$number/
+            docker cp ${config}_${generator}_1:/experiment/report_${config}_${generator}_24.txt $base_dir/$number/
+            docker cp ${config}_${generator}_1:/experiment/log.out $base_dir/$number/
             if [ $generator != "XPress" ]; then
                 break
             fi
@@ -46,7 +46,7 @@ for i in $(eval echo {1..$2} ); do
     do    
         for config in ${configs[@]};
         do
-            docker rm ${config}_${generator}
+            docker rm ${config}_${generator}_1
             if [ $generator != "XPress" ]; then
                 break
             fi
