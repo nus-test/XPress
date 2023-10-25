@@ -35,7 +35,7 @@ for i in $(eval echo {1..$2} ); do
     do
         for config in ${configs[@]};
         do
-            docker cp ${config}_${generator}_2:/experiment/diag_${config}_${generator}_24.txt $base_dir/$number/
+            docker cp ${config}_${generator}_2:/experiment/diagnosis_${config}_${generator}_24.txt $base_dir/$number/
             if [ $generator != "XPress" ]; then
                 break
             fi
