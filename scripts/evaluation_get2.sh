@@ -9,21 +9,22 @@ for i in $(eval echo {1..$2} ); do
     for generator in ${generators[@]};
     do
         for config in ${configs[@]};
-            do
-                echo docker run -e EVAL_TYPE=2 -e CONFIG=$config -e TIME=$3 -e GEN=$generator --name ${config}_${generator} -d xpress_eval:latest &
-                docker run -e EVAL_TYPE=2 -e CONFIG=$config -e TIME=$3 -r GEN=$generator --name ${config}_${generator} -d xpress_eval:latest &
-            done
+        do
+            echo docker run -e EVAL_TYPE=2 -e CONFIG=$config -e TIME=$3 -e GEN=$generator --name ${config}_${generator}_${evaluation_type} -d xpress_eval:latest &
+            docker run -e EVAL_TYPE=2 -e CONFIG=$config -e TIME=$3 -r GEN=$generator --name ${config}_${generator}_${evaluation_type} -d xpress_eval:latest &
             if [ $generator != "XPress" ]; then
                 break
             fi
+        done
+        
         sleep 5
     done
     for generator in ${generators[@]};
     do
         for config in ${configs[@]};
         do
-            echo docker wait ${config}_${generator}
-            docker wait ${config}_${generator}
+            echo docker wait ${config}_${generator}_${evaluation_type}
+            docker wait ${config}_${generator}_${evaluation_type}
             if [ $generator != "XPress" ]; then
                 break
             fi
@@ -34,7 +35,7 @@ for i in $(eval echo {1..$2} ); do
     do
         for config in ${configs[@]};
         do
-            docker cp ${config}_${generator}:/experiment/diag_${config}_${generator}_24.txt $base_dir/$number/
+            docker cp ${config}_${generator}_${evaluation_type}:/experiment/diag_${config}_${generator}_24.txt $base_dir/$number/
             if [ $generator != "XPress" ]; then
                 break
             fi
@@ -45,7 +46,7 @@ for i in $(eval echo {1..$2} ); do
     do    
         for config in ${configs[@]};
         do
-            docker rm ${config}_${generator}
+            docker rm ${config}_${generator}_${evaluation_type}
             if [ $generator != "XPress" ]; then
                 break
             fi
