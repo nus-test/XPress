@@ -2,7 +2,7 @@
 
 base_dir=$1
 configs=("s_r" "p_nr" "p_r" "s_nr" )
-generators=("Com" "XQGen")
+generators=("Com" "XQGen" "XPress")
 number=1
 
 for i in $(eval echo {1..$2} ); do

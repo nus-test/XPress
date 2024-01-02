@@ -1,6 +1,6 @@
 # XPress
 
-## Description
+## Purpose
 
 XPress is a tool for finding XPath related bugs in XML processors using differential testing. 
 
@@ -15,10 +15,30 @@ XPress is a tool for finding XPath related bugs in XML processors using differen
 
 ## Usage
 
+First setup all systems undeer test according to instructions in Section [SystemSettings](#system-setups).
+Then run the following commands: 
+
 ```
 mvn package
-cd ./target
-java -cp ./XPress.jar XPress.XPressRunner -test "Saxon;BaseX(user,password);" -log /home/x/log.txt -round 2
+# Command with example options and configurations
+java -cp ./target/XPress.jar XPress.XPressRunner -test "Saxon;BaseX($user,$password);" -log /home/x/log.txt -round 2
+```
+
+Full runnable example testing BaseX and Saxon:
+
+```
+# Setup for BaseX: Start BaseX server (github commit d1bb20b)
+$ cd ..
+$ git clone https://github.com/BaseXdb/basex.git
+$ cd ./XPress
+$ ./scripts/basex_version_setup.sh ../basex d1bb20b
+
+# Run XPress
+$ mvn package -Dmaven.test.skip
+$ java -cp ./target/XPress.jar XPress.XPressRunner -test "Saxon;BaseX(admin, pass);" -log ./log.txt -round 2
+
+# Example Output
+Show generated test cases, and if suspected bugs were detected the test cases are saved to log.txt
 ```
 
 ### Options

@@ -30,10 +30,11 @@ public class XPressRunner {
 
         DatabaseExecutor.mapInit();
 
-        List<String> testSystems = Arrays.asList(args.testSystems.split("[\\s;]+"));
+        List<String> testSystems = Arrays.asList(args.testSystems.split(";"));
         List<String> testSystemArgs = new ArrayList<>();
         for(int i = 0; i < testSystems.size(); i ++) {
             String input = testSystems.get(i);
+            System.out.println(input);
             String[] info = input.split("\\(");
             testSystems.set(i, info[0]);
             if(info.length > 1) {
@@ -41,7 +42,6 @@ public class XPressRunner {
             } else {
                 testSystemArgs.add("");
             }
-            System.out.println(input + " " + testSystems.get(i) + " " + testSystemArgs.get(i));
         }
         String[] defaultInfo = args.defaultSystem.split("\\(");
         args.defaultSystem = defaultInfo[0];
