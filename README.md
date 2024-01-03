@@ -13,6 +13,9 @@ XPress is a tool for finding XPath related bugs in XML processors using differen
 - libXML2
 - Oracle
 
+## Setup
+Please install and use JDK-17 as Java environment. 
+
 ## Usage
 
 First, set up all systems under test according to the instructions in Section [SystemSettings](#system-setups).
@@ -37,8 +40,28 @@ $ ./scripts/basex_version_setup.sh ../basex d1bb20b
 $ mvn package -Dmaven.test.skip
 $ java -cp ./target/XPress.jar XPress.XPressRunner -test "Saxon;BaseX(admin, pass);" -log ./log.txt -round 2
 
+# Shutdown BaseX server
+$ server_PID=`cat server_PID.txt` && kill -9 $server_PID
+
 # Example Output
-Show generated test cases, and if suspected bugs were detected the test cases are saved to log.txt
+
+# Show generated test cases, and if suspected bugs were detected the test cases are saved to log.txt
+# Generated test cases example:
+# <T id="1">true</T> 
+# Generated XPath: 0 //T[text() = true()]
+# Generated XPath: 1 //*
+# Generated XPath: ...
+
+# Suspected Bugs
+# Bug record example: (Include id, test case that results in discrepancy, and results of all systems under test)
+# id:1
+# originalxml:<T id="1">true</T>
+# originalxpath://*
+# executionresults:
+# System1:
+# successfulexecution:1
+# System2:
+# successfulexecution:2
 ```
 
 ### Options
