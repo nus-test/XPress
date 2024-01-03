@@ -19,7 +19,7 @@ First setup all systems undeer test according to instructions in Section [System
 Then run the following commands: 
 
 ```
-mvn package
+mvn package -Dmaven.test.skip
 # Command with example options and configurations
 java -cp ./target/XPress.jar XPress.XPressRunner -test "Saxon;BaseX($user,$password);" -log /home/x/log.txt -round 2
 ```
