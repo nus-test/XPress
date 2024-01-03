@@ -14,6 +14,7 @@ XPress is a tool for finding XPath related bugs in XML processors using differen
 - Oracle
 
 ## Setup
+
 Please install and use JDK-17 as Java environment. 
 
 ## Usage
@@ -91,9 +92,12 @@ ___
 | libXML2     | Config: /<br />Setup: /                                      |
 | Oracle      | Config: (user, password)<br />Setup: Start Oracle server     |
 
+### Adding Support for Additional Systems
+
+To add support for an additional system, please instantiate a specific `DatabaseExecutor` which extends abstract class `XPress.DatabaseExecutor.DatabaseExecutor` and annotate it with `@Executor`. Please refer to comments in `XPress.DatabaseExecutor.DatabaseExecutor` and also examples of implemented executors as `BaseXExecutor` and `SaxonExecutor` for more details.
+
 ### Found Bugs
 
 ____
 
-[Link to found bugs](./docs/Found Bugs.md)
-
+[Link to found bugs](
