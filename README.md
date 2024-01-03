@@ -72,5 +72,5 @@ ___
 
 ____
 
-[Link to found bugs](./docs/Found_Bugs.md)
+[Link to found bugs](./docs/Found Bugs.md)
 
