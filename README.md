@@ -94,7 +94,7 @@ ___
 
 ### Adding Support for Additional Systems
 
-To add support for an additional system, please instantiate a specific `DatabaseExecutor` which extends abstract class `XPress.DatabaseExecutor.DatabaseExecutor` and annotate it with `@Executor`. Please refer to comments in `XPress.DatabaseExecutor.DatabaseExecutor` and also examples of implemented executors as `BaseXExecutor` and `SaxonExecutor` for more details.
+To add support for an additional system, please instantiate a specific `DatabaseExecutor` which extends abstract class `XPress.DatabaseExecutor.DatabaseExecutor` and annotate it with `@Executor`. Please refer to comments in `XPress.DatabaseExecutor.DatabaseExecutor` and also examples of implemented executors such as `BaseXExecutor` and `SaxonExecutor` for more details.
 
 ### Found Bugs
 
