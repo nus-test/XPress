@@ -15,8 +15,8 @@ XPress is a tool for finding XPath related bugs in XML processors using differen
 
 ## Usage
 
-First setup all systems undeer test according to instructions in Section [SystemSettings](#system-setups).
-Then run the following commands: 
+First, set up all systems under test according to the instructions in Section [SystemSettings](#system-setups).
+Then, run the following commands in the root directory of XPress:
 
 ```
 mvn package
