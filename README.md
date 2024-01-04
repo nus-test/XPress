@@ -97,12 +97,15 @@ To add support for an additional system, please instantiate a specific `Database
 ### Found Bugs
 
 ____
+
 XPress had found bugs in several XML processors. 
+
 [Link to found bugs](./docs/Found&#32;Bugs.md)
+
 To find the listed bugs, run XPress to perform differential testing for the buggy system and a newest version of other XML processor. 
 
 In the results file, test cases to trigger the bug is recorded. 
--
+
 However, to produce the exact same results may be difficult due to several reasons: 
 
 1. Test cases are generated randomly, therefore some time might be required to produce specific test case to trigger a bug.
