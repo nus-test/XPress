@@ -53,7 +53,7 @@ $ server_PID=`cat server_PID.txt` && kill -9 $server_PID
 # Generated XPath: ...
 
 # Suspected Bugs
-# Bug record example: (Include id, test case that results in discrepancy, and results of all systems under test)
+# Bug record example: (In log.txt, includes id, test case that results in discrepancy, and results of all systems under test)
 # id:1
 # originalxml:<T id="1">true</T>
 # originalxpath://*
