@@ -74,7 +74,7 @@ public abstract class DatabaseExecutor {
     /**
      * Set context of current database with check to clear previous context (If context exist).
      * @param info Info needed for getting XML document; For database executors with default setContext() method reading from files
-     *             Info is file address, while for those default is direct context reading Info is the document itself.
+     *             info is file address, while for those default is direct context reading info is the document itself.
      * @throws SQLException
      * @throws IOException
      * @throws UnsupportedContextSetUpException
@@ -86,7 +86,7 @@ public abstract class DatabaseExecutor {
     }
 
     /**
-     *  Set context of current database with check.
+     *  Set context of current database using default way (content or fileAddr) with check.
      * @param content XML document.
      * @param fileAddr File address XML document is stored in.
      * @throws SQLException
@@ -114,6 +114,14 @@ public abstract class DatabaseExecutor {
         clearFlag = true;
     }
 
+    /**
+     * Set context of current database.
+     * @param info Info needed for getting XML document; For database executors with default setContext() method reading from files
+     *             info is file address, while for those default is direct context reading info is the document itself.
+     * @throws SQLException
+     * @throws IOException
+     * @throws UnsupportedContextSetUpException
+     */
     abstract void setContext(String info) throws SQLException, IOException, UnsupportedContextSetUpException;
 
     public void setContextByFile(String fileAddr) throws IOException, UnsupportedContextSetUpException {
@@ -122,6 +130,12 @@ public abstract class DatabaseExecutor {
         setContextByFileLow(fileAddr);
     }
 
+    /**
+     * Set context of current database by file address.
+     * @param fileAddr Address of file which contains XML document context for test.
+     * @throws IOException
+     * @throws UnsupportedContextSetUpException
+     */
     abstract void setContextByFileLow(String fileAddr) throws IOException, UnsupportedContextSetUpException;
 
     void setContextByContent(String content) throws SQLException, UnsupportedContextSetUpException {
@@ -129,6 +143,12 @@ public abstract class DatabaseExecutor {
         setContextByContentLow(content);
     }
 
+    /**
+     * Set context of current database by XML document content.
+     * @param content XML document content.
+     * @throws SQLException
+     * @throws UnsupportedContextSetUpException
+     */
     abstract void setContextByContentLow(String content) throws SQLException, UnsupportedContextSetUpException;
 
     public void clearContextWithCheck() throws SQLException, IOException {
@@ -167,6 +187,7 @@ public abstract class DatabaseExecutor {
 
     /**
      * Return list of node ids from result string of nodes in XML format.
+     * If result string is not in XML format, please rewrite this method to parse output from the processor.
      * @param resultString Result string in XML format.
      * @return List of selected nodes' id.
      */
@@ -189,7 +210,7 @@ public abstract class DatabaseExecutor {
 
     /**
      * A wrapper to ignore known problems, get node id list from raw result string.
-     * @param resultString Result string returned from database after query execution.
+     * @param resultString Result string returned from processor after query execution.
      * @param dbName Database where execution took place.
      * @return List of selected nodes' id after processing.
      */
