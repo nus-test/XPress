@@ -86,7 +86,7 @@ ___
 | ----------- | ------------------------------------------------------------ |
 | BaseX       | Config: (user, password)<br />Setup: Start BaseX server      |
 | Saxon       | Config: /<br />Setup: /                                      |
-| eXist       | Config: /<br />Setup: 1. Start eXist  server 2. Create collection under /db with name test, and assign write permission for all users.<br />*There are known issues which leads to false alarms when using Saxon and eXist together, please avoid including both eXist and Saxon. To test eXist, run `./run_exist.sh 1` in sub-directory `eXist` (Reverse action:  `./run_exist.sh 0` ). |
+| eXist       | Config: /<br />Setup: 1. Start eXist  server 2. Create collection under /db with name test, and assign write permission for all users.<br />*There are known issues which leads to false alarms when using Saxon and eXist together, please avoid including both eXist and Saxon. To test eXist, run `./run_exist.sh 1` in sub-directory `eXist` before building XPress (Reverse action:  `./run_exist.sh 0` ). |
 | PostgreSQL  | Config: (user, password)<br />Setup: Start PostgreSQL server |
 | libXML2     | Config: /<br />Setup: /                                      |
 | Oracle      | Config: (user, password)<br />Setup: Start Oracle server     |
