@@ -92,6 +92,9 @@ ___
 | Oracle      | Config: (user, password)<br />Setup: Start Oracle server     |
 
 ### Adding Support for Additional Systems
+
+____
+
 To add support for an additional system, please instantiate a specific `DatabaseExecutor` which extends abstract class `XPress.DatabaseExecutor.DatabaseExecutor` and annotate it with `@Executor`. Please refer to comments in `XPress.DatabaseExecutor.DatabaseExecutor` and also examples of implemented executors such as `BaseXExecutor` and `SaxonExecutor` for more details.
 
 ### Found Bugs
