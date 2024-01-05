@@ -16,6 +16,7 @@ for commit in commit_info:
     output_file = result_root_dir + "/" + config + "_" + generator + "/" + date + "_" + sha + ".txt"
     if(cover == "false" and os.path.isfile(output_file)):
         continue
+    os.system("mkdir -p " + result_root_dir + "/" + config + "_" + generator)
     os.system("./basex_version_setup.sh " + os.environ['BASEX_HOME'] + " " + sha)
     input_file = result_root_dir + "/report_" + config + "_" + generator + "_24.txt"
     os.system("echo " + output_file + " > " + base_addr + "/config.txt")

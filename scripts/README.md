@@ -21,6 +21,8 @@ ___
 ```bash
 export BASEX_HOME=$path_to_basex_repo$
 ./evaluation_result.sh $dir_to_store_results$ $times_to_repeat_experiment$ $whether to cover previous results(true or false without quotes)$
+# When experiment is set to run for 24 hours, graph plot of number of bugs found across time under different configs 
+# is saved to unique_bug_num.png under this directory.
 ```
 
 ### Evaluation Test 2
